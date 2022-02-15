@@ -1,0 +1,17 @@
+// @import 'variables';
+
+// @import '~bootstrap/scss/bootstrap';
+@import '~sweetalert2/dist/sweetalert2';
+@import '~@fortawesome/fontawesome-svg-core/styles';
+
+// @import 'elements/card';
+// @import 'elements/navbar';
+// @import 'elements/buttons';
+// @import 'elements/transitions';
+
+ @import 'components/server-error';
+
+ .transparente {
+  background-color: rgba(255, 255, 255, 0.7)!important;
+  backdrop-filter: blur(8px)!important;
+}
