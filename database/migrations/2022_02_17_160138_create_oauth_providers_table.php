@@ -23,7 +23,7 @@ class CreateOauthProvidersTable extends Migration
            
 
             $table->foreign('user_id')
-                ->references('id_user')
+                ->references('id')
                 ->on('users')
                 ->onDelete('cascade');
             $table->timestamps();
