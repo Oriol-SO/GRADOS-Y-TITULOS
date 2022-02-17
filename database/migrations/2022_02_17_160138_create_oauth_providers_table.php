@@ -20,15 +20,16 @@ class CreateOauthProvidersTable extends Migration
             $table->string('provider_user_id')->index();
             $table->string('access_token')->nullable();
             $table->string('refresh_token')->nullable();
-            $table->timestamps();
+           
 
             $table->foreign('user_id')
-                ->references('id')
+                ->references('id_user')
                 ->on('users')
                 ->onDelete('cascade');
+            $table->timestamps();
         });
     }
-
+  
     /**
      * Reverse the migrations.
      *
