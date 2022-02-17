@@ -25,7 +25,7 @@ class CreatePersonasTable extends Migration
             $table->string('numDoc');
             $table->date('fecNac');
             $table->string('numcel',9);
-            $table->string('grad_esud');
+            $table->string('grad_estud');
             $table->string('abre_grad');
             $table->string('cod_alum',10)->nullable();
             $table->string('curri')->nullable();
