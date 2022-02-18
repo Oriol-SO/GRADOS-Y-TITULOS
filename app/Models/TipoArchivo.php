@@ -14,6 +14,6 @@ class TipoArchivo extends Model
     ];
     public function Requisito()
     {
-        return $this->hasMany(Requisito::class);
+        return $this->hasMany(Requisito::class,'tipoarchi_id','id');
     }
 }

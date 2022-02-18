@@ -14,11 +14,11 @@ class LineaInvestigacion extends Model
     ];
     public function Trabajo()
     {
-        return $this->hasMany(Trabajo::class);
+        return $this->hasMany(Trabajo::class,'lineainv_id','id');
     }
 
     public function LineaInvestigacionEscuela()
     {
-        return $this->hasMany(LineaInvestigacionEscuela::class);
+        return $this->hasMany(LineaInvestigacionEscuela::class,'lineainv_id','id');
     }
 }

@@ -15,16 +15,16 @@ class Trabajo extends Model
 
     public function Involucrado()
     {
-        return $this->hasMany(Involucrado::class);
+        return $this->hasMany(Involucrado::class,'trabajo_id','id');
     }
 
     public function LineaInvestigacion()
     {
-        return $this->belongsTo(LineaInvestigacion::class);
+        return $this->belongsTo(LineaInvestigacion::class,'lineainv_id','id');
     }
 
     public function Tramite()
     {
-        return $this->hasMany(Tramite::class);
+        return $this->hasMany(Tramite::class,'trabajo_id','id');
     }
 }

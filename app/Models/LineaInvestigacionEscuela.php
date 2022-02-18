@@ -14,6 +14,6 @@ class LineaInvestigacionEscuela extends Model
     ];
     public function LineaInvestigacion()
     {
-        return $this->belongsTo(LineaInvestigacion::class);
+        return $this->belongsTo(LineaInvestigacion::class,'lineainv_id','id');
     }
 }

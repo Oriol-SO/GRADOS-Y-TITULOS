@@ -14,6 +14,6 @@ class Estado extends Model
     ];
     
     public function Revision(){
-        return $this->hasMany(Revision::class);
+        return $this->hasMany(Revision::class,'estado_id','id');
     }
 }

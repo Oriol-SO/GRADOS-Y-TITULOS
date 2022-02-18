@@ -14,12 +14,12 @@ class FaseRolRequisito extends Model
     ];
     public function Fase()
     {
-        return $this->belongsTo(Fase::class);
+        return $this->belongsTo(Fase::class,'fase_id','id');
     }
 
     public function Requisito()
     {
-        return $this->belongsTo(Requisito::class);
+        return $this->belongsTo(Requisito::class,'requisito_id','id');
     }
 
 
@@ -28,6 +28,11 @@ class FaseRolRequisito extends Model
 
     public function File()
     {
-        return $this->hasMany(File::class);
+        return $this->hasMany(File::class,'faserolreq_id','id');
+    }
+
+    public function Rol(){
+        return $this->belongsTo(Rol::class,'rol_id','id');
+ 
     }
 }

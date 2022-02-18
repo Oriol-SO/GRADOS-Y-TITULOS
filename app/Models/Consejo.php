@@ -15,6 +15,6 @@ class Consejo extends Model
 
     public function Tramite()
     {
-        return $this->hasMany(Tramite::class);
+        return $this->hasMany(Tramite::class,'consejo_id','id');
     }
 }

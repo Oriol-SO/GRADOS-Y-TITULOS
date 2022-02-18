@@ -15,7 +15,7 @@ class Diploma extends Model
 
     public function Tramite(){
 
-        return $this->belongsTo(Tramite::class);
+        return $this->belongsTo(Tramite::class,'tramite_id','id');
 
     }
 }

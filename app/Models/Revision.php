@@ -15,11 +15,15 @@ class Revision extends Model
 
     public function File()
     {
-        return $this->belongsTo(File::class);
+        return $this->belongsTo(File::class,'file_id','id');
+    }
+    public function personarolFile()
+    {
+        return $this->belongsTo(File::class,'persrol_id','persrol_id');
     }
 
     public function Estado()
     {
-        return $this->belongsTo(Estado::class);
+        return $this->belongsTo(Estado::class,'estado_id','id');
     }
 }

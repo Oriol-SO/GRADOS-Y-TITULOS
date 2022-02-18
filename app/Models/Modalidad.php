@@ -14,6 +14,6 @@ class Modalidad extends Model
     ];
     public function Proceso()
     {
-        return $this->hasMany(Proceso::class);
+        return $this->hasMany(Proceso::class,'moda_id','id');
     }
 }

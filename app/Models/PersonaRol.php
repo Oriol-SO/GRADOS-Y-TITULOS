@@ -15,22 +15,23 @@ class PersonaRol extends Model
 
     public function Rol()
     {
-        return $this->belongsTo(Rol::class);
+        return $this->belongsTo(Rol::class,'rol_id','id');
     }
 
     public function Persona()
     {
-        return $this->belongsTo(Persona::class);
+        return $this->belongsTo(Persona::class,'persona_id','id');
     }
 
     public function Involucrado()
     {
-        return $this->hasmany(Involucrado::class);
+        return $this->hasmany(Involucrado::class,'persrol_id','id');
     }
 
+   
     public function File()
     {
-        return $this->hasmany(File::class);
+        return $this->hasmany(File::class,'persrol_id','id');
     }
 
 }

@@ -15,12 +15,16 @@ class Rol extends Model
 
     public function PersonaRol()
     {
-        return $this->hasMany(PersonaRol::class);
+        return $this->hasMany(PersonaRol::class,'rol_id','id');
     }
     //CONECION CON LA MISMA TABLA ROL
     public function Rol()
     {
-        return $this->hasMany(Rol::class);
+        return $this->hasMany(Rol::class,'rol_id','id');
+    }
+    public function FaseRolRequisito(){
+        return $this->hasMany(FaseRolRequisito::class,'rol_id','id');
+  
     }
 
 }

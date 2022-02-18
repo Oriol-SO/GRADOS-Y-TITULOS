@@ -14,10 +14,10 @@ class Requisito extends Model
     ];
     public function FaseRolRequisito()
     {
-        return $this->hasMany(FaseRolRequisito::class);
+        return $this->hasMany(FaseRolRequisito::class,'requisito_id','id');
     }
     public function TipoArchivo()
     {
-        return $this->belongsTo(TipoArchivo::class);
+        return $this->belongsTo(TipoArchivo::class,'tipoarchi_id','id');
     }
 }

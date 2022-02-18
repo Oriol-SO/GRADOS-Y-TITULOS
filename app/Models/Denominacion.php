@@ -14,6 +14,6 @@ class Denominacion extends Model
     ];
     public function Grado()
     {
-        return $this->belongsTo(Grado::class);
+        return $this->belongsTo(Grado::class,'grado_id','id');
     }
 }

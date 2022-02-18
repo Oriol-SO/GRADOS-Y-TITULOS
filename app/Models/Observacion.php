@@ -14,6 +14,6 @@ class Observacion extends Model
     ];
     
     public function File(){
-        return $this->belongsTo(File::class);
+        return $this->belongsTo(File::class,'file_id','id');
     }
 }

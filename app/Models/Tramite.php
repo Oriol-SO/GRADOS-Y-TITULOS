@@ -15,36 +15,36 @@ class Tramite extends Model
 
     public function Persona()
     {
-        return $this->belongsTo(Persona::class);
+        return $this->belongsTo(Persona::class,'persona_id','id');
     }
 
     public function Diploma()
     {
-        return $this->hasOne(Diploma::class);
+        return $this->hasOne(Diploma::class,'tramite_id','id');
     }
 
     public function Resolucion()
     {
-        return $this->hasOne(Resolucion::class);
+        return $this->belongsTo(Resolucion::class,'resolucion_id','id');
     }
 
     public function Consejo()
     {
-        return $this->hasOne(Consejo::class);
+        return $this->belongsTo(Consejo::class,'consejo_id','id');
     }
 
     public function Proceso()
     {
-        return $this->belongsTo(Proceso::class);
+        return $this->belongsTo(Proceso::class,'proceso_id','id');
     }
 
     public function Trabajo()
     {
-        return $this->belongsTo(Trabajo::class);
+        return $this->belongsTo(Trabajo::class,'trabajo_id','id');
     }
 
     public function File()
     {
-        return $this->hasMany(File::class);
+        return $this->hasMany(File::class,'tramite_id','id');
     }
 }

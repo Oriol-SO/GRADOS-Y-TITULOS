@@ -15,6 +15,6 @@ class Resolucion extends Model
 
     public function Tramite()
     {
-        return $this->hasMany(Tramite::class);
+        return $this->hasMany(Tramite::class,'resolucion_id','id');
     }
 }

@@ -14,26 +14,26 @@ class File extends Model
     ];
     public function Tramite()
     {
-        return $this->belongsTo(Tramite::class);
+        return $this->belongsTo(Tramite::class,'tramite_id','id');
     }
 
     public function PersonaRol()
     {
-        return $this->belongsTo(PersonaRol::class);
+        return $this->belongsTo(PersonaRol::class,'persrol_id','id');
     }
 
     public function Revision()
     {
-        return $this->hasMany(Revision::class);
+        return $this->hasMany(Revision::class,'file_id','id');
     }
 
     public function Observacion()
     {
-        return $this->hasMany(Observacion::class);
+        return $this->hasMany(Observacion::class,'file_id','id');
     }
 
     public function FaseRolRequisito()
     {
-        return $this->belongsTo(FaseRolRequisito::class);
+        return $this->belongsTo(FaseRolRequisito::class,'faserolreq_id','id');
     }
 }

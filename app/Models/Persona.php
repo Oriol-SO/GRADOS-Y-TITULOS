@@ -14,16 +14,16 @@ class Persona extends Model
     ];
     
     public function PersonaRol(){
-        return $this->hasMany(PersonaRol::class);
+        return $this->hasMany(PersonaRol::class,'persona_id','id');
     }
 
     public function User()
     {
-        return $this->hasOne(User::class);
+        return $this->hasOne(User::class,'persona_id','id');
     }
 
     public function Tramite(){
-        return $this->hasMany(Tramite::class);
+        return $this->hasMany(Tramite::class,'persona_id','id');
     }
 
 
