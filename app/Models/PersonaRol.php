@@ -17,4 +17,20 @@ class PersonaRol extends Model
     {
         return $this->belongsTo(Rol::class);
     }
+
+    public function Persona()
+    {
+        return $this->belongsTo(Persona::class);
+    }
+
+    public function Involucrado()
+    {
+        return $this->hasmany(Involucrado::class);
+    }
+
+    public function File()
+    {
+        return $this->hasmany(File::class);
+    }
+
 }

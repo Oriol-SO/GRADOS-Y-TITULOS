@@ -26,6 +26,11 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
         'password',
     ];
 
+    public function Persona(){
+
+        return $this->belongsTo(Persona::class);
+
+    }
     /**
      * The attributes that should be hidden for arrays.
      *

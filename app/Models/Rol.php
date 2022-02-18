@@ -17,4 +17,10 @@ class Rol extends Model
     {
         return $this->hasMany(PersonaRol::class);
     }
+    //CONECION CON LA MISMA TABLA ROL
+    public function Rol()
+    {
+        return $this->hasMany(Rol::class);
+    }
+
 }
