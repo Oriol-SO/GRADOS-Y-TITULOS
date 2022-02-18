@@ -14,14 +14,14 @@ class CreateProcesosTable extends Migration
     public function up()
     {
         Schema::create('procesos', function (Blueprint $table) {
-            $table->id('procId');
+            $table->id();
             $table->string('procNom');
-            $table->BigInteger('graId')->unsigned();
-            $table->BigInteger('modId')->unsigned();
+            $table->BigInteger('grado_id')->unsigned();
+            $table->BigInteger('moda_id')->unsigned();
             $table->string('tipo');
 
-            $table->foreign('graId')->references('graId')->on('grados');
-            $table->foreign('modId')->references('modId')->on('modalidades');
+            $table->foreign('grado_id')->references('id')->on('grados');
+            $table->foreign('moda_id')->references('id')->on('modalidades');
 
             $table->timestamps();
         });

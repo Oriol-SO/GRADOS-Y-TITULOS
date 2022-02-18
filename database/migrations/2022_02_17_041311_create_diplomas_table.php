@@ -14,8 +14,8 @@ class CreateDiplomasTable extends Migration
     public function up()
     {
         Schema::create('diplomas', function (Blueprint $table) {
-                $table->id('dipId');
-                $table->BigInteger('tramId')->unsigned();
+                $table->id();
+                $table->BigInteger('tramite_id')->unsigned();
                 $table->string('num_lib');
                 $table->string('num_lib_regis');
                 $table->integer('lib_foli');
@@ -23,7 +23,7 @@ class CreateDiplomasTable extends Migration
                 $table->date('fec_hor_entre')->nullable();
                 $table->string('num_info_vice');
 
-                $table->foreign('tramId')->references('tramId')->on('tramites');
+                $table->foreign('tramite_id')->references('id')->on('tramites');
                 $table->timestamps();
         });
     }

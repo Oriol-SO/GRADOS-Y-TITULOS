@@ -14,13 +14,13 @@ class CreateRequisitosTable extends Migration
     public function up()
     {
         Schema::create('requisitos', function (Blueprint $table) {
-            $table->id('reqId');
+            $table->id();
             $table->string('nombre');
             $table->string('tipo_documento');
             $table->text('html_formato')->nullable();
-            $table->BigInteger('tipoId')->unsigned();
+            $table->BigInteger('tipoarchi_id')->unsigned();
 
-            $table->foreign('tipoId')->references('tipoId')->on('tipo_archivos');
+            $table->foreign('tipoarchi_id')->references('id')->on('tipo_archivos');
             $table->timestamps();
         });
     }

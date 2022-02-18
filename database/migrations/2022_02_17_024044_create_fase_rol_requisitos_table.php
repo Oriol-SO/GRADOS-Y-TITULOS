@@ -14,14 +14,14 @@ class CreateFaseRolRequisitosTable extends Migration
     public function up()
     {
         Schema::create('fase_rol_requisitos', function (Blueprint $table) {
-            $table->id('faseRolReqId');
-            $table->BigInteger('rolId')->unsigned();
-            $table->BigInteger('reqId')->unsigned();
-            $table->BigInteger('faseId')->unsigned();
+            $table->id();
+            $table->BigInteger('rol_id')->unsigned();
+            $table->BigInteger('requisito_id')->unsigned();
+            $table->BigInteger('fase_id')->unsigned();
           
-            $table->foreign('rolId')->references('rolId')->on('roles');
-            $table->foreign('reqId')->references('reqId')->on('requisitos');
-            $table->foreign('faseId')->references('faseId')->on('fases');
+            $table->foreign('rol_id')->references('id')->on('roles');
+            $table->foreign('requisito_id')->references('id')->on('requisitos');
+            $table->foreign('fase_id')->references('id')->on('fases');
 
             $table->timestamps();
         });

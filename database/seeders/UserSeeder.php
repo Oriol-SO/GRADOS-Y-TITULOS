@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
             'email' => 'admin@gmail.com',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
-            'perId'=>1
+            'persona_id'=>1
         ]);
     }
 }

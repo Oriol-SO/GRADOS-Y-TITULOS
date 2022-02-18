@@ -14,15 +14,15 @@ class CreateRevisionesTable extends Migration
     public function up()
     {
         Schema::create('revisiones', function (Blueprint $table) {
-            $table->id('revId');
-            $table->BigInteger('filId')->unsigned();
-            $table->BigInteger('perRolId')->unsigned();
-            $table->BigInteger('estaId')->unsigned();
+            $table->id();
+            $table->BigInteger('file_id')->unsigned();
+            $table->BigInteger('persrol_id')->unsigned();
+            $table->BigInteger('estado_id')->unsigned();
             $table->boolean('estado');
 
-            $table->foreign('filId')->references('filId')->on('files');
-            $table->foreign('perRolId')->references('perRolId')->on('persona_roles');
-            $table->foreign('estaId')->references('estaId')->on('estados');
+            $table->foreign('file_id')->references('id')->on('files');
+            $table->foreign('persrol_id')->references('persrol_id')->on('files');
+            $table->foreign('estado_id')->references('id')->on('estados');
             $table->timestamps();
         });
     }

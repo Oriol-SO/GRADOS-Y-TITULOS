@@ -14,14 +14,14 @@ class CreateTrabajosTable extends Migration
     public function up()
     {
         Schema::create('trabajos', function (Blueprint $table) {
-            $table->id('trabId');
+            $table->id();
             $table->string('modo_sustentacion'); 
             $table->string('url_repositorio');
             $table->date('fecha_sustentacion')->nullable();
             $table->text('nombre');
-            $table->BigInteger('linInvId')->unsigned();
+            $table->BigInteger('lineainv_id')->unsigned();
 
-            $table->foreign('linInvId')->references('linInvId')->on('linea_de_investigaciones');
+            $table->foreign('lineainv_id')->references('id')->on('linea_de_investigaciones');
             $table->timestamps();
         });
     }

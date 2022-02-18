@@ -14,15 +14,15 @@ class CreateFilesTable extends Migration
     public function up()
     {
         Schema::create('files', function (Blueprint $table) {
-            $table->id('filId');            
+            $table->id();            
             $table->string('path');
-            $table->BigInteger('tramId')->unsigned();
-            $table->BigInteger('perRolId')->unsigned();
-            $table->BigInteger('faseRolReqId')->unsigned();
+            $table->BigInteger('tramite_id')->unsigned();
+            $table->BigInteger('persrol_id')->unsigned();
+            $table->BigInteger('faserolreq_id')->unsigned();
 
-            $table->foreign('tramId')->references('tramId')->on('tramites');
-            $table->foreign('perRolId')->references('perRolId')->on('persona_roles'); 
-            $table->foreign('faseRolReqId')->references('faseRolReqId')->on('fase_rol_requisitos');
+            $table->foreign('tramite_id')->references('id')->on('tramites');
+            $table->foreign('persrol_id')->references('id')->on('persona_roles'); 
+            $table->foreign('faserolreq_id')->references('id')->on('fase_rol_requisitos');
             $table->timestamps();
         });
     }

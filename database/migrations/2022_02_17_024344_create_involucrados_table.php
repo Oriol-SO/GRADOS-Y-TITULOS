@@ -14,15 +14,15 @@ class CreateInvolucradosTable extends Migration
     public function up()
     {
         Schema::create('involucrados', function (Blueprint $table) {
-            $table->id('involId');
-            $table->BigInteger('trabId')->unsigned();
-            $table->BigInteger('perRolId')->unsigned();
-            $table->BigInteger('rolId')->unsigned();
+            $table->id();
+            $table->BigInteger('trabajo_id')->unsigned();
+            $table->BigInteger('persrol_id')->unsigned();
+            $table->BigInteger('rol_id')->unsigned();
             $table->boolean('estado');
 
-            $table->foreign('trabId')->references('trabId')->on('trabajos');
-            $table->foreign('perRolId')->references('perRolId')->on('persona_roles');
-            $table->foreign('rolId')->references('rolId')->on('persona_roles');
+            $table->foreign('trabajo_id')->references('id')->on('trabajos');
+            $table->foreign('persrol_id')->references('id')->on('persona_roles');
+            $table->foreign('rol_id')->references('rol_id')->on('persona_roles');
            
             $table->timestamps();
         });
