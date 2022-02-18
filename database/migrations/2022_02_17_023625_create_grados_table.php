@@ -30,5 +30,5 @@ class CreateGradosTable extends Migration
     public function down()
     {
         Schema::dropIfExists('grados');
-    }
+    }   
 }
