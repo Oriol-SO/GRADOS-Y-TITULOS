@@ -14,7 +14,7 @@ class CreateResolucionesTable extends Migration
     public function up()
     {
         Schema::create('resoluciones', function (Blueprint $table) {
-            $table->id('resolId');
+            $table->id();
             $table->date('fecha');
             $table->string('numero');
             $table->string('estado');

@@ -14,13 +14,14 @@ class CreateFasesTable extends Migration
     public function up()
     {
         Schema::create('fases', function (Blueprint $table) {
-            $table->id('faseId');
+            $table->id();
             $table->string('nombre');
             $table->integer('numero');
-            $table->string('llave');
+            $table->bigInteger('fase_id')->unsigned();
+            $table->BigInteger('proceso_id')->unsigned();
 
-            $table->BigInteger('procId')->unsigned();
-            $table->foreign('procId')->references('procId')->on('procesos');
+            $table->foreign('proceso_id')->references('id')->on('procesos');
+            $table->foreign('fase_id')->references('id')->on('fases');
 
             $table->timestamps();
         });

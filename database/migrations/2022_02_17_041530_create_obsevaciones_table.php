@@ -14,13 +14,13 @@ class CreateObsevacionesTable extends Migration
     public function up()
     {
         Schema::create('obsevaciones', function (Blueprint $table) {
-            $table->id('obserId');
-            $table->BigInteger('filId')->unsigned();
-            $table->BigInteger('perRolId')->unsigned();
+            $table->id();
+            $table->BigInteger('file_id')->unsigned();
+            $table->BigInteger('persrol_id')->unsigned();
             $table->text('texto');
 
-            $table->foreign('filId')->references('filId')->on('files');
-            $table->foreign('perRolId')->references('perRolId')->on('files');            
+            $table->foreign('file_id')->references('id')->on('files');
+            $table->foreign('persrol_id')->references('persrol_id')->on('files');            
             $table->timestamps();
         });
     }

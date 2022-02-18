@@ -14,18 +14,18 @@ class CreatePersonaRolesTable extends Migration
     public function up()
     {
         Schema::create('persona_roles', function (Blueprint $table) {
-            $table->id('perRolId');
+            $table->id();
             $table->date('fecIni');
             $table->date('fecFin')->nullable();
             $table->boolean('estado');
-            $table->BigInteger('perId')->unsigned(); 
+            $table->BigInteger('persona_id')->unsigned(); 
             $table->string('facId'); //se obtendra de la api
             $table->string('escId');//se obtendra de la api
-            $table->BigInteger('rolId')->unsigned();
+            $table->BigInteger('rol_id')->unsigned();
            
            
-            $table->foreign('perId')->references('perId')->on('personas');
-            $table->foreign('rolId')->references('rolId')->on('roles');
+            $table->foreign('persona_id')->references('id')->on('personas');
+            $table->foreign('rol_id')->references('id')->on('roles');
             $table->timestamps();
         });
     }

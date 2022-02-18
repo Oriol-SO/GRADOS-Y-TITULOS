@@ -14,7 +14,7 @@ class CreateLineaDeInvestigacionesTable extends Migration
     public function up()
     {
         Schema::create('linea_de_investigaciones', function (Blueprint $table) {
-            $table->id('linInvId');
+            $table->id();
             $table->string('inveNombre');
             $table->timestamps();
         });

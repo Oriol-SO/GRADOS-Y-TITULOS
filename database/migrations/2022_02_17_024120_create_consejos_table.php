@@ -14,7 +14,7 @@ class CreateConsejosTable extends Migration
     public function up()
     {
         Schema::create('consejos', function (Blueprint $table) {
-            $table->id('consId');
+            $table->id();
             $table->string('numero')->nullable();
             $table->date('fecha');
             $table->boolean('estado');          

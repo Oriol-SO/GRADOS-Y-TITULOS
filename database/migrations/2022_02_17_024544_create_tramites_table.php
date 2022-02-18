@@ -15,7 +15,7 @@ class CreateTramitesTable extends Migration
     {
         Schema::create('tramites', function (Blueprint $table) {
 
-            $table->id('tramId');
+            $table->id();
             $table->date('fec-inicio');
             $table->date('fec-fin')->nullable();
             $table->date('fecha_vencimiento')->nullable();
@@ -24,17 +24,17 @@ class CreateTramitesTable extends Migration
             $table->integer('fase_actual');
             $table->boolean('estado');
 
-            $table->BigInteger('trabId')->unsigned();
-            $table->BigInteger('perId')->unsigned();
-            $table->BigInteger('procId')->unsigned();
-            $table->BigInteger('consId')->unsigned()->nullable();
-            $table->BigInteger('resolId')->unsigned()->nullable();
+            $table->BigInteger('trabajo_id')->unsigned();
+            $table->BigInteger('persona_id')->unsigned();
+            $table->BigInteger('proceso_id')->unsigned();
+            $table->BigInteger('consejo_id')->unsigned()->nullable();
+            $table->BigInteger('resolucion_id')->unsigned()->nullable();
 
-            $table->foreign('trabId')->references('trabId')->on('trabajos');
-            $table->foreign('perId')->references('perId')->on('personas');
-            $table->foreign('procId')->references('procId')->on('procesos');
-            $table->foreign('consId')->references('consId')->on('consejos');
-            $table->foreign('resolId')->references('resolId')->on('resoluciones');
+            $table->foreign('trabajo_id')->references('id')->on('trabajos');
+            $table->foreign('persona_id')->references('id')->on('personas');
+            $table->foreign('proceso_id')->references('id')->on('procesos');
+            $table->foreign('consejo_id')->references('id')->on('consejos');
+            $table->foreign('resolucion_id')->references('id')->on('resoluciones');
             $table->timestamps();
         });
     }

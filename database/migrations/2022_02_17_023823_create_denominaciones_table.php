@@ -14,11 +14,11 @@ class CreateDenominacionesTable extends Migration
     public function up()
     {
         Schema::create('denominaciones', function (Blueprint $table) {
-            $table->id('denoId');
+            $table->id();
             $table->string('nombre');
             $table->string('especialidad_id'); //obtenemos de la api
-            $table->BigInteger('graId')->unsigned();
-            $table->foreign('graid')->references('graId')->on('grados');
+            $table->BigInteger('grado_id')->unsigned();
+            $table->foreign('grado_id')->references('id')->on('grados');
             $table->timestamps();
         });
     }
