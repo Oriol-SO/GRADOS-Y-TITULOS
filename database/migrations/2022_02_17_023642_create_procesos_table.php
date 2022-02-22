@@ -17,7 +17,7 @@ class CreateProcesosTable extends Migration
             $table->id();
             $table->string('procNom');
             $table->BigInteger('grado_id')->unsigned();
-            $table->BigInteger('moda_id')->unsigned();
+            $table->BigInteger('moda_id')->unsigned()->nullable();
             $table->string('tipo');
 
             $table->foreign('grado_id')->references('id')->on('grados');

@@ -15,12 +15,12 @@ class CreatePersonaRolesTable extends Migration
     {
         Schema::create('persona_roles', function (Blueprint $table) {
             $table->id();
-            $table->date('fecIni');
+            $table->date('fecIni')->nullable();
             $table->date('fecFin')->nullable();
             $table->boolean('estado');
             $table->BigInteger('persona_id')->unsigned(); 
-            $table->string('facId'); //se obtendra de la api
-            $table->string('escId');//se obtendra de la api
+            $table->string('facId')->nullable(); //se obtendra de la api
+            $table->string('escId')->nullable();//se obtendra de la api
             $table->BigInteger('rol_id')->unsigned();
            
            

@@ -22,6 +22,31 @@ class UserSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
             'persona_id'=>1
-        ]);
+        ],
+        [
+            'id' => '2',
+            'name' => 'secrevicerectorado',
+            'email' => 'secVicRec@gmail.com',
+            'password' => Hash::make('password'),
+            'email_verified_at' => now(),
+            'persona_id' => '13'
+        ],
+        //secretarias generales
+        [
+            'id' => '3',
+            'name' => 'secretaria ge',
+            'email' => 'secGenUno@gmail.com',
+            'password' => Hash::make('password'),
+            'email_verified_at' => now(),
+            'persona_id' => '2'
+        ], [
+            'id' => '4',
+            'name' => 'secre ge 2',
+            'email' => 'secGenDos@gmail.com',
+            'password' => Hash::make('password'),
+            'email_verified_at' => now(),
+            'persona_id' => '14'
+        ],
+    );
     }
 }

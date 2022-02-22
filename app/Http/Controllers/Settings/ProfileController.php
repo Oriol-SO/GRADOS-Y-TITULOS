@@ -7,9 +7,7 @@ use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
-    /**
-     * Update the user's profile information.
-     */
+
     public function update(Request $request)
     {
         $user = $request->user();

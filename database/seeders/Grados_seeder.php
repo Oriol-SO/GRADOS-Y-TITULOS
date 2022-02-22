@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-
-class Grados_seeders extends Seeder
+use Illuminate\Support\Facades\DB;
+class Grados_seeder extends Seeder
 {
     /**
      * Run the database seeds.
