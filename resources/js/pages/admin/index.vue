@@ -1,9 +1,8 @@
 <template>
   <div>
    
-    
+      <sidevar/>
      <transition name="fade" mode="out-in">
-       <sidevar/>
      <h1> hola a todos este es el espacio de dashboard</h1>
       <router-view />
     </transition>
