@@ -1,13 +1,14 @@
 <template>
-  <div>
-   
+  <v-container     class="ml-12">  
+
+   <v-card-text> hola a todos este es el espacio de dashboard</v-card-text>
     
      <transition name="fade" mode="out-in">
        <sidevar/>
-     <h1> hola a todos este es el espacio de dashboard</h1>
+     
       <router-view />
     </transition>
-  </div>
+  </v-container>
 </template>
 
 <script>

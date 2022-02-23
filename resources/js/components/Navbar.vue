@@ -15,14 +15,14 @@
       <v-menu v-if="user" bottom min-width="240px" rounded offset-y>
         <template v-slot:activator="{ on }">
           <v-btn icon elevation="0" color="transparent" dense x-large v-on="on">
-            <v-avatar color="secondary" size="32">
+            <v-avatar color="secondary" size="32" >
               <v-img :src="user.foto_url"></v-img>
             </v-avatar>
           </v-btn>
         </template>
         <v-card>
           <v-list-item-content class="justify-center">
-            <div class="mx-auto text-center">
+            <div class="mx-auto text-center" >
               <v-avatar color="primary" size="32">
                 <v-img :src="user.foto_url"></v-img>
               </v-avatar>

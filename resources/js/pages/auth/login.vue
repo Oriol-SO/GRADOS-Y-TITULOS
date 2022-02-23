@@ -1,5 +1,7 @@
 <template>
+
   <v-container fluid class="fill-height main">
+
     <v-flex>
       <v-card
         class="mx-auto my-auto h-100 transparente py-6"
@@ -13,7 +15,7 @@
           </div>
         </v-flex>
 
-        <v-card-title class="d-block text-center"
+        <v-card-title class="d-block text-center "
           >{{ appName }}<br />Iniciar sesión</v-card-title
         >
         <v-card-text>
@@ -137,7 +139,8 @@ export default {
 </script>
 <style scoped>
 .main {
-  background-color: rgb(223, 226, 230);
+  background-image: url("/img/bg-login.jpg");
+  background-size: cover;
 }
 
 .img {
