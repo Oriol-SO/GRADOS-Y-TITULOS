@@ -1,12 +1,11 @@
 <template>
-  <div>
-   
-      <sidevar/>
-     <transition name="fade" mode="out-in">
-     <h1> hola a todos este es el espacio de dashboard</h1>
-      <router-view />
-    </transition>
-  </div>
+
+  <v-container class="ml-12">  
+    <sidevar :items="links"/>
+     <div>
+       <router-view></router-view>
+     </div>
+  </v-container>
 </template>
 
 <script>
@@ -15,7 +14,16 @@ export default {
   components:{
     Sidevar
     
-  }
+  },
+    data: () => ({
+    links: [
+      { title: "Dashboard", icon: "mdi-view-dashboard", to: "admin.dashboard" },
+      { title: "Tramites", icon: "mdi-folder", to: "admin.tramites" },
+      { title: "Personas/Usuarios", icon: "mdi-account-multiple",to: "admin.usuarios",
+      },
+    ],
+  }),
+
 };
 </script>
 
