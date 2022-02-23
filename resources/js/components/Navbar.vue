@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app :color="bgNavbar" elevate-on-scroll elevation="2" flat rounded>
+  <v-app-bar app :color="bgNavbar"  elevation="2" flat rounded  outlinend >
     <v-container class="py-0 fill-height" fluid>
       <v-app-bar-nav-icon>
         <v-img max-height="40" max-width="40" src="/img/u.png" />
@@ -26,10 +26,14 @@
               <v-avatar color="primary" size="32">
                 <v-img :src="user.foto_url"></v-img>
               </v-avatar>
-              <h4 class="text-wrap">{{ user.name }}</h4>
+              <h4 class="text-wrap">{{ user.nombre }}</h4>
               <p class="text-caption mt-1">
                 {{ user.email }}
               </p>
+              <v-divider class="my-3"></v-divider>
+               <v-btn depressed rounded text to="/admin">
+                Dashboard
+              </v-btn>
               <v-divider class="my-3"></v-divider>
               <v-btn depressed rounded text to="/settings">
                 Editar perfil

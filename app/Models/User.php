@@ -24,11 +24,12 @@ class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
         'name',
         'email',
         'password',
+        'persona_id',
     ];
 
     public function Persona(){
 
-        return $this->belongsTo(Persona::class);
+        return $this->belongsTo(Persona::class,'persona_id','id');
 
     }
     /**
