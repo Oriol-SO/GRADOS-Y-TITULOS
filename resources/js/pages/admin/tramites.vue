@@ -1,15 +1,15 @@
 <template>
-  <v-data-table
+<v-data-table
     :headers="headers"
-    :items="desserts"
-    sort-by="calories"
+    :items="procesos"
+    :items-per-page="10"
     class="elevation-1"
   >
-    <template v-slot:top>
+  <template v-slot:top>
       <v-toolbar
         flat
       >
-        <v-toolbar-title>GESTIONAR TRAMITES</v-toolbar-title>
+        <v-toolbar-title>Gestionar Tramites</v-toolbar-title>
         <v-divider
           class="mx-4"
           inset
@@ -28,7 +28,7 @@
               v-bind="attrs"
               v-on="on"
             >
-              NUEVO TRAMITE
+              Agregar Tramite
             </v-btn>
           </template>
           <v-card>
@@ -45,8 +45,8 @@
                     md="4"
                   >
                     <v-text-field
-                      v-model="editedItem.name"
-                      label="Nombre"
+                    
+                      label="Nombre Proceso"
                     ></v-text-field>
                   </v-col>
                   <v-col
@@ -55,7 +55,7 @@
                     md="4"
                   >
                     <v-text-field
-                      v-model="editedItem.calories"
+                     
                       label="Grado"
                     ></v-text-field>
                   </v-col>
@@ -65,12 +65,22 @@
                     md="4"
                   >
                     <v-text-field
-                      v-model="editedItem.fat"
-                      label="Modalida"
+                      
+                      label="Modalidad"
                     ></v-text-field>
                   </v-col>
-                 
+                  <v-col
+                    cols="12"
+                    sm="6"
+                    md="4"
+                  >
+                    <v-text-field
+                      
+                      label="fase"
+                    ></v-text-field>
+                  </v-col>
                   
+                
                 </v-row>
               </v-container>
             </v-card-text>
@@ -79,167 +89,73 @@
               <v-spacer></v-spacer>
               <v-btn
                 color="blue darken-1"
-                text
-                @click="close"
+                text               
               >
-                Cancel
+                Cancelar
               </v-btn>
               <v-btn
                 color="blue darken-1"
-                text
-                @click="save"
+                text                
               >
-                Save
+                Guardar
               </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-dialog v-model="dialogDelete" max-width="500px">
-          <v-card>
-            <v-card-title class="text-h5">Oe gil estas de desactivar ese tramite?</v-card-title>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
-              <v-spacer></v-spacer>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
+    
       </v-toolbar>
-    </template>
-    <template v-slot:item.actions="{ item }">
-        <v-btn
-        color="cyan"
-        elevation="2"
-        raised
-        tile
-         @click="editItem(item)"
-        > Abrir</v-btn>
+  </template>
 
-        <v-btn
-        color="secondary"
-        elevation="2"
-        raised
-        tile
-         @click="deleteItem(item)"
-        > desactivar</v-btn>
-  
-   
-    </template>
-    <template v-slot:no-data>
-      <v-btn
-        color="primary"
-        @click="initialize"
-      >
-        Reset
-      </v-btn>
-    </template>
+
   </v-data-table>
 </template>
 <script>
+import axios from 'axios'
   export default {
-    data: () => ({
-      dialog: false,
-      dialogDelete: false,
-      headers: [
-        {
-          text: 'Nombre Proceso',
-          align: 'start',
-          sortable: false,
-          value: 'procNom',
-        },
-        { text: 'Fases', value: 'fases' },
-        { text: 'requisitos', value: 'requisitos' },
-     /*   { text: 'Carbs (g)', value: 'carbs' },
-        { text: 'Protein (g)', value: 'protein' },*/
-        { text: '', value: 'actions', sortable: false },
-      ],
-      procesos: [],
-      editedIndex: -1,
-      editedItem: {
-        procNom: '',
-        fases: 0,
-        requisitos: 0,
-       // carbs: 0,
-       // protein: 0,
-      },
-      defaultItem: {
-         procNom: '',
-         fases: 0,
-         requisitos: 0,
-       // carbs: 0,
-       // protein: 0,
-      },
-    }),
-
+    data () {
+      return {
+        headers: [
+          {
+            text: 'Nombre Procesos',
+            align: 'start',
+            sortable: false,
+            value: 'procNom',
+          },
+          { text: 'Fases', value: 'fase' },
+          { text: 'Requisitos', value: 'requisito' },
+           { text: 'Acciones', value: 'actions', sortable: false },
+        ],
+        /*desserts: [
+          {
+            nomProc: 'KitKat',
+            fase: 518,
+            requisito: 26.0,
+          
+          },
+        ],*/
+        procesos:[],
+       
+      }
+    },
     computed: {
       formTitle () {
-        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+        return this.editedIndex === 'New Item' 
       },
-    },
-
-    watch: {
-      dialog (val) {
-        val || this.close()
-      },
-      dialogDelete (val) {
-        val || this.closeDelete()
-      },
-    },
-
-    created () {
-      this.initialize()
     },
     mounted(){
-        this.FetchProceso();
-    },
-    methods: {
+      this.FetchProceso();
+    }, 
+    
+    methods:{
+      async FetchProceso() {
+        const { data } = await axios.get("/api/proceso");
+        this.procesos = data;
 
-    async FetchProceso() {
-      const { data } = await axios.get("/api/proceso/");
-      this.procesos = data;
-    },
-      editItem (item) {
-        this.editedIndex = this.desserts.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
+        //console.log(data);
       },
 
-      deleteItem (item) {
-        this.editedIndex = this.desserts.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialogDelete = true
-      },
 
-      deleteItemConfirm () {
-        this.desserts.splice(this.editedIndex, 1)
-        this.closeDelete()
-      },
-
-      close () {
-        this.dialog = false
-        this.$nextTick(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        })
-      },
-
-      closeDelete () {
-        this.dialogDelete = false
-        this.$nextTick(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        })
-      },
-
-      save () {
-        if (this.editedIndex > -1) {
-          Object.assign(this.desserts[this.editedIndex], this.editedItem)
-        } else {
-          this.desserts.push(this.editedItem)
-        }
-        this.close()
-      },
+    
     },
   }
 </script>
