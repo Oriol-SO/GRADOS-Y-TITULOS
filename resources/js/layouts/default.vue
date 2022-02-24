@@ -5,17 +5,19 @@
     <v-main class="grey lighten-3">
       <transition name="fade" mode="out-in"> <child /> </transition>
     </v-main>
-  </v-app>
+    <piepage />
+      </v-app>
 </template>
 
 <script>
 import Navbar from "~/components/Navbar";
-
+import Piepage from "../components/footer.vue";
 export default {
   name: "MainLayout",
 
   components: {
     Navbar,
+   Piepage,
   },
 };
 </script>

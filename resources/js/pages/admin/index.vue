@@ -1,18 +1,25 @@
 <template>
-
-  <v-container class="ml-12">  
-    <sidevar :items="links"/>
+   <div>
+     <sidevar :items="links"/>
+       <v-container class="ml-12">  
+    
      <div>
        <router-view></router-view>
      </div>
+     
   </v-container>
+   </div>
+
+  
 </template>
 
 <script>
 import Sidevar from '../../components/sidevar.vue';
+
 export default {
   components:{
-    Sidevar
+    Sidevar,
+   
     
   },
     data: () => ({
