@@ -1,13 +1,12 @@
 <template>
    <div>
      <sidevar :items="links"/>
-       <v-container class="ml-12">  
     
-     <div>
+     <div class="ml-12" >
        <router-view></router-view>
      </div>
      
-  </v-container>
+ 
    </div>
 
   
