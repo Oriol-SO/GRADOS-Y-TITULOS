@@ -35,6 +35,8 @@ export default [
       { path: 'tramites', name: 'admin.tramites', component: page('admin/tramites.vue') },
       { path: 'tramite/:id', name: 'admin.tramite', component: page('admin/tramite.vue') },
       { path: 'personas-usuarios', name: 'admin.usuarios', component: page('admin/usuarios.vue') },
+
     ]
-  }
+  },
+ 
 ]

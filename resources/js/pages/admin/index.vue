@@ -10,7 +10,7 @@
    </div>
 
   
-</template>
+</template> 
 
 <script>
 import Sidevar from '../../components/sidevar.vue';
