@@ -9,6 +9,7 @@
       <v-dialog
         transition="dialog-top-transition"
         max-width="600"
+        v-model="dialog"
       >
         <template v-slot:activator="{ on, attrs }">
           <v-btn
@@ -18,7 +19,7 @@
             v-on="on"
           >Agregar Tramite</v-btn>
         </template>
-        <template v-slot:default="dialog">
+        <template >
           <v-card>
             <v-toolbar
               color="teal"
@@ -33,6 +34,11 @@
                     label="Nombre"
                     required
                   ></v-text-field>
+                   <div v-if="errors.nombre">
+                      <v-alert  dense outlined type="error" >
+                        {{errors.nombre[0]}}
+                      </v-alert>
+                   </div>
                    <v-select
                     v-model="form.grado"                  
                     :items="grados"
@@ -44,7 +50,11 @@
                     single-line
                
                   ></v-select>
-
+                      <div v-if="errors.grado">
+                        <v-alert   dense outlined type="error" >
+                           {{errors.grado[0]}}
+                        </v-alert>
+                      </div>
                   <v-select
                     v-model="form.modalidad"                  
                     :items="modalidades"
@@ -56,7 +66,11 @@
                     single-line
                    
                   ></v-select>
-                                  
+                       <div v-if="errors.modalidad">
+                            <v-alert   dense outlined type="error" >
+                               {{errors.modalidad[0]}}
+                            </v-alert>
+                        </div>  
                     <v-btn
                       class="mr-4"
                       @click="enviar"
@@ -76,7 +90,8 @@
             <v-card-actions class="justify-end">
               <v-btn
                 text
-                @click="dialog.value = false"
+                @click="dialog=false"
+               
               >Close</v-btn>
             </v-card-actions>
           </v-card>
@@ -138,14 +153,14 @@ import axios from 'axios'
 import Form from "vform";
    export default {
     data () {
-        
+       
       return {  
           //select:{graNom:'',id:''} ,
-        
           grados:[],
           procesos:[],         
           modalidades:[],
-
+          dialog:false,
+          errors:{},
         form: new Form({
             nombre:'',
             grado:'',
@@ -178,29 +193,29 @@ import Form from "vform";
 
         console.log(data);
       }, async enviar(){
-          //this.$v.$touch()
-          /*const datos={'nombre':this.nombre,
-                 'grado':this.selectG.id,
-                 'modalidad':this.selectM.id,
-                 'tipo':'1' };
-          console.log(datos);*/
-      
-            
-
-          console.log(this.form);
-          const { data } =await this.form.post("/api/proceso");
-          this.procesos.push(data);
-          this.dialog.value = false
-          this.$router.push({
-              path: `/admin/personas-usuarios`,
-            });
-           console.log(data);
+             
+         console.log(this.form);
+          
+          const { data } =await this.form.post("/api/proceso")
+          .then(response =>{
+            this.FetchProceso();
+            this.clear();
+            this.dialog=false;
+          }).catch(error=>{
+            if(error.response.status === 422){
+              this.errors=error.response.data.errors;
+              console.log(this.errors);
+            }
+          });
+        
+          
 
       }, clear() {
-         this.nombre='';
-         this.selectG=null;
-         this.selectM=null;
-      },
+         this.form.nombre='';
+         this.form.grado=null;
+         this.form.modalidad=null;
+         
+      }
 
 
     

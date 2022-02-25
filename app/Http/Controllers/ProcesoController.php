@@ -35,7 +35,8 @@ class ProcesoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request){
-    
+
+            $this->validar($request);    
             $proceso = Proceso::create([
             'procNom' => $request->nombre,
             'grado_id' => $request->grado['id'],
@@ -91,4 +92,15 @@ class ProcesoController extends Controller
     {
         //
     }
+
+    public function validar($request = null)
+    {
+        return $request->validate([
+            'nombre' => 'required',
+            'grado' => 'required',
+            'modalidad' => 'required'
+        ]);
+    }
+
+  
 }
