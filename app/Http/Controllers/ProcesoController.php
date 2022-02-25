@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Proceso;
+use App\Models\Grado;
+use App\Models\Modalidade;
 
 class ProcesoController extends Controller
 {
@@ -14,8 +16,26 @@ class ProcesoController extends Controller
      */
     public function index()
     {
-        $procesos= Proceso::all();
-        return response()->json($procesos);
+
+        $tramites['tramites'] = Proceso::all()->map(function ($t) {
+            return [
+                'id' => $t->id,
+                'nombre' => $t->procNom,
+                'grado_id' => $t->grado ? $t->grado_id : null,
+                'grado' => $t->grado ? $t->grado->graNom : null,
+                'modalidad_id' => $t->modalidade ? $t->moda_id : null,
+                'modalidad' => $t->modalidade ? $t->modalidade->modNombre : null,
+                'cantidad_fases' => $t->fase->count(),
+                'cantidad_requisitos' => $t->fase->map(function ($f) {
+                    return $f->faserolrequisito->count();
+                })->sum(),
+            ];
+        });
+        //$tramites['grados'] = Grado::all();
+        //$tramites['modalidades'] = Modalidade::all();
+        return response()->json($tramites, 200);
+        //$procesos= Proceso::all();
+        //return response()->json($procesos);
     }
 
     /**

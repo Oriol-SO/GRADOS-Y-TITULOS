@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             Proceso_seeder::class,
             DenominacionSeeder::class,
             PersonaRolSeeder::class,
+            FaseSeeder::class,
         ]);
     }
 }

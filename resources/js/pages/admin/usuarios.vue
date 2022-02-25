@@ -112,11 +112,11 @@
   
     <v-card-text >     
       <p class="text-h6 indigo--text " >
-        {{proceso.procNom}}
+        {{proceso.nombre}}
       </p>
         <div class="text--primary "  >
-        Fases :<strong>15</strong> <br/>
-        Requisitos :<strong>10</strong>
+        Fases :<strong>{{proceso.cantidad_fases}}</strong> <br/>
+        Requisitos :<strong>{{proceso.cantidad_requisitos}}</strong>
       </div>
     </v-card-text>
     <v-card-actions>
@@ -179,7 +179,7 @@ import Form from "vform";
     methods:{
       async FetchProceso() {
         const { data } = await axios.get("/api/proceso");
-        this.procesos = data;
+        this.procesos = data.tramites;
 
         console.log(data);
       },async FetchGrados(){
