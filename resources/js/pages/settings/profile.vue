@@ -64,6 +64,7 @@
             class="form-control"
             type="email"
             name="email"
+             style="border:solid 1px black;"
           />
           <has-error :form="form" field="email" />
         </div>

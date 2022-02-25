@@ -28,15 +28,13 @@
 
              <form>
                   <v-text-field
-                    v-model="nombre"
+                    v-model="form.nombre"
                     :error-messages="nameErrors"
                     label="Nombre"
                     required
-                    @input="$v.nombre.$touch()"
-                    @blur="$v.nombre.$touch()"
                   ></v-text-field>
                    <v-select
-                    v-model="selectG"                  
+                    v-model="form.grado"                  
                     :items="grados"
                     item-text='graNom'
                     item-value='id'
@@ -44,12 +42,11 @@
                     persistent-hint
                     return-object
                     single-line
-                      @change="$v.selectG.$touch()"
-                      @blur="$v.selectG.$touch()"
+               
                   ></v-select>
 
                   <v-select
-                    v-model="selectM"                  
+                    v-model="form.modalidad"                  
                     :items="modalidades"
                     item-text='modNombre'
                     item-value='id'
@@ -57,13 +54,12 @@
                     persistent-hint
                     return-object
                     single-line
-                      @change="$v.selectM.$touch()"
-                      @blur="$v.selectM.$touch()"
+                   
                   ></v-select>
                                   
                     <v-btn
                       class="mr-4"
-                      @click="submit"
+                      @click="enviar"
                     >
                       submit
                     </v-btn>
@@ -139,14 +135,24 @@
 
 <script>
 import axios from 'axios'
+import Form from "vform";
    export default {
     data () {
-      
+        
       return {  
           //select:{graNom:'',id:''} ,
+        
           grados:[],
           procesos:[],         
           modalidades:[],
+
+        form: new Form({
+            nombre:'',
+            grado:'',
+            modalidad:'',
+            tipo:'1',
+          }),
+          
       }
     },
       mounted(){
@@ -171,15 +177,29 @@ import axios from 'axios'
         this.modalidades = data;
 
         console.log(data);
-      }, submit () {
-        this.$v.$touch()
-      },
-      clear () {
-        this.$v.$reset()
-        this.nombre = ''
-        this.selectG = ''
-        this.selectM = ''
-        
+      }, async enviar(){
+          //this.$v.$touch()
+          /*const datos={'nombre':this.nombre,
+                 'grado':this.selectG.id,
+                 'modalidad':this.selectM.id,
+                 'tipo':'1' };
+          console.log(datos);*/
+      
+            
+
+          console.log(this.form);
+          const { data } =await this.form.post("/api/proceso");
+          this.procesos.push(data);
+          this.dialog.value = false
+          this.$router.push({
+              path: `/admin/personas-usuarios`,
+            });
+           console.log(data);
+
+      }, clear() {
+         this.nombre='';
+         this.selectG=null;
+         this.selectM=null;
       },
 
 

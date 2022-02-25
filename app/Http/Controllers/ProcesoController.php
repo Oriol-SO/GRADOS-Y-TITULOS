@@ -34,9 +34,17 @@ class ProcesoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request){
+    
+            $proceso = Proceso::create([
+            'procNom' => $request->nombre,
+            'grado_id' => $request->grado['id'],
+            'moda_id' => $request->modalidad['id'],
+            'tipo' => $request->tipo,
+        ]);
+        return response()->json([
+            'tramite'=>$proceso
+        ]);
     }
 
     /**

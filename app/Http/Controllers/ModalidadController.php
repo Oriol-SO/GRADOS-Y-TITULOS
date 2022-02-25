@@ -17,6 +17,7 @@ class ModalidadController extends Controller
         $modalidades=Modalidade::all();
         return response()->json($modalidades);
     }
+    //modalidades
 
     /**
      * Show the form for creating a new resource.

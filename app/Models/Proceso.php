@@ -9,7 +9,10 @@ class Proceso extends Model
 {
     use HasFactory;
     protected $fillable=[
-
+        'procNom',
+        'grado_id',
+        'moda_id',
+        'tipo',
 
     ];
 
