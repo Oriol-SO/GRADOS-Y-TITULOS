@@ -135,7 +135,7 @@
         tile
         color="blue-grey"
         outlined
-       elevation="2"
+       elevation="2"  
       >
         Desactivar
       </v-btn>
