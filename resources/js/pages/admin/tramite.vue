@@ -66,7 +66,9 @@ export default{
           console.log(data);
       },
       async FetchFases(){
-          const {data}=await axios.get(`/api/fases/${this.$route.params.id}`)
+          const {data}=await axios.get(`/api/fases/${this.$route.params.id}`);
+          this.fases=data;
+          console.log(data);
 
       }
   }
