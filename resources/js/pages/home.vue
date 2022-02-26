@@ -1,12 +1,21 @@
 <template>
-  <v-container>
-    <h3>Bienvenido</h3>
-  </v-container>
+<h1> INICIO</h1>  
 </template>
 
 <script>
 // import axios from 'axios'
-export default {
+export default { 
+  data () {
+      return {
+        drawer: true,
+        items: [
+          { title: 'dashboard', icon: 'mdi-account' },
+          { title: 'tramites', icon: 'mdi-account' },
+          { title: 'personas/usuarios ', icon: 'mdi-account' },
+        ],
+        mini: true,
+      }
+    },
   middleware: "auth",
 
   // async asyncData () {

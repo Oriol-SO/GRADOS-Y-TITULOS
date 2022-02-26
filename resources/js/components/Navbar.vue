@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app :color="bgNavbar" elevate-on-scroll elevation="2" flat rounded>
+  <v-app-bar app :color="bgNavbar"  elevation="2" flat rounded  outlinend >
     <v-container class="py-0 fill-height" fluid>
       <v-app-bar-nav-icon>
         <v-img max-height="40" max-width="40" src="/img/u.png" />
@@ -15,21 +15,25 @@
       <v-menu v-if="user" bottom min-width="240px" rounded offset-y>
         <template v-slot:activator="{ on }">
           <v-btn icon elevation="0" color="transparent" dense x-large v-on="on">
-            <v-avatar color="secondary" size="32">
+            <v-avatar color="secondary" size="32" >
               <v-img :src="user.foto_url"></v-img>
             </v-avatar>
           </v-btn>
         </template>
         <v-card>
           <v-list-item-content class="justify-center">
-            <div class="mx-auto text-center">
+            <div class="mx-auto text-center" >
               <v-avatar color="primary" size="32">
                 <v-img :src="user.foto_url"></v-img>
               </v-avatar>
-              <h4 class="text-wrap">{{ user.name }}</h4>
+              <h4 class="text-wrap">{{ user.nombre }}</h4>
               <p class="text-caption mt-1">
                 {{ user.email }}
               </p>
+              <v-divider class="my-3"></v-divider>
+               <v-btn depressed rounded text to="/admin">
+                Dashboard
+              </v-btn>
               <v-divider class="my-3"></v-divider>
               <v-btn depressed rounded text to="/settings">
                 Editar perfil

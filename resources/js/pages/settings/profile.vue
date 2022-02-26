@@ -10,13 +10,45 @@
         }}</label>
         <div class="col-md-7">
           <input
-            v-model="form.name"
+            v-model="form.nombre"
             :class="{ 'is-invalid': form.errors.has('name') }"
             class="form-control"
             type="text"
             name="name"
           />
           <has-error :form="form" field="name" />
+        </div>
+      </div>
+            <!-- Apellido pat -->
+      <div class="mb-3 row">
+        <label class="col-md-3 col-form-label text-md-end">{{
+          $t("apellido Paterno")
+        }}</label>
+        <div class="col-md-7">
+          <input
+            v-model="form.apellido1"
+            :class="{ 'is-invalid': form.errors.has('apellido1') }"
+            class="form-control"
+            type="text"
+            name="apellido1"
+          />
+          <has-error :form="form" field="apellido1" />
+        </div>
+      </div>
+            <!-- Apellido Mat-->
+      <div class="mb-3 row">
+        <label class="col-md-3 col-form-label text-md-end">{{
+          $t("apellido Materno")
+        }}</label>
+        <div class="col-md-7">
+          <input
+            v-model="form.apellido2"
+            :class="{ 'is-invalid': form.errors.has('apellido2') }"
+            class="form-control"
+            type="text"
+            name="apellido2"
+          />
+          <has-error :form="form" field="apellido2" />
         </div>
       </div>
 
@@ -32,6 +64,7 @@
             class="form-control"
             type="email"
             name="email"
+             style="border:solid 1px black;"
           />
           <has-error :form="form" field="email" />
         </div>
@@ -62,8 +95,10 @@ export default {
 
   data: () => ({
     form: new Form({
-      name: "",
+      nombre: "",
       email: "",
+      apellido1:"",
+      apellido2:"",
     }),
   }),
 
