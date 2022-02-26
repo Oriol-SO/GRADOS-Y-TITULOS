@@ -1,31 +1,29 @@
 <template>
-  <v-app-bar app :color="bgNavbar"  elevation="2" flat rounded  outlinend >
+  <v-app-bar app :color="bgNavbar"  elevation="3" flat   >
     <v-container class="py-0 fill-height" fluid>
       <v-app-bar-nav-icon>
         <v-img max-height="40" max-width="40" src="/img/u.png" />
       </v-app-bar-nav-icon>
-      <v-app-bar-title>{{ appName }}</v-app-bar-title>
+      <v-app-bar-title style="color:#grey;">{{ appName }}</v-app-bar-title>
 
       <v-spacer></v-spacer>
 
-      <v-btn v-for="(link, i) in linksVerified" :key="i" text :to="link.path">
+      <v-btn v-for="(link, i) in linksVerified" :key="i" text :to="link.path"  style="color:#000;">
         {{ link.name }}
       </v-btn>
 
       <v-menu v-if="user" bottom min-width="240px" rounded offset-y>
         <template v-slot:activator="{ on }">
           <v-btn icon elevation="0" color="transparent" dense x-large v-on="on">
-            <v-avatar color="secondary" size="32" >
-              <v-img :src="user.foto_url"></v-img>
+            <v-avatar  size="32" >
+              <v-icon color="grey">mdi-account-circle</v-icon>
             </v-avatar>
           </v-btn>
         </template>
         <v-card>
           <v-list-item-content class="justify-center">
             <div class="mx-auto text-center" >
-              <v-avatar color="primary" size="32">
-                <v-img :src="user.foto_url"></v-img>
-              </v-avatar>
+             
               <h4 class="text-wrap">{{ user.nombre }}</h4>
               <p class="text-caption mt-1">
                 {{ user.email }}
@@ -61,7 +59,7 @@ export default {
     // { name: "Iniciar sesión", path: "/login", notUser: true },
     // { name: "Registrarme", path: "/registro", notUser: true },
     //],
-    bgNavbar: "transparent",
+    bgNavbar: "#fff",
   }),
 
   computed: {
@@ -76,7 +74,7 @@ export default {
 
   mounted() {
     window.onscroll = () => {
-      this.changeColor();
+      //this.changeColor();
     };
   },
 
