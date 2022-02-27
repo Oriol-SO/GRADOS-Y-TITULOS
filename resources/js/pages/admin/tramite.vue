@@ -18,7 +18,7 @@
                     style="color:#fff;"
                     class="text-h7"
                     active-class="blue darken-4 "
-
+                    @click="mostrarid(fase,i)"
                 >
                     {{ i+1 }}
                 </v-tab>
@@ -28,10 +28,11 @@
                 <v-tab-item
                     v-for="(fase,i) in fases"
                     :key="i"
+
                 >
                     <v-card flat  >
                         
-                    <v-card-text class="text-md-body-1 font-weight-medium" >{{ fase.nombre }} </v-card-text>
+                    <v-card-text class="text-md-body-1 font-weight-medium" >{{ fase.id }} </v-card-text>
                     </v-card>
                 </v-tab-item>
                 </v-tabs-items>
@@ -78,8 +79,8 @@ export default{
      return{
         procesos:[],
          tab: null,
-       
         fases: [],
+        faseid:'',
         selectedItem: 1,
         items: [
             { text: 'Real-Time', icon: 'mdi-check-outline' },
@@ -93,13 +94,13 @@ export default{
             { text: 'Conversions', icon: 'mdi-check-outline' },
             { text: 'Conversions', icon: 'mdi-check-outline' },
         ],
-        faseid:'',
+
         
      } 
   },mounted(){
       this.FetchTramites();
       this.FetchFases();
-      console.log(this.faseid);
+
   },methods:{
       async FetchTramites(){
           const { data } = await axios.get(`/api/proceso/${this.$route.params.id}`);   
@@ -110,6 +111,9 @@ export default{
           const {data}=await axios.get(`/api/fase/${this.$route.params.id}`);
           this.fases=data;
           this.faseid=data[0].id;        
+      }, mostrarid(fase,i){
+          console.log(fase.i);
+          this.faseid=fase.i;
       }
   }
 }
