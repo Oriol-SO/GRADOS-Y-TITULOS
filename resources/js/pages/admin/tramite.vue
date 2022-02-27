@@ -18,7 +18,7 @@
                     style="color:#fff;"
                     class="text-h7"
                     active-class="blue darken-4 "
-
+                   @click="mostrarid(fase,i)"
                 >
                     {{ i+1 }}
                 </v-tab>
@@ -31,7 +31,7 @@
                 >
                     <v-card flat  >
                         
-                    <v-card-text class="text-md-body-1 font-weight-medium" >{{ fase.nombre }} </v-card-text>
+                    <v-card-text class="text-md-body-1 font-weight-medium" >{{ fase.nombre }}{{fase.id}} </v-card-text>
                     </v-card>
                 </v-tab-item>
                 </v-tabs-items>
@@ -44,20 +44,20 @@
                     tile
                 >
                     <v-list dense>
-                    <v-subheader class="font-weight-medium text-md-body-1">REQUISITOS {{faseid}}</v-subheader>
+                    <v-subheader class="font-weight-medium text-md-body-1">REQUISITOS {{faseid}}   </v-subheader>
                     <v-list-item-group
                         v-model="selectedItem"
                         color="primary"
                     >
                         <v-list-item
-                        v-for="(item, i) in items"
+                        v-for="(requisito, i) in requisitos"
                         :key="i"
                         >
                         <v-list-item-icon>
-                            <v-icon v-text="item.icon"></v-icon>
+                            <v-icon >mdi-check-outline</v-icon>
                         </v-list-item-icon>
                         <v-list-item-content>
-                            <v-list-item-title v-text="item.text"></v-list-item-title>
+                            <v-list-item-title v-text="requisito.nombre"></v-list-item-title>
                         </v-list-item-content>
                         </v-list-item>
                     </v-list-item-group>
@@ -81,8 +81,8 @@ export default{
        
         fases: [],
         selectedItem: 1,
-        items: [
-            { text: 'Real-Time', icon: 'mdi-check-outline' },
+        requisitos: [
+           /* { text: 'Real-Time', icon: 'mdi-check-outline' },
             { text: 'Audience', icon: 'mdi-check-outline' },
             { text: 'Conversions', icon: 'mdi-check-outline' },
             { text: 'Conversions', icon: 'mdi-check-outline' },
@@ -91,10 +91,9 @@ export default{
             { text: 'Conversions', icon: 'mdi-check-outline' },
             { text: 'Conversions', icon: 'mdi-check-outline' },
             { text: 'Conversions', icon: 'mdi-check-outline' },
-            { text: 'Conversions', icon: 'mdi-check-outline' },
+            { text: 'Conversions', icon: 'mdi-check-outline' },*/
         ],
         faseid:'',
-        
      } 
   },mounted(){
       this.FetchTramites();
@@ -109,7 +108,19 @@ export default{
       async FetchFases(){
           const {data}=await axios.get(`/api/fase/${this.$route.params.id}`);
           this.fases=data;
-          this.faseid=data[0].id;        
+          this.faseid=(data[0].id);   
+
+          this.mostrarrequisito(data[0].id);
+      }, mostrarid(fase,i){
+          console.log(fase.id);
+          this.faseid=fase.id;
+          this.mostrarrequisito(fase.id);
+          //return(fase.id);
+      },async mostrarrequisito(id){
+          const {data}=await axios.get(`/api/faserequisito/${id}`);
+          this.requisitos=data;
+
+          console.log(data);
       }
   }
 }

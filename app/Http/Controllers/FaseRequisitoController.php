@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\FaseRolRequisito;
+use App\Models\Requisito;
 
 class FaseRequisitoController extends Controller
 {
@@ -46,13 +47,27 @@ class FaseRequisitoController extends Controller
      */
     public function show($id)
     {
-        $requisitos=FaseRolRequisito::where('fase_id',$id)->get();
+        /*$requisitos=FaseRolRequisito::where('fase_id',$id)->get();
+                return [
+                    'faserequisito' => $requisitos->id,
+                    'requisito_id' => $requisitos->requisito_id,
+                    'nombre' => $requisitos->requisito->nombre,                   
+                    
+                ];*/
+                $requisitos['requisitos'] = FaseRolRequisito::where('fase_id',$id)->get(function ($r) {
+                    return [
+                        'id' => $r->id,       
+                        'requisito_id' => $r->requisito ? $r->requisito_id : null,
+                        'requiNom' => $r->requisito ? $r->requisito->nombre : null,                        
+                    ];
+                });
         return response()->json($requisitos,200);
-    }
+                        
+}
 
     /**
      * Show the form for editing the specified resource.
-     *
+     *select from users
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
