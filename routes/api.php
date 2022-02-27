@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\ProcesoController;
 use App\Http\Controllers\GradoController;
 use App\Http\Controllers\ModalidadController;
+use App\Http\Controllers\FaseController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -54,3 +55,4 @@ Route::group(['middleware' => 'guest:api'], function () {
 Route::resource('proceso', ProcesoController::class);
 Route::resource('grado', GradoController::class);
 Route::resource('modalidades', ModalidadController::class);
+Route::resource('fase',FaseController::class);

@@ -1,161 +1,233 @@
+
+
 <template>
-<v-data-table
-    :headers="headers"
-    :items="procesos"
-    :items-per-page="10"
-    class="elevation-1"
-  >
-  <template v-slot:top>
-      <v-toolbar
-        flat
+
+<div>
+  <div> 
+          
+      <v-col cols="auto">
+      <v-dialog
+        transition="dialog-top-transition"
+        max-width="600"
+        v-model="dialog"
       >
-        <v-toolbar-title>Gestionar Tramites</v-toolbar-title>
-        <v-divider
-          class="mx-4"
-          inset
-          vertical
-        ></v-divider>
-        <v-spacer></v-spacer>
-        <v-dialog
-          v-model="dialog"
-          max-width="500px"
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              color="primary"
-              dark
-              class="mb-2"
-              v-bind="attrs"
-              v-on="on"
-            >
-              Agregar Tramite
-            </v-btn>
-          </template>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            color="#2cdd9b" class="ml-10 mt-5"
+            style="color:#fff;"
+            v-bind="attrs"
+            v-on="on"
+          >Agregar Tramite</v-btn>
+        </template>
+        <template >
           <v-card>
-            <v-card-title>
-              <span class="text-h5">{{ formTitle }}</span>
-            </v-card-title>
-
+            <v-toolbar
+              color="#2cdd9b"
+              dark
+            >Agregar Nuevo tramite</v-toolbar>
             <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="4"
-                  >
-                    <v-text-field
-                    
-                      label="Nombre Proceso"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="4"
-                  >
-                    <v-text-field
-                     
-                      label="Grado"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="4"
-                  >
-                    <v-text-field
-                      
-                      label="Modalidad"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="4"
-                  >
-                    <v-text-field
-                      
-                      label="fase"
-                    ></v-text-field>
-                  </v-col>
-                  
-                
-                </v-row>
-              </v-container>
-            </v-card-text>
 
-            <v-card-actions>
-              <v-spacer></v-spacer>
+             <form>
+                  <v-text-field
+                    v-model="form.nombre"
+                    :error-messages="nameErrors"
+                    label="Nombre"
+                    required
+                  ></v-text-field>
+                   <div v-if="errors.nombre">
+                      <v-alert  dense outlined type="error" >
+                        {{errors.nombre[0]}}
+                      </v-alert>
+                   </div>
+                   <v-select
+                    v-model="form.grado"                  
+                    :items="grados"
+                    item-text='graNom'
+                    item-value='id'
+                    label="grado"
+                    persistent-hint
+                    return-object
+                    single-line
+               
+                  ></v-select>
+                      <div v-if="errors.grado">
+                        <v-alert   dense outlined type="error" >
+                           {{errors.grado[0]}}
+                        </v-alert>
+                      </div>
+                  <v-select
+                    v-model="form.modalidad"                  
+                    :items="modalidades"
+                    item-text='modNombre'
+                    item-value='id'
+                    label="Modalidad"
+                    persistent-hint
+                    return-object
+                    single-line
+                   
+                  ></v-select>
+                       <div v-if="errors.modalidad">
+                            <v-alert   dense outlined type="error" >
+                               {{errors.modalidad[0]}}
+                            </v-alert>
+                        </div>  
+                    <v-btn
+                      class="mr-4"
+                      color="#2cdd9b"
+                      @click="enviar"
+                      style="color:#fff;"
+                    >
+                      submit
+                    </v-btn>
+                    <v-btn @click="clear" color="#000"  style="color:#fff;">
+                      clear
+                    </v-btn>
+             </form>
+
+            
+
+
+
+            </v-card-text>
+            <v-card-actions class="justify-end">
               <v-btn
-                color="blue darken-1"
-                text               
-              >
-                Cancelar
-              </v-btn>
-              <v-btn
-                color="blue darken-1"
-                text                
-              >
-                Guardar
-              </v-btn>
+                text
+                @click="dialog=false"
+               
+              >Close</v-btn>
             </v-card-actions>
           </v-card>
-        </v-dialog >
+        </template>
+      </v-dialog>
+    </v-col>
+
+  </div>
+ <div 
+  style="display:flex; flex-wrap:wrap; justify-content: space-evenly;"
+ >
+ 
+      <v-alert v-for="(proceso,i) in procesos" :key="i"
+    class="mt-5 mb-5 ml-1 mr-1  "    
+    width="420"  
+    border="top"
+    colored-border
+    color="rgb(44, 221, 155)"
     
-      </v-toolbar>
-  </template>
+  >
+  
+    <v-card-text >     
+      <p class="text-h6 " style="color:#000; ">
+        {{proceso.nombre}}
+      </p>
+        <div class="text--primary "  >
+        Fases :<strong>{{proceso.cantidad_fases}}</strong> <br/>
+        Requisitos :<strong>{{proceso.cantidad_requisitos}}</strong>
+      </div>
+    </v-card-text>
+    <v-card-actions>
+      <v-btn  
+        color="blue lighten-5"
+        style="color:#2196f3;"
+        rounded
+        elevation="0"
+        class="text-capitalize"
+        @click=" $router.push({ path: `/admin/tramite/${proceso.id}`, }) "     
+      >
+        Abrir
+      </v-btn>
+      <v-btn
+       color="error lighten-5"
+        style="color:#ff5722;"
+        rounded
+        elevation="0"
+        class="text-capitalize"
+      >
+        Desactivar
+      </v-btn>
+    </v-card-actions>
+  </v-alert>
+   
 
-
-  </v-data-table>
+ 
+ </div>
+</div>
 </template>
+
 <script>
 import axios from 'axios'
-  export default {
+import Form from "vform";
+   export default {
     data () {
-      return {
-        headers: [
-          {
-            text: 'Nombre Procesos',
-            align: 'start',
-            sortable: false,
-            value: 'procNom',
-          },
-          { text: 'Fases', value: 'fase' },
-          { text: 'Requisitos', value: 'requisito' },
-           { text: 'Acciones', value: 'actions', sortable: false },
-        ],
-        /*desserts: [
-          {
-            nomProc: 'KitKat',
-            fase: 518,
-            requisito: 26.0,
-          
-          },
-        ],*/
-        procesos:[],
        
+      return {  
+          //select:{graNom:'',id:''} ,
+          grados:[],
+          procesos:[],         
+          modalidades:[],
+          dialog:false,
+          errors:{},
+        form: new Form({
+            nombre:'',
+            grado:'',
+            modalidad:'',
+            tipo:'1',
+          }),
+          
       }
     },
-    computed: {
-      formTitle () {
-        return this.editedIndex === 'New Item' 
-      },
-    },
-    mounted(){
+      mounted(){
       this.FetchProceso();
+      this.FetchGrados();
+      this.FetchModalidad();
     }, 
     
     methods:{
       async FetchProceso() {
         const { data } = await axios.get("/api/proceso");
-        this.procesos = data;
+        this.procesos = data.tramites;
 
-        //console.log(data);
-      },
+        console.log(data);
+      },async FetchGrados(){
+        const { data } = await axios.get("/api/grado");
+        this.grados = data;
+
+        console.log(data);
+      },async FetchModalidad(){
+        const { data } = await axios.get("/api/modalidades");
+        this.modalidades = data;
+
+        console.log(data);
+      }, async enviar(){
+             
+         console.log(this.form);
+          
+          const { data } =await this.form.post("/api/proceso")
+          .then(response =>{
+            this.FetchProceso();
+            this.clear();
+            this.dialog=false;
+          }).catch(error=>{
+            if(error.response.status === 422){
+              this.errors=error.response.data.errors;
+              console.log(this.errors);
+            }
+          });
+        
+          
+
+      }, clear() {
+         this.form.nombre='';
+         this.form.grado=null;
+         this.form.modalidad=null;
+         
+      }
 
 
     
     },
   }
 </script>
+
+<style >
+ 
+</style>

@@ -6,7 +6,7 @@
                 permanent
                 fixed
                 class='estilos-sidebar'
-                
+                color="#111827"
                 
               >
                 <v-divider></v-divider>
@@ -19,9 +19,9 @@
               
                 <router-link 
                 v-for="(item,i) in items" :key="i" :to="{name: item.to}" link style="text-decoration:none">   
-                  <v-list-item link class="iconos">
+                  <v-list-item link class="iconos" style="color:white;">
                     <v-list-item-icon>
-                      <v-icon>{{item.icon}}</v-icon>
+                      <v-icon color="white">{{item.icon}}</v-icon>
                     </v-list-item-icon>
                     <v-list-item-title>{{item.title}}</v-list-item-title>
                   </v-list-item>
@@ -46,7 +46,7 @@
 <style>
   .estilos-sidebar{
     margin-top:70px;
-    border-top-right-radius:20px;
+  /*  border-top-right-radius:20px;*/
   }
   .estilos-sidebar:hover{
  -webkit-box-shadow: 10px -1px 21px -11px rgba(0,0,0,0.56);
@@ -54,7 +54,7 @@
   box-shadow: 10px -1px 21px -11px rgba(0,0,0,0.56);
   }
  .iconos:hover{
-   background: #c6c6cd;
+   background: rgb(80 78 78 / 26%);
  }
 
 

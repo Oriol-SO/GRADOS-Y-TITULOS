@@ -2,7 +2,7 @@
   <v-app id="inspire" class="grey lighten-3">
     <navbar />
 
-    <v-main class="grey lighten-3">
+    <v-main style="background:rgb(242, 243, 248);" >
       <transition name="fade" mode="out-in"> <child /> </transition>
     </v-main>
     <piepage />
