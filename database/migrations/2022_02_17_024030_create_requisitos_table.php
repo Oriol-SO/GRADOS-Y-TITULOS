@@ -15,7 +15,7 @@ class CreateRequisitosTable extends Migration
     {
         Schema::create('requisitos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
+            $table->text('nombre');
             $table->string('tipo_documento');
             $table->text('html_formato')->nullable();
             $table->BigInteger('tipoarchi_id')->unsigned();

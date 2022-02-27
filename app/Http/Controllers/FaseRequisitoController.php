@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Fase;
+use App\Models\FaseRolRequisito;
 
-class FaseConntroller extends Controller
+class FaseRequisitoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -46,8 +46,8 @@ class FaseConntroller extends Controller
      */
     public function show($id)
     {
-        $fase=Fase::find($id);
-        return $fase->json();
+        $requisitos=FaseRolRequisito::where('fase_id',$id)->get();
+        return response()->json($requisitos,200);
     }
 
     /**
