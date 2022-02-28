@@ -9,7 +9,10 @@ class Fase extends Model
 {
     use HasFactory;
     protected $fillable=[
-
+        'nombre',
+        'numero',
+        'fase_id',
+        'proceso_id',
 
     ];
     public function Proceso()

@@ -24,7 +24,6 @@
                                     v-on="on"
                                 >Agregar Fase</v-btn> 
                             </div>
-                                
                         </template>              
 
                         <template >
@@ -36,22 +35,34 @@
                                 <v-card-text>
                                     <form>
                                         <v-text-field
+                                            v-model="formfase.nombrefase"
                                             label="Nombre"
                                             required
-                                        ></v-text-field>                            
+                                        ></v-text-field> 
+                                        <div v-if="errores.nombrefase">
+                                            <v-alert   dense outlined type="error" >
+                                            {{errores.nombrefase[0]}}
+                                            </v-alert>
+                                        </div>                           
                                         <v-text-field
+                                            v-model="formfase.numerofase"
                                             label="Orden"
                                             required
-                                        ></v-text-field>                                                    
+                                        ></v-text-field>  
+                                        <div v-if="errores.numerofase">
+                                            <v-alert   dense outlined type="error" >
+                                            {{errores.numerofase[0]}}
+                                            </v-alert>
+                                        </div>                                                   
                                             <v-btn
                                             class="mr-4 text-capitalize"
                                             color="#2cdd9b"
                                             style="color:#fff;"
-                                            
+                                             @click="enviarfase()"                                            
                                             >
                                             Enviar
                                             </v-btn>
-                                            <v-btn  color="#000"  style="color:#fff;" class="text-capitalize">
+                                            <v-btn  @click="clear" color="#000"  style="color:#fff;" class="text-capitalize">
                                             Limpiar
                                             </v-btn>
                                     </form>                     
@@ -59,7 +70,7 @@
                                 <v-card-actions class="justify-end">
                                 <v-btn
                                     text
-                                    @click="dialog=false"
+                                    @click="dialog=false,clear()"
                                     class="text-capitalize"
                                 >Close</v-btn>
                                 </v-card-actions>
@@ -113,7 +124,112 @@
                 >
                     <v-list dense >
                     <v-subheader class="font-weight-medium text-md-body-1 d-flex">REQUISITOS 
-                        <v-btn color="#2cdd9b" small elevation="0" style="color:#fff;"  class="ml-4 ml-auto text-capitalize" >Agregar requisito</v-btn>    
+                                        <v-dialog
+                                                transition="dialog-top-transition"
+                                                max-width="600"
+                                                v-model="dialog2"
+                                            >   
+                                                    <template v-slot:activator="{ on, attrs }" >
+                                                        <div class="d-flex" style="width: 100%;">
+                                                           
+                                                      <v-btn color="#2cdd9b" small elevation="0" style="color:#fff;"  class=" ml-auto text-capitalize"  
+                                                      v-bind="attrs"
+                                                      v-on="on" >Agregar requisito</v-btn> 
+                                                        </div>
+                                                    </template>              
+
+                                                    <template >
+                                                        <v-card>
+                                                            <v-toolbar
+                                                            color="#3DB2FF"
+                                                            dark
+                                                            >Agregar Nuevo requisito en esta fase</v-toolbar>
+                                                            <v-card-text>
+                                                                <form>
+                                                                    <template>
+                                                                        <v-card elevation="0" class="mt-2">
+                                                                            <v-tabs
+                                                                            color="primary"
+                                                                            centered
+
+                                                                            >
+                                                                            <v-tab>seleccionar requisito </v-tab>
+                                                                            <v-tab>crear nuevo</v-tab>                                                                            
+                                                                            <v-tab-item>
+                                                                                <v-container fluid>
+                                                                                    <v-row>                                                                                    
+                                                                                       <v-select
+                                                                                            v-model="formrequi.requisito"   
+                                                                                            :hint="`${formrequi.requisito.nombre}`"               
+                                                                                            :items="allrequisitos"
+                                                                                            item-text='nombre'
+                                                                                            item-value='id'
+                                                                                            label="Seleccionar Requisito existentente"
+                                                                                            persistent-hint
+                                                                                            return-object
+                                                                                            single-line                                                                      
+                                                                                        ></v-select>                                                                                
+                                                                                    </v-row>                                                                  
+                                                                                </v-container>                                                           
+                                                                            </v-tab-item>
+                                                                               <v-tab-item>
+                                                                                <v-container fluid>
+                                                                                    <v-row>                                                                                    
+                                                                                         <v-text-field
+                                                                                            v-model="formrequi.nombre"
+                                                                                            label="nombre"
+                                                                                            required
+                                                                                        ></v-text-field> 
+                                                                                    </v-row> 
+                                                                                    <v-row>
+                                                                                        <v-text-field
+                                                                                            v-model="formrequi.tipodocumneto"
+                                                                                            label="Tipo de documento"
+                                                                                            required
+                                                                                        ></v-text-field>
+                                                                                    </v-row> 
+                                                                                    <v-row>
+                                                                                         <v-text-field
+                                                                                            v-model="formrequi.extension"
+                                                                                            label="extension"
+                                                                                            required
+                                                                                        ></v-text-field>                                                                                 
+                                                                                    </v-row>                                                                  
+                                                                                </v-container>                                                           
+                                                                            </v-tab-item>
+                                                                            </v-tabs>
+                                                                        </v-card>
+                                                                    </template>                                                                                                                                                             
+                                                                    <v-text-field
+                                                                        v-model="formrequi.rol"
+                                                                        label="rol"
+                                                                        required
+                                                                    ></v-text-field>  
+                                                                                                                   
+                                                                        <v-btn
+                                                                        class="mr-4 text-capitalize"
+                                                                        color="#3DB2FF"
+                                                                        style="color:#fff;"
+                                                                        @click="enviarfase()"                                            
+                                                                        >
+                                                                        Enviar
+                                                                        </v-btn>
+                                                                        <v-btn  @click="clear" color="#000"  style="color:#fff;" class="text-capitalize">
+                                                                        Limpiar
+                                                                        </v-btn>
+                                                                </form>                     
+                                                            </v-card-text>
+                                                            <v-card-actions class="justify-end">
+                                                            <v-btn
+                                                                text
+                                                                @click="dialog2=false,clear()"
+                                                                class="text-capitalize"
+                                                            >Close</v-btn>
+                                                            </v-card-actions>
+                                                        </v-card>
+                                                    </template>    
+                                        </v-dialog>
+                           
                     </v-subheader>
                     <v-list-item-group
                         v-model="selectedItem"
@@ -197,7 +313,8 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from 'axios';
+import Form from "vform";
 export default{
 
   data(){     
@@ -215,11 +332,33 @@ export default{
         extension:'',
         otros:[],
         dialog:false,
+        dialog2:false,
+        errores:{},
+        formfase: new Form({
+            nombrefase:'',
+            numerofase:'',
+            procesoid:this.$route.params.id,
+          }),
+        formrequi:new Form({
+            requisito:'',
+            nombre:'',
+            rol:'',
+            tipodocumento:'',
+            extension:'',
+
+        }),
+        allrequisitos:{},
+
+        
      } 
   },mounted(){
       this.FetchTramites();
       this.FetchFases();
-      console.log(this.faseid);
+      this.FetchAllrequisitos();
+    // this.formfase.procesoid=this.$route.params.id;
+     // console.log(this.faseid);
+
+      //console.log(this.formfase.procesoid);
   },methods:{
       async FetchTramites(){
           const { data } = await axios.get(`/api/proceso/${this.$route.params.id}`);   
@@ -264,6 +403,26 @@ export default{
            this.otros=requisito.otrostramites;
          // console.log(this.selectedItem);
          
+      }, clear() {
+         this.formfase.nombrefase='';
+         this.formfase.numerofase='';
+         this.errores={};         
+      },async enviarfase(){
+          const {data}= await this.formfase.post(`/api/fase/`)
+           .then(response =>{
+            this.FetchFases();
+            this.clear();
+            this.dialog=false;
+          }).catch(error=>{
+            if(error.response.status === 422){
+              this.errores=error.response.data.errors;
+              console.log(this.errores);
+            }
+          });
+      },async FetchAllrequisitos(){
+             const {data}=await axios.get(`/api/requisito/`);
+             this.allrequisitos=data;
+             //console.log(data);
       }
   }
 }

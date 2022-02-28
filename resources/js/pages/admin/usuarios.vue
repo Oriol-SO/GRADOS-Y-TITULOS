@@ -28,7 +28,7 @@
               v-bind="attrs"
               v-on="on"
             >
-              Agregar Tramite
+              Agregar Usuario
             </v-btn>
           </template>
           <v-card>
@@ -116,13 +116,13 @@ import axios from 'axios'
       return {
         headers: [
           {
-            text: 'Nombre Procesos',
+            text: 'Usuarios',
             align: 'start',
             sortable: false,
             value: 'procNom',
           },
-          { text: 'Fases', value: 'fase' },
-          { text: 'Requisitos', value: 'requisito' },
+          { text: 'Nombre', value: 'nombre' },
+          { text: 'Email', value: 'email' },
            { text: 'Acciones', value: 'actions', sortable: false },
         ],
         /*desserts: [
@@ -133,7 +133,7 @@ import axios from 'axios'
           
           },
         ],*/
-        procesos:[],
+        personas:[],
        
       }
     },
@@ -143,13 +143,13 @@ import axios from 'axios'
       },
     },
     mounted(){
-      this.FetchProceso();
+      this.FetchPersonas();
     }, 
     
     methods:{
-      async FetchProceso() {
-        const { data } = await axios.get("/api/proceso");
-        this.procesos = data;
+      async FetchPersonas() {
+        const { data } = await axios.get("/api/persona");
+        this.personas = data;
 
         //console.log(data);
       },
