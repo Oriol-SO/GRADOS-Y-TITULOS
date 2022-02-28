@@ -32,7 +32,7 @@ class FaseRolRequisito extends Model
     }
 
     public function Rol(){
-        return $this->belongsTo(Rol::class,'rol_id','id');
+        return $this->belongsTo(Role::class,'rol_id','id');
  
     }
 }

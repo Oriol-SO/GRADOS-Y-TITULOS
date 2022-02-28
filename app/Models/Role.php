@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Rol extends Model
+class Role extends Model
 {
     use HasFactory;
     protected $fillable=[
@@ -15,12 +15,12 @@ class Rol extends Model
 
     public function PersonaRol()
     {
-        return $this->hasMany(PersonaRol::class,'rol_id','id');
+        return $this->hasMany(PersonaRole::class,'rol_id','id');
     }
     //CONECION CON LA MISMA TABLA ROL
     public function Rol()
     {
-        return $this->hasMany(Rol::class,'rol_id','id');
+        return $this->hasMany(Role::class,'rol_id','id');
     }
     public function FaseRolRequisito(){
         return $this->hasMany(FaseRolRequisito::class,'rol_id','id');

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\FaseRolRequisito;
 use App\Models\Requisito;
+use App\Models\Role;
+use App\Models\TipoArchivo;
+use App\Models\Proceso;
 
 class FaseRequisitoController extends Controller
 {
@@ -47,21 +50,24 @@ class FaseRequisitoController extends Controller
      */
     public function show($id)
     {
-        /*$requisitos=FaseRolRequisito::where('fase_id',$id)->get();
-                return [
-                    'faserequisito' => $requisitos->id,
-                    'requisito_id' => $requisitos->requisito_id,
-                    'nombre' => $requisitos->requisito->nombre,                   
-                    
-                ];*/
-                $requisitos['requisitos'] = FaseRolRequisito::where('fase_id',$id)->get(function ($r) {
+
+                $requisitos = FaseRolRequisito::where('fase_id',$id)->get()->map(function ($r) {
                     return [
                         'id' => $r->id,       
-                        'requisito_id' => $r->requisito ? $r->requisito_id : null,
-                        'requiNom' => $r->requisito ? $r->requisito->nombre : null,                        
+                        'requisito_id' => $r->requisito_id ,
+                        'nombre' => $r->requisito ->nombre ,
+                        'rol'=> $r->rol->rolNombre,
+                        'documento'=>$r->requisito->TipoArchivo->tipoNombre,
+                        'extension'=>   $r->requisito ->tipo_documento,
+                        'otrostramites'=> $r->fase->autofase->map(function($p){
+                            return[
+                                'nombre'=>$p->proceso->procNom,
+                                'idproc'=>$p->proceso->id,
+                            ];
+                        }),               
                     ];
                 });
-        return response()->json($requisitos,200);
+        return response()->json($requisitos);
                         
 }
 

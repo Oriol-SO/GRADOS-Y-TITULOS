@@ -22,8 +22,10 @@ class Fase extends Model
         return $this->hasMany(FaseRolRequisito::class,'fase_id','id');
     }
     //CONECION CON LA MISMA TABLA FASE
-    public function Fase()
+    public function autofase()
     {
         return $this->hasMany(Fase::class,'fase_id','id');
     }
+
+
 }
