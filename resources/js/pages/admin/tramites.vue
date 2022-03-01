@@ -30,13 +30,12 @@
              <form>
                   <v-text-field
                     v-model="form.nombre"
-                    :error-messages="nameErrors"
                     label="Nombre"
                     required
                   ></v-text-field>
-                   <div v-if="errors.nombre">
+                   <div v-if="errores.nombre">
                       <v-alert  dense outlined type="error" >
-                        {{errors.nombre[0]}}
+                        {{errores.nombre[0]}}
                       </v-alert>
                    </div>
                    <v-select
@@ -50,9 +49,9 @@
                     single-line
                
                   ></v-select>
-                      <div v-if="errors.grado">
+                      <div v-if="errores.grado">
                         <v-alert   dense outlined type="error" >
-                           {{errors.grado[0]}}
+                           {{errores.grado[0]}}
                         </v-alert>
                       </div>
                   <v-select
@@ -66,9 +65,9 @@
                     single-line
                    
                   ></v-select>
-                       <div v-if="errors.modalidad">
+                       <div v-if="errores.modalidad">
                             <v-alert   dense outlined type="error" >
-                               {{errors.modalidad[0]}}
+                               {{errores.modalidad[0]}}
                             </v-alert>
                         </div>  
                     <v-btn
@@ -92,7 +91,7 @@
             <v-card-actions class="justify-end">
               <v-btn
                 text
-                @click="dialog=false"
+                @click="dialog=false,clear()"
                
               >Close</v-btn>
             </v-card-actions>
@@ -165,7 +164,7 @@ import Form from "vform";
           procesos:[],         
           modalidades:[],
           dialog:false,
-          errors:{},
+          errores:{},
         form: new Form({
             nombre:'',
             grado:'',
@@ -208,7 +207,7 @@ import Form from "vform";
             this.dialog=false;
           }).catch(error=>{
             if(error.response.status === 422){
-              this.errors=error.response.data.errors;
+              this.errores=error.response.data.errors;
               console.log(this.errors);
             }
           });
@@ -219,6 +218,7 @@ import Form from "vform";
          this.form.nombre='';
          this.form.grado=null;
          this.form.modalidad=null;
+         this.errores={};
          
       }
 

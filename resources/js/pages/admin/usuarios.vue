@@ -1,15 +1,15 @@
 <template>
 <v-data-table
     :headers="headers"
-    :items="procesos"
+    :items="personas"
     :items-per-page="10"
-    class="elevation-1"
+    class="elevation-1 ml-4 mt-5"
   >
   <template v-slot:top>
       <v-toolbar
         flat
       >
-        <v-toolbar-title>Gestionar Tramites</v-toolbar-title>
+        <v-toolbar-title>USUARIOS</v-toolbar-title>
         <v-divider
           class="mx-4"
           inset
@@ -28,7 +28,7 @@
               v-bind="attrs"
               v-on="on"
             >
-              Agregar Usuario
+              Agregar Persona
             </v-btn>
           </template>
           <v-card>
@@ -119,11 +119,11 @@ import axios from 'axios'
             text: 'Usuarios',
             align: 'start',
             sortable: false,
-            value: 'procNom',
+            value: 'nom',
           },
-          { text: 'Nombre', value: 'nombre' },
+          { text: 'documento', value: 'numDoc' },
           { text: 'Email', value: 'email' },
-           { text: 'Acciones', value: 'actions', sortable: false },
+          { text: 'Acciones', value: 'actions', sortable: false },
         ],
         /*desserts: [
           {
@@ -151,7 +151,7 @@ import axios from 'axios'
         const { data } = await axios.get("/api/persona");
         this.personas = data;
 
-        //console.log(data);
+        console.log(data);
       },
 
 

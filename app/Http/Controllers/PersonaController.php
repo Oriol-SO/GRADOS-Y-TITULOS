@@ -3,20 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Requisito;
-use App\Models\FaseRolRequisito;
-class RequisitoController extends Controller
+use App\Models\Persona;
+
+class PersonaController extends Controller
 {
-     /**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $requisitos= Requisito::all('nombre','id');
-
-        return response()->json($requisitos);
+        $personas=Persona::all();
+        return response()->json($personas);
     }
 
     /**
@@ -37,21 +36,8 @@ class RequisitoController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validarrequisitoNuevo($request);
-        $requisito=Requisito::create([
-            'nombre' => $request->nombre,
-            'tipo_documento' => $request->extension,
-            'tipoarchi_id' =>$request->tipodocumento['id'],
-            'html_formato'=>null,
-            ]);
-        
-        $faserol=$this->insertarfaserequisito($requisito->id,$request->fase_id,$request->rol['id']); 
-         return response()->json([
-           'faserolreq'=>$faserol,
-         ]);  
-        
+        //
     }
-
 
     /**
      * Display the specified resource.
@@ -96,23 +82,5 @@ class RequisitoController extends Controller
     public function destroy($id)
     {
         //
-    }
-    public function validarrequisitoNuevo($request=null){
-        return $request->validate([
-            'nombre'=>'required',
-            'rol'=>'required',
-            'tipodocumento'=>'required',
-            'extension'=>'required',
-        ]);
-    }
-    public function insertarfaserequisito($id,$faseid,$rolid){  
-        $faserequisito = FaseRolRequisito::create([
-            'rol_id' => $rolid,
-            'requisito_id' => $id,
-            'fase_id' =>$faseid,
-            ]);
-            return response()->json([
-                'faserequisito'=>$faserequisito,
-            ]); 
     }
 }

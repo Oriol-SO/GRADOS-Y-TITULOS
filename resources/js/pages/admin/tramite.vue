@@ -117,118 +117,202 @@
                 <div class="d-flex" style="width:100%; min-height:600px;">
 
               
-                <v-card
-                    class=" mt-2 "
-                    tile
-                    width="70%"
-                >
+                    <v-card
+                        class=" mt-2 "
+                        tile
+                        width="70%"
+                    >
                     <v-list dense >
                     <v-subheader class="font-weight-medium text-md-body-1 d-flex">REQUISITOS 
-                                        <v-dialog
-                                                transition="dialog-top-transition"
-                                                max-width="600"
-                                                v-model="dialog2"
-                                            >   
-                                                    <template v-slot:activator="{ on, attrs }" >
-                                                        <div class="d-flex" style="width: 100%;">
-                                                           
-                                                      <v-btn color="#2cdd9b" small elevation="0" style="color:#fff;"  class=" ml-auto text-capitalize"  
-                                                      v-bind="attrs"
-                                                      v-on="on" >Agregar requisito</v-btn> 
-                                                        </div>
-                                                    </template>              
+                        <v-dialog
+                                transition="dialog-top-transition"
+                                max-width="600"
+                                v-model="dialog2"
+                            >   
+                                    <template v-slot:activator="{ on, attrs }" >
+                                        <div class="d-flex" style="width: 100%;">
+                                            
+                                        <v-btn v-if="faseid" color="#2cdd9b" small elevation="0" style="color:#fff;"  class=" ml-auto text-capitalize"  
+                                        v-bind="attrs"
+                                        v-on="on" >Agregar requisito</v-btn> 
+                                        </div>
+                                    </template>              
 
-                                                    <template >
-                                                        <v-card>
-                                                            <v-toolbar
-                                                            color="#3DB2FF"
-                                                            dark
-                                                            >Agregar Nuevo requisito en esta fase</v-toolbar>
-                                                            <v-card-text>
-                                                                <form>
-                                                                    <template>
-                                                                        <v-card elevation="0" class="mt-2">
-                                                                            <v-tabs
-                                                                            color="primary"
-                                                                            centered
+                                    <template >
+                                        <v-card>
+                                            <v-toolbar
+                                            color="#3DB2FF"
+                                            dark
+                                            >Agregar Nuevo requisito en esta fase</v-toolbar>
+                                            <v-card-text>                                                                
+                                                <template>
+                                                    <v-card elevation="0" class="mt-2">
+                                                        <v-tabs
+                                                        color="primary"
+                                                        centered
 
-                                                                            >
-                                                                            <v-tab>seleccionar requisito </v-tab>
-                                                                            <v-tab>crear nuevo</v-tab>                                                                            
-                                                                            <v-tab-item>
-                                                                                <v-container fluid>
-                                                                                    <v-row>                                                                                    
-                                                                                       <v-select
-                                                                                            v-model="formrequi.requisito"   
-                                                                                            :hint="`${formrequi.requisito.nombre}`"               
-                                                                                            :items="allrequisitos"
-                                                                                            item-text='nombre'
-                                                                                            item-value='id'
-                                                                                            label="Seleccionar Requisito existentente"
-                                                                                            persistent-hint
-                                                                                            return-object
-                                                                                            single-line                                                                      
-                                                                                        ></v-select>                                                                                
-                                                                                    </v-row>                                                                  
-                                                                                </v-container>                                                           
-                                                                            </v-tab-item>
-                                                                               <v-tab-item>
-                                                                                <v-container fluid>
-                                                                                    <v-row>                                                                                    
-                                                                                         <v-text-field
-                                                                                            v-model="formrequi.nombre"
-                                                                                            label="nombre"
-                                                                                            required
-                                                                                        ></v-text-field> 
-                                                                                    </v-row> 
-                                                                                    <v-row>
-                                                                                        <v-text-field
-                                                                                            v-model="formrequi.tipodocumneto"
-                                                                                            label="Tipo de documento"
-                                                                                            required
-                                                                                        ></v-text-field>
-                                                                                    </v-row> 
-                                                                                    <v-row>
-                                                                                         <v-text-field
-                                                                                            v-model="formrequi.extension"
-                                                                                            label="extension"
-                                                                                            required
-                                                                                        ></v-text-field>                                                                                 
-                                                                                    </v-row>                                                                  
-                                                                                </v-container>                                                           
-                                                                            </v-tab-item>
-                                                                            </v-tabs>
-                                                                        </v-card>
-                                                                    </template>                                                                                                                                                             
-                                                                    <v-text-field
-                                                                        v-model="formrequi.rol"
-                                                                        label="rol"
-                                                                        required
-                                                                    ></v-text-field>  
-                                                                                                                   
+                                                        >
+                                                            <v-tab >seleccionar requisito </v-tab>
+                                                            <v-tab >crear nuevo</v-tab>                                                                         
+                                                                <v-tab-item> 
+                                                                    <form >                                                                                      
+                                                                    <v-container >
+                                                                        <v-row fluid>                                                                                    
+                                                                            <v-select
+                                                                                v-model="formrequi1.requisito"   
+                                                                                :hint="`${formrequi1.requisito.nombre}`"               
+                                                                                :items="allrequisitos"
+                                                                                item-text='nombre'
+                                                                                item-value='id'
+                                                                                label="Seleccionar Requisito existentente"
+                                                                                persistent-hint
+                                                                                return-object
+                                                                                single-line                                                                      
+                                                                            ></v-select>                                                                                                                                                            
+                                                                        </v-row>
+                                                                        <v-row>
+                                                                            <div>
+                                                                                <v-alert v-if="erroresR1.requisito"   dense outlined type="error" >
+                                                                                            {{erroresR1.requisito[0]}}
+                                                                                </v-alert>
+                                                                            </div>
+                                                                        </v-row>
+                                                                        <v-row fluid>  
+                                                                            <v-select
+                                                                            v-model="formrequi1.rol"                                                                               
+                                                                            required          
+                                                                            :items="roles"
+                                                                            item-text='rolNombre'
+                                                                            item-value='id'
+                                                                            label="Seleccionar rol"
+                                                                            persistent
+                                                                            return-object
+                                                                            single-line                                                                      
+                                                                            ></v-select>                                                                                
+                                                                        </v-row>
+                                                                        <v-row>
+                                                                            <div>
+                                                                                <v-alert v-if="erroresR1.rol"   dense outlined type="error" >
+                                                                                            {{erroresR1.rol[0]}}
+                                                                                </v-alert>
+                                                                            </div>
+                                                                        </v-row>
+                                                                                                                                   
+                                                                    </v-container> 
                                                                         <v-btn
+                                                                            class="mr-4 text-capitalize"
+                                                                            color="#3DB2FF"
+                                                                            style="color:#fff;"
+                                                                            @click="submitrequisito()"                                            
+                                                                            >
+                                                                            Enviar
+                                                                            </v-btn>
+                                                                            <v-btn  @click="limpiarselect()" color="#000"  style="color:#fff;  " class="text-capitalize">
+                                                                            Limpiar
+                                                                            </v-btn>
+                                                                    </form>                                                                                            
+                                                                </v-tab-item>                                                                                           
+                                                                
+                                                                <v-tab-item> 
+                                                                    <form>                                                                                   
+                                                                    <v-container >
+                                                                        <v-row fluid>                                                                                    
+                                                                            <v-text-field
+                                                                                v-model="formrequi2.nombre"
+                                                                                label="nombre"
+                                                                                required
+                                                                            ></v-text-field> 
+                                                                        </v-row>
+                                                                        <v-row>
+                                                                            <div>
+                                                                                <v-alert v-if="erroresR2.nombre"   dense outlined type="error" >
+                                                                                            {{erroresR2.nombre[0]}}
+                                                                                </v-alert>
+                                                                            </div>
+                                                                        </v-row>
+                                                                        <v-row fluid> 
+                                                                            <v-select
+                                                                                v-model="formrequi2.tipodocumento"                                                                                
+                                                                                required          
+                                                                                :items="tipoarchivos"
+                                                                                item-text='tipoNombre'
+                                                                                item-value='id'
+                                                                                label="Seleccionar tipo de documento"
+                                                                                persistent-hint
+                                                                                return-object
+                                                                                single-line                                                                      
+                                                                            ></v-select>
+                                                                        </v-row>
+                                                                        <v-row>
+                                                                            <div>
+                                                                                <v-alert v-if="erroresR2.tipodocumento"   dense outlined type="error" >
+                                                                                            {{erroresR2.tipodocumento[0]}}
+                                                                                </v-alert>
+                                                                            </div>
+                                                                        </v-row>                                                                                  
+                                                                        <v-row fluid>
+                                                                            <v-text-field
+                                                                                v-model="formrequi2.extension"
+                                                                                label="extension"
+                                                                                required
+                                                                            ></v-text-field>                                                                                 
+                                                                        </v-row>
+                                                                        <v-row>
+                                                                            <div>
+                                                                                <v-alert v-if="erroresR2.extension"   dense outlined type="error" >
+                                                                                            {{erroresR2.extension[0]}}
+                                                                                </v-alert>
+                                                                            </div>
+                                                                        </v-row>
+                                                                        <v-row fluid>                                                                                       
+                                                                            <v-select
+                                                                            v-model="formrequi2.rol"                                                                               
+                                                                            required          
+                                                                            :items="roles"
+                                                                            item-text='rolNombre'
+                                                                            item-value='id'
+                                                                            label="Seleccionar rol"
+                                                                            persistent
+                                                                            return-object
+                                                                            single-line                                                                      
+                                                                            ></v-select>                                                                                                                                                                                
+                                                                        </v-row> 
+                                                                        <v-row>
+                                                                            <div>
+                                                                                <v-alert v-if="erroresR2.rol"   dense outlined type="error" >
+                                                                                            {{erroresR2.rol[0]}}
+                                                                                </v-alert>
+                                                                            </div>
+                                                                        </v-row>                                                                 
+                                                                    </v-container>                                                                     
+                                                                        <v-btn                                                                                 
                                                                         class="mr-4 text-capitalize"
                                                                         color="#3DB2FF"
                                                                         style="color:#fff;"
-                                                                        @click="enviarfase()"                                            
+                                                                        @click="submitrequisitonuevo()"                                            
                                                                         >
                                                                         Enviar
                                                                         </v-btn>
-                                                                        <v-btn  @click="clear" color="#000"  style="color:#fff;" class="text-capitalize">
+                                                                        <v-btn  @click="limpiarnuevo()" color="#000"  style="color:#fff;" class="text-capitalize">
                                                                         Limpiar
-                                                                        </v-btn>
-                                                                </form>                     
-                                                            </v-card-text>
-                                                            <v-card-actions class="justify-end">
-                                                            <v-btn
-                                                                text
-                                                                @click="dialog2=false,clear()"
-                                                                class="text-capitalize"
-                                                            >Close</v-btn>
-                                                            </v-card-actions>
-                                                        </v-card>
-                                                    </template>    
-                                        </v-dialog>
+                                                                        </v-btn>                                                                    
+                                                                    </form>                                                                                                                                         
+                                                                </v-tab-item>                                                                                        
+                                                            
+                                                        </v-tabs>
+                                                    </v-card>
+                                                </template>                                
+                                            </v-card-text>
+                                            <v-card-actions class="justify-end">
+                                            <v-btn
+                                                text
+                                                @click="dialog2=false,clearall()"
+                                                class="text-capitalize"
+                                            >Close</v-btn>
+                                            </v-card-actions>
+                                        </v-card>
+                                    </template>    
+                        </v-dialog>
                            
                     </v-subheader>
                     <v-list-item-group
@@ -252,64 +336,57 @@
                     </v-list-item-group>
                     </v-list>
                      
-                </v-card>
-                <v-spacer></v-spacer>
-                <v-card class="mt-2 ml-4 mr-2"  width="30%" tile>
-                      <v-subheader class="font-weight-medium text-md-body-1">DETALLE REQUISITO </v-subheader>
-                        <v-list three-line style="min-height:02;">
-                            <template>                                
-                                <v-divider
-                                class="mx-auto"
-                                style="min-width:90%;"
-                                ></v-divider>
-                              <v-list-item  class="mt-1" style="min-height:50px;">
-                                <v-list-item-content class="py-0 " style="max-height: 55px;" v-if="nombrereq" >
-                                    <v-list-item-title > Nombre</v-list-item-title>
-                                    <v-list-item-subtitle>{{nombrereq}}</v-list-item-subtitle>
-                                </v-list-item-content>                             
-                                </v-list-item>
-                                <v-list-item class="mt-1" style="min-height:50px;">                                    
-                                    <v-list-item-content class="py-0 " style="max-height: 55px;" v-if="encargado" >
-                                        <v-list-item-title > Debe cargar</v-list-item-title>
-                                        <v-list-item-subtitle>{{encargado}}</v-list-item-subtitle>
-                                    </v-list-item-content>
-                                </v-list-item>
-                                <v-list-item class="mt-1" style="min-height: 50px;">                                    
-                                    <v-list-item-content class="py-0 " style="max-height: 55px;" v-if="documento" >
-                                        <v-list-item-title > Tipo de documento</v-list-item-title>
-                                        <v-list-item-subtitle>{{documento}}</v-list-item-subtitle>
-                                    </v-list-item-content>
-                                </v-list-item>
-                                <v-list-item class="mt-1" style="min-height: 50px;">                                    
-                                    <v-list-item-content class="py-0 " style="max-height: 55px;" v-if="extension" >
-                                        <v-list-item-title >Extension</v-list-item-title>
-                                        <v-list-item-subtitle>{{extension}}</v-list-item-subtitle>
-                                    </v-list-item-content>
-                                </v-list-item>
-                                <v-list-item class="mt-1" style="min-height: 50px;">                                    
-                                    <v-list-item-content  class="py-0 " style="max-height: 55px;" >
-                                        <v-list-item-title v-if="otros.length" >otros tramites en los que aparece</v-list-item-title>
-                                        <v-list-item-subtitle>
-                                            <ul v-for="(otro,i) in otros" :key="i">
-                                                <li>{{otro.nombre}}</li>
-                                            </ul>
-                                        </v-list-item-subtitle>
-                                    </v-list-item-content>
-                                </v-list-item>
-                            
-                            </template>
-                        </v-list>
-                </v-card>
-                
-                 
+                    </v-card>
+                    <v-spacer></v-spacer>
+                    <v-card class="mt-2 ml-4 mr-2"  width="30%" tile>
+                        <v-subheader class="font-weight-medium text-md-body-1">DETALLE REQUISITO </v-subheader>
+                            <v-list three-line style="min-height:02;">
+                                <template>                                
+                                    <v-divider
+                                    class="mx-auto"
+                                    style="min-width:90%;"
+                                    ></v-divider>
+                                <v-list-item  class="mt-1" style="min-height:50px;">
+                                    <v-list-item-content class="py-0 " style="max-height: 55px;" v-if="nombrereq" >
+                                        <v-list-item-title > Nombre</v-list-item-title>
+                                        <v-list-item-subtitle>{{nombrereq}}</v-list-item-subtitle>
+                                    </v-list-item-content>                             
+                                    </v-list-item>
+                                    <v-list-item class="mt-1" style="min-height:50px;">                                    
+                                        <v-list-item-content class="py-0 " style="max-height: 55px;" v-if="encargado" >
+                                            <v-list-item-title > Debe cargar</v-list-item-title>
+                                            <v-list-item-subtitle>{{encargado}}</v-list-item-subtitle>
+                                        </v-list-item-content>
+                                    </v-list-item>
+                                    <v-list-item class="mt-1" style="min-height: 50px;">                                    
+                                        <v-list-item-content class="py-0 " style="max-height: 55px;" v-if="documento" >
+                                            <v-list-item-title > Tipo de documento</v-list-item-title>
+                                            <v-list-item-subtitle>{{documento}}</v-list-item-subtitle>
+                                        </v-list-item-content>
+                                    </v-list-item>
+                                    <v-list-item class="mt-1" style="min-height: 50px;">                                    
+                                        <v-list-item-content class="py-0 " style="max-height: 55px;" v-if="extension" >
+                                            <v-list-item-title >Extension</v-list-item-title>
+                                            <v-list-item-subtitle>{{extension}}</v-list-item-subtitle>
+                                        </v-list-item-content>
+                                    </v-list-item>
+                                    <v-list-item class="mt-1" style="min-height: 50px;">                                    
+                                        <v-list-item-content  class="py-0 " style="max-height: 55px;" >
+                                            <v-list-item-title v-if="otros.length" >otros tramites en los que aparece</v-list-item-title>
+                                            <v-list-item-subtitle>
+                                                <ul v-for="(otro,i) in otros" :key="i">
+                                                    <li>{{otro.nombre}}</li>
+                                                </ul>
+                                            </v-list-item-subtitle>
+                                        </v-list-item-content>
+                                    </v-list-item>
+                                
+                                </template>
+                            </v-list>
+                    </v-card>
                   </div>
-            </template> 
-
-                
-
-
+            </template>              
     </div>
-    
 </template>
 
 <script>
@@ -334,20 +411,32 @@ export default{
         dialog:false,
         dialog2:false,
         errores:{},
+        erroresR1:{},
+        erroresR2:{},
         formfase: new Form({
             nombrefase:'',
             numerofase:'',
             procesoid:this.$route.params.id,
           }),
-        formrequi:new Form({
+        formrequi1:new Form({
             requisito:'',
+            rol:'',
+            fase_id:'',
+
+        }),
+        formrequi2:new Form({
             nombre:'',
             rol:'',
             tipodocumento:'',
             extension:'',
+            fase_id:'',
 
         }),
-        allrequisitos:{},
+
+
+        allrequisitos:[],
+        tipoarchivos:[],
+        roles:[],
 
         
      } 
@@ -355,6 +444,9 @@ export default{
       this.FetchTramites();
       this.FetchFases();
       this.FetchAllrequisitos();
+      this.FetchTipoDocumento();
+      this.FetchRoles();
+      //console.log(this.formrequi);
     // this.formfase.procesoid=this.$route.params.id;
      // console.log(this.faseid);
 
@@ -369,11 +461,14 @@ export default{
           const {data}=await axios.get(`/api/fase/${this.$route.params.id}`);
           this.fases=data;
           this.faseid=(data[0].id);   
-
+          this.formrequi1.fase_id=(data[0].id);
+          this.formrequi2.fase_id=(data[0].id);
           this.mostrarrequisito(data[0].id);
       }, mostrarid(fase,i){
           console.log(fase.id);
           this.faseid=fase.id;
+          this.formrequi1.fase_id=fase.id;
+          this.formrequi2.fase_id=fase.id;
           this.mostrarrequisito(fase.id);
           //return(fase.id);
       },async mostrarrequisito(id){
@@ -413,6 +508,7 @@ export default{
             this.FetchFases();
             this.clear();
             this.dialog=false;
+            
           }).catch(error=>{
             if(error.response.status === 422){
               this.errores=error.response.data.errors;
@@ -423,6 +519,55 @@ export default{
              const {data}=await axios.get(`/api/requisito/`);
              this.allrequisitos=data;
              //console.log(data);
+      },async FetchTipoDocumento(){
+          const{data}=await axios.get('/api/tipoarchivo/');
+          this.tipoarchivos=data;
+          console.log(data);
+      },async FetchRoles(){
+          const{data}=await axios.get('/api/rol/');
+          this.roles=data;
+      },limpiarnuevo(){
+          this.formrequi2.nombre='';
+          this.formrequi2.tipodocumento='';
+          this.formrequi2.extension='';
+          this.formrequi2.rol='';
+          this.erroresR2={};
+      },limpiarselect(){
+          this.formrequi1.requisito='';
+          this.formrequi1.rol='';
+          this.erroresR1={};
+      },clearall(){
+          this.limpiarnuevo();
+          this.limpiarselect();          
+      },async submitrequisito(){ 
+          console.log(this.formrequi1);                  
+          const {data}= await this.formrequi1.post('/api/faserequisito/')
+           .then(response =>{
+            this.mostrarrequisito(this.formrequi1.fase_id);
+            this.clearall();
+            this.dialog2=false;
+          }).catch(error=>{
+            if(error.response.status === 422){
+              this.erroresR1=error.response.data.errors;
+              console.log(this.erroresR1);
+            }
+          });
+          
+      },async submitrequisitonuevo(){ 
+          console.log(this.formrequi2);                  
+          const {data}= await this.formrequi2.post('/api/requisito/')
+           .then(response =>{
+            this.mostrarrequisito(this.formrequi2.fase_id);
+            this.clearall();
+            this.dialog2=false;
+            console.log(response);
+          }).catch(error=>{
+            if(error.response.status === 422){
+              this.erroresR2=error.response.data.errors;
+              console.log(this.erroresR2);
+            }
+          });
+          
       }
   }
 }

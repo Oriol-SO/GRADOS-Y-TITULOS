@@ -9,7 +9,9 @@ class FaseRolRequisito extends Model
 {
     use HasFactory;
     protected $fillable=[
-
+        'rol_id',
+        'requisito_id',
+        'fase_id',
 
     ];
     public function Fase()

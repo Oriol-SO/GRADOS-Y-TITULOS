@@ -13,6 +13,9 @@ use App\Http\Controllers\ModalidadController;
 use App\Http\Controllers\FaseController;
 use  App\Http\Controllers\FaseRequisitoController;
 use  App\Http\Controllers\RequisitoController;
+use  App\Http\Controllers\PersonaController;
+use  App\Http\Controllers\TipoArchivoController;
+use  App\Http\Controllers\RolController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -50,7 +53,6 @@ Route::group(['middleware' => 'guest:api'], function () {
 
     Route::post('oauth/{driver}', [OAuthController::class, 'redirect']);
     Route::get('oauth/{driver}/callback', [OAuthController::class, 'handleCallback'])->name('oauth.callback');
-
     
 });
 
@@ -60,3 +62,6 @@ Route::resource('modalidades', ModalidadController::class);
 Route::resource('fase',FaseController::class);
 Route::resource('faserequisito',FaseRequisitoController::class);
 Route::resource('requisito',RequisitoController::class);
+Route::resource('persona',PersonaController::class);
+Route::resource('tipoarchivo',TipoArchivoController::class);
+Route::resource('rol',RolController::class);

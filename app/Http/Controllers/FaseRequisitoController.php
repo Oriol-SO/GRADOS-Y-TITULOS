@@ -8,6 +8,7 @@ use App\Models\Requisito;
 use App\Models\Role;
 use App\Models\TipoArchivo;
 use App\Models\Proceso;
+use Symfony\Contracts\Service\Attribute\Required;
 
 class FaseRequisitoController extends Controller
 {
@@ -39,7 +40,16 @@ class FaseRequisitoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+            $this->validarrequisitoSelect($request);
+            $faserolrequi = FaseRolRequisito::create([
+                'rol_id' => $request->rol['id'],
+                'requisito_id' => $request->requisito['id'],
+                'fase_id' =>$request->fase_id,
+                ]);
+                return response()->json([
+                    'fase'=>$faserolrequi,
+                ]);                
     }
 
     /**
@@ -103,5 +113,11 @@ class FaseRequisitoController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function validarrequisitoSelect($request=null){
+        return $request->validate([
+            'requisito'=>'required',
+            'rol'=>'required'
+        ]);
     }
 }
