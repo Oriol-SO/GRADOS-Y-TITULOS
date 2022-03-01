@@ -9,7 +9,10 @@ class Fase extends Model
 {
     use HasFactory;
     protected $fillable=[
-
+        'nombre',
+        'numero',
+        'fase_id',
+        'proceso_id',
 
     ];
     public function Proceso()
@@ -22,8 +25,10 @@ class Fase extends Model
         return $this->hasMany(FaseRolRequisito::class,'fase_id','id');
     }
     //CONECION CON LA MISMA TABLA FASE
-    public function Fase()
+    public function autofase()
     {
         return $this->hasMany(Fase::class,'fase_id','id');
     }
+
+
 }

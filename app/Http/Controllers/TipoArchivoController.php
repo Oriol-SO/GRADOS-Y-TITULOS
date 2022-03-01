@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Fase;
 
-class FaseController extends Controller
+use Illuminate\Http\Request;
+use App\Models\TipoArchivo;
+
+class TipoArchivoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +15,9 @@ class FaseController extends Controller
      */
     public function index()
     {
-        //
+        $tipodoc=TipoArchivo::all();
+        return response()->json($tipodoc);
+                
     }
 
     /**
@@ -35,16 +38,7 @@ class FaseController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validarfase($request);    
-        $fase = Fase::create([
-        'nombre' => $request->nombrefase,
-        'numero' => $request->numerofase,
-        'proceso_id' => $request->procesoid,
-        'fase_id' =>null,
-        ]);
-        return response()->json([
-            'fase'=>$fase,
-        ]);
+        //
     }
 
     /**
@@ -55,9 +49,7 @@ class FaseController extends Controller
      */
     public function show($id)
     {
-        $fase=Fase::where('proceso_id', $id)->get();
-       // $primerid=Fase::where('proceso_id', $id)->get();
-        return response()->json($fase, 200);
+        //
     }
 
     /**
@@ -92,11 +84,5 @@ class FaseController extends Controller
     public function destroy($id)
     {
         //
-    }
-    public function validarfase($request=null){
-        return $request->validate([
-            'nombrefase' => 'required',
-            'numerofase' => 'required|integer'
-        ]);
     }
 }

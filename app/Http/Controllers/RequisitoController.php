@@ -3,18 +3,20 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Fase;
-
-class FaseController extends Controller
+use App\Models\Requisito;
+use App\Models\FaseRolRequisito;
+class RequisitoController extends Controller
 {
-    /**
+     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        //
+        $requisitos= Requisito::all('nombre','id');
+
+        return response()->json($requisitos);
     }
 
     /**
@@ -35,17 +37,21 @@ class FaseController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validarfase($request);    
-        $fase = Fase::create([
-        'nombre' => $request->nombrefase,
-        'numero' => $request->numerofase,
-        'proceso_id' => $request->procesoid,
-        'fase_id' =>null,
-        ]);
-        return response()->json([
-            'fase'=>$fase,
-        ]);
+        $this->validarrequisitoNuevo($request);
+        $requisito=Requisito::create([
+            'nombre' => $request->nombre,
+            'tipo_documento' => $request->extension,
+            'tipoarchi_id' =>$request->tipodocumento['id'],
+            'html_formato'=>null,
+            ]);
+        
+        $faserol=$this->insertarfaserequisito($requisito->id,$request->fase_id,$request->rol['id']); 
+         return response()->json([
+           'faserolreq'=>$faserol,
+         ]);  
+        
     }
+
 
     /**
      * Display the specified resource.
@@ -55,9 +61,7 @@ class FaseController extends Controller
      */
     public function show($id)
     {
-        $fase=Fase::where('proceso_id', $id)->get();
-       // $primerid=Fase::where('proceso_id', $id)->get();
-        return response()->json($fase, 200);
+        //
     }
 
     /**
@@ -93,10 +97,22 @@ class FaseController extends Controller
     {
         //
     }
-    public function validarfase($request=null){
+    public function validarrequisitoNuevo($request=null){
         return $request->validate([
-            'nombrefase' => 'required',
-            'numerofase' => 'required|integer'
+            'nombre'=>'required',
+            'rol'=>'required',
+            'tipodocumento'=>'required',
+            'extension'=>'required',
         ]);
+    }
+    public function insertarfaserequisito($id,$faseid,$rolid){  
+        $faserequisito = FaseRolRequisito::create([
+            'rol_id' => $rolid,
+            'requisito_id' => $id,
+            'fase_id' =>$faseid,
+            ]);
+            return response()->json([
+                'faserequisito'=>$faserequisito,
+            ]); 
     }
 }

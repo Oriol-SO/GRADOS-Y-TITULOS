@@ -9,7 +9,10 @@ class Requisito extends Model
 {
     use HasFactory;
     protected $fillable=[
-
+        'nombre',
+        'tipo_documento',
+        'html_formate',
+        'tipoarchi_id',
 
     ];
     public function FaseRolRequisito()

@@ -4,6 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\FaseRolRequisito;
+use App\Models\Requisito;
+use App\Models\Role;
+use App\Models\TipoArchivo;
+use App\Models\Proceso;
+use Symfony\Contracts\Service\Attribute\Required;
 
 class FaseRequisitoController extends Controller
 {
@@ -35,7 +40,16 @@ class FaseRequisitoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+            $this->validarrequisitoSelect($request);
+            $faserolrequi = FaseRolRequisito::create([
+                'rol_id' => $request->rol['id'],
+                'requisito_id' => $request->requisito['id'],
+                'fase_id' =>$request->fase_id,
+                ]);
+                return response()->json([
+                    'fase'=>$faserolrequi,
+                ]);                
     }
 
     /**
@@ -46,13 +60,30 @@ class FaseRequisitoController extends Controller
      */
     public function show($id)
     {
-        $requisitos=FaseRolRequisito::where('fase_id',$id)->get();
-        return response()->json($requisitos,200);
-    }
+
+                $requisitos = FaseRolRequisito::where('fase_id',$id)->get()->map(function ($r) {
+                    return [
+                        'id' => $r->id,       
+                        'requisito_id' => $r->requisito_id ,
+                        'nombre' => $r->requisito ->nombre ,
+                        'rol'=> $r->rol->rolNombre,
+                        'documento'=>$r->requisito->TipoArchivo->tipoNombre,
+                        'extension'=>   $r->requisito ->tipo_documento,
+                        'otrostramites'=> $r->fase->autofase->map(function($p){
+                            return[
+                                'nombre'=>$p->proceso->procNom,
+                                'idproc'=>$p->proceso->id,
+                            ];
+                        }),               
+                    ];
+                });
+        return response()->json($requisitos);
+                        
+}
 
     /**
      * Show the form for editing the specified resource.
-     *
+     *select from users
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -82,5 +113,11 @@ class FaseRequisitoController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function validarrequisitoSelect($request=null){
+        return $request->validate([
+            'requisito'=>'required',
+            'rol'=>'required'
+        ]);
     }
 }

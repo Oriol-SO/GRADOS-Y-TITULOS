@@ -1,15 +1,15 @@
 <template>
 <v-data-table
     :headers="headers"
-    :items="procesos"
+    :items="personas"
     :items-per-page="10"
-    class="elevation-1"
+    class="elevation-1 ml-4 mt-5"
   >
   <template v-slot:top>
       <v-toolbar
         flat
       >
-        <v-toolbar-title>Gestionar Tramites</v-toolbar-title>
+        <v-toolbar-title>USUARIOS</v-toolbar-title>
         <v-divider
           class="mx-4"
           inset
@@ -28,7 +28,7 @@
               v-bind="attrs"
               v-on="on"
             >
-              Agregar Tramite
+              Agregar Persona
             </v-btn>
           </template>
           <v-card>
@@ -116,14 +116,14 @@ import axios from 'axios'
       return {
         headers: [
           {
-            text: 'Nombre Procesos',
+            text: 'Usuarios',
             align: 'start',
             sortable: false,
-            value: 'procNom',
+            value: 'nom',
           },
-          { text: 'Fases', value: 'fase' },
-          { text: 'Requisitos', value: 'requisito' },
-           { text: 'Acciones', value: 'actions', sortable: false },
+          { text: 'documento', value: 'numDoc' },
+          { text: 'Email', value: 'email' },
+          { text: 'Acciones', value: 'actions', sortable: false },
         ],
         /*desserts: [
           {
@@ -133,7 +133,7 @@ import axios from 'axios'
           
           },
         ],*/
-        procesos:[],
+        personas:[],
        
       }
     },
@@ -143,15 +143,15 @@ import axios from 'axios'
       },
     },
     mounted(){
-      this.FetchProceso();
+      this.FetchPersonas();
     }, 
     
     methods:{
-      async FetchProceso() {
-        const { data } = await axios.get("/api/proceso");
-        this.procesos = data;
+      async FetchPersonas() {
+        const { data } = await axios.get("/api/persona");
+        this.personas = data;
 
-        //console.log(data);
+        console.log(data);
       },
 
 
