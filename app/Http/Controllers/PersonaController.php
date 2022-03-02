@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Persona;
-
+use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Http;
 class PersonaController extends Controller
 {
     /**
@@ -15,6 +16,7 @@ class PersonaController extends Controller
     public function index()
     {
         $personas=Persona::all();
+        
         return response()->json($personas);
     }
 
@@ -50,6 +52,13 @@ class PersonaController extends Controller
         //
     }
 
+    public function buscarusercodigo($codigo)
+    {   
+
+            $response = Http::get('http://api.undac.edu.pe/tasks/a3945a7384cbdcd33f49e8f5b8ec29f5/91f33e2776c526b9cca723a63476f028/'.$codigo);
+
+                return $response;
+    }
     /**
      * Show the form for editing the specified resource.
      *
@@ -83,4 +92,5 @@ class PersonaController extends Controller
     {
         //
     }
+ 
 }
