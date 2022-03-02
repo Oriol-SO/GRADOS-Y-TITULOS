@@ -93,11 +93,7 @@
                     style="color:#fff;"
                     class="text-h7"
                     active-class="blue darken-4 "
-<<<<<<< HEAD
-                    @click="mostrarid(fase,i)"
-=======
                    @click="mostrarid(fase,i)"
->>>>>>> 81845f99be15a0d066aed928015e43211c8e7b8d
                 >
                     {{ i+1 }}
                 </v-tab>
@@ -391,6 +387,7 @@
                     </v-card>
                   </div>
             </template>              
+
     </div>
 </template>
 
@@ -402,26 +399,7 @@ export default{
   data(){     
      return{
         procesos:[],
-<<<<<<< HEAD
-         tab: null,
-        fases: [],
-        faseid:'',
-        selectedItem: 1,
-        items: [
-            { text: 'Real-Time', icon: 'mdi-check-outline' },
-            { text: 'Audience', icon: 'mdi-check-outline' },
-            { text: 'Conversions', icon: 'mdi-check-outline' },
-            { text: 'Conversions', icon: 'mdi-check-outline' },
-            { text: 'Conversions', icon: 'mdi-check-outline' },
-            { text: 'Conversions', icon: 'mdi-check-outline' },
-            { text: 'Conversions', icon: 'mdi-check-outline' },
-            { text: 'Conversions', icon: 'mdi-check-outline' },
-            { text: 'Conversions', icon: 'mdi-check-outline' },
-            { text: 'Conversions', icon: 'mdi-check-outline' },
-        ],
-=======
         tab: null,
-       
         fases: [],
         selectedItem:undefined,
         requisitos: [],
@@ -460,25 +438,21 @@ export default{
         allrequisitos:[],
         tipoarchivos:[],
         roles:[],
->>>>>>> 81845f99be15a0d066aed928015e43211c8e7b8d
 
         
      } 
   },mounted(){
       this.FetchTramites();
       this.FetchFases();
-<<<<<<< HEAD
-
-=======
       this.FetchAllrequisitos();
       this.FetchTipoDocumento();
       this.FetchRoles();
+      this.FetchPersona();
       //console.log(this.formrequi);
     // this.formfase.procesoid=this.$route.params.id;
      // console.log(this.faseid);
 
       //console.log(this.formfase.procesoid);
->>>>>>> 81845f99be15a0d066aed928015e43211c8e7b8d
   },methods:{
       async FetchTramites(){
           const { data } = await axios.get(`/api/proceso/${this.$route.params.id}`);   
@@ -488,17 +462,16 @@ export default{
       async FetchFases(){
           const {data}=await axios.get(`/api/fase/${this.$route.params.id}`);
           this.fases=data;
-<<<<<<< HEAD
-          this.faseid=data[0].id;        
-      }, mostrarid(fase,i){
-          console.log(fase.i);
-          this.faseid=fase.i;
-=======
           this.faseid=(data[0].id);   
           this.formrequi1.fase_id=(data[0].id);
           this.formrequi2.fase_id=(data[0].id);
           this.mostrarrequisito(data[0].id);
-      }, mostrarid(fase,i){
+      },
+      async FetchPersona(){
+          const codigo ='1824403077';
+          const {data}=await axios.get(`/api/persona/${codigo}`);
+          console.log(data);
+      },mostrarid(fase,i){
           console.log(fase.id);
           this.faseid=fase.id;
           this.formrequi1.fase_id=fase.id;
@@ -602,7 +575,6 @@ export default{
             }
           });
           
->>>>>>> 81845f99be15a0d066aed928015e43211c8e7b8d
       }
   }
 }

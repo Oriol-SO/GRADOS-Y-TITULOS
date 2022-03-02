@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
 use App\Models\Persona;
+use Illuminate\Http\Request;
+use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Http;
+
 
 class PersonaController extends Controller
 {
@@ -36,7 +38,7 @@ class PersonaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**
@@ -45,9 +47,9 @@ class PersonaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($codigo)
     {
-        //
+        return response()->json($this->buscarUsuario($codigo));
     }
 
     /**
@@ -83,4 +85,19 @@ class PersonaController extends Controller
     {
         //
     }
+    public function buscarUsuario($request){
+        
+
+
+        $res = Http::get('http://api.undac.edu.pe/tasks/a3945a7384cbdcd33f49e8f5b8ec29f5/
+        91f33e2776c526b9cca723a63476f028/'.($request));
+        
+        if($res->getStatusCode() != 200) return response ()->json(['msg' => 'Error de conexión']);
+
+        $datos= json_decode($res->getBody()->getContents(),true);
+
+        return response() ->json($datos);
+    }
 }
+    
+

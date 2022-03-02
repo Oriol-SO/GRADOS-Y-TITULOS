@@ -1,38 +1,45 @@
 <template>
 
     <div>
-        <h1> hola </h1>
-
-        <ul>
-            <li v-for="(grado,i) in grados" :key="i"> {{grado.graNom}}</li>
-        </ul>
+     <line-chart :chart-data="datacollection"></line-chart>
+    <button @click="fillData()">Randomize</button>
+    
     </div>
 </template>
 
 <script>
-import axios from 'axios'
-export default {    
+import LineChart from '~/components/LineChart.js'
+export default {  
+  components: {
+      LineChart
+    },  
     data(){
         return{
-            grados:[],
-            procesos:[],
+            datacollection: null
         }
-        
     },mounted() {
-        
-        this.FetchProceso();
-        this.FetchGrados();
+        this.fillData()
     },
     methods: {
-        async FetchGrados(){
-        const { data } = await axios.get("/api/grado");
-        this.grados = data;
-        console.log(data);
-      },async FetchProceso() {
-        const { data } = await axios.get("/api/proceso");
-        this.procesos = data;
-        console.log(data);
+      fillData () {
+        this.datacollection = {
+          labels: [this.getRandomInt(), this.getRandomInt()],
+          datasets: [
+            {
+              label: 'Data One',
+              backgroundColor: '#f87979',
+              data: [this.getRandomInt(), this.getRandomInt()]
+            }, {
+              label: 'Data One',
+              backgroundColor: '#f87979',
+              data: [this.getRandomInt(), this.getRandomInt()]
+            }
+          ]
+        }
       },
-    },
-}
+      getRandomInt () {
+        return Math.floor(Math.random() * (50 - 5 + 1)) + 5
+      }
+    }
+  }
 </script>
