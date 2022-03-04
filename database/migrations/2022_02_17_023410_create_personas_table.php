@@ -20,7 +20,7 @@ class CreatePersonasTable extends Migration
             $table->string('apeMat');
             $table->boolean('gen');
             $table->string('dom');
-            $table->string('email');
+            $table->string('email')->unique();
             $table->integer('tipDoc');
             $table->string('numDoc');
             $table->date('fecNac');

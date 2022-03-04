@@ -9,8 +9,14 @@ class PersonaRole extends Model
 {
     use HasFactory;
     protected $fillable=[
-
-
+ 
+        'fecIni',
+        'fecFin',
+        'estado' ,
+        'persona_id',
+        'facId',
+        'escId',
+        'rol_id', 
     ];
 
     public function Rol()

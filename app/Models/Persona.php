@@ -8,9 +8,25 @@ use Illuminate\Database\Eloquent\Model;
 class Persona extends Model
 {
     use HasFactory;
-    protected $fillables=[
-        
-
+    protected $fillable=[
+        'nom',
+        'apePat',
+        'apeMat',
+        'gen',
+        'dom',
+        'email',
+        'tipDoc',
+        'numDoc',
+        'fecNac',
+        'numcel',
+        'grad_estud',
+        'abre_grad',
+        'espe',
+        'cod_alum',
+        'curri',
+        'fec_matri',
+        'fec_egre',
+        'fec_egre',
     ];
     
     public function PersonaRol(){

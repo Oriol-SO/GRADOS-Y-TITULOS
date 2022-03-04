@@ -73,11 +73,11 @@
                                   <v-radio-group v-model="formus.genero" row >
                                       <v-radio
                                         label="Masculino"
-                                        value="M"
+                                        value="1"
                                       ></v-radio>
                                       <v-radio
                                         label="Femenino"
-                                        value="F"
+                                        value="0"
                                       ></v-radio>
                                   </v-radio-group>
                                   <v-text-field
@@ -145,7 +145,7 @@
                                     autocomplete="new-password"
                                   ></v-text-field>
                                   <v-text-field
-                                    v-model="formus.passwordconfirm"
+                                    v-model="formus.password_confirmation"
                                     label="Confirmar contraseña"
                                     type="password"
                                     autocomplete="new-password"
@@ -284,13 +284,14 @@ import Form from "vform";
           apeMat:'',
           nombresuser:'',
           genero:'',
-          nacimmiento:null,
+          nacimiento:null,
           correo:'',
+          direccion:'',
           celular:'',
           gradoestu:'',
           gradoabr:'',
           password:'',
-          passwordconfirm:'',
+          password_confirmation:'',
           facultad:'',
           escuela:'',
           roles:[],
@@ -310,7 +311,7 @@ import Form from "vform";
         roles:[],
 
         variable:'',
-        
+        erroresuser:'',
       }
     },
     mounted(){
@@ -349,7 +350,10 @@ import Form from "vform";
             this.facultades=response.data;
             console.log(response.data);
             console.log(this.escuelas);
+
             this.mostrarroles();
+
+
           });
           }
         
@@ -379,8 +383,18 @@ import Form from "vform";
         this.paginaform2=false;            
         this.btnnext=true;
         this.btnback=false;    
-      },enviaruser(){
+      },async enviaruser(){
         console.log(this.formus);
+        await this.formus.post('/api/adminuser/').then(response=>{
+              console.log(response.data);
+        }).catch(error=>{
+            if(error.response.status === 422){
+              this.erroresuser=error.response.data.errors;
+              console.log(this.erroresuser);
+            }
+          });  
+
+
       },async mostrarroles(){
             if(this.formus.facultad==''){
               await axios.get(`/api/rolesgenerales/${1}`).then(response=>{
