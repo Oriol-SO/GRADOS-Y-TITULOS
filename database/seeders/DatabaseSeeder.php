@@ -28,6 +28,8 @@ class DatabaseSeeder extends Seeder
             TipoSeeder::class,
             RequisitoSeeder::class,
             FaseRolRequisitoSeeder::class,
+            BachillerIni::class,
+            BachillerFinal::class,
         ]);
     }
 }

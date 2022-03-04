@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Persona;
-use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Http;
-class PersonaController extends Controller
+
+use Illuminate\Http\Request;
+use App\Models\tablainicio;
+
+class BachillerIniController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,9 +14,9 @@ class PersonaController extends Controller
      */
     public function index()
     {
-        $personas=Persona::all();
-        
-        return response()->json($personas);
+        $BachillerIni['Mes']=tablainicio::all('Mes');
+        $BachillerIni['Valor']=tablainicio::all('Iniciados');
+        return $BachillerIni;
     }
 
     /**
@@ -36,7 +37,7 @@ class PersonaController extends Controller
      */
     public function store(Request $request)
     {
-        
+        //
     }
 
     /**
@@ -45,22 +46,11 @@ class PersonaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($codigo)
+    public function show($id)
     {
-       
+        //
     }
 
-    public function buscarusercodigo($codigo)
-    {   
-
-            $response = Http::get('http://api.undac.edu.pe/tasks/a3945a7384cbdcd33f49e8f5b8ec29f5/91f33e2776c526b9cca723a63476f028/'.$codigo);
-            return $response;
-    }
-
-    public function buscardniuser($codigo){
-        $response=Http::get('https://dniruc.apisperu.com/api/v1/dni/'.$codigo.'?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImpjbGF1cmVhbm96QGdtYWlsLmNvbSJ9.xfmGDbSyPq016GIiuDHiyevun8bb2Avl2EBjYqXAQZA');
-        return $response;
-    }
     /**
      * Show the form for editing the specified resource.
      *
@@ -94,7 +84,4 @@ class PersonaController extends Controller
     {
         //
     }
- 
 }
-    
-

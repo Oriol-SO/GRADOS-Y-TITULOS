@@ -108,41 +108,58 @@ style="display:flex; flex-wrap:wrap; justify-content: spacy;"
 
 <script>
 
-import LineChart from '~/components/LineChart.js'
-
+import LineChart from '~/components/LineChart.js';
+import axios from 'axios'
 
 export default {
 
   components: {
-    LineChart,
+    LineChart
 
   },
   data(){
     return {
       datacollection: null,
+      bachillerIni:[],
+      bachillerIniValue:[],
+      bachillerFinal:[],
 
     }
   },
   mounted () {
+    this.FetchBachillerIni();
+    this.FetchBachillerFinal();
     this.fillData();
     this.renderChart(this.chartData, this.options)
   },
   methods: {
+    async FetchBachillerIni() {
+        const { data } = await axios.get("/api/bachillerIni");
+        this.bachillerIni = data.Mes;
+        this.bachillerIniValue =data.Valor;
 
-    fillData ()
+        console.log(this.bachillerIni[0]['Mes'],this.bachillerIni[1]['Mes'],this.bachillerIni[2]['Mes'],this.bachillerIni[3]['Mes']);
+        console.log(this.bachillerIniValue[0]['Iniciados'],this.bachillerIniValue[1]['Iniciados'],this.bachillerIniValue[2]['Iniciados'],this.bachillerIniValue[3]['Iniciados']);
+      },async FetchBachillerFinal() {
+        const { data } = await axios.get("/api/bachillerFinal");
+        this.bachillerFinal = data;
+
+        console.log(this.bachillerFinal[0]['Finalizados'],this.bachillerFinal[1]['Finalizados'],this.bachillerFinal[2]['Finalizados'],this.bachillerFinal[3]['Finalizados']);
+      },
+      fillData ()
     {
       this.datacollection = {
-        labels: ['Lunes','Martes','Miercoles','Jueves','Viernes', 'Sabado' , 'Domingo'],
+        labels: ['Enero','Febrero','Marzo','Abril'],
         datasets: [
           {
             label: 'Ventas Junio',
             backgroundColor: '#FF0066',
-            data: [ 20, 40, 50, 20, 50, 40,10]
+            data: [this.bachillerIniValue]
           },
           {
             label: 'Ventas Agosto',
             backgroundColor: '#8467ad',
-            data: [ 12, 45, 46, 45, 20, 54,15]
+            data: [this.bachillerFinal]
           },
         ]
       }
@@ -151,6 +168,10 @@ export default {
 }
 </script>
 
-<style >
-
+<style lang="css">
+.small {
+  max-width: 800px;
+  /* max-height: 500px; */
+  margin:  50px auto;
+}
 </style>
