@@ -65,3 +65,4 @@ Route::resource('requisito',RequisitoController::class);
 Route::resource('persona',PersonaController::class);
 Route::resource('tipoarchivo',TipoArchivoController::class);
 Route::resource('rol',RolController::class);
+Route::get('buscarcodigouser/{codigo}', [PersonaController::class, 'buscarusercodigo']);
