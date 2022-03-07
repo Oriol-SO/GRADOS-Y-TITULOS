@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class Persona extends Model
 {
     use HasFactory;
@@ -29,8 +30,8 @@ class Persona extends Model
         'fec_egre',
     ];
     
-    public function PersonaRol(){
-        return $this->hasMany(PersonaRol::class,'persona_id','id');
+    public function PersonaRole(){
+        return $this->hasMany(PersonaRole::class,'persona_id','id');
     }
 
     public function User()

@@ -23,6 +23,7 @@
               <v-dialog
                 transition="dialog-top-transition"
                 max-width="650"
+                v-model="dialog"
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
@@ -33,7 +34,7 @@
                     class="text-capitalize"
                   >Agregar</v-btn>
                 </template>
-                <template v-slot:default="dialog">
+                <template >
                   <v-card>
                     <v-toolbar
                       color="primary"
@@ -192,16 +193,22 @@
                                     
                                   ></v-select>
                                 </v-col>
+                                                                 
+                                      <v-alert  v-if="erroresuser"   text prominent color="red"  class="px-0 py-0" >
+                                              <p v-for="(error,i ) in erroresuser" :key="i" class="my-1">{{error}}</p>
+                                      </v-alert> 
+                                      <v-alert v-if="errorexist" text outlined color="deep-orange" icon="mdi-cloud-alert">
+                                                {{errorexist}}
+                                      </v-alert>                              
+                               
                               </div>
                               <v-btn color="primary" elevation="0" @click="enviaruser()">Registrar Usuario</v-btn>
                             </v-card-text>  
-                            </v-expand-transition> 
-                        
+                            </v-expand-transition>                        
                       
                        </v-card-text>                      
-                    </form>
-                   
-
+                    </form>                
+  
                     <v-card-actions class="justify-end">
                       <div v-if="btnnext">
                         <v-btn 
@@ -221,7 +228,7 @@
 
                       <v-btn 
                         text
-                        @click="dialog.value = false"
+                        @click="close(),clear()"
                       >Close</v-btn>
                     </v-card-actions>
                   </v-card>
@@ -236,10 +243,225 @@
       :search="search"
       class="elevation-1"
     >
+    <template v-slot:item.actions="{ item }">
+      <v-icon
+        small
+        class="mr-2"
+        @click="editItem(item)"
+      >
+        mdi-pencil
+      </v-icon>
+
+    </template>
+
+
   </v-data-table>
+                <v-dialog
+                transition="dialog-top-transition"
+                max-width="650"
+                v-model="dialogedit"
+              >
+                <template >
+                  <v-card>
+                    <v-toolbar
+                      color="primary"
+                      dark
+                    >Agregue un nuevo usuario</v-toolbar>
+                    
+                    <form >
+                      <v-card-text>
+                            <v-expand-transition>
+                              <v-card-text class="mt-3" v-model="paginaform1" v-show="paginaform1">
+                                <div class=" d-flex" style="flex-wrap:wrap;">
+                                <v-col cols="12" md="6" >
+                                  <div class="d-flex" >
+                                      <v-text-field
+                                        v-model="formusE.userdni" 
+                                        label="DNI"   
+                                        class="my-auto mr-3"                 
+                                        >
+                                        </v-text-field>
+                                        <v-btn color="primary" small class="my-auto text-capitalize" style="color:#fff;" elevation="0" @click="buscardni()" >Buscar</v-btn>                              
+                                  </div>
+                                  <v-text-field
+                                    v-model="formusE.apePat"
+                                    label="Apellido Paterno"
+                                    autocomplete="new-text"
+                                  ></v-text-field>
+                                  <v-text-field
+                                    v-model="formusE.apeMat"
+                                    label="Apellido Materno"
+                                    autocomplete="new-text"
+                                  ></v-text-field>
+                                  <v-text-field
+                                    v-model="formusE.nombresuser"
+                                    label="Nombres"
+                                    autocomplete="new-text"
+                                  ></v-text-field>
+                                  <v-radio-group v-model="formusE.genero" row >
+                                      <v-radio
+                                        label="Masculino"
+                                        :value="1"
+                                      ></v-radio>
+                                      <v-radio
+                                        label="Femenino"
+                                        :value="0"
+                                      ></v-radio>
+                                  </v-radio-group>
+                                  <v-text-field
+                                    v-model="formusE.direccion"
+                                    label="Dirección"
+                                    autocomplete="new-text"
+                                    
+                                  ></v-text-field>
+                                  <v-text-field
+                                    v-model="formusE.correo"
+                                    label="Correo"
+                                    autocomplete="new-text"
+                                    
+                                  ></v-text-field>  
+                                </v-col>
+                                <v-col cols="12" md="6"  >
+                                  <div>
+                                    <!--div class="mb-6">Active picker: <code>{{ activePicker || 'null' }}</code></div-->
+                                    <v-menu
+                                      ref="menu"
+                                      v-model="menu"
+                                      :close-on-content-click="false"
+                                      transition="scale-transition"
+                                      offset-y
+                                      min-width="auto"
+                                    >
+                                      <template v-slot:activator="{ on, attrs }">
+                                        <v-text-field
+                                          v-model="formusE.nacimiento"
+                                          label="Fecha de nacimiento"
+                                          prepend-icon="mdi-calendar"
+                                          readonly
+                                          v-bind="attrs"
+                                          v-on="on"
+                                        ></v-text-field>
+                                      </template>
+                                      <v-date-picker
+                                        v-model="formusE.nacimiento"
+                                        :active-picker.sync="activePicker"
+                                        :max="(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)"
+                                        min="1950-01-01"
+                                        @change="save"
+                                      ></v-date-picker>
+                                    </v-menu>
+                                  </div>
+                                  <v-text-field
+                                    v-model="formusE.celular"
+                                    label="Celular"
+                                    autocomplete="new-text"
+                                  ></v-text-field>
+                                  <v-text-field
+                                    v-model="formusE.gradoestu"
+                                    label="Grado de estudios"
+                                    autocomplete="new-text"
+                                  ></v-text-field>
+                                  <v-text-field
+                                    v-model="formusE.gradoabr"
+                                    label="Abrebiatura"
+                                    autocomplete="new-text"
+                                  ></v-text-field>
+                                  <v-text-field
+                                    v-model="formusE.password"
+                                    label="Contraseña"
+                                    type="password"
+                                    autocomplete="new-password"
+                                  ></v-text-field>
+                                  <v-text-field
+                                    v-model="formusE.password_confirmation"
+                                    label="Confirmar contraseña"
+                                    type="password"
+                                    autocomplete="new-password"
+                                  ></v-text-field>
+                                </v-col>
+                                </div>
+                              </v-card-text>   
+                            </v-expand-transition>                        
+                         
+                            <v-expand-transition>
+                            <v-card-text class="mt-3"  v-model="paginaform2" v-show="paginaform2">
+                              <div class="d-flex">
+                                <v-col  cols="12" md="6"  >
+                                    <v-select                                   
+                                    v-model="formusE.facultad"
+                                    :items="facultades"
+                                    item-text='FACULTAD'
+                                    item-value='FACULTAD_ID'
+                                    return-object
+                                    label="Facultad"
+                                    @change="mostrarescuelasedit"
+                                    ></v-select>
+                                    <v-select 
+                                    v-model="formusE.escuela"
+                                    :items="escuelas"
+                                    item-text='ESCUELA_ESPECIALIDAD'
+                                    item-value='ID_ESC'
+                                    return-object
+                                    label="Escuela"
+                                     @change="mostrarrolesedit"
+                                    
+                                    ></v-select>
+                                    <v-select
+                                    v-model="formusE.roles"
+                                    :items="roles"
+                                    label="roles"
+                                    item-text="rolNombre"
+                                    item-value="id"
+                                    multiple
+                                    chips
+                                    hint="roles disponibles"
+                                    persistent-hint
+                                    return-object
+                                    
+                                  ></v-select>
+                                </v-col>
+                                                                 
+                                      <v-alert  v-if="erroresuser"   text prominent color="red"  class="px-0 py-0" >
+                                              <p v-for="(error,i ) in erroresuser" :key="i" class="my-1">{{error}}</p>
+                                      </v-alert> 
+                                      <v-alert v-if="errorexist" text outlined color="deep-orange" icon="mdi-cloud-alert">
+                                                {{errorexist}}
+                                      </v-alert>                              
+                               
+                              </div>
+                              <v-btn color="primary" elevation="0" @click="actualizaruser()">Actualizar </v-btn>
+                            </v-card-text>  
+                            </v-expand-transition>                        
+                      
+                       </v-card-text>                      
+                    </form>                
+  
+                    <v-card-actions class="justify-end">
+                      <div v-if="btnnext">
+                        <v-btn 
+                          text
+                          color="success"
+                          @click="siguiente(),fecthfacultad()"                        
+                        >Siguiente</v-btn>                        
+                      </div>
+                      <div v-if="btnback">
+                        <v-btn
+                        text
+                        color="warning"
+                        @click="anteriore()"                        
+                        >Anterior</v-btn>  
+                      </div>
+     
 
+                      <v-btn 
+                        text
+                        @click="closedialogedit(),clear()"
+                      >Close</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </template>
+              </v-dialog>
   </v-card>
-
 </div>
 </template>
 <script>
@@ -259,7 +481,9 @@ import Form from "vform";
           },
           { text: 'documento', value: 'numDoc' },
           { text: 'Email', value: 'email' },
-          { text: 'Acciones', value: 'actions', sortable: false },
+          { text: 'telefono', value: 'numcel' },
+          { text: 'Escuela', value: 'espe' },
+          { text: 'Actions', value: 'actions', sortable: false },
         ],
         /*desserts: [
           {
@@ -270,7 +494,8 @@ import Form from "vform";
           },
         ],*/
         personas:[],
-
+        dialog:false,
+        dialogedit:false,
         
        // userdni:'',
         
@@ -279,6 +504,25 @@ import Form from "vform";
         erroruser:'',
 
         formus: new Form({
+          userdni:'',
+          apePat:'',
+          apeMat:'',
+          nombresuser:'',
+          genero:'',
+          nacimiento:null,
+          correo:'',
+          direccion:'',
+          celular:'',
+          gradoestu:'',
+          gradoabr:'',
+          password:'',
+          password_confirmation:'',
+          facultad:'',
+          escuela:'',
+          roles:[],
+        }),
+        formusE: new Form({
+          iduser:'',
           userdni:'',
           apePat:'',
           apeMat:'',
@@ -312,6 +556,9 @@ import Form from "vform";
 
         variable:'',
         erroresuser:'',
+        errorexist:'',
+        erroresuseredit:'',
+        errorexistedit:'', 
       }
     },
     mounted(){
@@ -328,13 +575,13 @@ import Form from "vform";
       async FetchPersonas() {
         const { data } = await axios.get("/api/persona");
         this.personas = data;
-       // console.log(data);
+        console.log(data);
 
       },async buscardni(){    
            await axios.get(`/api/buscardni/${this.formus.userdni}`)
            .then(response =>{                 
              this.usuario=response.data;
-             // this.erroruser='';
+             // this.erroruser=
              this.formus.apePat=this.usuario.apellidoPaterno;
              this.formus.apeMat=this.usuario.apellidoMaterno;
              this.formus.nombresuser=this.usuario.nombres;
@@ -343,22 +590,23 @@ import Form from "vform";
 
       },async fecthfacultad(){
           if(this.facultades==''){
+
           await axios.get(`/api/facuescuela/`)
           .then(response=>{
             //this.facultades=response.data.facultades;
            // this.escuelas=response.data.escuelas;
             this.facultades=response.data;
-            console.log(response.data);
-            console.log(this.escuelas);
-
+            //console.log(response.data);
+           // console.log(this.escuelas);
+            //this.formus.escuela='';
+            //this.formusE.escuela='';
             this.mostrarroles();
-
-
+           // this.mostrarrolesedit();
           });
           }
         
       },mostrarescuelas(){
-        //console.log(this.variable);
+        this.formus.escuela='';
         this.mostrarroles();        
          axios.get(`/api/mostrarescuela/${this.formus.facultad.FACULTAD_ID}`)
         .then(response=>{
@@ -366,9 +614,31 @@ import Form from "vform";
            // this.escuelas=response.data.escuelas;
             this.escuelas=response.data;
             //console.log(response.data);
-            console.log(this.escuelas);
+            //console.log(this.escuelas);
           });
-         console.log(this.formus);
+         //console.log(this.formus);
+      },mostrarescuelaseditfirst(){    
+                axios.get(`/api/mostrarescuela/${this.formusE.facultad.FACULTAD_ID}`)
+                .then(response=>{
+                    //this.facultades=response.data.facultades;
+                  // this.escuelas=response.data.escuelas;
+                    this.escuelas=response.data;
+                    //console.log(response.data);
+                    //console.log(this.escuelas);
+                  });
+                //console.log(this.formus);
+      },mostrarescuelasedit(){
+                this.formusE.escuela.ID_ESC="";
+                this.mostrarrolesedit();        
+                axios.get(`/api/mostrarescuela/${this.formusE.facultad.FACULTAD_ID}`)
+                .then(response=>{
+                    //this.facultades=response.data.facultades;
+                  // this.escuelas=response.data.escuelas;
+                    this.escuelas=response.data;
+                    //console.log(response.data);
+                    //console.log(this.escuelas);
+                  });
+                //console.log(this.formus);
       },
       save (date) {
         this.$refs.menu.save(date)
@@ -384,9 +654,16 @@ import Form from "vform";
         this.btnnext=true;
         this.btnback=false;    
       },async enviaruser(){
-        console.log(this.formus);
+       // console.log(this.formus);
         await this.formus.post('/api/adminuser/').then(response=>{
-              console.log(response.data);
+              //console.log(response.data);
+              if(response.data==1){
+               this.errorexist='ya existe un usuario con este correo';
+              }else{
+                 this.FetchPersonas();
+                 this.clear();
+                 this.close();
+              }
         }).catch(error=>{
             if(error.response.status === 422){
               this.erroresuser=error.response.data.errors;
@@ -396,6 +673,7 @@ import Form from "vform";
 
 
       },async mostrarroles(){
+        this.formus.roles='';
             if(this.formus.facultad==''){
               await axios.get(`/api/rolesgenerales/${1}`).then(response=>{
               //console.log(response.data);
@@ -413,10 +691,123 @@ import Form from "vform";
             }
             
            
+      },
+      async mostrarrolesedit(){
+        this.formusE.roles='';
+            if(this.formusE.facultad.FACULTAD_ID==`${null}`){
+              await axios.get(`/api/rolesgenerales/${1}`).then(response=>{
+              //console.log(response.data);
+              this.roles=response.data;
+              })
+            }else{
+              await axios.get(`/api/rolesgenerales/${2}`).then(response=>{
+               this.roles=response.data;
+              })
+              if(this.formusE.escuela.ID_ESC!=""){
+                await axios.get(`/api/rolesgenerales/${3}`).then(response=>{
+                this.roles=response.data;
+                })
+              }
+            }               
+      },  async mostrarroleseditfirst(){
+       // this.formusE.roles='';
+            if(this.formusE.facultad.FACULTAD_ID==`${null}`){
+              await axios.get(`/api/rolesgenerales/${1}`).then(response=>{
+              //console.log(response.data);
+              this.roles=response.data;
+              })
+            }else{
+              await axios.get(`/api/rolesgenerales/${2}`).then(response=>{
+               this.roles=response.data;
+              })
+              if(this.formusE.escuela.ID_ESC!=""){
+                await axios.get(`/api/rolesgenerales/${3}`).then(response=>{
+                this.roles=response.data;
+                })
+              }
+            }               
+      }
+      ,clear(){
+          this.formusE.iduser='';
+
+          this.formus.apePat='';
+          this.formus.userdni='';
+          this.formus.apeMat='';
+          this.formus.nombresuser='';
+          this.formus.genero='';
+          this.formus.nacimiento=null;
+          this.formus.correo='';
+          this.formus.direccion='';
+          this.formus.celular='';
+          this.formus.gradoestu='';
+          this.formus.gradoabr='';
+          this.formus.password='';
+          this.formus.password_confirmation='';
+          this.formus.facultad='';
+          this.formus.escuela='';
+          this.formus.roles=[];
+
+
+
+          this.erroresuser='';
+      },close(){
+        this.dialog=false;
+      },
+      closedialogedit(){
+        this.dialogedit=false;
+      },mostrarselects(){
+        this.mostrarroleseditfirst();
+        this.mostrarescuelaseditfirst();
+      },
+      editItem(item){
+          console.log(item);
+          
+          this.dialogedit=true;
+          this.formusE.iduser=item.id;
+          this.formusE.apePat=item.apePat;
+          this.formusE.userdni=item.numDoc;
+          this.formusE.apeMat=item.apeMat;
+          this.formusE.nombresuser=item.nom;
+          this.formusE.genero=item.gen;
+          this.formusE.nacimiento=item.fecNac;
+          this.formusE.correo=item.email;
+          this.formusE.direccion=item.dom;
+          this.formusE.celular=item.numcel;
+          this.formusE.gradoestu=item.grad_estud;
+          this.formusE.gradoabr=item.abre_grad;
+          this.formusE.password='';
+          this.formusE.password_confirmation='';
+          this.formusE.facultad={FACULTAD:" ",FACULTAD_ID:`${item.facu[0].facId}`},
+          this.formusE.escuela={ESCUELA_ESPECIALIDAD:"",ID_ESC:`${item.espe}`,};
+          this.formusE.roles=item.roles;
+          console.log(this.formusE.roles);
+          this.mostrarselects();
+          
+      },async actualizaruser(){
+          console.log(this.formusE)
+            await this.formusE.put(`/api/adminuser/${this.formusE.iduser}`).then(response=>{
+            //console.log(response.data);
+            if(response.data==1){
+              this.errorexistedit='ya existe un usuario con este correo';
+            }else{
+               console.log(response.data);
+                this.FetchPersonas();
+                this.clear();
+                this.closedialogedit();
+            }
+            }).catch(error=>{
+                if(error.response.status === 422){
+                  this.erroresuseredit=error.response.data.errors;
+                  
+                  console.log(this.erroresuseredit);
+                }
+              });  
+
       }
 
 
     
     },
   }
-</script>
+
+</script> 

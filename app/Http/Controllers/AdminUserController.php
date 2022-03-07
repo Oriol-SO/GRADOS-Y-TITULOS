@@ -59,7 +59,7 @@ class AdminUserController extends Controller
 
         $this->validaruser($request);
         if((Persona::where('email',$request->correo)->count())>0){
-            return 'el usuario ya existe';
+            return '1';
         }else{
             $persona=Persona::create([
                 'nom'=>$request->nombresuser,
@@ -141,6 +141,8 @@ class AdminUserController extends Controller
         //
     }
 
+   
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -161,8 +163,32 @@ class AdminUserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if($request->password=="" && $request->password_confirmation==""){
+            $this->validarusersinpass($request);
+            
+
+        }else{
+            $this->validaruser($request);
+        }
+   
+
     }
+    public function validarusersinpass($request = null)
+    {
+        return $request->validate([
+            'userdni' => 'required|max:12',
+            'apeMat' => 'required',
+            'nombresuser' => 'required',
+            'genero' => 'required|max:1',
+            'nacimiento' => 'required|date',
+            'correo' => 'required|email',
+            'celular' => 'required|max:9',
+            'gradoestu' => 'required',
+            'gradoabr' => 'required',
+            'roles' => 'required',
+        ]);
+    }
+    
 
     /**
      * Remove the specified resource from storage.

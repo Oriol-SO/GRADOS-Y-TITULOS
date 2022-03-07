@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Persona;
+use App\Models\PersonaRole;
 use GuzzleHttp\Client;
+use App\Models\User;
 use Illuminate\Support\Facades\Http;
 class PersonaController extends Controller
 {
@@ -15,7 +17,36 @@ class PersonaController extends Controller
      */
     public function index()
     {
-        $personas=Persona::all();
+        $personas=Persona::all()->map(function($p){
+            return [
+                'nom'=>$p->nom,
+                'apePat'=>$p->apePat,
+                'apeMat'=>$p->apeMat,
+                'gen'=>$p->gen,
+                'dom'=>$p->dom,
+                'email'=>$p->email,
+                'tipDoc'=>$p->tipDoc,
+                'numDoc'=>$p->numDoc,
+                'fecNac'=>$p->fecNac,
+                'numcel'=>$p->numcel,
+                'grad_estud'=>$p->grad_estud,
+                'abre_grad'=>$p->abre_grad,
+                'espe'=>$p->espe,
+                'facu'=>$p->PersonaRole->map(function($r){
+                    return[
+                        'facId'=>$r->facId,
+                    ];
+                }),
+
+                'roles'=>$p->PersonaRole->map(function($r){
+                    return[
+                        'rolNombre'=>"",
+                        'id'=>$r->rol_id,                        
+                    ];
+                }),
+               // 'user'=>$p->user,
+            ];
+        });
         
         return response()->json($personas);
     }
