@@ -1,8 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
 use App\Models\Persona;
 use App\Models\PersonaRole;
 use GuzzleHttp\Client;
@@ -69,7 +67,7 @@ class PersonaController extends Controller
      */
     public function store( Request $request)
     {
-        //
+        
     }
 
     /**
@@ -78,9 +76,9 @@ class PersonaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($codigo)
     {
-        //
+       
     }
 
     public function buscarusercodigo($codigo)
@@ -129,3 +127,5 @@ class PersonaController extends Controller
     }
  
 }
+    
+

@@ -103,10 +103,11 @@
                 <v-tab-item
                     v-for="(fase,i) in fases"
                     :key="i"
+
                 >
                     <v-card flat  >
                         
-                    <v-card-text class="text-md-body-1 font-weight-medium" >{{ fase.nombre }} </v-card-text>
+                    <v-card-text class="text-md-body-1 font-weight-medium" >{{ fase.id }} </v-card-text>
                     </v-card>
                 </v-tab-item>
                 </v-tabs-items>
@@ -386,6 +387,7 @@
                     </v-card>
                   </div>
             </template>              
+
     </div>
 </template>
 
@@ -398,7 +400,6 @@ export default{
      return{
         procesos:[],
         tab: null,
-       
         fases: [],
         selectedItem:undefined,
         requisitos: [],
@@ -446,6 +447,7 @@ export default{
       this.FetchAllrequisitos();
       this.FetchTipoDocumento();
       this.FetchRoles();
+      this.FetchPersona();
       //console.log(this.formrequi);
     // this.formfase.procesoid=this.$route.params.id;
      // console.log(this.faseid);
@@ -464,7 +466,12 @@ export default{
           this.formrequi1.fase_id=(data[0].id);
           this.formrequi2.fase_id=(data[0].id);
           this.mostrarrequisito(data[0].id);
-      }, mostrarid(fase,i){
+      },
+      async FetchPersona(){
+          const codigo ='1824403077';
+          const {data}=await axios.get(`/api/persona/${codigo}`);
+          console.log(data);
+      },mostrarid(fase,i){
           console.log(fase.id);
           this.faseid=fase.id;
           this.formrequi1.fase_id=fase.id;
