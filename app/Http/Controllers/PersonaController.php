@@ -38,7 +38,6 @@ class PersonaController extends Controller
                         'facId'=>$r->facId,
                     ];
                 }),
-
                 'roles'=>$p->PersonaRole->map(function($r){
                     return[
                         'rolNombre'=>"",

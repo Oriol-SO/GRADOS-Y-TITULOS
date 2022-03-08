@@ -485,14 +485,7 @@ import Form from "vform";
           { text: 'Escuela', value: 'espe' },
           { text: 'Actions', value: 'actions', sortable: false },
         ],
-        /*desserts: [
-          {
-            nomProc: 'KitKat',
-            fase: 518,
-            requisito: 26.0,
-          
-          },
-        ],*/
+        labeles:['hola','lasd','asdas','asdasd','asdsfdsa'],
         personas:[],
         dialog:false,
         dialogedit:false,
@@ -566,7 +559,7 @@ import Form from "vform";
     },
     mounted(){
       this.FetchPersonas();
-      //this.fecthfacultad();
+      console.log(this.labeles);
     }, 
     watch: {
       menu (val) {
@@ -578,7 +571,7 @@ import Form from "vform";
       async FetchPersonas() {
         const { data } = await axios.get("/api/persona");
         this.personas = data;
-        console.log(data);
+        //console.log(data);
 
       },async buscardni(){    
            await axios.get(`/api/buscardni/${this.formus.userdni}`)
@@ -596,18 +589,11 @@ import Form from "vform";
 
           await axios.get(`/api/facuescuela/`)
           .then(response=>{
-            //this.facultades=response.data.facultades;
-           // this.escuelas=response.data.escuelas;
             this.facultades=response.data;
-            //console.log(response.data);
-           // console.log(this.escuelas);
-            //this.formus.escuela='';
-            //this.formusE.escuela='';
-            this.mostrarroles();
-           // this.mostrarrolesedit();
           });
+          
           }
-        
+          this.mostrarroles();
       },mostrarescuelas(){
         this.formus.escuela='';
         this.mostrarroles();        
@@ -756,8 +742,10 @@ import Form from "vform";
           this.errorexist='';
           this.erroresuseredit='';
           this.errorexistedit='';
-          
-
+          this.roles1=[];
+          this.escuelas=[];
+          this.anteriore();
+         
       },close(){
         this.dialog=false;
       },
@@ -765,7 +753,7 @@ import Form from "vform";
         this.dialogedit=false;
       },mostrarselects(){
         this.mostrarroleseditfirst();
-        this.mostrarescuelaseditfirst();
+        this.mostrar.editfirst();
       },
       editItem(item){
           //console.log(item);
