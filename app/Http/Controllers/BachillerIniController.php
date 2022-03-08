@@ -14,9 +14,10 @@ class BachillerIniController extends Controller
      */
     public function index()
     {
+
         $BachillerIni['Mes']=tablainicio::all('Mes');
         $BachillerIni['Valor']=tablainicio::all('Iniciados');
-        return $BachillerIni;
+        return($BachillerIni);
     }
 
     /**
