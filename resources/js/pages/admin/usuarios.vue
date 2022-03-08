@@ -181,7 +181,7 @@
                                     ></v-select>
                                     <v-select
                                     v-model="formus.roles"
-                                    :items="roles"
+                                    :items="roles1"
                                     label="roles"
                                     item-text="rolNombre"
                                     item-value="id"
@@ -326,7 +326,7 @@
                                     <!--div class="mb-6">Active picker: <code>{{ activePicker || 'null' }}</code></div-->
                                     <v-menu
                                       ref="menu"
-                                      v-model="menu"
+                                      v-model="menu2"
                                       :close-on-content-click="false"
                                       transition="scale-transition"
                                       offset-y
@@ -344,7 +344,7 @@
                                       </template>
                                       <v-date-picker
                                         v-model="formusE.nacimiento"
-                                        :active-picker.sync="activePicker"
+                                        :active-picker.sync="activePicker2"
                                         :max="(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)"
                                         min="1950-01-01"
                                         @change="save"
@@ -421,11 +421,11 @@
                                   ></v-select>
                                 </v-col>
                                                                  
-                                      <v-alert  v-if="erroresuser"   text prominent color="red"  class="px-0 py-0" >
-                                              <p v-for="(error,i ) in erroresuser" :key="i" class="my-1">{{error}}</p>
+                                      <v-alert  v-if="erroresuseredit"   text prominent color="red"  class="px-0 py-0" >
+                                              <p v-for="(error,i ) in erroresuseredit" :key="i" class="my-1">{{error}}</p>
                                       </v-alert> 
-                                      <v-alert v-if="errorexist" text outlined color="deep-orange" icon="mdi-cloud-alert">
-                                                {{errorexist}}
+                                      <v-alert v-if="errorexistedit" text outlined color="deep-orange" icon="mdi-cloud-alert">
+                                                {{errorexistedit}}
                                       </v-alert>                              
                                
                               </div>
@@ -542,8 +542,10 @@ import Form from "vform";
         }),
 
         activePicker: null,
+        activePicker2:null,
         //date: null,
         menu: false,
+        menu2:false,
 
         paginaform1:true,
         paginaform2:false,
@@ -552,6 +554,7 @@ import Form from "vform";
         btnback:false,
         facultades:[],
         escuelas:[],
+        roles1:[],
         roles:[],
 
         variable:'',
@@ -628,7 +631,7 @@ import Form from "vform";
                   });
                 //console.log(this.formus);
       },mostrarescuelasedit(){
-                this.formusE.escuela.ID_ESC="";
+                this.formusE.escuela.ID_ESC=null;
                 this.mostrarrolesedit();        
                 axios.get(`/api/mostrarescuela/${this.formusE.facultad.FACULTAD_ID}`)
                 .then(response=>{
@@ -673,19 +676,19 @@ import Form from "vform";
 
 
       },async mostrarroles(){
-        this.formus.roles='';
+        this.formus.roles1='';
             if(this.formus.facultad==''){
               await axios.get(`/api/rolesgenerales/${1}`).then(response=>{
               //console.log(response.data);
-              this.roles=response.data;
+              this.roles1=response.data;
               })
             }else{
               await axios.get(`/api/rolesgenerales/${2}`).then(response=>{
-               this.roles=response.data;
+               this.roles1=response.data;
               })
-              if(this.formus.escuela!=''){
+              if(this.formus.escuela!=''  ){
                 await axios.get(`/api/rolesgenerales/${3}`).then(response=>{
-               this.roles=response.data;
+               this.roles1=response.data;
                 })
               }
             }
@@ -694,7 +697,7 @@ import Form from "vform";
       },
       async mostrarrolesedit(){
         this.formusE.roles='';
-            if(this.formusE.facultad.FACULTAD_ID==`${null}`){
+            if(this.formusE.facultad.FACULTAD_ID==null){
               await axios.get(`/api/rolesgenerales/${1}`).then(response=>{
               //console.log(response.data);
               this.roles=response.data;
@@ -703,7 +706,7 @@ import Form from "vform";
               await axios.get(`/api/rolesgenerales/${2}`).then(response=>{
                this.roles=response.data;
               })
-              if(this.formusE.escuela.ID_ESC!=""){
+              if(this.formusE.escuela.ID_ESC!=null){
                 await axios.get(`/api/rolesgenerales/${3}`).then(response=>{
                 this.roles=response.data;
                 })
@@ -720,7 +723,7 @@ import Form from "vform";
               await axios.get(`/api/rolesgenerales/${2}`).then(response=>{
                this.roles=response.data;
               })
-              if(this.formusE.escuela.ID_ESC!=""){
+              if(this.formusE.escuela.ID_ESC!=`${null}`){
                 await axios.get(`/api/rolesgenerales/${3}`).then(response=>{
                 this.roles=response.data;
                 })
@@ -750,6 +753,11 @@ import Form from "vform";
 
 
           this.erroresuser='';
+          this.errorexist='';
+          this.erroresuseredit='';
+          this.errorexistedit='';
+          
+
       },close(){
         this.dialog=false;
       },
@@ -760,8 +768,8 @@ import Form from "vform";
         this.mostrarescuelaseditfirst();
       },
       editItem(item){
-          console.log(item);
-          
+          //console.log(item);
+
           this.dialogedit=true;
           this.formusE.iduser=item.id;
           this.formusE.apePat=item.apePat;
@@ -780,8 +788,10 @@ import Form from "vform";
           this.formusE.facultad={FACULTAD:" ",FACULTAD_ID:`${item.facu[0].facId}`},
           this.formusE.escuela={ESCUELA_ESPECIALIDAD:"",ID_ESC:`${item.espe}`,};
           this.formusE.roles=item.roles;
-          console.log(this.formusE.roles);
+          //console.log(this.formusE.roles);
           this.mostrarselects();
+
+          console.log(this.formusE)
           
       },async actualizaruser(){
           console.log(this.formusE)
@@ -790,7 +800,7 @@ import Form from "vform";
             if(response.data==1){
               this.errorexistedit='ya existe un usuario con este correo';
             }else{
-               console.log(response.data);
+                console.log(response.data);
                 this.FetchPersonas();
                 this.clear();
                 this.closedialogedit();

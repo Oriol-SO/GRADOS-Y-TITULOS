@@ -161,18 +161,113 @@ class AdminUserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+     /* 
+          'nom'=>$request->nombresuser,
+                'apePat'=>$request->apePat,
+                'apeMat'=>$request->apeMat,
+                'gen'=>$request->genero,
+                'dom'=>$request->direccion,
+                'email'=>$request->correo,
+                'tipDoc'=>1,
+                'numDoc'=>$request->userdni,
+                'fecNac'=>$request->nacimiento,
+                'numcel'=>$request->celular,
+                'grad_estud'=>$request->gradoestu,
+                'abre_grad'=>$request->gradoabr,
+                'espe'=>$request->escuela? $request->escuela['ID_ESC']:null,
+     */
     public function update(Request $request, $id)
     {
+        $this->validarusersinpass($request);
+        if((Persona::where('email',$request->correo)->where('id',$id)->count())>0){
+            $this->updatepersona( $request, $id);
+            return response()->json('actualizado');
+        }else{
+            if((Persona::where('email',$request->correo)->count())>0){
+                return '1';
+            }else{
+                $this->updatepersona( $request, $id);
+                return response()->json('actualizado');
+            }   
+         }  
+    }
+
+    public function updatepersona(Request $request, $id){
         if($request->password=="" && $request->password_confirmation==""){
-            $this->validarusersinpass($request);
+            $persona = Persona::findOrFail($id);
+            $persona->nom = $request->nombresuser;
+            $persona->apePat = $request->apePat;
+            $persona->apeMat = $request->apeMat;
+            $persona->gen = $request->genero;
+            $persona->dom = $request->direccion;
+            $persona->email = $request->correo;
+            //$persona->tipDoc = $request->tipDoc;
+            $persona->numDoc = $request->userdni;
+            $persona->fecNac = $request->nacimiento;
+            $persona->grad_estud = $request->gradoestu;
+            $persona->abre_grad = $request->gradoabr;
+            $persona->numCel = $request->celular;
+            $persona->espe=$request->escuela['ID_ESC'];
+            $persona->save();
+
+            $rolesupdate=$this->actualizarroles($persona->id,  $request->roles,  $request->facultad,  $request->escuela);                
             
+            $usuario = User::where('persona_id', $persona->id)->first();
+            $usuario->email = $request->correo;
+           // $usuario->password = Hash::make($request->clave1);
+            $usuario->save();
+           
+            return response()->json('actualizado');
 
         }else{
             $this->validaruser($request);
-        }
-   
+            $this->validarusersinpass($request);
+            $persona = Persona::findOrFail($id);
+            $persona->nom = $request->nombresuser;
+            $persona->apePat = $request->apePat;
+            $persona->apeMat = $request->apeMat;
+            $persona->gen = $request->genero;
+            $persona->dom = $request->direccion;
+            $persona->email = $request->correo;
+            //$persona->tipDoc = $request->tipDoc;
+            $persona->numDoc = $request->userdni;
+            $persona->fecNac = $request->nacimiento;
+            $persona->grad_estud = $request->gradoestu;
+            $persona->abre_grad = $request->gradoabr;
+            $persona->numCel = $request->celular;
+            $persona->espe=$request->escuela['ID_ESC'];
+            $persona->save();
 
+            $rolesupdate=$this->actualizarroles($persona->id,  $request->roles,  $request->facultad,  $request->escuela);                
+            
+            $usuario = User::where('persona_id', $persona->id)->first();
+            $usuario->email = $request->correo;
+            $usuario->password = Hash::make($request->password);
+            $usuario->save();
+           
+            return response()->json('actualizado');
+        }
     }
+
+
+     public function actualizarroles($id_per, $roles,$facu,$escu){
+        $personarol=PersonaRole::where('persona_id',$id_per)->delete();
+            if($personarol){
+                foreach ($roles as $rol ) {
+                    $roles=PersonaRole::create([              
+                        'estado'=>1,
+                        'persona_id'=>$id_per,
+                        'facId'=>$facu ? $facu['FACULTAD_ID']:null,
+                        'escId'=> $escu ? $escu['ID_ESC']:null,
+                        'rol_id'=>$rol['id'],
+                    ]); 
+                }
+                return $roles;
+     
+            }
+
+     }
     public function validarusersinpass($request = null)
     {
         return $request->validate([

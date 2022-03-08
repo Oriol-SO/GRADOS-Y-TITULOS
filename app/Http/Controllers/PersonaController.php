@@ -19,6 +19,7 @@ class PersonaController extends Controller
     {
         $personas=Persona::all()->map(function($p){
             return [
+                'id'=>$p->id,
                 'nom'=>$p->nom,
                 'apePat'=>$p->apePat,
                 'apeMat'=>$p->apeMat,
