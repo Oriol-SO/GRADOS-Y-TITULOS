@@ -65,10 +65,7 @@ class PersonaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store( Request $request)
-    {
-        
-    }
+
 
     /**
      * Display the specified resource.
@@ -110,10 +107,7 @@ class PersonaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request , $id)
-    {
-        //
-    }
+ 
 
     /**
      * Remove the specified resource from storage.
