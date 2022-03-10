@@ -516,11 +516,10 @@ import Form from "vform";
           },
           { text: 'documento', value: 'numDoc' },
           { text: 'Email', value: 'email' },
-          { text: 'telefono', value: 'numcel' },
+          //{ text: 'telefono', value: 'numcel' },
           { text: 'Escuela', value: 'espe' },
           { text: 'Actions', value: 'actions', sortable: false },
         ],
-        labeles:['hola','lasd','asdas','asdasd','asdsfdsa'],
         personas:[],
         dialog:false,
         dialogedit:false,
@@ -572,11 +571,11 @@ import Form from "vform";
           codalum:'',
         }),
 
-        activePicker: null,
-        activePicker2:null,
+        //activePicker: null,
+        //activePicker2:null,
         //date: null,
-        menu: false,
-        menu2:false,
+        //menu: false,
+       // menu2:false,
 
         paginaform1:true,
         paginaform2:false,
@@ -597,13 +596,12 @@ import Form from "vform";
     },
     mounted(){
       this.FetchPersonas();
-      console.log(this.labeles);
     }, 
-    watch: {
+   /* watch: {
       menu (val) {
         val && setTimeout(() => (this.activePicker = 'YEAR'))
       },
-    },
+    },*/
     methods:{
 
       async FetchPersonas() {
@@ -820,35 +818,46 @@ import Form from "vform";
           this.formusE.roles=item.roles;
           this.formusE.codalum=item.cod_alum;
           //console.log(this.formusE.roles);
+         //  console.log(this.formusE);
           this.mostrarselects();
 
-          console.log(this.formusE)
+         
           
       },async actualizaruser(){
           console.log(this.formusE)
             await this.formusE.put(`/api/adminuser/${this.formusE.iduser}`).then(response=>{
             //console.log(response.data);
-            if(response.data==1){
-              this.errorexistedit='ya existe un usuario con este correo';
+            if(response.data==2){
+              this.errorexistedit='¡UPS! algo salió mal, comunicate con el soporte técnico'
             }else{
-                console.log(response.data);
-                this.FetchPersonas();
-                this.clear();
-                this.closedialogedit();
+                if(response.data==1){
+                  this.errorexistedit='ya existe un usuario con este correo';
+                }else{
+                    //console.log(response.data);
+                    this.FetchPersonas();
+                    this.clear();
+                    this.closedialogedit();
+                }
             }
+            
             }).catch(error=>{
                 if(error.response.status === 422){
-                  this.erroresuseredit=error.response.data.errors;
-                  
-                  console.log(this.erroresuseredit);
-                }
-              });  
-
-      }
-
-
+                      this.erroresuseredit=error.response.data.errors;                      
+                      //console.log(this.erroresuseredit);
+                    }
+              }); 
+            }
+ 
     
     },
   }
 
 </script> 
+
+<style>
+ thead.v-data-table-header th[role=columnheader] {
+  font-size: 14px !important;
+  color:#000;
+  background:rgb(44, 221, 155);
+}
+</style>

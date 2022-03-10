@@ -186,75 +186,52 @@ class AdminUserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $this->validarusersinpass($request);
+        $this->validaruser($request);
         if((Persona::where('email',$request->correo)->where('id',$id)->count())>0){
-            $this->updatepersona( $request, $id);
-            return response()->json('actualizado');
+            $updatepersona=$this->updatepersona( $request, $id);
+            return response()->json($updatepersona);
         }else{
             if((Persona::where('email',$request->correo)->count())>0){
                 return '1';
             }else{
-                $this->updatepersona( $request, $id);
-                return response()->json('actualizado');
+                $updatepersona=$this->updatepersona( $request, $id);
+                return response()->json($updatepersona);
             }   
          }  
     }
 
     public function updatepersona(Request $request, $id){
-        if($request->password=="" && $request->password_confirmation==""){
+        try{
             $persona = Persona::findOrFail($id);
+            $persona->tipDoc=$request->tipodoc['num'];
             $persona->nom = $request->nombresuser;
             $persona->apePat = $request->apePat;
             $persona->apeMat = $request->apeMat;
             $persona->gen = $request->genero;
-            $persona->dom = $request->direccion;
+            //$persona->dom = $request->direccion;
             $persona->email = $request->correo;
-            //$persona->tipDoc = $request->tipDoc;
-            $persona->numDoc = $request->userdni;
-            $persona->fecNac = $request->nacimiento;
+           // $persona->tipDoc = $request->tipoDoc;
+            $persona->numDoc = $request->userdoc;
+            //$persona->fecNac = $request->nacimiento;
             $persona->grad_estud = $request->gradoestu;
             $persona->abre_grad = $request->gradoabr;
-            $persona->numCel = $request->celular;
+            //$persona->numCel = $request->celular;
             $persona->espe=$request->escuela['ID_ESC'];
+            $persona->cod_alum=$request->codalum;
             $persona->save();
 
             $rolesupdate=$this->actualizarroles($persona->id,  $request->roles,  $request->facultad,  $request->escuela);                
             
             $usuario = User::where('persona_id', $persona->id)->first();
             $usuario->email = $request->correo;
-           // $usuario->password = Hash::make($request->clave1);
+            $usuario->password = Hash::make($request->userdoc);
             $usuario->save();
            
             return response()->json('actualizado');
-
-        }else{
-            $this->validaruser($request);
-            $this->validarusersinpass($request);
-            $persona = Persona::findOrFail($id);
-            $persona->nom = $request->nombresuser;
-            $persona->apePat = $request->apePat;
-            $persona->apeMat = $request->apeMat;
-            $persona->gen = $request->genero;
-            $persona->dom = $request->direccion;
-            $persona->email = $request->correo;
-            //$persona->tipDoc = $request->tipDoc;
-            $persona->numDoc = $request->userdni;
-            $persona->fecNac = $request->nacimiento;
-            $persona->grad_estud = $request->gradoestu;
-            $persona->abre_grad = $request->gradoabr;
-            $persona->numCel = $request->celular;
-            $persona->espe=$request->escuela['ID_ESC'];
-            $persona->save();
-
-            $rolesupdate=$this->actualizarroles($persona->id,  $request->roles,  $request->facultad,  $request->escuela);                
-            
-            $usuario = User::where('persona_id', $persona->id)->first();
-            $usuario->email = $request->correo;
-            $usuario->password = Hash::make($request->password);
-            $usuario->save();
-           
-            return response()->json('actualizado');
+        }catch(Exception){
+            return '2';
         }
+
     }
 
 
@@ -275,21 +252,7 @@ class AdminUserController extends Controller
             }
 
      }
-    public function validarusersinpass($request = null)
-    {
-        return $request->validate([
-            'userdni' => 'required|max:12',
-            'apeMat' => 'required',
-            'nombresuser' => 'required',
-            'genero' => 'required|max:1',
-            'nacimiento' => 'required|date',
-            'correo' => 'required|email',
-            'celular' => 'required|max:9',
-            'gradoestu' => 'required',
-            'gradoabr' => 'required',
-            'roles' => 'required',
-        ]);
-    }
+
     
 
     /**
