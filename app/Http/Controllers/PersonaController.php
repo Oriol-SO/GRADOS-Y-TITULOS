@@ -31,6 +31,7 @@ class PersonaController extends Controller
                 'grad_estud'=>$p->grad_estud,
                 'abre_grad'=>$p->abre_grad,
                 'espe'=>$p->espe,
+                'cod_alum'=>$p->cod_alum,
                 'facu'=>$p->PersonaRole->map(function($r){
                     return[
                         'facId'=>$r->facId,

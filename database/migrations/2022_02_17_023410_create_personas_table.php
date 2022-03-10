@@ -19,12 +19,12 @@ class CreatePersonasTable extends Migration
             $table->string('apePat');
             $table->string('apeMat');
             $table->boolean('gen');
-            $table->string('dom');
+            $table->string('dom')->nullable();
             $table->string('email')->unique();
             $table->integer('tipDoc');
             $table->string('numDoc');
-            $table->date('fecNac');
-            $table->string('numcel',9);
+            $table->date('fecNac')->nullable();
+            $table->string('numcel')->nullable();
             $table->string('grad_estud');
             $table->string('abre_grad');
             $table->string('cod_alum',10)->nullable();

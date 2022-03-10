@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Persona;
 use App\Models\PersonaRole;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use phpDocumentor\Reflection\Types\Null_;
@@ -57,52 +58,58 @@ class AdminUserController extends Controller
     public function store(Request $request)
     {
 
+    
         $this->validaruser($request);
         if((Persona::where('email',$request->correo)->count())>0){
             return '1';
         }else{
-            $persona=Persona::create([
-                'nom'=>$request->nombresuser,
-                'apePat'=>$request->apePat,
-                'apeMat'=>$request->apeMat,
-                'gen'=>$request->genero,
-                'dom'=>$request->direccion,
-                'email'=>$request->correo,
-                'tipDoc'=>1,
-                'numDoc'=>$request->userdni,
-                'fecNac'=>$request->nacimiento,
-                'numcel'=>$request->celular,
-                'grad_estud'=>$request->gradoestu,
-                'abre_grad'=>$request->gradoabr,
-                'espe'=>$request->escuela? $request->escuela['ID_ESC']:null,
-            ]);
-             
-            $rolesuser=$this->agregarroles($persona->id,  $request->roles,  $request->facultad,  $request->escuela);    
-            $user=$this->agregaruser($persona->id, $request->password,$request->password_confirmation,$request->nombresuser,$request->correo);    
-            return response()->json([
-                'persona'=>$persona,
-                'roles'=>$rolesuser,
-                'user'=>$user,
-            ]);
+            try{
+                $persona=Persona::create([
+                    'nom'=>$request->nombresuser,
+                    'apePat'=>$request->apePat,
+                    'apeMat'=>$request->apeMat,
+                    'gen'=>$request->genero,
+                    //'dom'=>$request->direccion,
+                    'email'=>$request->correo,
+                    'tipDoc'=>$request->tipodoc['num'],
+                    'numDoc'=>$request->userdoc,
+                    //'fecNac'=>$request->nacimiento,
+                    //'numcel'=>$request->celular,
+                    'grad_estud'=>$request->gradoestu,
+                    'abre_grad'=>$request->gradoabr,
+                    'espe'=>$request->escuela? $request->escuela['ID_ESC']:null,
+                    'cod_alum'=>$request->codalum? $request->codalum:null,
+                ]);
+                
+                $rolesuser=$this->agregarroles($persona->id,  $request->roles,  $request->facultad,  $request->escuela);    
+                $user=$this->agregaruser($persona->id, $request->userdoc,$request->nombresuser,$request->correo);    
+                return response()->json([
+                    'persona'=>$persona,
+                    'roles'=>$rolesuser,
+                    'user'=>$user,
+                ]);
+            }catch(Exception){
+                return '2';
+            }
         }
-
+   
      
         
     }
     public function validaruser($request = null)
     {
         return $request->validate([
-            'userdni' => 'required|max:12',
+            'userdoc' => 'required|max:12',
             'apeMat' => 'required',
             'nombresuser' => 'required',
             'genero' => 'required|max:1',
-            'nacimiento' => 'required|date',
+            //'nacimiento' => 'required|date',
             'correo' => 'required|email',
-            'celular' => 'required|max:9',
+            //'celular' => 'required|max:9',
             'gradoestu' => 'required',
             'gradoabr' => 'required',
-            'password' => 'required|confirmed',
-            'password_confirmation'=>'required',
+            //'password' => 'required|confirmed',
+            //'password_confirmation'=>'required',
             'roles' => 'required',
         ]);
     }
@@ -119,7 +126,7 @@ class AdminUserController extends Controller
         }
         return $roles;
     }
-    public function agregaruser($idper,$pass,$passcon,$name,$email){
+    public function agregaruser($idper,$pass,$name,$email){
         $user=User::create([
             'name'=>$name,
             'email'=>$email,

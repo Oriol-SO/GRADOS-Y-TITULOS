@@ -47,9 +47,20 @@
                               <v-card-text class="mt-3" v-model="paginaform1" v-show="paginaform1">
                                 <div class=" d-flex" style="flex-wrap:wrap;">
                                 <v-col cols="12" md="6" >
+                                 <v-select
+                                  v-model="formus.tipodoc"
+                                  :items="tipodocs"
+                                  label='tipo de documento'
+                                  item-text="nombre"
+                                  item-value="num"
+                                  solo                                  
+                                  return-object
+                                  height="35"
+                                  style="height:55px;"
+                                 ></v-select>
                                   <div class="d-flex" >
                                       <v-text-field
-                                        v-model="formus.userdni" 
+                                        v-model="formus.userdoc" 
                                         label="DNI"   
                                         class="my-auto mr-3"                 
                                         >
@@ -81,22 +92,23 @@
                                         value="0"
                                       ></v-radio>
                                   </v-radio-group>
-                                  <v-text-field
+                                  <!--v-text-field
                                     v-model="formus.direccion"
                                     label="Dirección"
                                     autocomplete="new-text"
                                     
-                                  ></v-text-field>
+                                  ></v-text-field-->
+                                 
+                                </v-col>
+                                <v-col cols="12" md="6"  >
                                   <v-text-field
                                     v-model="formus.correo"
                                     label="Correo"
                                     autocomplete="new-text"
-                                    
-                                  ></v-text-field>  
-                                </v-col>
-                                <v-col cols="12" md="6"  >
-                                  <div>
-                                    <!--div class="mb-6">Active picker: <code>{{ activePicker || 'null' }}</code></div-->
+                                    type="email"
+                                  ></v-text-field> 
+                                  <!--div>
+           
                                     <v-menu
                                       ref="menu"
                                       v-model="menu"
@@ -123,12 +135,12 @@
                                         @change="save"
                                       ></v-date-picker>
                                     </v-menu>
-                                  </div>
-                                  <v-text-field
+                                  </div-->
+                                  <!--v-text-field
                                     v-model="formus.celular"
                                     label="Celular"
                                     autocomplete="new-text"
-                                  ></v-text-field>
+                                  ></v-text-field-->
                                   <v-text-field
                                     v-model="formus.gradoestu"
                                     label="Grado de estudios"
@@ -139,7 +151,7 @@
                                     label="Abrebiatura"
                                     autocomplete="new-text"
                                   ></v-text-field>
-                                  <v-text-field
+                                  <!--v-text-field
                                     v-model="formus.password"
                                     label="Contraseña"
                                     type="password"
@@ -150,6 +162,11 @@
                                     label="Confirmar contraseña"
                                     type="password"
                                     autocomplete="new-password"
+                                  ></v-text-field-->
+                                 <v-text-field
+                                    v-model="formus.codalum"
+                                    label="Codigo"
+                                    autocomplete="new-text"
                                   ></v-text-field>
                                 </v-col>
                                 </div>
@@ -266,7 +283,7 @@
                     <v-toolbar
                       color="primary"
                       dark
-                    >Agregue un nuevo usuario</v-toolbar>
+                    >Editar este usuario</v-toolbar>
                     
                     <form >
                       <v-card-text>
@@ -274,9 +291,20 @@
                               <v-card-text class="mt-3" v-model="paginaform1" v-show="paginaform1">
                                 <div class=" d-flex" style="flex-wrap:wrap;">
                                 <v-col cols="12" md="6" >
+                                  <v-select
+                                  v-model="formusE.tipodoc"
+                                  :items="tipodocs"
+                                  label='tipo de documento'
+                                  item-text="nombre"
+                                  item-value="num"
+                                  solo                                  
+                                  return-object
+                                  height="35"
+                                  style="height:55px;"
+                                 ></v-select>
                                   <div class="d-flex" >
                                       <v-text-field
-                                        v-model="formusE.userdni" 
+                                        v-model="formusE.userdoc" 
                                         label="DNI"   
                                         class="my-auto mr-3"                 
                                         >
@@ -308,22 +336,24 @@
                                         :value="0"
                                       ></v-radio>
                                   </v-radio-group>
-                                  <v-text-field
+                                  <!--v-text-field
                                     v-model="formusE.direccion"
                                     label="Dirección"
                                     autocomplete="new-text"
                                     
-                                  ></v-text-field>
-                                  <v-text-field
+                                  ></v-text-field-->
+                                   
+                                </v-col>
+                                <v-col cols="12" md="6"  >
+
+                                <v-text-field
                                     v-model="formusE.correo"
                                     label="Correo"
                                     autocomplete="new-text"
                                     
-                                  ></v-text-field>  
-                                </v-col>
-                                <v-col cols="12" md="6"  >
-                                  <div>
-                                    <!--div class="mb-6">Active picker: <code>{{ activePicker || 'null' }}</code></div-->
+                                  ></v-text-field> 
+                                  <!--div>
+                                
                                     <v-menu
                                       ref="menu"
                                       v-model="menu2"
@@ -350,12 +380,12 @@
                                         @change="save"
                                       ></v-date-picker>
                                     </v-menu>
-                                  </div>
-                                  <v-text-field
+                                  </div-->
+                                  <!--v-text-field
                                     v-model="formusE.celular"
                                     label="Celular"
                                     autocomplete="new-text"
-                                  ></v-text-field>
+                                  ></v-text-field-->
                                   <v-text-field
                                     v-model="formusE.gradoestu"
                                     label="Grado de estudios"
@@ -366,17 +396,22 @@
                                     label="Abrebiatura"
                                     autocomplete="new-text"
                                   ></v-text-field>
-                                  <v-text-field
+                                  <!--v-text-field
                                     v-model="formusE.password"
                                     label="Contraseña"
                                     type="password"
                                     autocomplete="new-password"
-                                  ></v-text-field>
-                                  <v-text-field
+                                  ></v-text-field-->
+                                  <!--v-text-field
                                     v-model="formusE.password_confirmation"
                                     label="Confirmar contraseña"
                                     type="password"
                                     autocomplete="new-password"
+                                  ></v-text-field-->
+                                    <v-text-field
+                                    v-model="formusE.codalum"
+                                    label="Codigo"
+                                    autocomplete="new-text"
                                   ></v-text-field>
                                 </v-col>
                                 </div>
@@ -495,43 +530,46 @@ import Form from "vform";
          
         usuario:{},
         erroruser:'',
-
+        tipodocs:[{nombre:'DNI',num:1},{nombre:'PASAPORTE',num:2}],
         formus: new Form({
-          userdni:'',
+          tipodoc:{nombre:'DNI', num:1},
+          userdoc:'',
           apePat:'',
           apeMat:'',
           nombresuser:'',
           genero:'',
-          nacimiento:null,
+          //nacimiento:null,
           correo:'',
-          direccion:'',
-          celular:'',
+          //direccion:'',
+          //celular:'',
           gradoestu:'',
           gradoabr:'',
-          password:'',
-          password_confirmation:'',
+          //password:'',
+          //password_confirmation:'',
           facultad:'',
           escuela:'',
           roles:[],
+          codalum:'',
         }),
         formusE: new Form({
-          iduser:'',
-          userdni:'',
+          tipodoc:{nombre:'DNI', num:1},
+          userdoc:'',
           apePat:'',
           apeMat:'',
           nombresuser:'',
           genero:'',
-          nacimiento:null,
+          //nacimiento:null,
           correo:'',
-          direccion:'',
-          celular:'',
+          //direccion:'',
+          //celular:'',
           gradoestu:'',
           gradoabr:'',
-          password:'',
-          password_confirmation:'',
+          //password:'',
+          //password_confirmation:'',
           facultad:'',
           escuela:'',
           roles:[],
+          codalum:'',
         }),
 
         activePicker: null,
@@ -574,7 +612,7 @@ import Form from "vform";
         //console.log(data);
 
       },async buscardni(){    
-           await axios.get(`/api/buscardni/${this.formus.userdni}`)
+           await axios.get(`/api/buscardni/${this.formus.userdoc}`)
            .then(response =>{                 
              this.usuario=response.data;
              // this.erroruser=
@@ -646,13 +684,17 @@ import Form from "vform";
        // console.log(this.formus);
         await this.formus.post('/api/adminuser/').then(response=>{
               //console.log(response.data);
-              if(response.data==1){
-               this.errorexist='ya existe un usuario con este correo';
-              }else{
-                 this.FetchPersonas();
-                 this.clear();
-                 this.close();
-              }
+            if(response.data==2){
+                this.errorexist='¡UPS! algo salió mal, comunicate con el soporte técnico'
+            }else{
+                if(response.data==1){
+                this.errorexist='ya existe un usuario con este correo';
+                }else{
+                  this.FetchPersonas();
+                  this.clear();
+                  this.close();
+                }
+            }
         }).catch(error=>{
             if(error.response.status === 422){
               this.erroresuser=error.response.data.errors;
@@ -720,22 +762,22 @@ import Form from "vform";
           this.formusE.iduser='';
 
           this.formus.apePat='';
-          this.formus.userdni='';
+          this.formus.userdoc='';
           this.formus.apeMat='';
           this.formus.nombresuser='';
           this.formus.genero='';
-          this.formus.nacimiento=null;
+         // this.formus.nacimiento=null;
           this.formus.correo='';
-          this.formus.direccion='';
-          this.formus.celular='';
+          //this.formus.direccion='';
+          //this.formus.celular='';
           this.formus.gradoestu='';
           this.formus.gradoabr='';
-          this.formus.password='';
-          this.formus.password_confirmation='';
+          //this.formus.password='';
+          //this.formus.password_confirmation='';
           this.formus.facultad='';
           this.formus.escuela='';
           this.formus.roles=[];
-
+          this.formus.codalum='';
 
 
           this.erroresuser='';
@@ -761,21 +803,22 @@ import Form from "vform";
           this.dialogedit=true;
           this.formusE.iduser=item.id;
           this.formusE.apePat=item.apePat;
-          this.formusE.userdni=item.numDoc;
+          this.formusE.userdoc=item.numDoc;
           this.formusE.apeMat=item.apeMat;
           this.formusE.nombresuser=item.nom;
           this.formusE.genero=item.gen;
-          this.formusE.nacimiento=item.fecNac;
+          //this.formusE.nacimiento=item.fecNac;
           this.formusE.correo=item.email;
-          this.formusE.direccion=item.dom;
-          this.formusE.celular=item.numcel;
+          //this.formusE.direccion=item.dom;
+          //this.formusE.celular=item.numcel;
           this.formusE.gradoestu=item.grad_estud;
           this.formusE.gradoabr=item.abre_grad;
-          this.formusE.password='';
-          this.formusE.password_confirmation='';
+          //this.formusE.password='';
+          //this.formusE.password_confirmation='';
           this.formusE.facultad={FACULTAD:" ",FACULTAD_ID:`${item.facu[0].facId}`},
           this.formusE.escuela={ESCUELA_ESPECIALIDAD:"",ID_ESC:`${item.espe}`,};
           this.formusE.roles=item.roles;
+          this.formusE.codalum=item.cod_alum;
           //console.log(this.formusE.roles);
           this.mostrarselects();
 
