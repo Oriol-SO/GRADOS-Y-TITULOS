@@ -53,6 +53,11 @@
                           <p class="mb-2">17A4SI</p>
                           <p class="mb-0"><Strong>Ingreso: </Strong></p>
                           <p class="mb-2">26-04-2018</p>
+                          <p class="mb-0"><Strong>Nacimiento: </Strong></p>
+                          <p class="mb-2">18-04-2000</p>
+                          <p class="mb-0"><Strong>dirección: </Strong></p>
+                          <p class="mb-2">av la cultura sn</p>
+
                       </div>
                       </v-card>
                     </div>
@@ -108,7 +113,7 @@
                   
                 ></v-text-field>
               </v-col>
-              <v-col
+              <!--v-col
                 cols="12"
                 sm="6"
                 md="4"
@@ -139,7 +144,7 @@
                    
                   ></v-date-picker>
                 </v-menu>
-              </v-col>
+              </v-col-->
               <v-col cols="12" md="3">
                 <v-text-field
                 v-model="form.celular"
@@ -192,7 +197,7 @@
                  v-model="form.gradoabr"
                  label="Abreviatura" ></v-text-field>
               </v-col>
-              <v-col
+              <!--v-col
                 cols="12"
                 sm="6"
                 md="4"
@@ -202,7 +207,7 @@
                 label="Dirección"
                 autocomplete="new-text"
                 ></v-text-field>
-              </v-col>
+              </v-col-->
               <v-col
                 cols="12"
                 sm="6"
