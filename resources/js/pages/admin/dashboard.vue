@@ -99,7 +99,6 @@ grid-list-md
         </tbody>
      </template>
     </v-simple-table>
-    </v-card>
 
   </v-layout>
 

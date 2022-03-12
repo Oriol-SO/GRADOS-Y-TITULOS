@@ -1,14 +1,20 @@
 <template>
-  <v-app id="inspire" class="grey lighten-3">
-    <v-main class="grey lighten-3">
+  <v-app id="inspire" >
+    <v-main style="background:rgb(242, 243, 248);">
       <child />
+     
     </v-main>
+    <!--piepage /-->  
   </v-app>
 </template>
 
 <script>
+//import Piepage from "~/components/footer.vue";
 export default {
   name: "BasicLayout",
+  components:{
+    // Piepage,
+  }
 };
 </script>
 

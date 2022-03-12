@@ -1,150 +1,303 @@
-<template>
-  <div class="row">
-    <div class="col-lg-7 m-auto">
-      <v-card v-if="mustVerifyEmail" :title="$t('register')">
-        <div class="alert alert-success" role="alert">
-          {{ $t("verify_email_address") }}
-        </div>
-      </v-card>
-      <v-card v-else :title="$t('register')">
-        <form @submit.prevent="register" @keydown="form.onKeydown($event)">
-          <!-- Name -->
-          <div class="mb-3 row">
-            <label class="col-md-3 col-form-label text-md-end">{{
-              $t("name")
-            }}</label>
-            <div class="col-md-7">
-              <input
-                v-model="form.name"
-                :class="{ 'is-invalid': form.errors.has('name') }"
-                class="form-control"
-                type="text"
-                name="name"
-              />
-              <has-error :form="form" field="name" />
-            </div>
-          </div>
+<template >
+<div class="d-flex" style="height:100vh; ">
+    <v-card class=" my-auto mx-auto">
+      <v-card-title>
+        <span class="text-h5">Registrate</span>
+      </v-card-title>
+      <v-card-text>
+        <v-container>
+            <v-col
+              cols="12"
+              sm="6"
+              md="12"
+              class="d-flex"
+            >
+              <v-text-field
+                label="Codigo de alumno"
+                required
+                autocomplete="new-text"
+                style="max-width:250px;"
+                class="my-auto "
+              ></v-text-field>
 
-          <!-- Email -->
-          <div class="mb-3 row">
-            <label class="col-md-3 col-form-label text-md-end">{{
-              $t("email")
-            }}</label>
-            <div class="col-md-7">
-              <input
-                v-model="form.email"
-                :class="{ 'is-invalid': form.errors.has('email') }"
-                class="form-control"
-                type="email"
-                name="email"
-              />
-              <has-error :form="form" field="email" />
-            </div>
-          </div>
-
-          <!-- Password -->
-          <div class="mb-3 row">
-            <label class="col-md-3 col-form-label text-md-end">{{
-              $t("password")
-            }}</label>
-            <div class="col-md-7">
-              <input
-                v-model="form.password"
-                :class="{ 'is-invalid': form.errors.has('password') }"
-                class="form-control"
-                type="password"
-                name="password"
-              />
-              <has-error :form="form" field="password" />
-            </div>
-          </div>
-
-          <!-- Password Confirmation -->
-          <div class="mb-3 row">
-            <label class="col-md-3 col-form-label text-md-end">{{
-              $t("confirm_password")
-            }}</label>
-            <div class="col-md-7">
-              <input
-                v-model="form.password_confirmation"
-                :class="{
-                  'is-invalid': form.errors.has('password_confirmation'),
-                }"
-                class="form-control"
-                type="password"
-                name="password_confirmation"
-              />
-              <has-error :form="form" field="password_confirmation" />
-            </div>
-          </div>
-
-          <div class="mb-3 row">
-            <div class="col-md-7 offset-md-3 d-flex">
-              <!-- Submit Button -->
-              <v-btn :loading="form.busy">
-                {{ $t("register") }}
+              <v-btn
+              color="primary"
+              class="ml-4 my-auto"
+              >
+              Buscar
               </v-btn>
+            </v-col>
+          <v-card-text class="d-flex">
+              <v-row class="mr-5" >
+                <v-card elevation="0" width="400">
+                <v-card-title> Tu informacion</v-card-title>
+                <v-divider class="mb-2"></v-divider>
+                    <div class="d-flex flex-wrap mb-5">
+                        <v-avatar size="75">
+                          <img
+                              src="/img/hombreavatar.png"
+                            >                       
+                        </v-avatar>
+                        <div class="ml-3"> 
+                          <strong class=" text-subtitle-1 font-weight-bold">Oriol Nelson Simon Orneta</strong>
+                          <p><strong>Codigo: </strong>1824403021</p>
+                        </div>                     
+                    </div>
 
-              <!-- GitHub Register Button -->
-              <login-with-github />
-            </div>
-          </div>
-        </form>
-      </v-card>
-    </div>
-  </div>
+                    <div>
+                      <v-card>
+                        <div  class="my-3 mx-2">
+                          <p class="mb-0"><Strong>Especialidad:</Strong></p>
+                          <p class="mb-2">Ingenieria de sistemas y computacion</p>
+                          <p class="mb-0"><Strong>Curricula:</Strong></p>
+                          <p class="mb-2">17A4SI</p>
+                          <p class="mb-0"><Strong>Ingreso: </Strong></p>
+                          <p class="mb-2">26-04-2018</p>
+                      </div>
+                      </v-card>
+                    </div>
+                </v-card>
+
+              </v-row>
+            <form>
+            <v-row class="ml-2">
+              <v-col
+                cols="12"
+                sm="6"
+                md="12"
+              >
+                <h3>Completa la siguiente informacion</h3>
+ 
+
+              </v-col>
+
+              <v-col
+                cols="12"
+                sm="6"
+                md="4"
+                class="d-flex"
+              >
+                  <v-select
+                  v-model="form.tipodoc"
+                  :items="tipodocs"
+                  label='tipo de documento'
+                  item-text="nombre"
+                  item-value="num"
+                  solo                                  
+                  return-object
+                  elevation="0"
+                  style="height:55px; width:200px;"
+                  ></v-select>
+            
+                <v-text-field
+                  v-model="form.userdoc"
+                  class="ml-2"
+                  label="N° Documento"
+                  autocomplete="new-text"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+                md="4"
+              >
+                <v-text-field
+                v-model="form.correo"
+                  label="Correo"
+                  
+                ></v-text-field>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+                md="4"
+              >
+                <v-menu
+                  ref="menu"
+                  v-model="menu"
+                  :close-on-content-click="false"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="auto"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="form.nacimiento"
+                      label="fecha de nacimiento"
+                      prepend-icon="mdi-calendar"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="form.nacimiento"
+                    :active-picker.sync="activePicker"
+                    :max="(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)"
+                    min="1950-01-01"
+                   
+                  ></v-date-picker>
+                </v-menu>
+              </v-col>
+              <v-col cols="12" md="3">
+                <v-text-field
+                v-model="form.celular"
+                  label="Celular"
+                  autocomplete="new-text"
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" md="3">
+                <v-menu
+                  ref="menu2"
+                  v-model="menu2"
+                  :close-on-content-click="false"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="auto"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="form.egreso"
+                      label="fecha de egreso"
+                      prepend-icon="mdi-calendar"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="form.egreso"
+                    :active-picker.sync="activePicker2"
+                    :max="(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)"
+                    min="1950-01-01"
+                   
+                  ></v-date-picker>
+                </v-menu>
+              </v-col>
+              <v-col
+                cols="12"
+                md="3"
+              >
+                <v-text-field 
+                v-model="form.gradoestu"
+                label="Grado de estudios" ></v-text-field>
+              </v-col>
+              <v-col
+                cols="12"
+                md="3"
+              >
+                <v-text-field
+                 v-model="form.gradoabr"
+                 label="Abreviatura" ></v-text-field>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+                md="4"
+              >
+                <v-text-field
+                v-model="form.direccion"
+                label="Dirección"
+                autocomplete="new-text"
+                ></v-text-field>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+                md="4"
+              >
+                <v-text-field
+                v-model="password"
+                label="Contraseña"
+                type="password"
+                autocomplete="new-password"
+                ></v-text-field>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+                md="4"
+              >
+                <v-text-field
+                v-model="password_confirmation"
+                label="Confirmar contraseña"
+                type="password"
+                autocomplete="new-password"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+            </form>
+          </v-card-text>
+
+        </v-container>
+        <small>*es indispensable que toda tu informacion este Completa</small>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn
+          color="blue darken-1"
+          text
+          @click="dialog = false"
+        >
+          Registrar
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+</div>
+
 </template>
 
 <script>
 import Form from "vform";
-import LoginWithGithub from "~/components/LoginWithGithub";
 
 export default {
   layout: "basic",
-  components: {
-    LoginWithGithub,
-  },
 
-  middleware: "guest",
+  data(){
+    return{
+      activePicker: null,
+     // date: null,
+      menu: false,
 
-  metaInfo() {
-    return { title: this.$t("register") };
-  },
+      activePicker2: null,
+     // date2: null,
+      menu2: false,
 
-  data: () => ({
-    form: new Form({
-      name: "",
-      email: "",
-      password: "",
-      password_confirmation: "",
-    }),
-    mustVerifyEmail: false,
-  }),
+      tipodocs:[{nombre:'DNI',num:1},{nombre:'PASAPORTE',num:2}],
+      form:new Form({
+          tipodoc:{nombre:'DNI', num:1},
+          userdoc:'',
+          apePat:'',
+          apeMat:'',
+          nombresuser:'',
+          genero:'',
+          nacimiento:null,
+          correo:'',
+          direccion:'',
+          celular:'',
+          egreso:'',
+          gradoestu:'',
+          gradoabr:'',
+          password:'',
+          password_confirmation:'',
+          facultad:'',
+          escuela:'',
+          roles:[],
+          codalum:'',
 
-  methods: {
-    async register() {
-      // Register the user.
-      const { data } = await this.form.post("/api/register");
-
-      // Must verify email fist.
-      if (data.status) {
-        this.mustVerifyEmail = true;
-      } else {
-        // Log in the user.
-        const {
-          data: { token },
-        } = await this.form.post("/api/login");
-
-        // Save the token.
-        this.$store.dispatch("auth/saveToken", { token });
-
-        // Update the user.
-        await this.$store.dispatch("auth/updateUser", { user: data });
-
-        // Redirect home.
-        this.$router.push({ name: "home" });
+      }),
+    }
+  }, watch: {
+      menu (val) {
+        val && setTimeout(() => (this.activePicker = 'YEAR'))
+      },
+      menu2(val){
+        val && setTimeout(() => (this.activePicker2 = 'YEAR'))
       }
     },
-  },
+
+  
 };
 </script>
