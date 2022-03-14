@@ -1,20 +1,16 @@
 <template>
-<v-container
-grid-list-md
->
+  <v-container
+    grid-list-md
+  >
 <v-layout row wrap>
- <v-card xs12 sm6
-    
+ <v-card xs12 sm4 class="mt-3 ml-2 mr-3"
     color="#42b883"
     dark
-    max-width="400"
-    max-height="400"
-    v-bind="attrs"
-    v-on="on"
+
   >
-    <v-card-text>
-      <line-chart :chart-data="datacollection" :height="300"   ></line-chart>
-    </v-card-text>
+    
+      <bar-chart :chart-data="datacollection" ></bar-chart>
+    
 
     <v-card-text>
       <div class="text-h4 font-weight-thin">
@@ -27,31 +23,16 @@ grid-list-md
     
   </v-card>
   
-  <v-spacer></v-spacer>
+    <v-spacer></v-spacer>
 
-  <v-card
-    class="mx-auto text-center mt-3 ml-2 mr-3"
+  <v-card 
+    class=" mt-3 ml-2 mr-3"
+    xs12 sm4
     color="green"
     dark
-    max-width="600"
-  >
-    <v-card-text>
-      <v-sheet color="rgba(0, 0, 0, .12)">
-        <v-sparkline
-          :value="value"
-          color="rgba(255, 255, 255, .7)"
-          height="100"
-          padding="24"
-          stroke-linecap="round"
-          smooth
-        >
-          <template v-slot:label="item">
-            ${{ item.value }}
-          </template>
-        </v-sparkline>
-      </v-sheet>
-    </v-card-text>
 
+  >
+    
     <v-card-text>
       <div class="text-h4 font-weight-thin">
         Procesos Iniciados 24h
@@ -72,7 +53,7 @@ grid-list-md
 
   <v-spacer></v-spacer>
 
-  <v-simple-table class="mt-3 ml-2 mr-3"
+  <v-simple-table xs12 sm4 class="mt-3 ml-2 mr-3"
   dark
   fixed-header
   height="400px">
@@ -110,13 +91,16 @@ grid-list-md
 <script>
 
 import LineChart from '~/components/LineChart.js';
+import DoughnutChart from '~/components/DoughnutChart.js';
+import BarChart from '~/components/BarChart.js';
 import axios from 'axios'
 
 export default {
 
   components: {
-    LineChart
-
+    LineChart,
+    DoughnutChart,
+    BarChart,
   },
   data(){
     return {
@@ -124,10 +108,8 @@ export default {
       bachillerIni:[],
       bachillerIniValue:[],
       bachillerFinal:[],
-      value:[],
       procesos:[],
       grados:[],
-      nombregrado:[],
     }
   },
   mounted () {
@@ -135,7 +117,6 @@ export default {
     this.FetchGrados();
     this.FetchBachillerIni();
     this.FetchBachillerFinal();
-    this.renderChart(this.chartData, this.options)
   },
   methods: {
       async FetchProceso() {
@@ -153,6 +134,7 @@ export default {
         const { data } = await axios.get("/api/bachillerIni");
         this.bachillerIni = data.Mes;
         this.bachillerIniValue =data.Valor;
+        
         this.fillData ();
         // console.log([this.bachillerIni[0]['Mes'],this.bachillerIni[1]['Mes'],this.bachillerIni[2]['Mes'],this.bachillerIni[3]['Mes']]);
         // console.log(this.bachillerIniValue[0]['Iniciados']);
@@ -163,22 +145,45 @@ export default {
         this.fillData ();
         // console.log(this.bachillerFinal[0]['Finalizados'],this.bachillerFinal[1]['Finalizados'],this.bachillerFinal[2]['Finalizados'],this.bachillerFinal[3]['Finalizados']);
       },
+      porFacultad() {
+      return {
+        labels: this.stats.tramites_por_facultad.map(
+          ({ facultad }) => facultad
+        ),
+        data: this.stats.tramites_por_facultad.map(({ cant }) => cant),
+      };
+    },
       fillData ()
-    {
-      this.datacollection = {
-        labels: ['Enero','Febrero','Marzo','Abril'],
+    {   var valoresIni=[];
+        var valoresMes=[];
+        var valoresFinal=[];
+        for(var i=0;i<  this.bachillerIniValue.length;i++){
+         valoresIni.push(this.bachillerIniValue[i]['Iniciados']);
+         valoresMes.push(this.bachillerIni[i]['Mes']);
+         
+          };
+        for(var i=0;i<  this.bachillerFinal.length;i++){
+         valoresFinal.push(this.bachillerFinal[i]['Finalizados']);
+        };
+        this.datacollection = {
+        axis: 'y',
+        labels: valoresMes,
+        
 
         datasets: [
           {
             label: 'Bachiller Iniciado',
             backgroundColor: '#FF0066',
-            data: [this.bachillerIniValue[0]['Iniciados'],this.bachillerIniValue[1]['Iniciados'],this.bachillerIniValue[2]['Iniciados'],this.bachillerIniValue[3]['Iniciados']]
+            data: valoresIni,
+            
           },
           {
-            label: 'Bachiller Finalizado',
-            backgroundColor: '#8467ad',
-            data: [this.bachillerFinal[0]['Finalizados'],this.bachillerFinal[1]['Finalizados'],this.bachillerFinal[2]['Finalizados'],this.bachillerFinal[3]['Finalizados']]
+            label: 'Bachiller Finalizados',
+            backgroundColor: '##0e75e0',
+            data: valoresFinal,
+            
           },
+          
         ]
       };
     }
@@ -188,8 +193,9 @@ export default {
 
 <style lang="css">
 .small {
-  max-width: 800px;
-  /* max-height: 500px; */
-  margin:  50px auto;
+  max-width: 300px;
+  max-height: 300px; 
+  margin:  30px auto;
 }
 </style>
+

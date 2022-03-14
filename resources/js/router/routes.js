@@ -25,18 +25,20 @@ export default [
     ]
   },
 
-  { path: '*', component: page('errors/404.vue') },
-
-  {
-    path: '/admin',component: page('admin/index.vue'),
-    children: [
-      { path: '', redirect: { name: 'admin.dashboard' } },
-      { path: 'dashboard', name: 'admin.dashboard', component: page('admin/dashboard.vue') },
-      { path: 'tramites', name: 'admin.tramites', component: page('admin/tramites.vue') },
-      { path: 'tramite/:id', name: 'admin.tramite', component: page('admin/tramite.vue') },
-      { path: 'personas-usuarios', name: 'admin.usuarios', component: page('admin/usuarios.vue') },
-
-    ]
-  },
  
+
+  
+    {
+      path: '/admin',
+      component: page('admin/index.vue'),
+      children: [
+        { path: '', redirect: { name: 'admin.dashboard' } },
+        { path: 'dashboard', name: 'admin.dashboard', component: page('admin/dashboard.vue') },
+        { path: 'tramites', name: 'admin.tramites', component: page('admin/tramites.vue') },
+        { path: 'tramite/:id', name: 'admin.tramite', component: page('admin/tramite.vue') },
+        { path: 'personas-usuarios', name: 'admin.usuarios', component: page('admin/usuarios.vue') },
+      ]
+    },
+    
+  { path: '*', component: page('errors/404.vue') },
 ]
