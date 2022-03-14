@@ -19,6 +19,7 @@ use App\Http\Controllers\RolController;
 use App\Http\Controllers\BachillerFinalController;
 use App\Http\Controllers\BachillerIniController;
 use App\Http\Controllers\FacultadEscuelaController;
+use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -47,6 +48,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 Route::group(['middleware' => 'guest:api'], function () {
     Route::post('login', [LoginController::class, 'login']);
     Route::post('register', [RegisterController::class, 'register']);
+    Route::get('datauser/{codigo}', [RegisterController::class, 'datosusuario']);   
 
     Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail']);
     Route::post('password/reset', [ResetPasswordController::class, 'reset']);
@@ -74,3 +76,4 @@ Route::get('buscardni/{codigo}', [PersonaController::class, 'buscardniuser']);
 Route::get('facuescuela',[FacultadEscuelaController::class,'facultad']);
 Route::get('mostrarescuela/{codigo}',[FacultadEscuelaController::class,'escuelas']);
 Route::get('rolesgenerales/{codigo}',[FacultadEscuelaController::class,'rolesgenerales']);
+Route::resource('adminuser',AdminUserController::class);

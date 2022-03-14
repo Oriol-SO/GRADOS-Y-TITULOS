@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 use App\Models\Persona;
+use App\Models\PersonaRole;
 use GuzzleHttp\Client;
+use App\Models\User;
 use Illuminate\Support\Facades\Http;
 class PersonaController extends Controller
 {
@@ -13,7 +15,37 @@ class PersonaController extends Controller
      */
     public function index()
     {
-        $personas=Persona::all();
+        $personas=Persona::all()->map(function($p){
+            return [
+                'id'=>$p->id,
+                'nom'=>$p->nom,
+                'apePat'=>$p->apePat,
+                'apeMat'=>$p->apeMat,
+                'gen'=>$p->gen,
+                'dom'=>$p->dom,
+                'email'=>$p->email,
+                'tipDoc'=>$p->tipDoc,
+                'numDoc'=>$p->numDoc,
+                'fecNac'=>$p->fecNac,
+                'numcel'=>$p->numcel,
+                'grad_estud'=>$p->grad_estud,
+                'abre_grad'=>$p->abre_grad,
+                'espe'=>$p->espe,
+                'cod_alum'=>$p->cod_alum,
+                'facu'=>$p->PersonaRole->map(function($r){
+                    return[
+                        'facId'=>$r->facId,
+                    ];
+                }),
+                'roles'=>$p->PersonaRole->map(function($r){
+                    return[
+                        'rolNombre'=>"",
+                        'id'=>$r->rol_id,                        
+                    ];
+                }),
+               // 'user'=>$p->user,
+            ];
+        });
         
         return response()->json($personas);
     }
@@ -34,10 +66,7 @@ class PersonaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        
-    }
+
 
     /**
      * Display the specified resource.
@@ -50,12 +79,7 @@ class PersonaController extends Controller
        
     }
 
-    public function buscarusercodigo($codigo)
-    {   
 
-            $response = Http::get('http://api.undac.edu.pe/tasks/a3945a7384cbdcd33f49e8f5b8ec29f5/91f33e2776c526b9cca723a63476f028/'.$codigo);
-            return $response;
-    }
 
     public function buscardniuser($codigo){
         $response=Http::get('https://dniruc.apisperu.com/api/v1/dni/'.$codigo.'?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImpjbGF1cmVhbm96QGdtYWlsLmNvbSJ9.xfmGDbSyPq016GIiuDHiyevun8bb2Avl2EBjYqXAQZA');
@@ -79,10 +103,7 @@ class PersonaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+ 
 
     /**
      * Remove the specified resource from storage.

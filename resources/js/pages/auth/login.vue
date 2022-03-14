@@ -66,6 +66,10 @@
               Ingresar
             </v-btn>
           </v-form>
+
+          <router-link :to="{name:'register'}" class="d-flex mt-4 align-center justify-center text-subtitle-2">
+            Registrate aqui
+          </router-link>
         </v-card-text>
       </v-card>
     </v-flex>

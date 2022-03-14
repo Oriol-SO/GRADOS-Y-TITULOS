@@ -80,7 +80,6 @@
         </tbody>
      </template>
     </v-simple-table>
-    </v-card>
 
   </v-layout>
 

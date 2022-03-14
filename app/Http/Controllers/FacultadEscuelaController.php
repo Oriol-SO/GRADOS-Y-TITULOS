@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Http;
 use Mockery\Undefined;
 use App\Models\Role;
 use App\Models\PersonaRole;
+use Illuminate\Support\Arr;
+
 class FacultadEscuelaController extends Controller
 {
   
@@ -24,7 +26,7 @@ class FacultadEscuelaController extends Controller
     public function escuelas($codigo){
         
         $escuelas=Http::get('http://api.undac.edu.pe/tasks/a3945a7384cbdcd33f49e8f5b8ec29f5/91f33e2776c526b9cca723a63476f028/school');
-       
+        $escuela=array();
         $escuelas=json_decode($escuelas);
         foreach($escuelas as $escu){
             if($escu->FACULTAD_ID==$codigo){
@@ -44,10 +46,13 @@ class FacultadEscuelaController extends Controller
         }else if($codigo==2){
             //roles por facu
             $rolesF=Role::whereIn('id', [4,5,14])->get();
+
             return response()->json($rolesF);
         }else if($codigo==3){
             //roles por escuela
             $rolesE=Role::whereIn('id', [6,7,8,9,10])->get();
+
+
             return response()->json($rolesE);
         }
 
