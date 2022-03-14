@@ -30,8 +30,8 @@ class CreatePersonasTable extends Migration
             $table->string('cod_alum',10)->nullable();
             $table->string('curri')->nullable();
             $table->string('espe')->nullable();
-            $table->date('fec_matri')->nullable();
-            $table->date('fec_egre')->nullable();
+            $table->string('fec_matri')->nullable();
+            $table->string('fec_egre')->nullable();
             $table->string('proced')->nullable();
             $table->timestamps();
         });

@@ -27,7 +27,6 @@ class Persona extends Model
         'curri',
         'fec_matri',
         'fec_egre',
-        'fec_egre',
     ];
     
     public function PersonaRole(){

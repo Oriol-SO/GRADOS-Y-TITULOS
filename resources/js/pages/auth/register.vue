@@ -13,7 +13,7 @@
               class="d-flex"
             >
               <v-text-field
-              v-model="form.codigo"
+              v-model="codigouser"
                 label="Codigo de alumno"
                 required
                 autocomplete="new-text"
@@ -36,13 +36,13 @@
                 <v-card-title> Tu información</v-card-title>
                 <v-divider class="mb-2"></v-divider>
                     <div class="d-flex flex-wrap mb-5">
-                        <v-avatar size="75" v-if="form.genero =='F'">
+                        <v-avatar size="75" v-if="form.genero =='0'">
                           <img
                             src="/img/mujeravatar.png"
                               
                             >                       
                         </v-avatar>
-                        <v-avatar size="75" v-if="form.genero =='M'">
+                        <v-avatar size="75" v-if="form.genero =='1'">
                           <img
                                src="/img/hombreavatar.png"
                             >                       
@@ -163,32 +163,11 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12" md="2">
-                <v-menu
-                  ref="menu2"
-                  v-model="menu2"
-                  :close-on-content-click="false"
-                  transition="scale-transition"
-                  offset-y
-                  min-width="auto"
-                >
-                  <template v-slot:activator="{ on, attrs }">
                     <v-text-field
-                      v-model="form.egreso"
-                      label="fecha de egreso"
+                      v-model="form.fecha_egre"
+                      label="Año de egreso"
                       prepend-icon="mdi-calendar"
-                      readonly
-                      v-bind="attrs"
-                      v-on="on"
                     ></v-text-field>
-                  </template>
-                  <v-date-picker
-                    v-model="form.egreso"
-                    :active-picker.sync="activePicker2"
-                    :max="(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)"
-                    min="1950-01-01"
-                   
-                  ></v-date-picker>
-                </v-menu>
               </v-col>
               <v-col
                 cols="12"
@@ -241,7 +220,7 @@
                 md="4"
               >
                 <v-text-field
-                v-model="password"
+                v-model="form.password"
                 label="Contraseña"
                 type="password"
                 autocomplete="new-password"
@@ -253,7 +232,7 @@
                 md="4"
               >
                 <v-text-field
-                v-model="password_confirmation"
+                v-model="form.password_confirmation"
                 label="Confirmar contraseña"
                 type="password"
                 autocomplete="new-password"
@@ -269,9 +248,8 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn
-          color="blue darken-1"
-          text
-          @click="dialog = false"
+          color="blue"
+          @click="registraruser()"
         >
           Registrar
         </v-btn>
@@ -292,15 +270,14 @@ export default {
 
   data(){
     return{
-      activePicker: null,
-     // date: null,
-      menu: false,
+
 
       activePicker2: null,
      // date2: null,
       menu2: false,
 
       tipodocs:[{nombre:'DNI',num:1},{nombre:'PASAPORTE',num:2}],
+      codigouser:'',
       form:new Form({
           codigo:'',
           tipodoc:{nombre:'DNI', num:1},
@@ -329,11 +306,10 @@ export default {
       }),
       facultades:[],
       escuelas:[],
+      errores:'',
     }
   }, watch: {
-      menu (val) {
-        val && setTimeout(() => (this.activePicker = 'YEAR'))
-      },
+
       menu2(val){
         val && setTimeout(() => (this.activePicker2 = 'YEAR'))
       }
@@ -343,7 +319,7 @@ export default {
   },  
   methods:{
     async searchdatosuser(){
-      await axios.get(`api/datauser/${this.form.codigo}`).then(response=>{
+      await axios.get(`api/datauser/${this.codigouser}`).then(response=>{
           var user=response.data;
           this.form.nombresuser=user['Nombres'];
           this.form.apePat=user['Apellido paterno'];
@@ -353,7 +329,11 @@ export default {
           this.form.nacimiento=user['Fecha de nacimiento'];
           this.form.fecha_ingre=user['Fecha de Ingreso'];
           this.form.curricula=user['Curricula'];
-          this.form.genero=user['Genero']
+          if(user['Genero']=='M'){
+            this.form.genero='1';
+          }else{this.form.genero='0';}
+          
+          this.form.codigo=this.codigouser;
          // console.log(this.nombresuser);
       });
 
@@ -379,6 +359,16 @@ export default {
             //console.log(this.escuelas);
           });
          //console.log(this.formus);
+      },registraruser(){
+        console.log(this.form);
+        this.form.post('/api/register').then(response=>{
+          console.log(response.data);
+        }).catch(error=>{
+                if(error.response.status === 422){
+                      this.errores=error.response.data.errors;                      
+                      console.log(this.errores);
+                    }
+        });
       }
   }
 
