@@ -502,6 +502,7 @@
 <script>
 import axios from 'axios';
 import Form from "vform";
+import { isNullLiteralTypeAnnotation } from '@babel/types';
   export default {
     data () {
       return {
@@ -740,7 +741,7 @@ import Form from "vform";
             }               
       },  async mostrarroleseditfirst(){
        // this.formusE.roles='';
-            if(this.formusE.facultad.FACULTAD_ID==`${null}`){
+            if(this.formusE.facultad.FACULTAD_ID==null){
               await axios.get(`/api/rolesgenerales/${1}`).then(response=>{
               //console.log(response.data);
               this.roles=response.data;
@@ -749,7 +750,7 @@ import Form from "vform";
               await axios.get(`/api/rolesgenerales/${2}`).then(response=>{
                this.roles=response.data;
               })
-              if(this.formusE.escuela.ID_ESC!=`${null}`){
+              if(this.formusE.escuela.ID_ESC!=null){
                 await axios.get(`/api/rolesgenerales/${3}`).then(response=>{
                 this.roles=response.data;
                 })
@@ -792,8 +793,10 @@ import Form from "vform";
       closedialogedit(){
         this.dialogedit=false;
       },mostrarselects(){
+       
         this.mostrarroleseditfirst();
-        this.mostrar.editfirst();
+         this.mostrarescuelaseditfirst();
+       // this.mostrar.editfirst();
       },
       editItem(item){
           //console.log(item);
@@ -813,8 +816,8 @@ import Form from "vform";
           this.formusE.gradoabr=item.abre_grad;
           //this.formusE.password='';
           //this.formusE.password_confirmation='';
-          this.formusE.facultad={FACULTAD:" ",FACULTAD_ID:`${item.facu[0].facId}`},
-          this.formusE.escuela={ESCUELA_ESPECIALIDAD:"",ID_ESC:`${item.espe}`,};
+          this.formusE.facultad={FACULTAD:" ",FACULTAD_ID:item.facu[0].facId},
+          this.formusE.escuela={ESCUELA_ESPECIALIDAD:"",ID_ESC:item.espe,};
           this.formusE.roles=item.roles;
           this.formusE.codalum=item.cod_alum;
           //console.log(this.formusE.roles);

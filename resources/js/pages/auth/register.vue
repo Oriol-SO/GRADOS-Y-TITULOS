@@ -1,14 +1,14 @@
 <template >
-<div class="d-flex" style="height:100vh; ">
+<div class="d-flex ml-4 mr-4" style="height:100vh; ">
     <v-card class=" my-auto mx-auto">
       <v-card-title>
         <span class="text-h5">Registrate</span>
       </v-card-title>
       <v-card-text>
-        <v-container>
+   
             <v-col
               cols="12"
-              sm="6"
+        
               md="12"
               class="d-flex"
             >
@@ -29,10 +29,10 @@
               Procesar
               </v-btn>
             </v-col>
-          <v-card-text class="d-flex">
+          <v-card-text class="d-flex" style="flex-wrap:wrap"  v-if="form.nombresuser">
          
               <v-row class="mr-5" >
-                <v-card elevation="0" width="400" v-if="form.nombresuser">
+                <v-card elevation="0" width="100%" >
                 <v-card-title> Tu información</v-card-title>
                 <v-divider class="mb-2"></v-divider>
                     <div class="d-flex flex-wrap mb-5">
@@ -77,7 +77,6 @@
             <v-row class="ml-2">
               <v-col
                 cols="12"
-                sm="6"
                 md="12"
               >
                 <h3>Completa la siguiente informacion</h3>
@@ -122,39 +121,7 @@
                   
                 ></v-text-field>
               </v-col>
-              <!--v-col
-                cols="12"
-                sm="6"
-                md="4"
-              >
-                <v-menu
-                  ref="menu"
-                  v-model="menu"
-                  :close-on-content-click="false"
-                  transition="scale-transition"
-                  offset-y
-                  min-width="auto"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-text-field
-                      v-model="form.nacimiento"
-                      label="fecha de nacimiento"
-                      prepend-icon="mdi-calendar"
-                      readonly
-                      v-bind="attrs"
-                      v-on="on"
-                    ></v-text-field>
-                  </template>
-                  <v-date-picker
-                    v-model="form.nacimiento"
-                    :active-picker.sync="activePicker"
-                    :max="(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)"
-                    min="1950-01-01"
-                   
-                  ></v-date-picker>
-                </v-menu>
-              </v-col-->
-              <v-col cols="12" md="2">
+              <v-col cols="12" md="2" sm="6">
                 <v-text-field
                 v-model="form.celular"
                   label="Celular"
@@ -162,7 +129,7 @@
                   required
                 ></v-text-field>
               </v-col>
-              <v-col cols="12" md="2">
+              <v-col cols="12" md="2" sm="6">
                     <v-text-field
                       v-model="form.fecha_egre"
                       label="Año de egreso"
@@ -172,7 +139,8 @@
               <v-col
                 cols="12"
                 md="3"
-              >
+                sm="6">
+              
                 <v-text-field 
                 v-model="form.gradoestu"
                 label="Grado de estudios" ></v-text-field>
@@ -180,7 +148,8 @@
               <v-col
                 cols="12"
                 md="3"
-              >
+                sm="6">
+              
                 <v-text-field
                  v-model="form.gradoabr"
                  label="Abreviatura" ></v-text-field>
@@ -239,13 +208,14 @@
                 ></v-text-field>
               </v-col>
             </v-row>
-          
+               
           </v-card-text>
 
-        </v-container>
-        <small>*es indispensable que toda tu informacion este Completa</small>
+     
+       <small >*es indispensable que toda tu informacion este Completa</small>
       </v-card-text>
-      <v-card-actions>
+      <v-card-actions v-if="form.nombresuser">
+      
         <v-spacer></v-spacer>
         <v-btn
           color="blue"
@@ -255,6 +225,29 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+    <v-dialog>
+      <v-card>
+        <v-card-title class="text-h5 grey lighten-2">
+          Errores
+        </v-card-title>
+
+        <v-card-text>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="primary"
+            text
+          >
+            I accept
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 </div>
 
 </template>
