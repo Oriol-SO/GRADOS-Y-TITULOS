@@ -1,5 +1,5 @@
 <template >
-<div class="d-flex ml-4 mr-4" style="height:100vh; ">
+<div class="d-flex ml-4 mr-4" style="height:100%; ">
     <v-card class=" my-auto mx-auto">
       <v-card-title>
         <span class="text-h5">Registrate</span>
@@ -182,6 +182,7 @@
                 return-object
                 label="Escuela"
                 ></v-select>
+
               </v-col>
               <v-col
                 cols="12"
@@ -212,7 +213,7 @@
           </v-card-text>
 
      
-       <small >*es indispensable que toda tu informacion este Completa</small>
+       <small class="text-subtitle-2" style="color:#2778c4;">*es indispensable que toda tu informacion este Completa</small>
       </v-card-text>
       <v-card-actions v-if="form.nombresuser">
       
@@ -225,14 +226,21 @@
         </v-btn>
       </v-card-actions>
     </v-card>
-    <v-dialog>
+    <v-dialog v-model="dialogerror">
       <v-card>
         <v-card-title class="text-h5 grey lighten-2">
           Errores
         </v-card-title>
 
         <v-card-text>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          <v-alert
+            outlined
+            type="warning"
+            prominent
+            border="left"
+          >
+          <p v-if="errores.codigo"> ya existe una cuenta con este codigo</p>
+          </v-alert>
         </v-card-text>
 
         <v-divider></v-divider>
@@ -242,8 +250,9 @@
           <v-btn
             color="primary"
             text
+            @click="closemodalerror()"
           >
-            I accept
+            Cerrar
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -300,6 +309,7 @@ export default {
       facultades:[],
       escuelas:[],
       errores:'',
+      dialogerror:false,
     }
   }, watch: {
 
@@ -360,8 +370,11 @@ export default {
                 if(error.response.status === 422){
                       this.errores=error.response.data.errors;                      
                       console.log(this.errores);
+                      this.dialogerror=true;
                     }
         });
+      },closemodalerror(){
+        this.dialogerror=false;
       }
   }
 

@@ -41,7 +41,7 @@
                                 ></v-text-field> 
                                 <div v-if="errores.nombrefase">
                                     <v-alert   dense outlined type="error" >
-                                    {{errores.nombrefase[0]}}
+                                    El campo Nombre es obligatorio 
                                     </v-alert>
                                 </div>                           
                                 <v-text-field
@@ -51,7 +51,7 @@
                                 ></v-text-field>  
                                 <div v-if="errores.numerofase">
                                     <v-alert   dense outlined type="error" >
-                                    {{errores.numerofase[0]}}
+                                    el campo Orden es obligatorio
                                     </v-alert>
                                 </div>                                                   
                                     <v-btn
@@ -107,7 +107,7 @@
                 >
                     <v-card flat  >
                         
-                    <v-card-text class="text-md-body-1 font-weight-medium" >{{ fase.id }} </v-card-text>
+                    <v-card-text class="text-md-body-1 font-weight-medium" >{{ fase.nombre }} </v-card-text>
                     </v-card>
                 </v-tab-item>
                 </v-tabs-items>
@@ -467,11 +467,7 @@ export default{
           this.formrequi2.fase_id=(data[0].id);
           this.mostrarrequisito(data[0].id);
       },
-      async FetchPersona(){
-          const codigo ='1824403077';
-          const {data}=await axios.get(`/api/persona/${codigo}`);
-          console.log(data);
-      },mostrarid(fase,i){
+        mostrarid(fase,i){
           console.log(fase.id);
           this.faseid=fase.id;
           this.formrequi1.fase_id=fase.id;
