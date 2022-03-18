@@ -1,59 +1,60 @@
 <template>
   <v-container
-    grid-list-md
+
   >
 <v-layout row wrap>
- <v-card xs12 sm4 class="mt-3 ml-2 mr-3"
-    color="#42b883"
-    dark
-
+ <v-card  class="mt-3 ml-2 mr-3"
+    
   >
-    
-      <bar-chart :chart-data="datacollection" ></bar-chart>
-    
-
     <v-card-text>
-      <div class="text-h4 font-weight-thin">
+      <bar-chart :chart-data="datacollection" ></bar-chart>
+    </v-card-text>
+    
+    <v-divider></v-divider>
+    <v-card-text class="text-h4 font-weight-thin">
         Procesos del Año
-      </div>
     </v-card-text>
 
-    <v-divider></v-divider>
-
-    
   </v-card>
   
     <v-spacer></v-spacer>
 
   <v-card 
     class=" mt-3 ml-2 mr-3"
-    xs12 sm4
-    color="green"
-    dark
+
+    color="white"
 
   >
-    
     <v-card-text>
-      <div class="text-h4 font-weight-thin">
-        Procesos Iniciados 24h
-      </div>
+      <doughnut-chart :data="porFacultad"></doughnut-chart>
     </v-card-text>
-
     <v-divider></v-divider>
 
-    <v-card-actions class="justify-center">
-      <v-btn
-        block
-        text
-      >
-        Go to Report
+    <v-card-text class="text-h4 font-weight-thin">
+        Bachilleres iniciados
       </v-btn>
-    </v-card-actions>
+    </v-card-text>
   </v-card>
-
   <v-spacer></v-spacer>
 
-  <v-simple-table xs12 sm4 class="mt-3 ml-2 mr-3"
+  <v-card 
+    class=" mt-3 ml-2 mr-3"
+    color="white"
+
+  >
+    <v-card-text>
+      <area-chart :data="porFacultadx" :options="yearsOptions"></area-chart>
+    </v-card-text>
+    <v-divider></v-divider>
+
+    <v-card-text class="text-h4 font-weight-thin">
+        Bachilleres iniciados
+      </v-btn>
+    </v-card-text>
+  </v-card>
+  <v-spacer></v-spacer>
+
+  <v-simple-table  class="mt-3 ml-2 mr-3"
   dark
   fixed-header
   height="400px">
@@ -92,6 +93,7 @@
 import LineChart from '~/components/LineChart.js';
 import DoughnutChart from '~/components/DoughnutChart.js';
 import BarChart from '~/components/BarChart.js';
+import AreaChart from '~/components/AreaChart.js';
 import axios from 'axios'
 
 export default {
@@ -100,22 +102,71 @@ export default {
     LineChart,
     DoughnutChart,
     BarChart,
+    AreaChart,
   },
   data(){
     return {
+      yearsOptions: {
+      hoverBorderWidth: 20,
+      },
       datacollection: null,
-      bachillerIni:[],
-      bachillerIniValue:[],
+      bachillerIni:null,
+      bachillerIniValue:null,
       bachillerFinal:[],
       procesos:[],
       grados:[],
     }
   },
+  
   mounted () {
     this.FetchProceso();
     this.FetchGrados();
     this.FetchBachillerIni();
     this.FetchBachillerFinal();
+  },computed: {
+    porFacultad() {
+
+      var valoresInix=[];
+        var valoresMesx=[];
+        var valoresFinalx=[];
+        for(var i=0;i<  this.bachillerIniValue.length;i++){
+         valoresInix.push(this.bachillerIniValue[i]['Iniciados']);
+         valoresMesx.push(this.bachillerIni[i]['Mes']);
+         
+          };
+        for(var i=0;i<  this.bachillerFinal.length;i++){
+         valoresFinalx.push(this.bachillerFinal[i]['Finalizados']);
+        };
+      return {
+        labels: valoresMesx,
+        data: valoresInix,
+      };
+    },
+    porFacultadx() {
+        let datasets = [];
+        var valoresInix=[];
+        var valoresMesx=[];
+        var valoresFinalx=[];
+        for(var i=0;i<  this.bachillerIniValue.length;i++){
+         valoresInix.push(this.bachillerIniValue[i]['Iniciados']);
+         valoresMesx.push(this.bachillerIni[i]['Mes']);
+         
+          };
+        for(var i=0;i<  this.bachillerFinal.length;i++){
+         valoresFinalx.push(this.bachillerFinal[i]['Finalizados']);
+        };
+        for(var i=0;i< valoresMesx.length;i++){
+        datasets.push({
+          
+        label:valoresMesx[i],
+        data:[12,43,54,76,4,32,54,56,76,54,76,87],
+         });
+        };
+      return {
+        labels:valoresMesx,
+        datasets:datasets,
+        };
+    },
   },
   methods: {
       async FetchProceso() {
@@ -133,7 +184,8 @@ export default {
         const { data } = await axios.get("/api/bachillerIni");
         this.bachillerIni = data.Mes;
         this.bachillerIniValue =data.Valor;
-        
+        this.porFacultad();
+        this.porFacultadx();
         this.fillData ();
         // console.log([this.bachillerIni[0]['Mes'],this.bachillerIni[1]['Mes'],this.bachillerIni[2]['Mes'],this.bachillerIni[3]['Mes']]);
         // console.log(this.bachillerIniValue[0]['Iniciados']);
@@ -142,16 +194,10 @@ export default {
         const { data } = await axios.get("/api/bachillerFinal");
         this.bachillerFinal = data;
         this.fillData ();
+        this.porFacultadx();
         // console.log(this.bachillerFinal[0]['Finalizados'],this.bachillerFinal[1]['Finalizados'],this.bachillerFinal[2]['Finalizados'],this.bachillerFinal[3]['Finalizados']);
       },
-      porFacultad() {
-      return {
-        labels: this.stats.tramites_por_facultad.map(
-          ({ facultad }) => facultad
-        ),
-        data: this.stats.tramites_por_facultad.map(({ cant }) => cant),
-      };
-    },
+      
       fillData ()
     {   var valoresIni=[];
         var valoresMes=[];
@@ -184,7 +230,11 @@ export default {
           },
           
         ]
-      };
+      };this.datadona = {
+        labels: ['azul','rojo','amarillo'],
+        data: [12,32,54],
+
+      }
     }
   }
 }

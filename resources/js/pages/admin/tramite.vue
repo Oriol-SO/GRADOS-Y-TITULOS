@@ -107,7 +107,7 @@
                 >
                     <v-card flat  >
                         
-                    <v-card-text class="text-md-body-1 font-weight-medium" >{{ fase.id }} </v-card-text>
+                    <v-card-text class="text-md-body-1 font-weight-medium" >{{fase.nombre}} </v-card-text>
                     </v-card>
                 </v-tab-item>
                 </v-tabs-items>

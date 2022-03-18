@@ -1,5 +1,5 @@
 <template >
-<div class="d-flex ml-4 mr-4" style="height:100vh; ">
+<div class="d-flex ml-4 mr-4" style="height:100%; ">
     <v-card class=" my-auto mx-auto">
       <v-card-title>
         <span class="text-h5">Registrate</span>
@@ -212,7 +212,7 @@
           </v-card-text>
 
      
-       <small >*es indispensable que toda tu informacion este Completa</small>
+       <small  style="color:red ">*es indispensable que toda tu informacion este Completa</small>
       </v-card-text>
       <v-card-actions v-if="form.nombresuser">
       
@@ -243,7 +243,7 @@
             color="primary"
             text
           >
-            I accept
+            Acepto
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -360,6 +360,7 @@ export default {
                 if(error.response.status === 422){
                       this.errores=error.response.data.errors;                      
                       console.log(this.errores);
+                    
                     }
         });
       }
