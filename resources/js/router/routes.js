@@ -38,5 +38,16 @@ export default [
 
     ]
   },
+  
+  {
+    path: '/alumno',component: page('alumno/index.vue'),
+    children: [
+      { path: '', redirect: { name: 'alumno.dashboard' } },
+      { path: 'dashboard', name: 'alumno.dashboard', component: page('alumno/dashboard.vue') },
+      { path: 'tramite/:id', name: 'alumno.tramite', component: page('alumno/tramite.vue') },
+ 
+
+    ]
+  },
  
 ]

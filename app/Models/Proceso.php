@@ -26,9 +26,9 @@ class Proceso extends Model
         return $this->hasMany(Fase::class,'proceso_id','id');
     }
 
-    public function Modalidad()
+    public function Modalidade()
     {
-        return $this->belongsTo(Modalidad::class,'moda_id','id');
+        return $this->belongsTo(Modalidade::class,'moda_id','id');
     }
 
     public function Grado()

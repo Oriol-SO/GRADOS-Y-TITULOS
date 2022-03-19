@@ -1,9 +1,16 @@
 <?php
 
 namespace App\Http\Controllers;
+//namespace App\Http\Controllers\Auth;
 
+use App\Models\Fase;
+use App\Models\Modalidade;
 use App\Models\Tramite;
 use Illuminate\Http\Request;
+use App\models\Persona;
+use App\Models\User;
+use Illuminate\Auth\Events\Validated;
+use Carbon\Carbon;
 
 class tramiteController extends Controller
 {
@@ -12,10 +19,11 @@ class tramiteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index( Request $request)
     {
-        //traemos a nuestra tabla de la bs
-        $tramites = tramite::all();
+        //traemos los tramites del alumno
+        $user=$request->user();
+        $tramites = tramite::where('persona_id',$user->persona_id)->get();
         return response()->json($tramites);
     }
 
@@ -37,7 +45,32 @@ class tramiteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validar($request);
+        $user=$request->user();
+        $persona=$user->persona;
+        //$modalidad=Modalidade::find($request->tipotramite['modalidad_id']);
+        //$fase=Fase::where('proceso_id','')->limit(1)->get();
+        $tramite=Tramite::create([
+            'fec-inicio'=> Carbon::now(),
+            'fecha_vencimiento'=>null,
+            'modo_obtencion'=> $request->tipotramite['modalidad'],
+            'tipo_tramite'=>$request->tipotramite['nombre'],
+            'fase_actual'=>'1',
+            'estado'=>0,
+            'trabajo_id'=>null,
+            'persona_id'=>$persona->id,
+            'proceso_id'=>$request->tipotramite['id'],
+            'consejo_id'=>null,
+            'resolucion_id'=>null,         
+        ]);
+
+        return response()->json($tramite);
+
+    }
+    public function validar($request=null){
+       return  $request->validate([
+            'tipotramite' => 'required',
+        ]);
     }
 
     /**

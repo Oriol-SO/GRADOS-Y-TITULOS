@@ -22,6 +22,7 @@ use App\Http\Controllers\FacultadEscuelaController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
+use App\Http\Controllers\tramiteController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -77,3 +78,5 @@ Route::get('facuescuela',[FacultadEscuelaController::class,'facultad']);
 Route::get('mostrarescuela/{codigo}',[FacultadEscuelaController::class,'escuelas']);
 Route::get('rolesgenerales/{codigo}',[FacultadEscuelaController::class,'rolesgenerales']);
 Route::resource('adminuser',AdminUserController::class);
+
+Route::resource('tramite',tramiteController::class);
