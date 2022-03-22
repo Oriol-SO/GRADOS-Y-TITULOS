@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mt-3 mx-4" style="min-height:500px;" >
+  <v-card class="mt-3 mx-4" style="min-height:600px;" >
     <v-toolbar
       flat
       color="primary"
