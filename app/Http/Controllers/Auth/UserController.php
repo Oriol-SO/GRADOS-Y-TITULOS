@@ -22,6 +22,14 @@ class UserController extends Controller
             'nombre'=>$persona->nom,
             'apellido1'=>$persona->apePat,
             'apellido2'=>$persona->apeMat,
+            'genero'=>$persona->gen,
+            'curricula'=>$persona->curri,
+            'matricula'=>$persona->fec_matri,
+            'Direccion'=>$persona->dom,
+            'Codigo'=>$persona->cod_alum,
+            'Ncelular'=>$persona->numcel,
+            'Nacimiento'=>$persona->fecNac,
+            'GradoEstudios'=>$persona->grad_estud,
         );
         return response()->json($datosUser);
         
