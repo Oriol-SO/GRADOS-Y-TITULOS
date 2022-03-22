@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card class="mt-3 mx-4" style="min-height:500px;" >
     <v-toolbar
       flat
       color="primary"
@@ -7,7 +7,7 @@
     >
       <v-toolbar-title> Mi Perfil</v-toolbar-title>
     </v-toolbar>
-    <v-tabs orizontal align-center  >
+    <v-tabs orizontal >
       <v-tab>
         <v-icon left>
           mdi-account
@@ -32,7 +32,7 @@
        <!-- Datos Generales -->
       <v-tab-item >
         <v-container >
-        <v-card class="pa-10" style="font-size:17px">
+        <v-card class="pa-10" style="font-size:17px" elevation="0">
           <div class="d-flex flex-wrap mb-5 ">
             <v-avatar size="75" v-if="form.genero =='0'">
               <img src="/img/mujeravatar.png">                
@@ -72,7 +72,7 @@
        <!-- Editar Perfil -->
       <v-tab-item>        
         <v-container >
-        <v-card class="d-flex justify-center ">
+        <v-card class="d-flex justify-center " elevation="0">
           <form @submit.prevent="updateper" @keydown="form.onKeydown($event)">
             <v-row style="display:flex ;justify-content: space-around; " class="ma-5">
               <v-bottom-sheet v-model="sheet">
@@ -84,7 +84,7 @@
                 <alert-success :form="form" :message="$t('info_updated')" />
                   </div>
                 </v-sheet>
-              </v-bottom-sheet justify-start>
+              </v-bottom-sheet >
                   <!-- Name -->
               <v-col
                 cols="12"
@@ -202,7 +202,7 @@
         </v-container>
       </v-tab-item>
       <v-tab-item>
-        <v-card flat>
+        <v-card flat elevation="0">
           <router-view></router-view>
         </v-card>
       </v-tab-item>

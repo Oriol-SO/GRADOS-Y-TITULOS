@@ -9,8 +9,8 @@
           <has-error :form="form" field="password_confirmation" style="color:blue" />
         </div>
       </v-sheet>
-    </v-bottom-sheet justify-start>
-    <v-card class="pb-5" >
+    </v-bottom-sheet >
+    <v-card class="pb-5" elevation="0" >
       <v-row style="display:flex ;justify-content: center;  " class="pb-10">
         <!-- Password -->
         <v-col cols="4">

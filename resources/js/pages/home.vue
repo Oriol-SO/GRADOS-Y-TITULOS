@@ -6,10 +6,10 @@
         <v-layout align-center justify-center fill-height >
           <div  >      
             <p class=" text-center ;text-justify"
-               style="font-size:70px; font-family: 'Vollkorn', serif; font-weight: bold; ">
-                Grados  y Titulos <br> <hr>Universidad Nacional Daniel Alcides Carrion
+               style="font-size:70px; font-family: 'Vollkorn', serif;  ">
+                Grados y Títulos <br>
             </p> 
-            <hr>
+                 <hr>Universidad Nacional Daniel Alcides Carrion <hr>
           </div>  
         </v-layout> 
       </v-flex>
@@ -23,7 +23,7 @@
 <style scoped>
 .main {
   background-size: cover;
-  height:92vh;
-  background:#BFC3C3
+  height: 100%;
+  background:#f5f7ff;
 }
 </style>
