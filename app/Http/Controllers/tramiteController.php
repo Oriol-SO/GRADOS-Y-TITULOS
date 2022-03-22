@@ -81,9 +81,17 @@ class tramiteController extends Controller
      */
     public function show($id)
     {
-        //
+        
+        $tramites = tramite::find($id);
+        return response()->json($tramites);
     }
 
+    public function obtenerfases($codigo){
+        $fase['fases']=Fase::where('proceso_id', $codigo)->get();
+        $fase['cantidad']=Fase::where('proceso_id', $codigo)->get()->count();
+        //$fase=Fase::all();
+        return response()->json($fase);
+    }
     /**
      * Show the form for editing the specified resource.
      *

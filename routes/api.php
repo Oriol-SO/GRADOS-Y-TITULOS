@@ -80,3 +80,4 @@ Route::get('rolesgenerales/{codigo}',[FacultadEscuelaController::class,'rolesgen
 Route::resource('adminuser',AdminUserController::class);
 
 Route::resource('tramite',tramiteController::class);
+Route::get('fasestramite/{codigo}',[tramiteController::class,'obtenerfases']);

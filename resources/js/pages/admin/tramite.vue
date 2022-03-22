@@ -457,7 +457,7 @@ export default{
       async FetchTramites(){
           const { data } = await axios.get(`/api/proceso/${this.$route.params.id}`);   
           this.procesos = data;
-          console.log(data);
+          //console.log(data);
       },
       async FetchFases(){
           const {data}=await axios.get(`/api/fase/${this.$route.params.id}`);

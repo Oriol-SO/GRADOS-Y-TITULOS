@@ -25,7 +25,6 @@ export default [
     ]
   },
 
-  { path: '*', component: page('errors/404.vue') },
 
   {
     path: '/admin',component: page('admin/index.vue'),
@@ -49,5 +48,8 @@ export default [
 
     ]
   },
- 
+
+
+  
+  { path: '*', component: page('errors/404.vue') },
 ]

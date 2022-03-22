@@ -1,64 +1,266 @@
 <template>
   <div class="mx-4 mt-5">
-    <v-card class="mb-4">
-      <v-card-text>
-        <v-card-title>BACHILLER SEMI PRESENCIAL</v-card-title>
-      </v-card-text>
+    <v-card elevation="0" flat class="mb-2 d-flex" >
+      <v-card-title class="px-0 py-1 ml-3 text-h6">{{nomtramite.tipo_tramite}}</v-card-title>
     </v-card>
-    <v-stepper v-model="e1">
+    <v-stepper v-model="e1" >
       <v-stepper-header>
-        <template v-for="n in steps">
-          <v-stepper-step
-            :key="`${n}-step`"
-            :complete="e1 > n"
-            :step="n"
-            editable
-            
-          >
-            Fase {{ n }}
-          </v-stepper-step>
+        <v-stepper-step
+          v-for="(fase,i) in parseInt(this.numfases,10)" :key="i" 
+          :complete="e1 > (fase)"        
+          :step="fase"
+      
+         
+        >
+          fase {{fase}}
+        </v-stepper-step>
 
-          <v-divider
-            v-if="n !== steps"
-            :key="n"
-          ></v-divider>
-        </template>
       </v-stepper-header>
 
       <v-stepper-items>
+      
         <v-stepper-content
-          v-for="n in steps"
-          :key="`${n}-content`"
-          :step="n"
-        >
+        v-for="(fase,i) in fases" :key="i"
+        :step="i+1" 
+         >
           <v-card
-            class="mb-12"
-            color="grey lighten-1"
-            height="200px"
-          ></v-card>
-
-          <v-btn
-            color="primary"
-            @click="nextStep(n)"
+            class="mb-5 mt-0"
+            elevation="0"
+            style="min-height:350px;"
           >
-            Continue
+            <v-card-title class="my-0">{{fase.nombre}}</v-card-title>
+            <v-btn 
+            color="#2cdd9b" 
+            class="mb-2 text-capitalize" 
+            style="color:#fff;" elevation="0"
+             @click="mostrarrequisito(fase.id)">
+             Requisitos
+             <v-icon dark right>mdi-arrow-down</v-icon>
+             </v-btn>
+
+            <v-divider></v-divider>
+            <v-list-item-group
+                v-model="selectedItem"
+                color="primary"
+                mandatory
+                
+            >
+                <v-list-item
+                v-for="(requisito, i) in requisitos"
+                :key="i"
+                >
+                <v-list-item-icon>
+                    <v-icon >mdi-check-outline</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>
+                    <v-list-item-title class="d-flex" >{{requisito.nombre}}  
+                          <v-btn 
+                            class="ml-auto text-capitalize" 
+                            color="#00C897" 
+                            outlined
+                            rounded
+                            small
+                            @click="verformato(requisito)"
+                           >
+                              <v-icon dark>
+                                 mdi-eye
+                              </v-icon>
+                              ver formato
+                          </v-btn>
+                          <v-btn 
+                            class="ml-2" 
+                            color="indigo" 
+                            dark 
+                            small
+                            @click="openmodal(requisito)">
+                              <v-icon dark>
+                                 mdi-cloud-upload
+                              </v-icon>
+                          </v-btn>
+                    </v-list-item-title> 
+
+                </v-list-item-content>
+                </v-list-item>
+            </v-list-item-group>
+
+          </v-card>
+
+          <v-btn color="warning" style="color:#fff;" rounded @click="atras()">
+           <v-icon dark left>
+            mdi-arrow-left
+           </v-icon>
+            atras
+          </v-btn>
+          <v-btn
+            color="primary" rounded 
+            @click="siguiente()"           
+          >Continuar
+          <v-icon dark right>
+            mdi-arrow-right
+           </v-icon>            
           </v-btn>
 
-          <v-btn text>
-            Cancel
-          </v-btn>
         </v-stepper-content>
       </v-stepper-items>
     </v-stepper>
-  </div>
+    
+      <template>
+        <div class="text-center">
+          <v-dialog
+            v-model="dialog"
+            width="500"
+          >
+            <v-card>
+              <v-card-title class="text-h5 " style="background:#2cdd9b; color:#fff;">
+                Subir archivo
+              </v-card-title>
+              <v-card-text>
+                <strong>Documento: </strong>{{documento }} <br/>
+                <strong>Tipo de archivo: </strong>{{extension}}
+                 <v-file-input
+                    v-model="archivoreq"
+                    label="selecciona un archivo"
+                  
+                     prepend-icon="mdi-file"
+                    class="mt-2 mr-2"
+                  ></v-file-input>
+              </v-card-text>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="#2cdd9b"      
+                  rounded 
+                  chip     
+                  style="color:#fff;"
+                  @click="guardar()"
+                >
+                <v-icon dark left>mdi-upload</v-icon>
+                  cargar
+                </v-btn>
+                <v-btn
+                  color="error"     
+                  rounded 
+                  @click="dialog = false"
+                >
+                 <v-icon dark >mdi-close</v-icon>
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </div>
+      </template>
+         <template>
+        <div class="text-center">
+          <v-dialog
+            v-model="dialog2"
+            width="500"
+          >
+            <v-card>
+              <v-card-title class="text-h5 " style="background:#ffc136; color:#fff;">
+                Formato del requisito
+              </v-card-title>
+              <v-card-text>
+                  <v-container fluid>
+                  <v-textarea
+                    clearable
+                    clear-icon="mdi-close-circle"
+                    label="Formato"
+                    :value="content"
+                  ></v-textarea>
+                </v-container>
+              </v-card-text>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="#2cdd9b"      
+                  rounded 
+                  chip     
+                  style="color:#fff;"
+                  @click="guardar()"
+                >
+                <v-icon dark left>mdi-download</v-icon>
+                  Descargar
+                </v-btn>
+                <v-btn
+                  color="error"     
+                  rounded 
+                  @click="dialog2 = false"
+                >
+                 <v-icon dark >mdi-close</v-icon>
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </div>
+      </template>
+  </div>    
 </template>
+
+
 <script>
+
+import axios from 'axios';
 export default {
     data(){
         return{
-         e1: 1,
-         steps: 12, 
+          e1: 1,
+          nomtramite:[],
+          fases:[],
+          numfases:'',
+          requisitos:[],
+          dialog:false,
+          idrequi:'',
+          archivoreq:null,
+          documento:'',
+          extension:'',
+
+          dialog2:false,
+          content:'',
         }
+    },mounted(){
+        this.fetchtramite();
+       // this.fetchfase();
+        this.numfase();
+    },methods:{
+      siguiente(){            
+        if(this.e1<this.numfases){
+         this.e1=this.e1+1;
+          this.requisitos='';
+        }
+      },
+      atras(){
+        if(this.e1<=this.numfases && this.e1>1 ){
+         this.e1=this.e1-1;
+          this.requisitos='';
+        }
+      },
+      async fetchtramite(){
+         const { data } = await axios.get(`/api/tramite/${this.$route.params.id}`);   
+         this.nomtramite = data;
+        // this.codigoproc=this.nomtramite.proceso_id;
+         //console.log(this.codigoproc)
+          this.fetchfase(this.nomtramite.proceso_id)
+      },async fetchfase($id){
+         const { data } =await axios.get(`/api/fasestramite/${$id}`);   
+         this.fases = data.fases;
+         this.numfases=data.cantidad;
+      },async mostrarrequisito(id){
+          const {data}=await axios.get(`/api/faserequisito/${id}`);
+          this.requisitos=data;
+      },openmodal(requisito){        
+        this.idrequi=requisito.id;
+        this.documento=requisito.documento;
+        this.extension=requisito.extension;
+        this.dialog=true;
+      },guardar(){
+        console.log(this.idrequi);
+        console.log(this.archivoreq);
+      },verformato(requisito){
+         this.dialog2=true;
+         this.content=requisito.nombre;
+      }
     }
 }
 </script>
