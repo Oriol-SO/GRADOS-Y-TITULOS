@@ -123,18 +123,76 @@ export default {
     this.FetchGrados();
     this.FetchBachillerIni();
     this.FetchBachillerFinal();
+  },methods: {
+      async FetchProceso() {
+        const { data } = await axios.get("/api/proceso");
+        this.procesos = data.tramites;
+
+      },
+      async FetchGrados(){
+        const { data } = await axios.get("/api/grado");
+
+        this.grados = data;
+
+
+      },async FetchBachillerIni() {
+        const { data } = await axios.get("/api/bachillerIni");
+        this.bachillerIni = data.Mes;
+        this.bachillerIniValue =data.Valor;
+        this.fillData ();
+        // console.log([this.bachillerIni[0]['Mes'],this.bachillerIni[1]['Mes'],this.bachillerIni[2]['Mes'],this.bachillerIni[3]['Mes']]);
+        // console.log(this.bachillerIniValue[0]['Iniciados']);
+        
+      },async FetchBachillerFinal() {
+        const { data } = await axios.get("/api/bachillerFinal");
+        this.bachillerFinal = data;
+        this.fillData ();
+
+        // console.log(this.bachillerFinal[0]['Finalizados'],this.bachillerFinal[1]['Finalizados'],this.bachillerFinal[2]['Finalizados'],this.bachillerFinal[3]['Finalizados']);
+      },
+      
+      fillData ()
+    {   
+      var valoresIni=[];
+        var valoresMes=[];
+        var valoresFinal=[];
+        for(var i=0;i<  this.bachillerIniValue.length;i++){
+         valoresIni.push(this.bachillerIniValue[i]['Iniciados']);
+         valoresMes.push(this.bachillerIni[i]['Mes']);
+         
+          };
+        for(var i=0;i<  this.bachillerFinal.length;i++){
+         valoresFinal.push(this.bachillerFinal[i]['Finalizados']);
+        };
+        this.datacollection = {
+        labels: valoresMes,
+        datasets: [
+          {
+            label: 'Bachiller Iniciado',
+            backgroundColor: '#FF0066',
+            data: valoresIni,
+            
+          },
+          {
+            label: 'Bachiller Finalizados',
+            backgroundColor: '##0e75e0',
+            data: valoresFinal, 
+          },
+        ]
+      };
+    }
   },computed: {
     porFacultad() {
 
       var valoresInix=[];
         var valoresMesx=[];
         var valoresFinalx=[];
-        for(var i=0;i<  this.bachillerIniValue.length;i++){
+        for(var i=0;i<this.bachillerIniValue.length;i++){
          valoresInix.push(this.bachillerIniValue[i]['Iniciados']);
          valoresMesx.push(this.bachillerIni[i]['Mes']);
          
           };
-        for(var i=0;i<  this.bachillerFinal.length;i++){
+        for(var i=0;i<this.bachillerFinal.length;i++){
          valoresFinalx.push(this.bachillerFinal[i]['Finalizados']);
         };
       return {
@@ -152,9 +210,6 @@ export default {
          valoresMesx.push(this.bachillerIni[i]['Mes']);
          
           };
-        for(var i=0;i<  this.bachillerFinal.length;i++){
-         valoresFinalx.push(this.bachillerFinal[i]['Finalizados']);
-        };
         for(var i=0;i< valoresMesx.length;i++){
         datasets.push({
           
@@ -167,76 +222,8 @@ export default {
         datasets:datasets,
         };
     },
-  },
-  methods: {
-      async FetchProceso() {
-        const { data } = await axios.get("/api/proceso");
-        this.procesos = data.tramites;
-
-      },
-      async FetchGrados(){
-        const { data } = await axios.get("/api/grado");
-
-        this.grados = data;
-
-
-      },async FetchBachillerIni() {
-        const { data } = await axios.get("/api/bachillerIni");
-        this.bachillerIni = data.Mes;
-        this.bachillerIniValue =data.Valor;
-        this.porFacultad();
-        this.porFacultadx();
-        this.fillData ();
-        // console.log([this.bachillerIni[0]['Mes'],this.bachillerIni[1]['Mes'],this.bachillerIni[2]['Mes'],this.bachillerIni[3]['Mes']]);
-        // console.log(this.bachillerIniValue[0]['Iniciados']);
-        
-      },async FetchBachillerFinal() {
-        const { data } = await axios.get("/api/bachillerFinal");
-        this.bachillerFinal = data;
-        this.fillData ();
-        this.porFacultadx();
-        // console.log(this.bachillerFinal[0]['Finalizados'],this.bachillerFinal[1]['Finalizados'],this.bachillerFinal[2]['Finalizados'],this.bachillerFinal[3]['Finalizados']);
-      },
-      
-      fillData ()
-    {   var valoresIni=[];
-        var valoresMes=[];
-        var valoresFinal=[];
-        for(var i=0;i<  this.bachillerIniValue.length;i++){
-         valoresIni.push(this.bachillerIniValue[i]['Iniciados']);
-         valoresMes.push(this.bachillerIni[i]['Mes']);
-         
-          };
-        for(var i=0;i<  this.bachillerFinal.length;i++){
-         valoresFinal.push(this.bachillerFinal[i]['Finalizados']);
-        };
-        this.datacollection = {
-        axis: 'y',
-        labels: valoresMes,
-        
-
-        datasets: [
-          {
-            label: 'Bachiller Iniciado',
-            backgroundColor: '#FF0066',
-            data: valoresIni,
-            
-          },
-          {
-            label: 'Bachiller Finalizados',
-            backgroundColor: '##0e75e0',
-            data: valoresFinal,
-            
-          },
-          
-        ]
-      };this.datadona = {
-        labels: ['azul','rojo','amarillo'],
-        data: [12,32,54],
-
-      }
-    }
   }
+
 }
 </script>
 
