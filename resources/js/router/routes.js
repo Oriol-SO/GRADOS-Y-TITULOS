@@ -48,6 +48,33 @@ export default [
     ]
   },
 
+  {
+    path: '/secretaria-general',component: page('secretariaGeneral/index.vue'),
+    children: [
+      { path: '', redirect: { name: 'secretaria_general.dashboard' } },
+      { path: 'dashboard', name: 'secretaria_general.dashboard', component: page('secretariaGeneral/dashboard.vue') },
+      { path: 'expedientes-por-agendar', name: 'sg.expedientes', component: page('secretariaGeneral/expedientes.vue') },
+      { path: 'expedientes-agendados', name: 'sg.agendados', component: page('secretariaGeneral/agendados.vue') },
+      { path: 'expedientes-aprobados', name: 'sg.aprobados', component: page('secretariaGeneral/aprobados.vue') },
+      { path: 'datos-internos', name: 'sg.resueltos', component: page('secretariaGeneral/resueltos.vue') },
+      { path: 'control-sticker', name: 'sg.sticker', component: page('secretariaGeneral/sticker.vue') },
+      { path: 'para-sunedu', name: 'sg.sunedu', component: page('secretariaGeneral/sunedu.vue') },
+      { path: 'tramite/:id', name: 'sg.tramite', component: page('secretariaGeneral/tramite.vue') },
+      { path: 'revisar/tramite/:tramite', name: 'sg.revisar', component: page('secretariaGeneral/revisar.vue') }
+ 
+
+    ]
+  },
+  {
+    path: '/secretaria-facultad',
+    component: page('secretariaFacultad/index.vue'),
+    children: [
+      { path: '', redirect: { name: 'sf.dashboard' } },
+      { path: 'dashboard', name: 'sf.dashboard', component: page('secretariaFacultad/dashboard.vue') },
+      { path: 'tramite/:id', name: 'sf.tramite', component: page('secretariaFacultad/tramite.vue') },
+      { path: 'revisar/tramite/:tramite', name: 'sf.revisar', component: page('secretariaFacultad/revisar.vue') }
+    ]
+  },
 
   
   { path: '*', component: page('errors/404.vue') },

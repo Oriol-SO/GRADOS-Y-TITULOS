@@ -16,8 +16,8 @@ class CreateTramitesTable extends Migration
         Schema::create('tramites', function (Blueprint $table) {
 
             $table->id();
-            $table->date('fec-inicio');
-            $table->date('fec-fin')->nullable();
+            $table->date('fec_inicio');
+            $table->date('fec_fin')->nullable();
             $table->date('fecha_vencimiento')->nullable();
             $table->string('modo_obtencion')->nullable();
             $table->string('tipo_tramite');
