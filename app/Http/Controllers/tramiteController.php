@@ -55,7 +55,7 @@ class tramiteController extends Controller
         //$modalidad=Modalidade::find($request->tipotramite['modalidad_id']);
         //$fase=Fase::where('proceso_id','')->limit(1)->get();
         $tramite=Tramite::create([
-            'fec-inicio'=> Carbon::now(),
+            'fec_inicio'=> Carbon::now(),
             'fecha_vencimiento'=>null,
             'modo_obtencion'=> $request->tipotramite['modalidad'],
             'tipo_tramite'=>$request->tipotramite['nombre'],

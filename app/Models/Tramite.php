@@ -21,7 +21,6 @@ class Tramite extends Model
         'proceso_id',
         'consejo_id',
         'resolucion_id',
-
     ];
 
     public function Persona()

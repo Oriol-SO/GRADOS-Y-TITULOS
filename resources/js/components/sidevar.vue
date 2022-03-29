@@ -1,9 +1,10 @@
 <template>
 <div>
     <v-app-bar
-      color="transparent"
+      color="red"
       elevation="0"
       fixed
+      
       style="margin-top:0px; margin-left:5px;"                  
     >
       <v-app-bar-nav-icon  color="secondary" style="font-size:50px" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
@@ -22,7 +23,7 @@
       >
         <v-list-item-group
           v-model="group"
-          active-class="deep-purple--text text--accent-4"
+          active-class="deep-lead--text text--accent-4"
           permanent
         >
         <router-link 
