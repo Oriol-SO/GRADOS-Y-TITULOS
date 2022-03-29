@@ -20,10 +20,10 @@ export default [
     component: page('settings/index.vue'),
     children: [
       { path: '', redirect: { name: 'settings.password' } },
-      { path: 'profile', name: 'settings.password', component: page('settings/password.vue') }
+      { path: 'profile', name: 'settings.password', component: page('settings/password.vue') },
+      { path: 'profile/s', name: '', component: page('settings/s.vue') }
     ]
   },
-
 
   {
     path: '/admin',component: page('admin/index.vue'),
@@ -43,8 +43,6 @@ export default [
       { path: '', redirect: { name: 'alumno.dashboard' } },
       { path: 'dashboard', name: 'alumno.dashboard', component: page('alumno/dashboard.vue') },
       { path: 'tramite/:id', name: 'alumno.tramite', component: page('alumno/tramite.vue') },
- 
-
     ]
   },
 

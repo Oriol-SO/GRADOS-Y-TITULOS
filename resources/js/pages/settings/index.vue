@@ -32,12 +32,12 @@
        <!-- Datos Generales -->
       <v-tab-item >
         <v-container >
-        <v-card class="pa-10" style="font-size:17px" elevation="0">
+        <v-card class="pa-10" elevation="0">
           <div class="d-flex flex-wrap mb-5 ">
-            <v-avatar size="75" v-if="form.genero =='0'">
+            <v-avatar size="70" v-if="form.genero =='0'">
               <img src="/img/mujeravatar.png">                
             </v-avatar>
-            <v-avatar size="75" v-if="form.genero =='1'">
+            <v-avatar size="70" v-if="form.genero =='1'">
               <img src="/img/hombreavatar.png">                       
             </v-avatar>
             <div class="ml-3"> 
@@ -48,22 +48,33 @@
           <hr>
           <div  class="my-3 mx-2" style="display:flex ;justify-content: space-around;  flex-wrap: wrap">
             <div>
-            <p class="mb-0"><Strong>Grado de estudios:</Strong></p>
-            <p class="mb-2">{{form.GradoEstudios}}</p>
-            <p class="mb-0"><Strong>Curricula:</Strong></p>
-            <p class="mb-2">{{form.curricula}}</p>
+            <p class="mb-0"><Strong>E-mail: </Strong></p>
+            <p class="mb-2">{{form.email}}</p>            
             <p class="mb-0"><Strong>Ingreso: </Strong></p>
             <p class="mb-2">{{form.matricula}}</p>
-            <p class="mb-0"><Strong>Nacimiento: </Strong></p>
+            <p class="mb-0"><Strong>Fec Nacimiento: </Strong></p>
             <p class="mb-2">{{form.Nacimiento}}</p>
             </div>
             <div>
             <p class="mb-0"><Strong>Dirección: </Strong></p>
             <p class="mb-2">{{form.Direccion}}</p>
-            <p class="mb-0"><Strong>E-mail: </Strong></p>
-            <p class="mb-2">{{form.email}}</p>
+            <p class="mb-0"><Strong>Curricula:</Strong></p>
+            <p class="mb-2">{{form.curricula}}</p>
             <p class="mb-0"><Strong>Celular: </Strong></p>
-            <p class="mb-2">{{form.Ncelular}}</p>
+            <p class="mb-2">{{form.Ncelular}}</p>          
+            </div>
+          </div>
+            <hr>
+             <div class="my-3 mx-2" style="display:flex ;justify-content: space-around;  flex-wrap: wrap">
+             <div>        
+            <p class="mb-0"><Strong>Año De Egreso: </Strong></p>
+            <p class="mb-2">{{form.Egreso}}</p>
+            <p class="mb-0"><Strong>Abreviatura De Grado: </Strong></p>
+            <p class="mb-2">{{form.Abreviatura}}</p>
+            </div> 
+             <div>
+            <p class="mb-0"><Strong>Grado de estudios:</Strong></p>
+            <p class="mb-2">{{form.GradoEstudios}}</p>
             </div>
           </div>
         </v-card>
@@ -74,7 +85,7 @@
         <v-container >
         <v-card class="d-flex justify-center " elevation="0">
           <form @submit.prevent="updateper" @keydown="form.onKeydown($event)">
-            <v-row style="display:flex ;justify-content: space-around; " class="ma-5">
+            <v-row style="display:flex ;justify-content: space-around; " class="ma-1">
               <v-bottom-sheet v-model="sheet">
                 <v-sheet
                   class="text-center"
@@ -85,70 +96,6 @@
                   </div>
                 </v-sheet>
               </v-bottom-sheet >
-                  <!-- Name -->
-              <v-col
-                cols="12"
-                sm="6"
-                md="5"
-               >
-                <v-text-field
-                 v-model="form.nombre"
-                  type="text"
-                  name="name"
-                  label="nombre"
-                  :rules="[v => !!v || 'El campo es requerido']"
-                  required
-                  filled
-                ></v-text-field>
-              </v-col>  
-                  <!-- Apellido pat -->
-              <v-col
-                cols="12"
-                sm="6"
-                md="5"
-               >
-                <v-text-field
-                  v-model="form.apellido1"
-                  type="text"
-                  name="apellido1"
-                  label="Apellido Paterno"
-                  :rules="[v => !!v || 'El campo es requerido']"
-                  required
-                  filled
-                ></v-text-field>
-              </v-col>
-                  <!-- Apellido Mat-->
-              <v-col
-                cols="12"
-                sm="6"
-                md="5"
-               >
-                <v-text-field
-                  v-model="form.apellido2"
-                  type="text"
-                  name="apellido2"
-                  label="Apellido Materno"
-                  :rules="[v => !!v || 'El campo es requerido']"
-                  required
-                  filled
-                ></v-text-field>
-              </v-col>
-                  <!-- Email -->
-              <v-col
-                cols="12"
-                sm="6"
-                md="5"
-               >
-                <v-text-field
-                  v-model="form.email"
-                  type="email"
-                  name="email"
-                  :rules="emailRules"
-                  label="E-mail"
-                  required
-                  filled
-                ></v-text-field>
-              </v-col>
               <!-- numero -->
               <v-col
                 cols="12"
@@ -160,6 +107,7 @@
                   type="numeric"
                   name="Ncelular"
                   label="Numero Celular"
+                  :rules="[v => !!v || 'El campo es requerido']"
                   required
                   filled
                 ></v-text-field>
@@ -175,6 +123,104 @@
                   type="text"
                   name="Direccion"
                   label="Direccion"
+                  :rules="[v => !!v || 'El campo es requerido']"
+                  required
+                  filled
+                ></v-text-field>
+              </v-col>
+                  <!-- Año de egreso-->
+              <v-col
+                cols="12"
+                sm="6"
+                md="5"
+               >
+                <v-text-field
+                 v-model="form.Egreso"
+                  type="numeric"
+                  name="Egreso"
+                  label="Año de Egreso"
+                  :rules="[v => !!v || 'El campo es requerido']"
+                  required
+                  filled
+                ></v-text-field>
+              </v-col>  
+                  <!-- fec nacimiento -->
+              <v-col
+                cols="12"
+                sm="6"
+                md="5"
+               >
+                <v-menu
+                  v-model="menufec"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="auto"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="form.Nacimiento"
+                      label="Picker without buttons"
+                      prepend-icon="mdi-calendar"
+                      name="Nacimiento"
+                      :rules="[v => !!v || 'El campo es requerido']"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    v-model="form.Nacimiento"
+                    @input="menufec = false"
+                  ></v-date-picker>
+                </v-menu>
+              </v-col>
+                  <!-- Grado de estudios-->
+              <v-col
+                cols="12"
+                sm="6"
+                md="5"
+               >
+                <v-text-field
+                  v-model="form.GradoEstudios"
+                  type="text"
+                  name="GradoEstudios"
+                  label="Grado De estudios"
+                  :rules="[v => !!v || 'El campo es requerido']"
+                  required
+                  filled
+                ></v-text-field>
+              </v-col>
+                  <!-- ABREVIATURA GRADO -->
+              <v-col
+                cols="12"
+                sm="6"
+                md="5"
+               >
+                <v-text-field
+                  v-model="form.Abreviatura"
+                  type="tex"
+                  name="Abreviatura"
+                  label="Abreviatura De Grado"
+                  :rules="[v => !!v || 'El campo es requerido']"
+                  required
+                  filled
+                ></v-text-field>
+              </v-col>
+                 <!-- documento -->
+              <v-col
+                cols="12"
+                sm="6"
+                md="5"
+               >
+                <v-text-field
+                  v-model="form.Documento"
+                  type="numeric"
+                  name="Documento"
+                  label="Numero De Documento"
+                  :rules="[v => !!v || 'El campo es requerido']"
+                  hint="DNI o PASAPORTE"
                   required
                   filled
                 ></v-text-field>
@@ -219,6 +265,7 @@ export default {
   scrollToTop: false,
  
   data: () => ({
+      menufec: false,
     emailRules: [
         v => !!v || 'E-mail is required',
         v => /.+@.+\..+/.test(v) || 'E-mail no es valido',
@@ -236,6 +283,9 @@ export default {
       Ncelular:"",
       Nacimiento:"",
       GradoEstudios:"",
+      Abreviatura:"",
+      Egreso:"",
+      Documento:"",
 
     }),
 
