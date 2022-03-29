@@ -24,14 +24,14 @@ class File extends Model
         return $this->belongsTo(PersonaRole::class,'persrol_id','id');
     }
 
-    public function Revision()
+    public function Revisione()
     {
-        return $this->hasMany(Revision::class,'file_id','id');
+        return $this->hasMany(Revisione::class,'file_id','id');
     }
 
-    public function Observacion()
+    public function Observacione()
     {
-        return $this->hasMany(Observacion::class,'file_id','id');
+        return $this->hasMany(Observacione::class,'file_id','id');
     }
 
     public function FaseRolRequisito()

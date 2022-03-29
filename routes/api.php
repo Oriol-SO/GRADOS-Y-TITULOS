@@ -102,3 +102,4 @@ Route::get('sf-tramite/{id}',[SecretariaController::class,'sf_obtenertramite']);
 Route::get('sf-fasestramite/{id}',[SecretariaController::class,'sf_obtenerfasestramite']);
 Route::get('sf-faserequisito/{id}/{tramite}',[SecretariaController::class,'sf_requisitosfase']);
 Route::get('sf-archivorequisito/{tramite}/{fasereq}',[SecretariaController::class,'sf_archivorequisito']);
+Route::post('sf-revisarrequisito',[SecretariaController::class,'sf_revisarrequisito']);
