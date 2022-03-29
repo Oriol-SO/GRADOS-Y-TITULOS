@@ -9,8 +9,8 @@ class Tramite extends Model
 {
     use HasFactory;
     protected $fillable=[
-        'fec-inicio',
-        'fec-fin',
+        'fec_inicio',
+        'fec_fin',
         'fecha_vencimiento',
         'modo_obtencion',
         'tipo_tramite',

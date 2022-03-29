@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app :color="bgNavbar"  elevation="3" flat   >
+  <v-app-bar app :color="bgNavbar"  elevation="1"  flat   >
     <v-container class="py-0 fill-height" fluid>
       <v-app-bar-nav-icon>
         <v-img max-height="40" max-width="40" src="/img/u.png" />

@@ -20,6 +20,8 @@ use App\Http\Controllers\BachillerFinalController;
 use App\Http\Controllers\BachillerIniController;
 use App\Http\Controllers\FacultadEscuelaController;
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\SecretariaController;
+use App\Http\Controllers\SecretariaGeneral1Controller;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\tramiteController;
@@ -71,13 +73,33 @@ Route::resource('requisito',RequisitoController::class);
 Route::resource('persona',PersonaController::class);
 Route::resource('tipoarchivo',TipoArchivoController::class);
 Route::resource('rol',RolController::class);
+
 Route::resource('bachillerIni',BachillerIniController::class);
 Route::resource('bachillerFinal',BachillerFinalController::class);
+
 Route::get('buscardni/{codigo}', [PersonaController::class, 'buscardniuser']);
 Route::get('facuescuela',[FacultadEscuelaController::class,'facultad']);
+
 Route::get('mostrarescuela/{codigo}',[FacultadEscuelaController::class,'escuelas']);
 Route::get('rolesgenerales/{codigo}',[FacultadEscuelaController::class,'rolesgenerales']);
 Route::resource('adminuser',AdminUserController::class);
 
+//alumno
 Route::resource('tramite',tramiteController::class);
 Route::get('fasestramite/{codigo}',[tramiteController::class,'obtenerfases']);
+Route::get('alu-faserequisito/{id}',[tramiteController::class,'obtenerfaserequisito']);
+Route::post('alu-filerequisito/',[tramiteController::class,'subirarchivorequisito']);
+
+
+//rutas scretaria general 1
+
+Route::get('expedientes',[SecretariaGeneral1Controller::class,'index']);
+
+//rutas secretaria facultad 
+
+Route::get('sf-expedientes',[SecretariaController::class,'sf_expedientes']);
+Route::get('sf-tramite/{id}',[SecretariaController::class,'sf_obtenertramite']);
+Route::get('sf-fasestramite/{id}',[SecretariaController::class,'sf_obtenerfasestramite']);
+Route::get('sf-faserequisito/{id}/{tramite}',[SecretariaController::class,'sf_requisitosfase']);
+Route::get('sf-archivorequisito/{tramite}/{fasereq}',[SecretariaController::class,'sf_archivorequisito']);
+Route::post('sf-revisarrequisito',[SecretariaController::class,'sf_revisarrequisito']);

@@ -8,9 +8,13 @@ use App\Models\Modalidade;
 use App\Models\Tramite;
 use Illuminate\Http\Request;
 use App\models\Persona;
+use App\models\PersonaRole;
 use App\Models\User;
 use Illuminate\Auth\Events\Validated;
 use Carbon\Carbon;
+use App\Models\FaseRolRequisito;
+use App\Models\File;
+use Illuminate\Support\Facades\Storage;
 
 class tramiteController extends Controller
 {
@@ -51,7 +55,7 @@ class tramiteController extends Controller
         //$modalidad=Modalidade::find($request->tipotramite['modalidad_id']);
         //$fase=Fase::where('proceso_id','')->limit(1)->get();
         $tramite=Tramite::create([
-            'fec-inicio'=> Carbon::now(),
+            'fec_inicio'=> Carbon::now(),
             'fecha_vencimiento'=>null,
             'modo_obtencion'=> $request->tipotramite['modalidad'],
             'tipo_tramite'=>$request->tipotramite['nombre'],
@@ -80,8 +84,7 @@ class tramiteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        
+    {  
         $tramites = tramite::find($id);
         return response()->json($tramites);
     }
@@ -91,6 +94,50 @@ class tramiteController extends Controller
         $fase['cantidad']=Fase::where('proceso_id', $codigo)->get()->count();
         //$fase=Fase::all();
         return response()->json($fase);
+    }
+
+    protected function obtenerfaserequisito($id){
+
+        $rol=10;
+        if($rol===10){
+            $requisitos = FaseRolRequisito::where('fase_id',$id)->get()->map(function ($r) {
+                return [
+                    'id' => $r->id,       
+                    'requisito_id' => $r->requisito_id ,
+                    'nombre' => $r->requisito ->nombre ,
+                    'rol'=> $r->rol->id,
+                    'documento'=>$r->requisito->TipoArchivo->tipoNombre,
+                    'extension'=>   $r->requisito ->tipo_documento,              
+                ];
+            });
+            return response()->json($requisitos);
+        }else{
+            return 'user no autorizado';
+        }
+ 
+    }
+
+    protected function subirarchivorequisito(Request $request){
+        $rol=10;
+        if( $rol===10){
+        $user=$request->user();
+       // $persona=$user->persona_id;
+        $personarol=$user->persona->personarole[0]->id;
+        $request->validate([
+            'archivoreq'=>'required'
+        ]);
+        $url=Storage::url($request->file('archivoreq')->store('public/requisitos'));
+        $requisito=File::create([
+            'path'=>$url,
+            'tramite_id'=>$request->tramite,
+            'persrol_id'=>$personarol,
+            'faserolreq_id'=>$request->idfaserequi,
+        ]);
+
+        return $requisito;
+      }else{
+          return 'user no autorizado';
+      }
     }
     /**
      * Show the form for editing the specified resource.

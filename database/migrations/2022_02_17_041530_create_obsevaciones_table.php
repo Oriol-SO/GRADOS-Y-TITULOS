@@ -13,7 +13,7 @@ class CreateObsevacionesTable extends Migration
      */
     public function up()
     {
-        Schema::create('obsevaciones', function (Blueprint $table) {
+        Schema::create('observaciones', function (Blueprint $table) {
             $table->id();
             $table->BigInteger('file_id')->unsigned();
             $table->BigInteger('persrol_id')->unsigned();

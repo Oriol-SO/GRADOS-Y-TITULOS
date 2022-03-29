@@ -9,27 +9,29 @@ class File extends Model
 {
     use HasFactory;
     protected $fillable=[
-
-
+        'path',
+        'tramite_id',
+        'persrol_id',
+        'faserolreq_id'
     ];
     public function Tramite()
     {
         return $this->belongsTo(Tramite::class,'tramite_id','id');
     }
 
-    public function PersonaRol()
+    public function PersonaRole()
     {
-        return $this->belongsTo(PersonaRol::class,'persrol_id','id');
+        return $this->belongsTo(PersonaRole::class,'persrol_id','id');
     }
 
-    public function Revision()
+    public function Revisione()
     {
-        return $this->hasMany(Revision::class,'file_id','id');
+        return $this->hasMany(Revisione::class,'file_id','id');
     }
 
-    public function Observacion()
+    public function Observacione()
     {
-        return $this->hasMany(Observacion::class,'file_id','id');
+        return $this->hasMany(Observacione::class,'file_id','id');
     }
 
     public function FaseRolRequisito()
