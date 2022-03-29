@@ -24,6 +24,7 @@ export default [
       { path: 'profile/s', name: '', component: page('settings/s.vue') }
     ]
   },
+{path: '/prueva', name:'prueva', component: page('settings/s.vue') },
 
   {
     path: '/admin',component: page('admin/index.vue'),

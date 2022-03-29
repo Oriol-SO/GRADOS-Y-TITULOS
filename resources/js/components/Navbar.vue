@@ -2,7 +2,7 @@
 <v-app-bar app >
 
     <v-toolbar dense elevation="0">
-     <v-img class="mr-5" max-height="30" max-width="30" src="/img/u.png" />
+     <v-img class="ml-10 mr-5" max-height="30" max-width="30" src="/img/u.png" />
       <v-toolbar-title>{{ appName }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn v-for="(link, i) in linksVerified" :key="i" text :to="link.path"  style="color:#000;">

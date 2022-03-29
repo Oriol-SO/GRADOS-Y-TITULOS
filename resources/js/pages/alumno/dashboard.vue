@@ -110,7 +110,7 @@ export default {
                 value: 'tipo_tramite',
             
             },
-            { text: 'Fecha', value: 'fec-inicio' },
+            { text: 'Fecha', value: 'fec_inicio' },
             { text: 'Modalidad', value: 'modo_obtencion' },
             //{ text: 'telefono', value: 'numcel' },
             { text: 'Proceso', value: 'estado' },

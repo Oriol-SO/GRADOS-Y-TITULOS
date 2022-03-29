@@ -4,9 +4,9 @@
       color="transparent"
       elevation="0"
       fixed
-      style="margin-top:70px; margin-left:20px;"                  
+      style="margin-top:0px; margin-left:5px;"                  
     >
-      <v-app-bar-nav-icon outlined color="secondary" style="font-size:50px" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon  color="secondary" style="font-size:50px" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
     </v-app-bar>
     <v-navigation-drawer
       v-model="drawer"
