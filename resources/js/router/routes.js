@@ -76,6 +76,6 @@ export default [
     ]
   },
 
-  
+  //hitler gilllllllllllllll
   { path: '*', component: page('errors/404.vue') },
 ]
