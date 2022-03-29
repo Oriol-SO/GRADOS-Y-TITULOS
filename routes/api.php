@@ -87,6 +87,8 @@ Route::resource('adminuser',AdminUserController::class);
 //alumno
 Route::resource('tramite',tramiteController::class);
 Route::get('fasestramite/{codigo}',[tramiteController::class,'obtenerfases']);
+Route::get('alu-faserequisito/{id}',[tramiteController::class,'obtenerfaserequisito']);
+Route::post('alu-filerequisito/',[tramiteController::class,'subirarchivorequisito']);
 
 
 //rutas scretaria general 1
@@ -96,3 +98,7 @@ Route::get('expedientes',[SecretariaGeneral1Controller::class,'index']);
 //rutas secretaria facultad 
 
 Route::get('sf-expedientes',[SecretariaController::class,'sf_expedientes']);
+Route::get('sf-tramite/{id}',[SecretariaController::class,'sf_obtenertramite']);
+Route::get('sf-fasestramite/{id}',[SecretariaController::class,'sf_obtenerfasestramite']);
+Route::get('sf-faserequisito/{id}/{tramite}',[SecretariaController::class,'sf_requisitosfase']);
+Route::get('sf-archivorequisito/{tramite}/{fasereq}',[SecretariaController::class,'sf_archivorequisito']);
