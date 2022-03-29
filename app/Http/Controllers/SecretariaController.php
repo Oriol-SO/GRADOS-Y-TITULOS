@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Tramite;
 use App\Models\Persona;
+use App\Models\Estado;
 use App\Models\FaseRolRequisito;
 use App\Models\Fase;
 use App\Models\File;
+use App\Models\Observacione;
+use App\Models\Revisione;
 use Illuminate\Http\Request;
 
 class SecretariaController extends Controller
@@ -60,6 +63,7 @@ class SecretariaController extends Controller
                     'documento'=>$r->requisito->TipoArchivo->tipoNombre,
                     'extension'=>$r->requisito ->tipo_documento,
                     'archivo'=>File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get(),
+                  //  'revisado'=>Revisione::where('file_id',File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('id'))
                 ];
             });
 
@@ -70,7 +74,7 @@ class SecretariaController extends Controller
                     'id' => $r->id,       
                     'requisito_id' => $r->requisito_id ,
                     'nombre' => $r->requisito ->nombre ,
-                    'rol'=> $r->rol->rolNombre,
+                    'rol'=> $r->rol->id,
                     'documento'=>$r->requisito->TipoArchivo->tipoNombre,
                     'extension'=>   $r->requisito ->tipo_documento,               
                 ];
@@ -80,6 +84,45 @@ class SecretariaController extends Controller
             return 'usuario no autorizado';
         }
 
+    }
+
+    protected function sf_revisarrequisito(Request $request){
+       // return $request;
+        $rol=5;
+        if($rol===5){
+            if($request->observado==false && $request->aprovado==false){
+                return 'selecciona una opcion';
+            }else{
+                if($request->observado==false && $request->aprovado==true){
+                    //aprovado
+                    $estado=Estado::create([
+                        'nombre'=>'conforme',
+                    ]);
+                    $revision=Revisione::create([
+                        'file_id'=>$request->file['id'],
+                        'persrol_id'=>$request->file['persrol_id'],
+                        'estado_id'=>$estado->id,
+                        'estado' =>1,
+                    ]);
+
+                    return $revision;
+                }else if($request->observado==true && $request->aprovado==false){
+                    //observacion
+                    $request->validate([
+                        'observacion'=>'required',
+                    ]);
+                    $observacion=Observacione::create([
+                        'file_id'=>$request->file['id'],
+                        'persrol_id'=>$request->file['persrol_id'],
+                        'texto'=>$request->observacion,
+            
+                    ]);
+                    return $observacion;
+                }
+            }
+        }else{
+            return 'user no autorizado';
+        }
     }
 
     protected function sf_archivorequisito($tramite , $fasereq){

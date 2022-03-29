@@ -77,7 +77,7 @@
                                     <v-icon dark>
                                         mdi-eye
                                     </v-icon>
-                                    ver formato
+                                    
                                 </v-btn>
                            </div>
                         </v-list-item-title> 
@@ -284,20 +284,20 @@
                                                 <div class="ml-4">
                                                     <v-switch
                                                         class="my-0"
-                                                        v-model="observado"
+                                                        v-model="formrevisado.observado"
                                                         color="warning"
                                                         label="Observado"
                                                         @click="obser()"
                                                     ></v-switch>
                                                     <v-banner
-                                                    v-model="observado"
+                                                    v-model="formrevisado.observado"
                                                     single-line
                                                     transition="slide-y-transition"
                                                     ><div fuid>
                                                         <v-textarea
                                                             clearable
                                                             color="warning"
-                                                            v-model="observacion"
+                                                            v-model="formrevisado.observacion"
                                                             label="Indique la observación"
                                                             prepend-inner-icon="mdi-eye-plus"                                                        
                                                         ></v-textarea>
@@ -311,7 +311,7 @@
                                             <v-alert color="#2cdd9b" outlined dense class="py-0">
                                                      <v-switch
                                                         class="ml-4 my-0"
-                                                        v-model="aprovado"
+                                                        v-model="formrevisado.aprovado"
                                                         color="#2cdd9b"
                                                         label="Conforme"
                                                         @click="conforme()"
@@ -340,6 +340,7 @@
 <script>
 
 import axios from 'axios';
+import Form from "vform";
 export default {
     data(){
         return{
@@ -360,10 +361,15 @@ export default {
             //revisar 
 
             requisitoRevisar:'',
-            observado:false,
-            aprovado:false,
-            observacion:'',
-            revisado:'',
+
+            formrevisado:new Form({
+                observado:false,
+                aprovado:false,
+                observacion:'',
+                revisado:'',
+                file:'',
+            }),
+          
 
           content:'',
           urlrequisito:'',
@@ -377,13 +383,13 @@ export default {
     },methods:{
 
       obser(){
-          this.aprovado=false;
-          this.revisado=0;
+          this.formrevisado.aprovado=false;
+          this.formrevisado.revisado=0;
       },
       conforme(){
-          this.observado=false;
-          this.observacion='';
-          this.revisado=1;
+          this.formrevisado.observado=false;
+          this.formrevisado.observacion='';
+          this.formrevisado.revisado=1;
       } ,
       limpiar(){
           this.requisitos='';
@@ -418,15 +424,20 @@ export default {
               this.urlrequisito=response.data[0].path;
           });*/
            this.urlrequisito=requisito.archivo[0].path;
+           this.formrevisado.file=requisito.archivo[0];
           
       },      
-      guardar(){
+      guardar(){ 
         console.log(this.idrequi);
         console.log(this.archivoreq);
       },verformato(requisito){
          this.dialog2=true;
          this.content=requisito.nombre;
-      },revisarReq(){
+      },async revisarReq(){
+          console.log(this.formrevisado);
+          await this.formrevisado.post(`/api/sf-revisarrequisito`).then(response=>{
+              console.log(response.data);
+          });
           
           this.dialogR=false;
       }

@@ -5,11 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Observacion extends Model
+class Observacione extends Model
 {
     use HasFactory;
-    protected $fillables=[
-
+    protected $fillable=[
+        'file_id',
+        'persrol_id',
+        'texto',
 
     ];
     

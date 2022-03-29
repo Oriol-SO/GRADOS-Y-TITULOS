@@ -5,12 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Revision extends Model
+class Revisione extends Model
 {
     use HasFactory;
     protected $fillable=[
 
-
+        'file_id',
+        'persrol_id',
+        'estado_id',
+        'estado',
     ];
 
     public function File()
