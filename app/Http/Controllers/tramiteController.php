@@ -84,8 +84,7 @@ class tramiteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        
+    {  
         $tramites = tramite::find($id);
         return response()->json($tramites);
     }
