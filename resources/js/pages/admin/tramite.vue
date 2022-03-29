@@ -51,7 +51,7 @@
                                 ></v-text-field>  
                                 <div v-if="errores.numerofase">
                                     <v-alert   dense outlined type="error" >
-                                    el campo Orden es obligatorio
+                                    el Campo Orden es Obligatorio
                                     </v-alert>
                                 </div>                                                   
                                     <v-btn
@@ -105,10 +105,18 @@
                     :key="i"
 
                 >
-                    <v-card flat  >
-                        
-                    <v-card-text class="text-md-body-1 font-weight-medium" >{{ fase.nombre }} </v-card-text>
-                    </v-card>
+                    <div class="d-flex"  >
+                        <v-card-text class="text-md-body-1 font-weight-medium" >{{ fase.nombre }} </v-card-text>
+                        <v-btn
+                          icon
+                          small elevation="0"  
+                          color="error"
+                          class="my-auto ml-n16"
+                          @click="eliminarfase(fase.id)"
+                        >
+                          <v-icon>mdi-delete</v-icon>
+                        </v-btn>
+                    </div>
                 </v-tab-item>
                 </v-tabs-items>
             </v-card>
@@ -330,9 +338,19 @@
                         <v-list-item-icon>
                             <v-icon >mdi-check-outline</v-icon>
                         </v-list-item-icon>
-                        <v-list-item-content>
+                        <div class="d-flex"  >
                             <v-list-item-title >{{requisito.nombre}}</v-list-item-title>
-                        </v-list-item-content>
+                            <v-btn
+                                class=" my-auto ml-16 mr-4 " 
+                                outlined
+                                color="indigo"
+                                small elevation="0"  
+                                depressed
+                                @click="submitrequisitoeliminado(requisitos.id)"
+                            >
+                                <v-icon>mdi-delete</v-icon>
+                            </v-btn>
+                        </div>
                         </v-list-item>
                     </v-list-item-group>
                     </v-list>
@@ -398,6 +416,7 @@ export default{
 
   data(){     
      return{
+        
         procesos:[],
         tab: null,
         fases: [],
@@ -457,7 +476,7 @@ export default{
       async FetchTramites(){
           const { data } = await axios.get(`/api/proceso/${this.$route.params.id}`);   
           this.procesos = data;
-          console.log(data);
+          //console.log(data);
       },
       async FetchFases(){
           const {data}=await axios.get(`/api/fase/${this.$route.params.id}`);
@@ -518,6 +537,22 @@ export default{
               console.log(this.errores);
             }
           });
+      },async eliminarfase(id){
+          confirm("¿Confirma eliminar el registro?");
+          
+          this.formfase.delete(`/api/fase/${id}`)
+          .then(response =>{
+            this.FetchFases();
+            this.clear();
+            this.dialog=false;
+            
+          }).catch(error=>{
+            if(error.response.status === 422){
+              this.errores=error.response.data.errors;
+              console.log(this.errores);
+            }
+          });
+
       },async FetchAllrequisitos(){
              const {data}=await axios.get(`/api/requisito/`);
              this.allrequisitos=data;
@@ -559,6 +594,21 @@ export default{
       },async submitrequisitonuevo(){ 
           console.log(this.formrequi2);                  
           const {data}= await this.formrequi2.post('/api/requisito/')
+           .then(response =>{
+            this.mostrarrequisito(this.formrequi2.fase_id);
+            this.clearall();
+            this.dialog2=false;
+            console.log(response);
+          }).catch(error=>{
+            if(error.response.status === 422){
+              this.erroresR2=error.response.data.errors;
+              console.log(this.erroresR2);
+            }
+          });
+          
+      },async submitrequisitoeliminado(id){ 
+          console.log(this.formrequi2);                  
+          this.formrequi2.delete(`/api/faserequisito/${id}`)
            .then(response =>{
             this.mostrarrequisito(this.formrequi2.fase_id);
             this.clearall();

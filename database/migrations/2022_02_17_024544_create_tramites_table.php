@@ -24,9 +24,9 @@ class CreateTramitesTable extends Migration
             $table->integer('fase_actual');
             $table->boolean('estado');
 
-            $table->BigInteger('trabajo_id')->unsigned();
-            $table->BigInteger('persona_id')->unsigned();
-            $table->BigInteger('proceso_id')->unsigned();
+            $table->BigInteger('trabajo_id')->unsigned()->nullable();
+            $table->BigInteger('persona_id')->unsigned()->nullable();
+            $table->BigInteger('proceso_id')->unsigned()->nullable();
             $table->BigInteger('consejo_id')->unsigned()->nullable();
             $table->BigInteger('resolucion_id')->unsigned()->nullable();
 

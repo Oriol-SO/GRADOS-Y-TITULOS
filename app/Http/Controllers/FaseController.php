@@ -89,9 +89,12 @@ class FaseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Fase $fase)
     {
-        //
+        $fase->delete();
+        return response()->json([
+            'mensaje'=>'Fase eliminada'
+        ]);
     }
     public function validarfase($request=null){
         return $request->validate([

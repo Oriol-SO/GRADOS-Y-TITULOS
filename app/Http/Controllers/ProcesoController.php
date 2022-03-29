@@ -25,6 +25,7 @@ class ProcesoController extends Controller
                 'grado' => $t->grado ? $t->grado->graNom : null,
                 'modalidad_id' => $t->modalidade ? $t->moda_id : null,
                 'modalidad' => $t->modalidade ? $t->modalidade->modNombre : null,
+                'estado' =>$t->estado,
                 'cantidad_fases' => $t->fase->count(),
                 'cantidad_requisitos' => $t->fase->map(function ($f) {
                     return $f->faserolrequisito->count();
@@ -62,6 +63,7 @@ class ProcesoController extends Controller
             'grado_id' => $request->grado['id'],
             'moda_id' => $request->modalidad['id'],
             'tipo' => $request->tipo,
+            'estado'=>$request->estado,
         ]);
         return response()->json([
             'tramite'=>$proceso

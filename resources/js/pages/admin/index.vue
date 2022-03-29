@@ -16,6 +16,7 @@
 import Sidevar from '../../components/sidevar.vue';
 
 export default {
+  middleware: "auth",
   components:{
     Sidevar,
    

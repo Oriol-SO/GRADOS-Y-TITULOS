@@ -22,7 +22,7 @@ class CreateProcesosTable extends Migration
 
             $table->foreign('grado_id')->references('id')->on('grados');
             $table->foreign('moda_id')->references('id')->on('modalidades');
-
+            
             $table->timestamps();
         });
     }

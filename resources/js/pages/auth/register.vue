@@ -1,8 +1,15 @@
 <template >
 <div class="d-flex ml-4 mr-4" style="height:100%; ">
     <v-card class=" my-auto mx-auto">
-      <v-card-title>
-        <span class="text-h5">Registrate</span>
+      <v-card-title class="d-flex">
+        <span class="text-h5">Registrate</span>     
+            <v-btn
+              right
+              color="warning"
+              @click="registraruser()"
+            >
+              Atras
+            </v-btn>
       </v-card-title>
       <v-card-text>
    
@@ -29,6 +36,7 @@
               Procesar
               </v-btn>
             </v-col>
+
           <v-card-text class="d-flex" style="flex-wrap:wrap"  v-if="form.nombresuser">
          
               <v-row class="mr-5" >
@@ -218,6 +226,7 @@
       <v-card-actions v-if="form.nombresuser">
       
         <v-spacer></v-spacer>
+
         <v-btn
           color="blue"
           @click="registraruser()"
@@ -239,7 +248,18 @@
             prominent
             border="left"
           >
-          <p v-if="errores.codigo"> ya existe una cuenta con este codigo</p>
+          <p v-if="errores.codigo"> {{errores.codigo[0]}}</p>
+          <p v-if="errores.correo"> {{errores.correo[0]}}</p>
+          <p v-if="errores.facultad"> {{errores.facultad[0]}}</p>
+          <p v-if="errores.escuela"> {{errores.escuela[0]}}</p>
+          <p v-if="errores.celular"> {{errores.celular[0]}}</p>
+          <p v-if="errores.fecha_egre"> {{errores.fecha_egre[0]}}</p>
+          <p v-if="errores.gradoabr">El campo abreviatura es obligatorio</p>
+          <p v-if="errores.gradoestu">El grado de estudio es obligatorio</p>
+          <p v-if="errores.password"> {{errores.password[0]}}</p>
+          <p v-if="errores.password_confirmation"> {{errores.password_confirmation[0]}}</p>
+          <p v-if="errores.userdoc"> {{errores.userdoc[0]}}</p>
+
           </v-alert>
         </v-card-text>
 
@@ -257,6 +277,35 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+<template>
+  <div class="text-center">
+    <v-bottom-sheet
+      v-model="dialogconfirm"
+      persistent
+      inset
+    >
+      <v-sheet
+        class="text-center"
+        height="130px"
+        rounded
+      >
+        <v-btn
+          class="mt-6"
+          text
+          color="error"
+          @click="dialogconfirm = !dialogconfirm"
+        >
+         Cerrar
+        </v-btn>
+        <div class="py-3 text-h6">
+          Te registraste exitosamente <v-icon color="#49FF00">mdi-checkbox-marked-circle</v-icon>
+        </div>
+      </v-sheet>
+    </v-bottom-sheet>
+  </div>
+</template>
+
 </div>
 
 </template>
@@ -310,6 +359,7 @@ export default {
       escuelas:[],
       errores:'',
       dialogerror:false,
+      dialogconfirm:false,
     }
   }, watch: {
 
@@ -365,12 +415,14 @@ export default {
       },registraruser(){
         console.log(this.form);
         this.form.post('/api/register').then(response=>{
-          console.log(response.data);
+         // console.log(response.data);
+         this.dialogconfirm=true;
         }).catch(error=>{
                 if(error.response.status === 422){
                       this.errores=error.response.data.errors;                      
                       console.log(this.errores);
                       this.dialogerror=true;
+   
                     }
         });
       },closemodalerror(){

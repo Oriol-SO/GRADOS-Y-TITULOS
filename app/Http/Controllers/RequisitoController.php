@@ -93,9 +93,12 @@ class RequisitoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Requisito $requisito)
     {
-        //
+        $requisito->delete();
+        return response()->json([
+            'mensaje'=>'Requisito eliminado'
+        ]);
     }
     public function validarrequisitoNuevo($request=null){
         return $request->validate([

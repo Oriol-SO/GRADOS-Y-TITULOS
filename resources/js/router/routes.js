@@ -20,26 +20,36 @@ export default [
     path: '/settings',
     component: page('settings/index.vue'),
     children: [
-      { path: '', redirect: { name: 'settings.profile' } },
-      { path: 'profile', name: 'settings.profile', component: page('settings/profile.vue') },
-      { path: 'password', name: 'settings.password', component: page('settings/password.vue') }
+      { path: '', redirect: { name: 'settings.password' } },
+      { path: 'profile', name: 'settings.password', component: page('settings/password.vue') }
     ]
   },
 
+
+  {
+    path: '/admin',component: page('admin/index.vue'),
+    children: [
+      { path: '', redirect: { name: 'admin.dashboard' } },
+      { path: 'dashboard', name: 'admin.dashboard', component: page('admin/dashboard.vue') },
+      { path: 'tramites', name: 'admin.tramites', component: page('admin/tramites.vue') },
+      { path: 'tramite/:id', name: 'admin.tramite', component: page('admin/tramite.vue') },
+      { path: 'personas-usuarios', name: 'admin.usuarios', component: page('admin/usuarios.vue') },
+
+    ]
+  },
+  
+  {
+    path: '/alumno',component: page('alumno/index.vue'),
+    children: [
+      { path: '', redirect: { name: 'alumno.dashboard' } },
+      { path: 'dashboard', name: 'alumno.dashboard', component: page('alumno/dashboard.vue') },
+      { path: 'tramite/:id', name: 'alumno.tramite', component: page('alumno/tramite.vue') },
  
 
+    ]
+  },
+
+
   
-    {
-      path: '/admin',
-      component: page('admin/index.vue'),
-      children: [
-        { path: '', redirect: { name: 'admin.dashboard' } },
-        { path: 'dashboard', name: 'admin.dashboard', component: page('admin/dashboard.vue')},
-        { path: 'tramites', name: 'admin.tramites', component: page('admin/tramites.vue') },
-        { path: 'tramite/:id', name: 'admin.tramite', component: page('admin/tramite.vue') },
-        { path: 'personas-usuarios', name: 'admin.usuarios', component: page('admin/usuarios.vue') },
-      ]
-    },
-    
   { path: '*', component: page('errors/404.vue') },
 ]

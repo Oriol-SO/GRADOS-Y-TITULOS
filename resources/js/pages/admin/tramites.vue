@@ -134,15 +134,15 @@
       >
         Abrir
       </v-btn>
-      <v-btn
-       color="error lighten-5"
-        style="color:#ff5722;"
-        rounded
-        elevation="0"
-        class="text-capitalize"
-      >
-        Desactivar
-      </v-btn>
+
+      <v-switch
+      class="ml-2"
+      v-model="switch1"
+      inset
+
+      color="success"
+      @click="cambiarEstado(proceso.id)"
+    ></v-switch>
     </v-card-actions>
   </v-alert>
    
@@ -159,7 +159,7 @@ import Form from "vform";
     data () {
        
       return {  
-          //select:{graNom:'',id:''} ,
+          switch1: [],
           grados:[],
           procesos:[],         
           modalidades:[],
@@ -185,7 +185,7 @@ import Form from "vform";
         const { data } = await axios.get("/api/proceso");
         this.procesos = data.tramites;
 
-        console.log(data);
+        console.log("procesos",data);
       },async FetchGrados(){
         const { data } = await axios.get("/api/grado");
         this.grados = data;
@@ -214,6 +214,10 @@ import Form from "vform";
         
           
 
+      },async cambiarEstado(id){
+        const { data } = await axios.get(`/api/proceso/${id}`);
+        this.switch1=data.Estado;
+        console.log("Estado",this.switch);
       }, clear() {
          this.form.nombre='';
          this.form.grado=null;

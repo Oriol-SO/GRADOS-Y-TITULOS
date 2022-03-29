@@ -352,40 +352,7 @@
                                     autocomplete="new-text"
                                     
                                   ></v-text-field> 
-                                  <!--div>
-                                
-                                    <v-menu
-                                      ref="menu"
-                                      v-model="menu2"
-                                      :close-on-content-click="false"
-                                      transition="scale-transition"
-                                      offset-y
-                                      min-width="auto"
-                                    >
-                                      <template v-slot:activator="{ on, attrs }">
-                                        <v-text-field
-                                          v-model="formusE.nacimiento"
-                                          label="Fecha de nacimiento"
-                                          prepend-icon="mdi-calendar"
-                                          readonly
-                                          v-bind="attrs"
-                                          v-on="on"
-                                        ></v-text-field>
-                                      </template>
-                                      <v-date-picker
-                                        v-model="formusE.nacimiento"
-                                        :active-picker.sync="activePicker2"
-                                        :max="(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)"
-                                        min="1950-01-01"
-                                        @change="save"
-                                      ></v-date-picker>
-                                    </v-menu>
-                                  </div-->
-                                  <!--v-text-field
-                                    v-model="formusE.celular"
-                                    label="Celular"
-                                    autocomplete="new-text"
-                                  ></v-text-field-->
+
                                   <v-text-field
                                     v-model="formusE.gradoestu"
                                     label="Grado de estudios"
@@ -396,18 +363,6 @@
                                     label="Abrebiatura"
                                     autocomplete="new-text"
                                   ></v-text-field>
-                                  <!--v-text-field
-                                    v-model="formusE.password"
-                                    label="Contraseña"
-                                    type="password"
-                                    autocomplete="new-password"
-                                  ></v-text-field-->
-                                  <!--v-text-field
-                                    v-model="formusE.password_confirmation"
-                                    label="Confirmar contraseña"
-                                    type="password"
-                                    autocomplete="new-password"
-                                  ></v-text-field-->
                                     <v-text-field
                                     v-model="formusE.codalum"
                                     label="Codigo"
