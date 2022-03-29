@@ -9,17 +9,19 @@ class File extends Model
 {
     use HasFactory;
     protected $fillable=[
-
-
+        'path',
+        'tramite_id',
+        'persrol_id',
+        'faserolreq_id'
     ];
     public function Tramite()
     {
         return $this->belongsTo(Tramite::class,'tramite_id','id');
     }
 
-    public function PersonaRol()
+    public function PersonaRole()
     {
-        return $this->belongsTo(PersonaRol::class,'persrol_id','id');
+        return $this->belongsTo(PersonaRole::class,'persrol_id','id');
     }
 
     public function Revision()

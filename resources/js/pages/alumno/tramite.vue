@@ -118,7 +118,7 @@
                 <strong>Documento: </strong>{{documento }} <br/>
                 <strong>Tipo de archivo: </strong>{{extension}}
                  <v-file-input
-                    v-model="archivoreq"
+                    v-model="daterequisito.archivoreq"
                     label="selecciona un archivo"
                   
                      prepend-icon="mdi-file"
@@ -150,7 +150,8 @@
           </v-dialog>
         </div>
       </template>
-         <template>
+
+      <template>
         <div class="text-center">
           <v-dialog
             v-model="dialog2"
@@ -178,7 +179,6 @@
                   rounded 
                   chip     
                   style="color:#fff;"
-                  @click="guardar()"
                 >
                 <v-icon dark left>mdi-download</v-icon>
                   Descargar
@@ -202,6 +202,7 @@
 <script>
 
 import axios from 'axios';
+import Form from "vform";
 export default {
     data(){
         return{
@@ -211,13 +212,21 @@ export default {
           numfases:'',
           requisitos:[],
           dialog:false,
-          idrequi:'',
-          archivoreq:null,
+          
+         
           documento:'',
           extension:'',
 
           dialog2:false,
           content:'',
+
+          requser:[],
+
+          daterequisito: new Form({
+             archivoreq:null,
+             idfaserequi:'',
+             tramite:this.$route.params.id,          
+          }),
         }
     },mounted(){
         this.fetchtramite();
@@ -247,16 +256,20 @@ export default {
          this.fases = data.fases;
          this.numfases=data.cantidad;
       },async mostrarrequisito(id){
-          const {data}=await axios.get(`/api/faserequisito/${id}`);
+          const {data}=await axios.get(`/api/alu-faserequisito/${id}`);
           this.requisitos=data;
       },openmodal(requisito){        
-        this.idrequi=requisito.id;
+        this.daterequisito.idfaserequi=requisito.id;
         this.documento=requisito.documento;
         this.extension=requisito.extension;
+       // this.requser=requisito;
         this.dialog=true;
-      },guardar(){
-        console.log(this.idrequi);
-        console.log(this.archivoreq);
+      },async guardar(){
+        console.log(this.daterequisito);  
+        await this.daterequisito.post(`/api/alu-filerequisito/`).then(response=>{
+          console.log(response.data);
+        })
+
       },verformato(requisito){
          this.dialog2=true;
          this.content=requisito.nombre;
