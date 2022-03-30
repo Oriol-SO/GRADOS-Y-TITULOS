@@ -87,7 +87,7 @@ Route::resource('adminuser',AdminUserController::class);
 //alumno
 Route::resource('tramite',tramiteController::class);
 Route::get('fasestramite/{codigo}',[tramiteController::class,'obtenerfases']);
-Route::get('alu-faserequisito/{id}',[tramiteController::class,'obtenerfaserequisito']);
+Route::get('alu-faserequisito/{id}/{tramite}',[tramiteController::class,'obtenerfaserequisito']);
 Route::post('alu-filerequisito/',[tramiteController::class,'subirarchivorequisito']);
 
 

@@ -14,6 +14,8 @@ use Illuminate\Auth\Events\Validated;
 use Carbon\Carbon;
 use App\Models\FaseRolRequisito;
 use App\Models\File;
+use App\Models\Observacione;
+use App\Models\Revisione;
 use Illuminate\Support\Facades\Storage;
 
 class tramiteController extends Controller
@@ -95,19 +97,22 @@ class tramiteController extends Controller
         //$fase=Fase::all();
         return response()->json($fase);
     }
-
-    protected function obtenerfaserequisito($id){
-
+    public $tram=null;
+    protected function obtenerfaserequisito($id,$tramite){
+        $this->tram=$tramite;
         $rol=10;
         if($rol===10){
-            $requisitos = FaseRolRequisito::where('fase_id',$id)->get()->map(function ($r) {
+            $requisitos = FaseRolRequisito::where('fase_id',$id)->where('rol_id',10)->get()->map(function ($r) {
                 return [
                     'id' => $r->id,       
                     'requisito_id' => $r->requisito_id ,
                     'nombre' => $r->requisito ->nombre ,
                     'rol'=> $r->rol->id,
                     'documento'=>$r->requisito->TipoArchivo->tipoNombre,
-                    'extension'=>   $r->requisito ->tipo_documento,              
+                    'extension'=>   $r->requisito ->tipo_documento, 
+                    'archivo'=>File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get(),
+                    'revisado_aprovado'=>Revisione::whereIn('file_id',(File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('id')))->get(),
+                    'revisado_observacion'=>Observacione::whereIn('file_id',(File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('id')))->get(),             
                 ];
             });
             return response()->json($requisitos);
@@ -124,9 +129,9 @@ class tramiteController extends Controller
        // $persona=$user->persona_id;
         $personarol=$user->persona->personarole[0]->id;
         $request->validate([
-            'archivoreq'=>'required'
+            'archivo'=>'required'
         ]);
-        $url=Storage::url($request->file('archivoreq')->store('public/requisitos'));
+        $url=Storage::url($request->file('archivo')->store('public/requisitos'));
         $requisito=File::create([
             'path'=>$url,
             'tramite_id'=>$request->tramite,

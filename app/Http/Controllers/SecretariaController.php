@@ -52,8 +52,10 @@ class SecretariaController extends Controller
     public $tram=null;
     public function sf_requisitosfase($id, $tramite ){    
         $this->tram=$tramite;    
+
         $rol_sf=5;
         if($rol_sf===5){
+            
             $requisitos['alumno'] = FaseRolRequisito::where('fase_id',$id)->where('rol_id',10)->get()->map(function ($r) {
                 return [
                     'id' => $r->id,       
@@ -63,11 +65,25 @@ class SecretariaController extends Controller
                     'documento'=>$r->requisito->TipoArchivo->tipoNombre,
                     'extension'=>$r->requisito ->tipo_documento,
                     'archivo'=>File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get(),
-                  //  'revisado'=>Revisione::where('file_id',File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('id'))
+                    'conforme'=>Revisione::whereIn('file_id',(File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('id')))->get(),
+                    'observacion'=>Observacione::whereIn('file_id',(File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('id')))->get(),
+
+                  //  'aprovados'=>Revisione::whereIn('file_id',(File::where('tramite_id',$this->tram)->get('id')))->count(),
+                    //'observados'=>Observacione::whereIn('file_id',(File::where('tramite_id',$this->tram)->get('id')))->count(),
                 ];
             });
+            $requisitos['aprovados']=0;
+            $requisitos['observados']=0;
+           foreach ($requisitos['alumno'] as $req) {
+               if(count($req['conforme'])>0){
+                $requisitos['aprovados']++;
+               }elseif(count($req['observacion'])>0){
+                $requisitos['observados']++;
+               }
+           } 
+          
+         //$requisitos['revisados']=Revisione::where('file_id',)
 
-            
 
             $requisitos['propios']=FaseRolRequisito::where('fase_id',$id)->where('rol_id',$rol_sf)->get()->map(function ($r) {
                 return [
@@ -91,26 +107,35 @@ class SecretariaController extends Controller
         $rol=5;
         if($rol===5){
             if($request->observado==false && $request->aprovado==false){
-                return 'selecciona una opcion';
+                return '1'; //seleccione una opcion
             }else{
                 if($request->observado==false && $request->aprovado==true){
                     //aprovado
-                    $estado=Estado::create([
-                        'nombre'=>'conforme',
-                    ]);
-                    $revision=Revisione::create([
-                        'file_id'=>$request->file['id'],
-                        'persrol_id'=>$request->file['persrol_id'],
-                        'estado_id'=>$estado->id,
-                        'estado' =>1,
-                    ]);
+                    //eliminamos cualquier revision anterior 
+                    $revision=Revisione::where('file_id',$request->file['id'])->count();
+                    if($revision>0){
+                        return '2';
+                    }else{
+                        //eliminar observaciones para aprobar
+                        Observacione::where('file_id', $request->file['id'])->delete();       
 
-                    return $revision;
+                        $revision=Revisione::create([
+                            'file_id'=>$request->file['id'],
+                            'persrol_id'=>$request->file['persrol_id'],
+                            'estado_id'=>3,
+                            'estado' =>true,
+                        ]);
+                        return $revision;
+                    }
+                   
                 }else if($request->observado==true && $request->aprovado==false){
                     //observacion
                     $request->validate([
                         'observacion'=>'required',
                     ]);
+                    //eliminar observaciones anteriores
+                    Observacione::where('file_id', $request->file['id'])->delete();  
+                    //reescribir observacion
                     $observacion=Observacione::create([
                         'file_id'=>$request->file['id'],
                         'persrol_id'=>$request->file['persrol_id'],

@@ -118,12 +118,15 @@
                 <strong>Documento: </strong>{{documento }} <br/>
                 <strong>Tipo de archivo: </strong>{{extension}}
                  <v-file-input
-                    v-model="daterequisito.archivoreq"
+                    v-model="daterequisito.archivo"
                     label="selecciona un archivo"
                   
                      prepend-icon="mdi-file"
                     class="mt-2 mr-2"
                   ></v-file-input>
+              </v-card-text>
+              <v-card-text>
+              {{daterequisito.archivo}}
               </v-card-text>
 
               <v-card-actions>
@@ -149,6 +152,30 @@
             </v-card>
           </v-dialog>
         </div>
+        <template>
+            <div class="text-center ma-2">
+
+                <v-snackbar
+                    v-model="boxerror"
+                    tile
+                    color="red accent-2"
+                    top
+                >
+                {{ subir_file_error }}
+
+                <template v-slot:action="{ attrs }">
+                    <v-btn
+                    color="white"
+                    text
+                    v-bind="attrs"
+                    @click="boxerror = false"
+                    >
+                    Close
+                    </v-btn>
+                </template>
+                </v-snackbar>
+            </div>
+        </template>
       </template>
 
       <template>
@@ -223,10 +250,14 @@ export default {
           requser:[],
 
           daterequisito: new Form({
-             archivoreq:null,
+             archivo:null,
              idfaserequi:'',
              tramite:this.$route.params.id,          
           }),
+
+          subir_file_error:'',
+          boxerror:false,
+         
         }
     },mounted(){
         this.fetchtramite();
@@ -255,9 +286,10 @@ export default {
          const { data } =await axios.get(`/api/fasestramite/${$id}`);   
          this.fases = data.fases;
          this.numfases=data.cantidad;
-      },async mostrarrequisito(id){
-          const {data}=await axios.get(`/api/alu-faserequisito/${id}`);
+      },async mostrarrequisito(id){ 
+          const {data}=await axios.get(`/api/alu-faserequisito/${id}/${this.$route.params.id}`);
           this.requisitos=data;
+          console.log(data);
       },openmodal(requisito){        
         this.daterequisito.idfaserequi=requisito.id;
         this.documento=requisito.documento;
@@ -268,7 +300,16 @@ export default {
         console.log(this.daterequisito);  
         await this.daterequisito.post(`/api/alu-filerequisito/`).then(response=>{
           console.log(response.data);
-        })
+
+        }).catch(error=>{
+          if(error.response.status === 422){
+                const errores_R=error.response.data.errors;
+              //  console.log(errores_R),                      
+                this.subir_file_error=errores_R.archivo[0];
+                //console.log(this.subir_file_error)
+                this.boxerror=true;
+              }
+          });
 
       },verformato(requisito){
          this.dialog2=true;

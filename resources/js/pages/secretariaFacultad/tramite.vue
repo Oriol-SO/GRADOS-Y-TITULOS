@@ -45,17 +45,52 @@
                 mandatory
                 
             >
-             <v-subheader class="font-weight-medium text-md-body-1 d-flex" v-if="requisitos.length" >REQUISITOS ALUMNO </v-subheader>
+                <v-subheader class="font-weight-medium text-md-body-1 d-flex" v-if="requisitos.length" >
+                    REQUISITOS ALUMNO 
+                    <div>
+                        <v-chip
+                        class="ma-2"
+                        color="#b3ffce"
+                        text-color="black"
+                        >                       
+                            Aprovados
+                            <v-avatar
+                                rigth
+                                class="green accent-3 ml-1"
+                            >
+                            {{requisitos_aprovados}}
+                            </v-avatar>
+                        </v-chip>  
+                         <v-chip
+                        class="ma-2"
+                        color="#fbef9f"
+                        text-color="black"
+                        >                       
+                            observados
+                            <v-avatar
+                                rigth
+                                class="amber accent-3 ml-1"
+                            >
+                            {{requisitos_observados}}
+                            </v-avatar>
+                        </v-chip>                   
+                    </div>
+                </v-subheader>
                 <v-list-item
                     v-for="(requisito, i) in requisitos"
                     :key="i"
+                    color="black"
+                    class="mt-1"
+                    v-bind:style="requisito.conforme.length>0?'background:#b3ffce;':(requisito.observacion.length>0?'background:#fbef9f;':'') "
+                    
                 >
                     <v-list-item-icon>
                         <v-icon >mdi-check-outline</v-icon>
                     </v-list-item-icon>
-                    <v-list-item-content>
+                    <v-list-item-content  >
                         <v-list-item-title class="d-flex" >{{requisito.nombre}}  
                             <div class="ml-auto">
+                                <!--div v-if="requisito.revisado.length>0">revisado</div-->
                                 <v-btn 
                                     v-if="requisito.archivo.length>0"
                                     class=" text-capitalize" 
@@ -90,7 +125,7 @@
             <v-divider></v-divider>
 
             <v-list-item-group
-                v-model="selectedItem"
+                :v-model="selectedItem"
                 color="primary"
                 mandatory
                 
@@ -99,7 +134,7 @@
                 <v-list-item
                     v-for="(requisitoP, i) in requisitosPropios"
                     :key="i"
-                    color="#01b559"
+                    color="#016da1"
                 >
                     <v-list-item-icon>
                         <v-icon >mdi-check-outline</v-icon>
@@ -313,7 +348,7 @@
                                                         class="ml-4 my-0"
                                                         v-model="formrevisado.aprovado"
                                                         color="#2cdd9b"
-                                                        label="Conforme"
+                                                        label="Aprovar"
                                                         @click="conforme()"
                                                     ></v-switch>
                                             </v-alert>
@@ -328,8 +363,33 @@
                     </v-card>
                 
             </v-card>
+                    <template>
+                        <div class="text-center ma-2">
+    
+                            <v-snackbar
+                                v-model="boxerror"
+                                tile
+                                color="red accent-2"
+                                top
+                            >
+                            {{ revisar_errores }}
+
+                            <template v-slot:action="{ attrs }">
+                                <v-btn
+                                color="white"
+                                text
+                                v-bind="attrs"
+                                @click="boxerror = false"
+                                >
+                                Close
+                                </v-btn>
+                            </template>
+                            </v-snackbar>
+                        </div>
+                    </template>
             </v-dialog>
         </v-row>
+
     </template>
 
     
@@ -373,8 +433,12 @@ export default {
 
           content:'',
           urlrequisito:'',
+          id_fase:'',
 
-          
+          requisitos_aprovados:0,
+          requisitos_observados:0,
+          boxerror:false,
+          revisar_errores:'',
         }
     },mounted(){
         this.fetchtramite();
@@ -409,23 +473,29 @@ export default {
           const {data}=await axios.get(`/api/sf-faserequisito/${id}/${this.$route.params.id}`);
           this.requisitos=data.alumno;
           this.requisitosPropios=data.propios;
-
-         // console.log(data);
+          this.id_fase=id;
+          this.requisitos_aprovados=data.aprovados;
+          this.requisitos_observados=data.observados;
+          console.log(data);
       },openmodal(requisito){        
         this.idrequi=requisito.id;
         this.documento=requisito.documento;
         this.extension=requisito.extension;
         this.dialog=true;
       },async revisar(requisito){
+          this.formrevisado.aprovado=false;
+          this.formrevisado.observado=false;
           this.dialogR=true;
           this.requisitoRevisar=requisito.nombre.toUpperCase();
-          /*await axios.get(`/api/sf-archivorequisito/${this.$route.params.id}/${requisito.id}`).then(response=>{
-              //console.log(response.data[0].path);
-              this.urlrequisito=response.data[0].path;
-          });*/
-           this.urlrequisito=requisito.archivo[0].path;
-           this.formrevisado.file=requisito.archivo[0];
-          
+          this.urlrequisito=requisito.archivo[0].path;
+          this.formrevisado.file=requisito.archivo[0];
+          if(requisito.conforme.length>0){
+             this.formrevisado.aprovado=true;
+          }else if(requisito.observacion.length>0){
+              this.formrevisado.observado=true;
+              this.formrevisado.observacion=requisito.observacion[0].texto;
+          }
+
       },      
       guardar(){ 
         console.log(this.idrequi);
@@ -436,10 +506,27 @@ export default {
       },async revisarReq(){
           console.log(this.formrevisado);
           await this.formrevisado.post(`/api/sf-revisarrequisito`).then(response=>{
-              console.log(response.data);
-          });
+                if(response.data===1){
+                     this.revisar_errores='selleciona una opcion si quieres guardar cambios';
+                     this.boxerror=true;
+                }else if(response.data===2){
+                     this.revisar_errores='ya fue aprobado este documento';
+                     this.boxerror=true;
+                }
+                else{
+                     this.mostrarrequisito(this.id_fase);
+                     this.dialogR=false;
+                }
+               
+          }).catch(error=>{
+                if(error.response.status === 422){
+                      const errores_R=error.response.data.errors;                      
+                      this.revisar_errores='indica la observacion si quieres guardar cambios';
+                       this.boxerror=true;
+                    }
+              }); 
           
-          this.dialogR=false;
+          
       }
     }
 }

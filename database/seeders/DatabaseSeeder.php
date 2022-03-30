@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             FaseRolRequisitoSeeder::class,
             BachillerIni::class,
             BachillerFinal::class,
+            EstadoSeeder::class,
         ]);
     }
 }
