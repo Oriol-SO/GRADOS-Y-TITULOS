@@ -102,7 +102,7 @@ class tramiteController extends Controller
         $this->tram=$tramite;
         $rol=10;
         if($rol===10){
-            $requisitos = FaseRolRequisito::where('fase_id',$id)->where('rol_id',10)->get()->map(function ($r) {
+            $requisitos['alumno'] = FaseRolRequisito::where('fase_id',$id)->where('rol_id',10)->get()->map(function ($r) {
                 return [
                     'id' => $r->id,       
                     'requisito_id' => $r->requisito_id ,
@@ -110,11 +110,26 @@ class tramiteController extends Controller
                     'rol'=> $r->rol->id,
                     'documento'=>$r->requisito->TipoArchivo->tipoNombre,
                     'extension'=>   $r->requisito ->tipo_documento, 
-                    'archivo'=>File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get(),
+                    'archivo_subido'=>File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get(),
                     'revisado_aprovado'=>Revisione::whereIn('file_id',(File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('id')))->get(),
-                    'revisado_observacion'=>Observacione::whereIn('file_id',(File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('id')))->get(),             
+                    'revisado_observado'=>Observacione::whereIn('file_id',(File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('id')))->get(),             
                 ];
             });
+            $requisitos['subidos']=0;
+            $requisitos['aprovados']=0;
+            $requisitos['observados']=0;            
+           foreach ($requisitos['alumno'] as $req) {
+               if(count($req['revisado_aprovado'])>0){
+                $requisitos['aprovados']++;
+               }elseif(count($req['revisado_observado'])>0){
+                $requisitos['observados']++;
+               }
+               if(count($req['archivo_subido'])>0){
+                $requisitos['subidos']++;
+               }
+           } 
+           
+
             return response()->json($requisitos);
         }else{
             return 'user no autorizado';
