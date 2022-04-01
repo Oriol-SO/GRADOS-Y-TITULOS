@@ -19,6 +19,7 @@ class CreateFilesTable extends Migration
             $table->BigInteger('tramite_id')->unsigned();
             $table->BigInteger('persrol_id')->unsigned();
             $table->BigInteger('faserolreq_id')->unsigned();
+            $table->Integer('num_modifi');
 
             $table->foreign('tramite_id')->references('id')->on('tramites');
             $table->foreign('persrol_id')->references('id')->on('persona_roles'); 

@@ -67,7 +67,9 @@ class SecretariaController extends Controller
                     'archivo'=>File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get(),
                     'conforme'=>Revisione::whereIn('file_id',(File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('id')))->get(),
                     'observacion'=>Observacione::whereIn('file_id',(File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('id')))->get(),
-
+                    'modificado'=>File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('num_modifi')->map(function($mod){
+                        return $mod->num_modifi;
+                    }),   
                   //  'aprovados'=>Revisione::whereIn('file_id',(File::where('tramite_id',$this->tram)->get('id')))->count(),
                     //'observados'=>Observacione::whereIn('file_id',(File::where('tramite_id',$this->tram)->get('id')))->count(),
                 ];
@@ -106,43 +108,53 @@ class SecretariaController extends Controller
        // return $request;
         $rol=5;
         if($rol===5){
-            if($request->observado==false && $request->aprovado==false){
-                return '1'; //seleccione una opcion
-            }else{
-                if($request->observado==false && $request->aprovado==true){
-                    //aprovado
-                    //eliminamos cualquier revision anterior 
-                    $revision=Revisione::where('file_id',$request->file['id'])->count();
-                    if($revision>0){
-                        return '2';
-                    }else{
-                        //eliminar observaciones para aprobar
-                        Observacione::where('file_id', $request->file['id'])->delete();       
+            //nuscar registros de revision anteriores
+            $revisados=Revisione::where('file_id',$request->file['id'])->count();
+            if($revisados>0){
+                return 'ya aprobaste este requisito';
+            }else{               
+                if($request->observado==false && $request->aprovado==false){
+                    return '1'; //seleccione una opcion
+                }else{
+                    if($request->observado==false && $request->aprovado==true){
+                        //aprovado
+                        $revision=Revisione::where('file_id',$request->file['id'])->count();
+                        if($revision>0){
+                            return '2';
+                        }else{
+                            //eliminar observaciones para aprobar
+                            Observacione::where('file_id', $request->file['id'])->delete();       
 
-                        $revision=Revisione::create([
+                            $revision=Revisione::create([
+                                'file_id'=>$request->file['id'],
+                                'persrol_id'=>$request->file['persrol_id'],
+                                'estado_id'=>3,
+                                'estado' =>true,
+                                
+                            ]);
+                            //cambiar estado de modificacion del archivo 
+                            File::where('id',$request->file['id'])->update(['num_modifi'=>0]);
+                            return $revision;
+                        }
+                    
+                    }else if($request->observado==true && $request->aprovado==false){
+                        //observacion
+                        $request->validate([
+                            'observacion'=>'required',
+                        ]);
+                        //eliminar observaciones anteriores
+                        Observacione::where('file_id', $request->file['id'])->delete();  
+                        //reescribir observacion
+                        $observacion=Observacione::create([
                             'file_id'=>$request->file['id'],
                             'persrol_id'=>$request->file['persrol_id'],
-                            'estado_id'=>3,
-                            'estado' =>true,
+                            'texto'=>$request->observacion,
+                
                         ]);
-                        return $revision;
+                            //cambiar estado de modificacion del archivo 
+                            File::where('id',$request->file['id'])->update(['num_modifi'=>0]);
+                        return $observacion;
                     }
-                   
-                }else if($request->observado==true && $request->aprovado==false){
-                    //observacion
-                    $request->validate([
-                        'observacion'=>'required',
-                    ]);
-                    //eliminar observaciones anteriores
-                    Observacione::where('file_id', $request->file['id'])->delete();  
-                    //reescribir observacion
-                    $observacion=Observacione::create([
-                        'file_id'=>$request->file['id'],
-                        'persrol_id'=>$request->file['persrol_id'],
-                        'texto'=>$request->observacion,
-            
-                    ]);
-                    return $observacion;
                 }
             }
         }else{

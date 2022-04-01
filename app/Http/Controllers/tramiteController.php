@@ -112,7 +112,10 @@ class tramiteController extends Controller
                     'extension'=>   $r->requisito ->tipo_documento, 
                     'archivo_subido'=>File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get(),
                     'revisado_aprovado'=>Revisione::whereIn('file_id',(File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('id')))->get(),
-                    'revisado_observado'=>Observacione::whereIn('file_id',(File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('id')))->get(),             
+                    'revisado_observado'=>Observacione::whereIn('file_id',(File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('id')))->get(), 
+                    'modificado'=>File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('num_modifi')->map(function($mod){
+                        return $mod->num_modifi;
+                    }),      
                 ];
             });
             $requisitos['subidos']=0;
@@ -140,21 +143,52 @@ class tramiteController extends Controller
     protected function subirarchivorequisito(Request $request){
         $rol=10;
         if( $rol===10){
-        $user=$request->user();
-       // $persona=$user->persona_id;
-        $personarol=$user->persona->personarole[0]->id;
-        $request->validate([
-            'archivo'=>'required'
-        ]);
-        $url=Storage::url($request->file('archivo')->store('public/requisitos'));
-        $requisito=File::create([
-            'path'=>$url,
-            'tramite_id'=>$request->tramite,
-            'persrol_id'=>$personarol,
-            'faserolreq_id'=>$request->idfaserequi,
-        ]);
+                       
+            $user=$request->user();
+            // $persona=$user->persona_id;
+            $personarol=$user->persona->personarole[0]->id;
+            $request->validate([
+                'archivo'=>'required'
+            ]);
 
-        return $requisito;
+            //actualizar
+
+            //subir nuevo
+            //verificar que no haya archivos de este requisito
+            $file_req=File::where('tramite_id',$request->tramite)->where('faserolreq_id',$request->idfaserequi)->count();
+            if($file_req>0){                
+                //actualizar
+                $file=File::where('tramite_id',$request->tramite)->where('faserolreq_id',$request->idfaserequi)->first();
+                //buscar observaciones
+                $obser=Observacione::where('file_id',$file->id)->count();
+                if($obser>0 && $file->num_modifi==0){
+                    //borramos el archivo de la carpeta
+                    $url_borrar=str_replace('storage','public',$file->path);
+                       Storage::delete($url_borrar);
+                    //subimos la nueva ruta 
+                   
+                        $new_url=Storage::url($request->file('archivo')->store('public/requisitos'));
+
+                        //remplazamos en la base de datos
+                        $requisito=File::where('id', $file->id)->update(['path' => $new_url ,'num_modifi'=>1]);
+                         
+                        return 'actualizado';
+                   
+                }else{
+                    return 1;
+                }
+            }else{
+                $url=Storage::url($request->file('archivo')->store('public/requisitos'));
+                $requisito=File::create([
+                    'path'=>$url,
+                    'tramite_id'=>$request->tramite,
+                    'persrol_id'=>$personarol,
+                    'faserolreq_id'=>$request->idfaserequi,
+                    'num_modifi'=>0,
+                ]);
+
+                return $requisito;
+            }
       }else{
           return 'user no autorizado';
       }

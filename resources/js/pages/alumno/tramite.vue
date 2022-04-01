@@ -31,11 +31,11 @@
           >
             <v-card-title class="my-0">{{fase.nombre}}</v-card-title>
             <v-btn 
-            color="#2cdd9b" 
-            class="mb-2 text-capitalize" 
-            style="color:#fff;" elevation="0"
-             @click="mostrarrequisito(fase.id)">
-             Requisitos
+              color="#2cdd9b" 
+              class="mb-2 text-capitalize" 
+              style="color:#fff;" elevation="0"
+              @click="mostrarrequisito(fase.id)">
+              Requisitos
              <v-icon dark right>mdi-arrow-down</v-icon>
              </v-btn>
 
@@ -112,7 +112,7 @@
                                     </v-avatar>
                                 </v-chip>
                                  <v-chip
-                               v-if="requisito.revisado_observado.length>0"
+                                v-if="requisito.revisado_observado.length>0 && requisito.modificado[0]==0 "
                                 color="#ff9400"
                                 text-color="#fff"
                                 >                       
@@ -124,6 +124,20 @@
                                     >
                                    <v-icon>mdi-eye-circle</v-icon>
                                     </v-avatar>
+                                </v-chip>
+                                <v-chip
+                                  v-if="requisito.modificado[0]==1"
+                                  color="#ff9400"
+                                  text-color="#fff"
+                                  >                       
+                                    levantado
+                                    <v-avatar
+                                        rigth
+                                        class="amber accent-3 ml-1"
+                                        text-color="#fff"
+                                    >
+                                      <v-icon>mdi-cog-clockwise</v-icon>
+                                    </v-avatar>
                                 </v-chip>    
                               <v-btn 
                                 class=" text-capitalize" 
@@ -131,9 +145,14 @@
                                 dark 
                                 small
                                 @click="openmodal(requisito)">
-                                  <v-icon dark>
-                                    mdi-cloud-upload
+                                  <v-icon dark v-if="requisito.archivo_subido.length>0">
+                                   mdi-eye
                                   </v-icon>
+                                  <v-icon v-else-if="requisito.revisado_observado.length>0 && requisito.modificado[0]==0" dark> mdi-file-edit</v-icon>
+                                  <!--v-icon v-else-if="requisito.revisado_observado.length>0 && requisito.modificado[0]==1" dark> mdi-eye</v-icon-->
+
+                                  <v-icon v-else dark> mdi-cloud-upload</v-icon>
+
                               </v-btn>
                           </div>  
                     </v-list-item-title> 
@@ -171,8 +190,17 @@
               transition="dialog-bottom-transition"
               >
                 <v-card elevation="0">
-                  <v-card-title class="text-h6 " style="background:#2cdd9b; color:#fff;">
-                    Subir archivo
+                  <v-card-title class="text-h6 d-flex" style="background:#2cdd9b; color:#fff;">
+                    {{msg_file}}
+                    <v-btn
+                    class="ml-auto"
+                      color="error"     
+                      rounded 
+                      @click="cerrar_modal()"
+                    >
+                      Cerrar
+                      <v-icon dark >mdi-close</v-icon>
+                    </v-btn>
                   </v-card-title>
                   <v-card elevation="0">
                     <v-row no-gutters>
@@ -182,6 +210,7 @@
                           <strong>Documento: </strong>{{documento }} <br/>
                           <strong>Tipo de archivo: </strong>{{extension}}
                           <v-file-input
+                              v-if="subir==true"
                               v-model="daterequisito.archivo"
                               label="selecciona un archivo"                           
                               prepend-icon="mdi-file"
@@ -192,15 +221,16 @@
                         <v-card-actions>
                           <v-spacer></v-spacer>
                           <v-btn
+                            v-if="subir==true"
                             color="#2cdd9b"      
                             rounded 
                             chip     
+                            v-bind:disabled="subir==false?true:false"
                             style="color:#fff;"
                             @click="guardar()"
                           >
-
-                          <v-icon dark left>mdi-upload</v-icon>
-                            cargar
+                            <v-icon dark left>mdi-upload</v-icon>
+                            {{nom_btn}}
                           </v-btn>
                            <v-btn 
                             class="text-capitalize" 
@@ -214,16 +244,20 @@
                               </v-icon>
                               ver formato
                           </v-btn>
-                          <v-btn
-                            color="error"     
-                            rounded 
-                            @click="dialog = false"
-                          >
-                          Cancelar
-                          <v-icon dark >mdi-close</v-icon>
-                          </v-btn>
-                        </v-card-actions>
 
+                        </v-card-actions>
+                          <div v-if="observacion">
+                             <v-subheader class="font-weight-medium text-md-body-1 d-flex">{{nom_obser}}:</v-subheader>
+                              <v-alert 
+                                border="left"
+                                colored-border
+                                type="warning"
+                                elevation="2"
+                                class="mx-2"
+                              >
+                              {{observacion}}
+                            </v-alert>                                                        
+                          </div>
                       </v-col>
                       <v-col cols="12"  md="8" style="height:100ch;" >   
                         <v-card height="95%" width="95%" class="my-2 mx-2 d-flex" >
@@ -339,6 +373,11 @@ export default {
           nom_requisito:'',
           documento:'',
           extension:'',
+          subir:'',
+          msg_file:'',
+          nom_btn:'',
+          nom_obser:'',
+          observacion:'',
 
           dialog2:false,
           content:'',
@@ -396,23 +435,63 @@ export default {
            this.id_fasereq=id;
           console.log(data);
       },openmodal(requisito){        
-        this.daterequisito.idfaserequi=requisito.id;
-        this.documento=requisito.documento;
-        this.extension=requisito.extension;
-        this.nom_requisito=requisito.nombre;
-       // this.requser=requisito;
-        this.dialog=true;
-      },vistaprevia(){
-        console.log(this.daterequisito.archivo);
+          this.daterequisito.idfaserequi=requisito.id;
+          this.documento=requisito.documento;
+          this.extension=requisito.extension;
+          this.nom_requisito=requisito.nombre;
+        // this.requser=requisito;
+        this.nom_obser='';
+        this.observacion='';
+        this.subir=true;
+        this.nom_btn='Cargar';
+        this.msg_file='Subir archivo';
+        if(requisito.archivo_subido.length>0 ){
+            this.subir=false;
+            this.msg_file='En espera de revision';
+            this.daterequisito.archivo='--'
+            this.url_document=requisito.archivo_subido[0].path;
+           // console.log(this.url_document)
+            if(requisito.modificado[0]==1){
+              this.subir=false;
+              this.msg_file='En espera de otra revision';
+              this.nom_obser='Observaciones corregidas';
+              this.observacion=requisito.revisado_observado[0].texto;
+            }
+            else if(requisito.revisado_aprovado.length>0){
+              this.msg_file='Este requisito esta aprobado';
+            }else if(requisito.revisado_observado.length>0){
+                   this.msg_file='Levantar observaciones';
+                   this.subir=true;
+                   this.nom_btn='Actualizar';
+                   this.nom_obser='Observaciones'
+                   this.observacion=requisito.revisado_observado[0].texto;
+            }
+        }        
+          this.dialog=true;
+          //console.log(this.subir);
+      },cerrar_modal(){
+         this.daterequisito.archivo='';
+         this.url_document='';
+         this.dialog=false;
+      },      
+      vistaprevia(){
+       // console.log(this.daterequisito.archivo);
         this.url_document=URL.createObjectURL(this.daterequisito.archivo)
       },
       async guardar(){
-        console.log(this.daterequisito);  
+       // console.log(this.daterequisito);  
+       if(this.subir===true){
         await this.daterequisito.post(`/api/alu-filerequisito/`).then(response=>{
-         // console.log(response.data);
+            console.log(response.data);
+            if(response.data===1){
+               this.subir_file_error='ya no se admiten mas archivos'
+               this.boxerror=true;
+            }else{
             this.daterequisito.archivo='',
             this.mostrarrequisito(this.id_fasereq);
             this.dialog=false;
+            }
+      
         }).catch(error=>{
           if(error.response.status === 422){
                 const errores_R=error.response.data.errors;
@@ -423,6 +502,11 @@ export default {
                 this.boxerror=true;
               }
           });
+       }else{
+          this.subir_file_error='tu archivo ya esta subido'
+           this.boxerror=true;
+       }
+
 
       },verformato(requisito){
          this.dialog2=true;
