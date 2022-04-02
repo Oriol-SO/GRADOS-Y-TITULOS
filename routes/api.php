@@ -103,3 +103,5 @@ Route::get('sf-fasestramite/{id}',[SecretariaController::class,'sf_obtenerfasest
 Route::get('sf-faserequisito/{id}/{tramite}',[SecretariaController::class,'sf_requisitosfase']);
 Route::get('sf-archivorequisito/{tramite}/{fasereq}',[SecretariaController::class,'sf_archivorequisito']);
 Route::post('sf-revisarrequisito',[SecretariaController::class,'sf_revisarrequisito']);
+Route::post('sf-subirfilerequisito',[SecretariaController::class,'sf_subirrequisito']);
+

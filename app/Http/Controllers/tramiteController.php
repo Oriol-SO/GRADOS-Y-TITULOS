@@ -92,7 +92,7 @@ class tramiteController extends Controller
     }
 
     public function obtenerfases($codigo){
-        $fase['fases']=Fase::where('proceso_id', $codigo)->get();
+        $fase['fases']=Fase::where('proceso_id', $codigo)->orderBy('numero', 'asc')->oldest()->get();
         $fase['cantidad']=Fase::where('proceso_id', $codigo)->get()->count();
         //$fase=Fase::all();
         return response()->json($fase);

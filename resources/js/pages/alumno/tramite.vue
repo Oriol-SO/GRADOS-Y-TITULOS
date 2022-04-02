@@ -88,8 +88,8 @@
                   v-for="(requisito, i) in requisitos"
                   :key="i"
                   class="mb-1"
-                 color="black"
-                 v-bind:style="requisito.archivo_subido.length>0?'background:#82b1ff;;':'' "
+                  color="black"
+                  v-bind:style="requisito.archivo_subido.length>0?'background:#82b1ff;;':'' "
                 >
                 <v-list-item-icon>
                     <v-icon >mdi-check-outline</v-icon>

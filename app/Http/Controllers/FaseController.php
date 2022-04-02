@@ -35,16 +35,20 @@ class FaseController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validarfase($request);    
-        $fase = Fase::create([
-        'nombre' => $request->nombrefase,
-        'numero' => $request->numerofase,
-        'proceso_id' => $request->procesoid,
-        'fase_id' =>null,
-        ]);
-        return response()->json([
-            'fase'=>$fase,
-        ]);
+        $this->validarfase($request);
+        $numero=Fase::where('proceso_id',$request->procesoid)->count();
+        //buscar numero en el registro
+            $fase = Fase::create([
+                'nombre' => $request->nombrefase,
+                'numero' => $numero+1,
+                'proceso_id' => $request->procesoid,
+                'fase_id' =>null,
+                ]);
+                return response()->json([
+                    'fase'=>$fase,
+                ]);
+        
+
     }
 
     /**
@@ -55,7 +59,7 @@ class FaseController extends Controller
      */
     public function show($id)
     {
-        $fase=Fase::where('proceso_id', $id)->get();
+        $fase=Fase::where('proceso_id', $id)->orderBy('numero', 'asc')->oldest()->get();
        // $primerid=Fase::where('proceso_id', $id)->get();
         return response()->json($fase, 200);
     }
@@ -96,7 +100,7 @@ class FaseController extends Controller
     public function validarfase($request=null){
         return $request->validate([
             'nombrefase' => 'required',
-            'numerofase' => 'required|integer'
+           // 'numerofase' => 'required|integer'
         ]);
     }
 }
