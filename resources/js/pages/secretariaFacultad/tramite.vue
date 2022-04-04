@@ -3,20 +3,20 @@
     <v-card elevation="0" flat class="mb-2 d-flex" >
       <v-card-title class="px-0 py-1 ml-3 text-h6">{{nomtramite.tipo_tramite}}</v-card-title>
     </v-card>
-    <v-stepper v-model="e1" >
-      <v-stepper-header>
-        <v-stepper-step
+    <v-stepper v-model="e1" >   
+      <v-stepper-header class="overflow-x-auto">
+    
+        <v-stepper-step 
           v-for="(fase,i) in parseInt(this.numfases,10)" :key="i" 
           :complete="e1 > (fase)"        
           :step="fase"
           editable      
           @click="limpiar()"
-        >
+        >  
           fase {{fase}}
         </v-stepper-step>
-
+     
       </v-stepper-header>
-
       <v-stepper-items>
       
         <v-stepper-content
@@ -54,8 +54,12 @@
                         <v-icon >mdi-check-outline</v-icon>
                     </v-list-item-icon>
                     <v-list-item-content>
-                        <v-list-item-title class="d-flex" >{{requisito.nombre}}  
-                            <div class="ml-auto">
+                        <v-list-item class="d-flex" >
+                     <!-- agregado vrow  div -->
+
+                        <v-row>
+                        {{requisito.nombre}}  
+                            <div class="ml-auto my-2 " >
                                 <v-btn 
                                     v-if="requisito.archivo.length>0"
                                     class=" text-capitalize" 
@@ -80,7 +84,8 @@
                                     
                                 </v-btn>
                            </div>
-                        </v-list-item-title> 
+                           </v-row>
+                        </v-list-item> 
 
                     </v-list-item-content>
                 </v-list-item>

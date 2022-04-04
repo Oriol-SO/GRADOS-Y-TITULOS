@@ -161,7 +161,7 @@
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
                       v-model="form.Nacimiento"
-                      label="Picker without buttons"
+                      label="fecha de nacimiento"
                       prepend-icon="mdi-calendar"
                       name="Nacimiento"
                       :rules="[v => !!v || 'El campo es requerido']"

@@ -4,7 +4,7 @@
       <v-card-title class="px-0 py-1 ml-3 text-h6">{{nomtramite.tipo_tramite}}</v-card-title>
     </v-card>
     <v-stepper v-model="e1" >
-      <v-stepper-header>
+      <v-stepper-header class="overflow-y-auto">
         <v-stepper-step
           v-for="(fase,i) in parseInt(this.numfases,10)" :key="i" 
           :complete="e1 > (fase)"        
@@ -52,8 +52,12 @@
                 <v-list-item-icon>
                     <v-icon >mdi-check-outline</v-icon>
                 </v-list-item-icon>
-                <v-list-item-content>
-                    <v-list-item-title class="d-flex" >{{requisito.nombre}}  
+                <v-list-item-content >
+                    <v-list-item class="d-flex" > 
+                     <!-- agregado vrow  div -->
+                    <v-row >
+                    {{requisito.nombre}}  
+                    <div class="ml-auto my-2 " >
                           <v-btn 
                             class="ml-auto text-capitalize" 
                             color="#00C897" 
@@ -77,7 +81,9 @@
                                  mdi-cloud-upload
                               </v-icon>
                           </v-btn>
-                    </v-list-item-title> 
+                        </div>  
+                          </v-row>
+                    </v-list-item> 
 
                 </v-list-item-content>
                 </v-list-item>

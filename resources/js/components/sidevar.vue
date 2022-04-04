@@ -1,21 +1,21 @@
 <template>
 <div>
     <v-app-bar
-      color="red"
+      color="trasparend"
       elevation="0"
       fixed
-      
-      style="margin-top:0px; margin-left:5px;"                  
+      width="45"
+      style="margin-top:0px; margin-left:5px;  "                  
     >
       <v-app-bar-nav-icon  color="secondary" style="font-size:50px" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
     </v-app-bar>
     <v-navigation-drawer
       v-model="drawer"
-      bottom
+      left
       temporary
       fixed        
       color="#111827"
-      style="margin-top:70px;"
+      style="margin-top:65px;"
     >
       <v-list
         nav
