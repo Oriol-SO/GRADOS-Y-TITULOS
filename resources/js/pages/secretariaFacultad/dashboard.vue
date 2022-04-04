@@ -34,6 +34,7 @@
                         <v-slider
                         :value="Math. round(item.requisitos_aprovados*100/item.total_requisitos)"                        
                         color="#3bfb60"
+                        readonly
                         :label="Math. round(item.requisitos_aprovados*100/item.total_requisitos )+'%'"
                         ></v-slider>
                     </div>

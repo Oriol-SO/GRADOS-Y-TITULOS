@@ -41,16 +41,31 @@ class FacultadEscuelaController extends Controller
     public function rolesgenerales($codigo){
         if($codigo==1){
             //rolesgenerales
-            $roles=Role::whereIn('id', [1, 2, 3,11,12,13])->get();
+            $roles=Role::whereIn('id', [1, 2, 3,11,12,13])->get()->map(function($r){
+                return[
+                    'id'=>$r->id,
+                    'rolNombre'=>$r->rolNombre,
+                ];
+            });
             return response()->json($roles);
         }else if($codigo==2){
             //roles por facu
-            $rolesF=Role::whereIn('id', [4,5,14])->get();
+            $rolesF=Role::whereIn('id', [4,5,14])->get()->map(function($r){
+                return[
+                    'id'=>$r->id,
+                    'rolNombre'=>$r->rolNombre,
+                ];
+            });
 
             return response()->json($rolesF);
         }else if($codigo==3){
             //roles por escuela
-            $rolesE=Role::whereIn('id', [6,7,8,9,10])->get();
+            $rolesE=Role::whereIn('id', [6,7,8,9,10])->get()->map(function($r){
+                return[
+                    'id'=>$r->id,
+                    'rolNombre'=>$r->rolNombre,
+                ];
+            });
 
 
             return response()->json($rolesE);

@@ -75,19 +75,28 @@
                 :search="search"
                 class="elevation-1"
                 >
-                <template v-slot:item.actions="{ item }">
-                <v-btn
-                small
-                rounded
-                color="#45EBA5"
-                elevation="0"
-                style="color:#fff;"
-                class="text-capitalize"
-                @click=" $router.push({ path: `/alumno/tramite/${item.id}`, }) "    
-                > Abrir</v-btn>
+                    <template v-slot:item.avance="{ item }">
+                        <div style="min-width:120px;">
+                            <v-slider
+                            :value="Math. round(item.requisitos_aprovados*100/item.total_requisitos)"                        
+                            color="#3bfb60"
+                            readonly
+                            :label="Math. round(item.requisitos_aprovados*100/item.total_requisitos )+'%'"
+                            ></v-slider>
+                        </div>
+                    </template>
+                    <template v-slot:item.actions="{ item }">
+                        <v-btn
+                        small
+                        rounded
+                        color="#45EBA5"
+                        elevation="0"
+                        style="color:#fff;"
+                        class="text-capitalize"
+                        @click=" $router.push({ path: `/alumno/tramite/${item.id}`, }) "    
+                        > Abrir</v-btn>
 
-                </template>
-            
+                    </template>                
 
             </v-data-table>
     </div>
@@ -113,7 +122,7 @@ export default {
             { text: 'Fecha', value: 'fec_inicio' },
             { text: 'Modalidad', value: 'modo_obtencion' },
             //{ text: 'telefono', value: 'numcel' },
-            { text: 'Proceso', value: 'estado' },
+            { text: 'Avance', value: 'avance',sortable:false },
             { text: 'Actions', value: 'actions', sortable: false },
             ],
            

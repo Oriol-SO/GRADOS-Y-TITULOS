@@ -29,7 +29,23 @@ class tramiteController extends Controller
     {
         //traemos los tramites del alumno
         $user=$request->user();
-        $tramites = tramite::where('persona_id',$user->persona_id)->get();
+        $tramites = tramite::where('persona_id',$user->persona_id)->get()->map(function($e){
+            return[
+                //'per_nom'=>$e->persona->nom.' '.$e->persona->apePat.' '.$e->persona->apeMat,
+                // 'per_apepat'=>$e->persona->apePat,
+                 //'per_apemat'=>$e->persona->apeMat,
+                 'id'=> $e->id,
+                 'tipo_tramite'=>$e->tipo_tramite,
+                 'modo_obtencion'=>$e->modo_obtencion,
+                 'fec_inicio'=>$e-> fec_inicio,
+                 'estado'=>$e->estado,
+                 'tramite'=>$e->tipo_tramite,
+                 'total_requisitos'=>FaseRolRequisito::whereIn('fase_id',(Fase::where('proceso_id',$e->proceso_id)->get('id')))->count(), 
+                 'requisitos_aprovados'=>$e->file->map(function($f){
+                     return $f->Revisione->count();
+                 })->sum(),
+            ];
+        });
         return response()->json($tramites);
     }
 
@@ -102,6 +118,22 @@ class tramiteController extends Controller
         $this->tram=$tramite;
         $rol=10;
         if($rol===10){
+                //obtener id fase anterior 
+
+                $numero_actual=(Fase::where('id',$id)->first())->numero;
+                if($numero_actual>1){
+                    $num_anterior=$numero_actual-1;
+                    //obtener el proceso id
+                    $proc_id=(Tramite::where('id',$tramite)->first())->proceso_id;
+                    //obtener fase anterior
+                    $fase=(Fase::where('proceso_id',$proc_id)->where('numero',$num_anterior)->first())->id;
+
+                    $autorized=$this->alu_autorized($fase,$tramite);
+                    $requisitos['autorized']=$autorized;
+                }
+               
+
+       
             $requisitos['alumno'] = FaseRolRequisito::where('fase_id',$id)->where('rol_id',10)->get()->map(function ($r) {
                 return [
                     'id' => $r->id,       
@@ -120,7 +152,10 @@ class tramiteController extends Controller
             });
             $requisitos['subidos']=0;
             $requisitos['aprovados']=0;
-            $requisitos['observados']=0;            
+            $requisitos['observados']=0;   
+           
+            //$requisitos['num_fase_ant']=$num_req;  
+            //$requisitos['total_req']=FaseRolRequisito::where('fase_id',$id)->count();       
            foreach ($requisitos['alumno'] as $req) {
                if(count($req['revisado_aprovado'])>0){
                 $requisitos['aprovados']++;
@@ -131,6 +166,14 @@ class tramiteController extends Controller
                 $requisitos['subidos']++;
                }
            } 
+            
+           //otros requisitos 
+           $requisitos['otros']=FaseRolRequisito::where('fase_id',$id)->where('rol_id','<>',10)->get()->map(function($o){
+               return[
+                'nombre' => $o->requisito ->nombre ,
+                'rol' =>$o->rol->rolNombre,
+               ];
+           });
            
 
             return response()->json($requisitos);
@@ -138,6 +181,30 @@ class tramiteController extends Controller
             return 'user no autorizado';
         }
  
+    }
+    public $tramfase;
+    protected function alu_autorized($fase,$tramite){
+         $this->tramfase=$tramite;          
+        $aprovados= FaseRolRequisito::where('fase_id',$fase)->where('rol_id',10)->get()->map(function ($r) {
+            return [
+                'revisado_aprovado'=>Revisione::whereIn('file_id',(File::where('tramite_id',$this->tramfase)->where('faserolreq_id',$r->id)->get('id')))->get(),
+         
+            ];
+        });
+        $requisitos['aprovados']=0;
+        $requisitos['total']=FaseRolRequisito::where('fase_id',$fase)->count();
+        foreach ($aprovados as $req) {
+            if(count($req['revisado_aprovado'])>0){
+             $requisitos['aprovados']++;
+            }
+        }
+        
+        if( $requisitos['aprovados']=== $requisitos['total']){
+            return true;
+        }else{
+            return 'no tienes permiso todavia o existe una alteracion en la base de datos';
+        }
+        
     }
 
     protected function subirarchivorequisito(Request $request){

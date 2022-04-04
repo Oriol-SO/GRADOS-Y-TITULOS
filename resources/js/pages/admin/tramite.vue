@@ -43,6 +43,16 @@
                                     <v-alert   dense outlined type="error" >
                                     El campo Nombre es obligatorio 
                                     </v-alert>
+                                </div>
+                                <v-text-field
+                                    v-model="formfase.numerofase"
+                                    label="Numero de orden"
+                                    required
+                                ></v-text-field> 
+                                <div v-if="errores.numerofase">
+                                    <v-alert   dense outlined type="error" >
+                                    El orden es obligatorio 
+                                    </v-alert>
                                 </div>                           
                                                                                   
                                     <v-btn
@@ -86,7 +96,7 @@
                     active-class="blue darken-4 "
                    @click="mostrarid(fase,i)"
                 >
-                    {{ i+1 }}
+                    {{ fase.numero }}
                 </v-tab>
                 </v-tabs>
 
@@ -407,7 +417,7 @@ export default{
         erroresR2:{},
         formfase: new Form({
             nombrefase:'',
-           // numerofase:'',
+            numerofase:'',
             procesoid:this.$route.params.id,
           }),
         formrequi1:new Form({
@@ -494,14 +504,14 @@ export default{
          
       }, clear() {
          this.formfase.nombrefase='';
-         //this.formfase.numerofase='';
+         this.formfase.numerofase='';
          this.errores={};         
       },async enviarfase(){
           const {data}= await this.formfase.post(`/api/fase/`)
            .then(response =>{
             this.FetchFases();
             this.clear();
-          //  console.log(response.data);
+            console.log(response.data);
             this.dialog=false;
             
           }).catch(error=>{

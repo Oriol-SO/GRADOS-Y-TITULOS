@@ -161,6 +161,37 @@
                 </v-list-item>
             </v-list>
 
+            <v-divider></v-divider>
+            <v-list>
+               <v-subheader class="font-weight-medium text-md-body-1 d-flex" v-if="requisitos_otros.length" >Otros Requisitos</v-subheader>
+                <v-list-item
+                  v-for="(requisito_otro, i) in requisitos_otros"
+                  :key="i"
+                  class="mb-1"
+                  style="background:#e7e7e7; border-radius: 0 30px 30px 0;"                 
+                >
+                  <v-list-item-content>
+                    <v-list-item-title class="d-flex" >{{requisito_otro.nombre}}  
+                        <div class="ml-auto">
+                                <v-chip
+                                  color="deep-purple accent-1"
+                                  text-color="#fff"
+                                  >                       
+                                    {{requisito_otro.rol}}
+                                    <v-avatar
+                                        rigth
+                                        class="deep-purple accent-3 ml-1"
+                                        text-color="#fff"
+                                    >
+                                      <v-icon>mdi-account-tie</v-icon>
+                                    </v-avatar>
+                                </v-chip>
+                        </div>
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+            </v-list>
+
           </v-card>
 
           <v-btn color="warning" style="color:#fff;" rounded @click="atras()">
@@ -171,7 +202,7 @@
           </v-btn>
           <v-btn
             color="primary" rounded 
-            @click="siguiente()"           
+            @click="siguiente(fase.id)"           
           >Continuar
           <v-icon dark right>
             mdi-arrow-right
@@ -350,6 +381,31 @@
           </v-dialog>
         </div>
       </template>
+      
+      <template>
+        <div class="text-center ma-2">
+
+            <v-snackbar
+                v-model="boxerror2"
+                tile
+                color="red accent-2"
+                top
+            >
+            {{ msg_autorized }}
+
+            <template v-slot:action="{ attrs }">
+                <v-btn
+                color="white"
+                text
+                v-bind="attrs"
+                @click="boxerror2 = false"
+                >
+                Close
+                </v-btn>
+            </template>
+            </v-snackbar>
+        </div>
+      </template>
   </div>    
 </template>
 
@@ -358,6 +414,7 @@
 
 import axios from 'axios';
 import Form from "vform";
+//
 export default {
 
 
@@ -368,6 +425,7 @@ export default {
           fases:[],
           numfases:'',
           requisitos:[],
+          requisitos_otros:[],
           dialog:false,
           
           nom_requisito:'',
@@ -398,16 +456,34 @@ export default {
           requisitos_observados:'',
           requisitos_subidos:'',
           id_fasereq:'',
+
+          //p sf
+          boxerror2:false,
+          msg_autorized:'',
         }
     },mounted(){
         this.fetchtramite();
        // this.fetchfase();
         this.numfase();
     },methods:{
-      siguiente(){            
+      siguiente(idfase){            
         if(this.e1<this.numfases){
-         this.e1=this.e1+1;
-          this.requisitos='';
+          axios.get(`/api/alu_autorized/${idfase}/${this.$route.params.id}`).then(response=>{
+              //console.log(response.data);
+            if(response.data===true){
+                  this.e1=this.e1+1;  //copiar este codigo
+                  this.requisitos=''; //copiar este codigo
+            }else{
+              //this.msg_autorized='espera a que todos tus requisitos sean aprobados'; //comentaer
+              //this.boxerror2=true;                                                    //comentar
+                  this.e1=this.e1+1;  //copiar este codigo
+                  this.requisitos=''; //copiar este codigo
+
+              //console.log('auhn no tienes acceso a la siguiente fase');
+            }
+          
+          });
+          
         }
       },
       atras(){
@@ -429,6 +505,7 @@ export default {
       },async mostrarrequisito(id){ 
           const {data}=await axios.get(`/api/alu-faserequisito/${id}/${this.$route.params.id}`);
           this.requisitos=data.alumno;
+          this.requisitos_otros=data.otros;
            this.requisitos_aprovados=data.aprovados;
            this.requisitos_observados=data.observados;
            this.requisitos_subidos=data.subidos;
