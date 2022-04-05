@@ -43,17 +43,18 @@
                                     <v-alert   dense outlined type="error" >
                                     El campo Nombre es obligatorio 
                                     </v-alert>
-                                </div>                           
+                                </div>
                                 <v-text-field
                                     v-model="formfase.numerofase"
-                                    label="Orden"
+                                    label="Numero de orden"
                                     required
-                                ></v-text-field>  
+                                ></v-text-field> 
                                 <div v-if="errores.numerofase">
                                     <v-alert   dense outlined type="error" >
-                                    el campo Orden es obligatorio
+                                    El orden es obligatorio 
                                     </v-alert>
-                                </div>                                                   
+                                </div>                           
+                                                                                  
                                     <v-btn
                                     class="mr-4 text-capitalize"
                                     color="#2cdd9b"
@@ -95,7 +96,7 @@
                     active-class="blue darken-4 "
                    @click="mostrarid(fase,i)"
                 >
-                    {{ i+1 }}
+                    {{ fase.numero }}
                 </v-tab>
                 </v-tabs>
 
@@ -468,7 +469,7 @@ export default{
           this.mostrarrequisito(data[0].id);
       },
         mostrarid(fase,i){
-          console.log(fase.id);
+         // console.log(fase.id);
           this.faseid=fase.id;
           this.formrequi1.fase_id=fase.id;
           this.formrequi2.fase_id=fase.id;
@@ -492,7 +493,7 @@ export default{
                this.extension='';
                this.otros=[];
           }
-          console.log(data);
+          //console.log(data);
       },detallerequisito(requisito){
           this.nombrereq=requisito.nombre;
           this.encargado=requisito.rol;
@@ -510,12 +511,13 @@ export default{
            .then(response =>{
             this.FetchFases();
             this.clear();
+            console.log(response.data);
             this.dialog=false;
             
           }).catch(error=>{
             if(error.response.status === 422){
               this.errores=error.response.data.errors;
-              console.log(this.errores);
+            //  console.log(this.errores);
             }
           });
       },async FetchAllrequisitos(){
@@ -525,7 +527,7 @@ export default{
       },async FetchTipoDocumento(){
           const{data}=await axios.get('/api/tipoarchivo/');
           this.tipoarchivos=data;
-          console.log(data);
+          //console.log(data);
       },async FetchRoles(){
           const{data}=await axios.get('/api/rol/');
           this.roles=data;
@@ -552,7 +554,7 @@ export default{
           }).catch(error=>{
             if(error.response.status === 422){
               this.erroresR1=error.response.data.errors;
-              console.log(this.erroresR1);
+            //  console.log(this.erroresR1);
             }
           });
           
@@ -563,11 +565,11 @@ export default{
             this.mostrarrequisito(this.formrequi2.fase_id);
             this.clearall();
             this.dialog2=false;
-            console.log(response);
+           // console.log(response);
           }).catch(error=>{
             if(error.response.status === 422){
               this.erroresR2=error.response.data.errors;
-              console.log(this.erroresR2);
+            //  console.log(this.erroresR2);
             }
           });
           
