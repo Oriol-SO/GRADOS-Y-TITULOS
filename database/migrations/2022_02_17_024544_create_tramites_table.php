@@ -23,6 +23,7 @@ class CreateTramitesTable extends Migration
             $table->string('tipo_tramite');
             $table->integer('fase_actual');
             $table->boolean('estado');
+            $table->bigInteger('receptor_rol_notify')->nullable();
 
             $table->BigInteger('trabajo_id')->unsigned()->nullable();
             $table->BigInteger('persona_id')->unsigned()->nullable();

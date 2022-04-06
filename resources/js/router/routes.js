@@ -72,7 +72,7 @@ export default [
       { path: '', redirect: { name: 'sf.dashboard' } },
       { path: 'dashboard', name: 'sf.dashboard', component: page('secretariaFacultad/dashboard.vue') },
       { path: 'tramite/:id', name: 'sf.tramite', component: page('secretariaFacultad/tramite.vue') },
-      { path: 'revisar/tramite/:tramite', name: 'sf.revisar', component: page('secretariaFacultad/revisar.vue') }
+      { path: 'tramite2/:id', name: 'sf.revisar', component: page('secretariaFacultad/tramite2.vue') }
     ]
   },
 

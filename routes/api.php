@@ -92,6 +92,7 @@ Route::get('fasestramite/{codigo}',[tramiteController::class,'obtenerfases']);
 Route::get('alu-faserequisito/{id}/{tramite}',[tramiteController::class,'obtenerfaserequisito']);
 Route::post('alu-filerequisito/',[tramiteController::class,'subirarchivorequisito']);
 Route::get('alu_autorized/{fase}/{tramite}',[tramiteController::class,'alu_autorized']);
+Route::get('alu-notificarcambio/{fase}/{tramite}',[tramiteController::class,'alu_notificarCambio']);
 
 
 //rutas scretaria general 1

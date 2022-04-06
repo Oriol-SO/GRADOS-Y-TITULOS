@@ -29,6 +29,18 @@
                 :search="search"
                 class="elevation-1"
                 >
+                <template v-slot:item.notify="{ item }">
+                    <v-chip
+                    v-if="item.notificacion==true"
+                    class="ma-2"
+                    color="deep-purple accent-4"
+                    outlined
+                    >
+                    <v-icon left>
+                        mdi-bell-ring
+                    </v-icon>
+                    </v-chip>
+                </template>
                 <template v-slot:item.avance="{ item }">
                     <div style="min-width:120px;">
                         <v-slider
@@ -67,8 +79,9 @@ export default {
             //{text: 'Facultad',align: 'start', value: '',},
             { text: 'Tramite', value: 'tramite' },           
             { text: 'fecha de inicio', value: 'fec_inicio' },
-            { text: 'avance', value:'avance',sortable: false},
+            { text: 'avance', value:'avance',sortable: false},            
             { text: 'estado', value: 'estado' },
+             { text: '', value:'notify',sortable: false},
             { text: 'Actions', value: 'actions', sortable: false },
             ],
             expedientes:[],

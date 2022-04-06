@@ -44,6 +44,8 @@ class SecretariaController extends Controller
                     'requisitos_aprovados'=>$e->file->map(function($f){
                         return $f->Revisione->count();
                     })->sum(),
+
+                    'notificacion'=>$e->receptor_rol_notify==5? true:false,
                 ];
             });
 
@@ -59,8 +61,18 @@ class SecretariaController extends Controller
         return response()->json($tramites);
     }
     public function sf_obtenerfasestramite($id){
-        $fase['fases']=Fase::where('proceso_id', $id)->orderBy('numero', 'asc')->oldest()->get();
-        $fase['cantidad']=Fase::where('proceso_id', $id)->get()->count();
+        
+        $fase['fases']=Fase::where('proceso_id', $id)->where(function($query) {
+            $query->where('encargado_ejecutar', 5)
+                  ->orWhere('encargado_revisar', 5);
+        })->orderBy('numero', 'asc')->get();
+      //  $fase['fases_ejecutar']=Fase::where('proceso_id', $id)->where('encargado_ejecutar',5)->orderBy('numero', 'asc')->oldest()->get();
+        $fase['cantidad']=Fase::where('proceso_id', $id)->where(function($query) {
+            $query->where('encargado_ejecutar', 5)
+                  ->orWhere('encargado_revisar', 5);
+        })->get()->count();
+        //$fase['cantidadCorrespondiente']=Fase::where('proceso_id', $id)->where('encargado_ejecutar',5)->get()->count();
+        $fase['fases_tramite']=Fase::where('proceso_id',$id)->orderBy('numero', 'asc')->get();
         //$fase=Fase::all();
         return response()->json($fase);
     }

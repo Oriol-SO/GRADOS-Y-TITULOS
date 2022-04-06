@@ -15,6 +15,7 @@ class PersonaController extends Controller
      */
     public function index()
     {
+         
         $personas=Persona::all()->map(function($p){
             return [
                 'id'=>$p->id,
