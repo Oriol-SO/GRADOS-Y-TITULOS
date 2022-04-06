@@ -260,6 +260,12 @@ class tramiteController extends Controller
           return 'user no autorizado';
       }
     }
+
+
+    protected function alu_notificarCambio($fase_id,$tramite){
+        $receptor_notify=(Fase::where('id',$fase_id)->first())->encargado_revisar;
+        Tramite::where('id',$tramite)->update(['receptor_rol_notify'=>$receptor_notify]);
+    }   
     /**
      * Show the form for editing the specified resource.
      *

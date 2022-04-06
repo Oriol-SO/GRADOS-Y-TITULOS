@@ -38,46 +38,246 @@
                     <v-icon dark right>mdi-arrow-down</v-icon>
                     </v-btn>
 
-                    <v-divider></v-divider>
-                    <v-list>
-                        <v-subheader class="font-weight-medium text-md-body-1 d-flex" v-if="requisitos.length" >
-                            REQUISITOS ALUMNO 
-                            <div>
-                                <v-chip
-                                class="ma-2"
-                                color="#b3ffce"
-                                text-color="black"
-                                >                       
-                                    Aprovados
-                                    <v-avatar
-                                        rigth
-                                        class="green accent-3 ml-1"
+                                <v-divider></v-divider>
+                                <v-list>
+                                    <v-subheader class="font-weight-medium text-md-body-1 d-flex" v-if="requisitos.length" >
+                                        REQUISITOS ALUMNO 
+                                        <div>
+                                            <v-chip
+                                            class="ma-2"
+                                            color="#b3ffce"
+                                            text-color="black"
+                                            >                       
+                                                Aprovados
+                                                <v-avatar
+                                                    rigth
+                                                    class="green accent-3 ml-1"
+                                                >
+                                                {{requisitos_aprovados}}
+                                                </v-avatar>
+                                            </v-chip>  
+                                            <v-chip
+                                            class="ma-2"
+                                            color="#fbef9f"
+                                            text-color="black"
+                                            >                       
+                                                observados
+                                                <v-avatar
+                                                    rigth
+                                                    class="amber accent-3 ml-1"
+                                                >
+                                                {{requisitos_observados}}
+                                                </v-avatar>
+                                            </v-chip>                   
+                                        </div>
+                                    </v-subheader>
+                                    <v-list-item
+                                        v-for="(requisito, i) in requisitos"
+                                        :key="i"
+                                        color="black"
+                                        class="mt-1"
+                                        v-bind:style="requisito.conforme.length>0?'background:#5dff97e3;':(requisito.observacion.length>0?'background:#ffec70;':'') "
+                                        
                                     >
-                                    {{requisitos_aprovados}}
-                                    </v-avatar>
-                                </v-chip>  
-                                <v-chip
-                                class="ma-2"
-                                color="#fbef9f"
-                                text-color="black"
-                                >                       
-                                    observados
-                                    <v-avatar
-                                        rigth
-                                        class="amber accent-3 ml-1"
+                                        <v-list-item-icon>
+                                            <v-icon >mdi-check-outline</v-icon>
+                                        </v-list-item-icon>
+                                        <v-list-item-content  >
+                                            <v-list-item-title class="d-flex" >{{requisito.nombre}}  
+                                                <div class="ml-auto">
+                                                    <!--div v-if="requisito.revisado.length>0">revisado</div-->
+                                                    <v-chip
+                                                    v-if="requisito.modificado[0]==1"
+                                                    color="#ff9400"
+                                                    text-color="#fff"
+                                                    >                       
+                                                        levantado
+                                                        <v-avatar
+                                                            rigth
+                                                            class="amber accent-3 ml-1"
+                                                            text-color="#fff"
+                                                        >
+                                                        <v-icon>mdi-cog-clockwise</v-icon>
+                                                        </v-avatar>
+                                                    </v-chip>  
+                                                    <v-btn 
+                                                        v-if="requisito.conforme.length>0"
+                                                        class=" text-capitalize" 
+                                                        color="#1f6effc9" 
+                                                        text-color="#fff"
+                                                        dark 
+                                                        small
+                                                        @click="revisar(requisito)">
+                                                        <v-icon dark>mdi-eye-check</v-icon>
+                                                    </v-btn>
+                                                    <v-btn  
+                                                        v-else-if="requisito.archivo.length>0"                                   
+                                                        class=" text-capitalize" 
+                                                        color="#2cdd9b" 
+                                                        text-color="#fff"
+                                                        dark 
+                                                        small
+                                                        @click="revisar(requisito)">
+                                                        Revisar
+                                                    </v-btn>
+
+                                            </div>
+                                            </v-list-item-title> 
+
+                                        </v-list-item-content>
+                                    </v-list-item>
+
+                                </v-list>
+
+                                <v-divider></v-divider>
+
+                                <v-list>
+                                    <v-subheader class="font-weight-medium text-md-body-1 d-flex" v-if="requisitosPropios.length">REQUISITOS A SUBIR 
+                                        <div>
+                                                <v-chip
+                                                class="ma-2"
+                                                color="#95d5ff"
+                                                text-color="black"
+                                                >                       
+                                                    Subidos
+                                                    <v-avatar
+                                                        rigth
+                                                        class="blue accent-3 ml-1"
+                                                    >
+                                                    {{requisitos_subidosPropios}}
+                                                    </v-avatar>
+                                                </v-chip>
+                                                <v-chip
+                                                class="ma-2"
+                                                color="#b3ffce"
+                                                text-color="black"
+                                                >                       
+                                                    Aprovados
+                                                    <v-avatar
+                                                        rigth
+                                                        class="green accent-3 ml-1"
+                                                    >
+                                                    {{requisitos_aprovadosPropios}}
+                                                    </v-avatar>
+                                                </v-chip>  
+                                                <v-chip
+                                                class="ma-2"
+                                                color="#fbef9f"
+                                                text-color="black"
+                                                >                       
+                                                    observados
+                                                    <v-avatar
+                                                        rigth
+                                                        class="amber accent-3 ml-1"
+                                                    >
+                                                    {{requisitos_observadosPropios}}
+                                                    </v-avatar>
+                                                </v-chip>                   
+                                        </div>
+                                    </v-subheader>
+                                    <v-list-item
+                                        v-for="(requisitoP, i) in requisitosPropios"
+                                        :key="i"
+                                        class="mb-1"
+                                        color="black"
+                                        v-bind:style="requisitoP.archivo_subido.length>0?'background:#82b1ff;;':'' "
+
                                     >
-                                    {{requisitos_observados}}
-                                    </v-avatar>
-                                </v-chip>                   
-                            </div>
-                        </v-subheader>
-                        <v-list-item
-                            v-for="(requisito, i) in requisitos"
-                            :key="i"
-                            color="black"
-                            class="mt-1"
-                            v-bind:style="requisito.conforme.length>0?'background:#5dff97e3;':(requisito.observacion.length>0?'background:#ffec70;':'') "
-                            
+                                        <v-list-item-icon>
+                                            <v-icon >mdi-check-outline</v-icon>
+                                        </v-list-item-icon>
+                                        <v-list-item-content>
+                                            <v-list-item-title class="d-flex" >{{requisitoP.nombre}}  
+                                                <div class="ml-auto">
+                                                    <v-chip
+                                                        v-if="requisitoP.revisado_aprovado.length>0"
+                                                        color="#0ce559"
+                                                        text-color="#fff"
+                                                    >                       
+                                                        Aprovado
+                                                        <v-avatar
+                                                            rigth
+                                                            class="green accent-3 ml-1"
+                                                            text-color="#fff"
+                                                        >
+                                                            <v-icon>mdi-checkbox-marked-circle</v-icon>
+                                                        </v-avatar>
+                                                    </v-chip>
+                                                    <v-chip
+                                                    v-if="requisitoP.revisado_observado.length>0 && requisito.modificado[0]==0 "
+                                                    color="#ff9400"
+                                                    text-color="#fff"
+                                                    >                       
+                                                        observado
+                                                        <v-avatar
+                                                            rigth
+                                                            class="amber accent-3 ml-1"
+                                                            text-color="#fff"
+                                                        >
+                                                        <v-icon>mdi-eye-circle</v-icon>
+                                                        </v-avatar>
+                                                    </v-chip>
+                                                    <v-chip
+                                                    v-if="requisitoP.modificado[0]==1"
+                                                    color="#ff9400"
+                                                    text-color="#fff"
+                                                    >                       
+                                                        levantado
+                                                        <v-avatar
+                                                            rigth
+                                                            class="amber accent-3 ml-1"
+                                                            text-color="#fff"
+                                                        >
+                                                        <v-icon>mdi-cog-clockwise</v-icon>
+                                                        </v-avatar>
+                                                    </v-chip>    
+                                                    <v-btn 
+                                                        class=" text-capitalize" 
+                                                        color="indigo" 
+                                                        dark 
+                                                        small
+                                                        @click="openmodal(requisitoP)">
+                                                        <v-icon dark v-if="requisitoP.archivo_subido.length>0">
+                                                        mdi-eye
+                                                        </v-icon>
+                                                        <v-icon v-else-if="requisitoP.revisado_observado.length>0 && requisitoP.modificado[0]==0" dark> mdi-file-edit</v-icon>
+                                                        <!--v-icon v-else-if="requisito.revisado_observado.length>0 && requisito.modificado[0]==1" dark> mdi-eye</v-icon-->
+
+                                                        <v-icon v-else dark> mdi-cloud-upload</v-icon>
+
+                                                    </v-btn>
+                                                </div>  
+                                            </v-list-item-title> 
+
+                                        </v-list-item-content>
+                                    </v-list-item>
+
+                                </v-list>
+
+                            </v-card>
+                            </v-stepper-content>
+                        </v-stepper-items>
+                    
+                </v-stepper>
+            </v-card>
+        </v-col>
+         <v-col ms="12" md="3">
+            <v-card class="ml-2" elevation="0" >
+               <v-subheader :inset="inset">
+                    Fases del tramite
+                </v-subheader>
+
+                    <v-stepper
+                    value="1"
+                    class="mt-12"
+                    vertical
+                    style="display: contents;"
+                    >
+                    <v-stepper-header elevation="0" style="min-height:450px; overflow:auto; flex-wrap: nowrap; flex-direction: column;">
+                        <v-stepper-step v-for="(fase,i) in fasestramite" :key="i"
+                        :step="i+1"
+                        
+                        color="green"
                         >
                             <v-list-item-icon>
                                 <v-icon >mdi-check-outline</v-icon>
@@ -263,6 +463,12 @@
         
     </v-stepper>
 
+                    </v-stepper-header>
+                    </v-stepper>
+            </v-card>
+        </v-col>
+    </v-row>
+    </div>
     <template>
           <v-row justify="center">
             <v-dialog
@@ -587,6 +793,7 @@ export default {
           fases:[],
           numfases:'',
           requisitos:[],
+          fasestramite:[],
           requisitosPropios:[],
           dialog:false,
           idrequi:'',
@@ -671,6 +878,7 @@ export default {
       },async fetchfase($id){
          const { data } =await axios.get(`/api/sf-fasestramite/${$id}`);   
          this.fases = data.fases;
+         this.fasestramite=data.fases_tramite;
          this.numfases=data.cantidad;
       },async mostrarrequisito(id){
           const {data}=await axios.get(`/api/sf-faserequisito/${id}/${this.$route.params.id}`);
