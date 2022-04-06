@@ -25,10 +25,6 @@ class RegisterController extends Controller
     {
         $this->middleware('guest');
     }
-
-    /**
-     * The user has been registered.
-     */
     protected function registered(Request $request, User $user)
     {
         if ($user instanceof MustVerifyEmail) {
@@ -38,99 +34,131 @@ class RegisterController extends Controller
         return response()->json($user);
     }
 
-    protected function register( request $request ){
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'password' => 'required|confirmed',
+            'password_confirmation'=>'required',
+            'codAlu'=> 'required|numeric|unique:personas,cod_alum',    
+        ]);
+    }
+
+    protected function create( array $request):User{
         
-        $this->validaruser($request);
+        //$this->validaruser($request);
+        $codAlu=$request['codAlu'];
+        $date= $this->datosusuario($codAlu);
+        $curricula=$date['Curricula'];
+        $curri= $this->curricula($curricula);
+        $school= $this->escuela($curri);
+        //  return $school[0]->FACULTAD_ID;
+        $g=1;
+        if ($date['Genero']=='F') {
+            $g=0;
+        }
+        try{
+            $persona=Persona::create([
 
-            try{
+                'nom' => $date['Nombres'],
+                'apePat' =>  $date['Apellido paterno'],
+                'apeMat' =>  $date['Apellido materno'],
+                'gen' => $g,
+                'dom' =>  $date['Domicilio']?$date['Domicilio']:'',
+                'email' => $date['Correo Institucional'],
+                'tipDoc' => '1',
+                'numDoc' =>  $date['Dni'],
+                'fecNac' =>  $date['Fecha de nacimiento'],            
+                'numCel' => '99999999',
+                'espe' => $school[0]->ID_ESC,
+                'cod_alum'=>  $codAlu,  
+                'curri'=> $curricula, 
+                'fec_matri'=>$date['Fecha de Ingreso'],
+                'grad_estud'=>"",
+                'abre_grad'=>"",
+            ]);  
+            $rolesuser= PersonaRole::create([
+                'estado'=>1,
+                'persona_id'=>$persona->id,
+                'facId'=>$school[0]->FACULTAD_ID,
+                'escId'=>$school[0]->ID_ESC,
+                'rol_id'=>'10',
+            ]); 
+            $user=User::create([
+                'name'=>$date['Nombres'],
+                'email'=>$date['Correo Institucional'],
+                'password'=>Hash::make($request['password']),
+                'persona_id'=>$persona->id,
+            ]);    
 
-
-                $persona=Persona::create([
-                    'nom'=>$request->nombresuser,
-                    'apePat'=>$request->apePat,
-                    'apeMat'=>$request->apeMat,
-                    'gen'=>$request->genero,
-                    'dom'=>$request->direccion?$request->direccion:null,
-                    'email'=>$request->correo,
-                    'tipDoc'=>$request->tipodoc['num'],
-                    'numDoc'=>$request->userdoc,
-                    'fecNac'=>$request->nacimiento?$request->nacimiento:null,
-                    'numcel'=>$request->celular,
-                    'grad_estud'=>$request->gradoestu,
-                    'abre_grad'=>$request->gradoabr,
-                    'espe'=>$request->escuela? $request->escuela['ID_ESC']:null,
-                    'cod_alum'=>$request->codigo,
-                    'curri'=>$request->curricula?$request->curricula:null,
-                    'fec_matri'=>$request->fecha_ingre?$request->fecha_ingre:null,
-                    'fec_egre'=>$request->fecha_egre,
-                    
-                ]);
-                
-                $rolesuser= PersonaRole::create([
-                    'estado'=>1,
-                    'persona_id'=>$persona->id,
-                    'facId'=>$request->facultad ? $request->facultad['FACULTAD_ID']:null,
-                    'escId'=>$request->escuela? $request->escuela['ID_ESC']:null,
-                    'rol_id'=>'10',
-                ]); 
-                $user=User::create([
-                    'name'=>$request->nombresuser,
-                    'email'=>$request->correo,
-                    'password'=>Hash::make($request->password),
-                    'persona_id'=>$persona->id,
-                ]);    
-                return response()->json([
-                    'persona'=>$persona,
-                    'roles'=>$rolesuser,
-                    'user'=>$user,
-                ]);
-            }catch(QueryException $e){
-                return $e;
-            }
+      //  $this->reg($request,$user);
+        
+            return $user;
+        }catch(QueryException $e){
+            return 'error conex';} 
         
     }
 
     /**
      * Get a validator for an incoming registration request.
      */
-    protected function validaruser($request=null)
-    {
-        return $request->validate([
-            'userdoc' => 'required|numeric',
-            'apeMat' => 'required',
-            'apePat'=> 'required',
-            'nombresuser' => 'required',
-            'genero' => 'required|max:1',
 
-            //'nacimiento' => 'required|date',
-            'correo' =>'required|email|unique:users,email',
-            'celular' => 'required|numeric',
-            'gradoestu' => 'required',
-            'gradoabr' => 'required',
-            'password' => 'required|confirmed',
-            'password_confirmation'=>'required',
-            'fecha_egre' => 'required|numeric',
-            'facultad'=> 'required',
-            'escuela'=> 'required',
-            'codigo'=> 'required|numeric|unique:personas,cod_alum',    
-        ]);
-    }
+
+
+
 
     /**
      * Create a new user instance after a valid registration.
      */
-    protected function create(array $data): User
+    /*protected function create(Request $request,array $data): User
     {
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
-    }
+    }*/
 
     public function datosusuario($codigo){    
-                $response = Http::get('http://api.undac.edu.pe/tasks/a3945a7384cbdcd33f49e8f5b8ec29f5/91f33e2776c526b9cca723a63476f028/'.$codigo);
-                
-                return $response;        
+                try{
+                    $response = Http::get('http://api.undac.edu.pe/tasks/a3945a7384cbdcd33f49e8f5b8ec29f5/91f33e2776c526b9cca723a63476f028/'.$codigo);
+                    return $response;
+                    
+                    
+                }catch (Exception){
+                     return 'error de conexion';
+                }                     
     }
+    public function curricula($codigo){    
+        try{
+            $curriculas = Http::get('http://api.undac.edu.pe/tasks/a3945a7384cbdcd33f49e8f5b8ec29f5/91f33e2776c526b9cca723a63476f028/curricula');
+            $escuela="";
+            $curriculas=json_decode($curriculas);
+            foreach($curriculas as $curri){
+                if($curri->CURRICULA==$codigo){
+                    $escuela=$curri->ESCUELA;
+                }
+            }
+                return $escuela;
+            
+        }catch (Exception){
+             return 'error de conexion';
+        }                     
+}
+    public function escuela($codigo){    
+        try{
+            $escuelas=Http::get('http://api.undac.edu.pe/tasks/a3945a7384cbdcd33f49e8f5b8ec29f5/91f33e2776c526b9cca723a63476f028/school');
+            $escuela=array();
+            $escuelas=json_decode($escuelas);
+            foreach($escuelas as $escu){
+                if($escu->ID_ESC==$codigo){
+                    $escuela[]=$escu;
+                }
+            }
+                return $escuela;
+            
+        }catch (Exception){
+             return 'error de conexion';
+        }                     
+    }
+    
 }
