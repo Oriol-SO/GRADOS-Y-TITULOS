@@ -9,7 +9,6 @@
           v-for="(fase,i) in parseInt(this.numfases,10)" :key="i" 
           :complete="e1 > (fase)"        
           :step="fase"
-      
          
         >
           fase {{fase}}
