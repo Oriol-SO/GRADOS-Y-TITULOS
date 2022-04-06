@@ -110,10 +110,11 @@ class FaseRequisitoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(FaseRolRequisito $FaseRolRequisito)
+    public function destroy( $id)
     {
-        $FaseRolRequisito->delete();
+        $FaseDelete=FaseRolRequisito::delete($id);
         return response()->json([
+            $FaseDelete,
             'mensajeFRR'=>'La FaseRolRequisito se elimino'
         ]);
     }

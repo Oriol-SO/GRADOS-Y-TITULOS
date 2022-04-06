@@ -127,6 +127,18 @@ class ProcesoController extends Controller
             'modalidad' => 'required'
         ]);
     }
+    protected function cambiarEstado($id)
+    {   
+        $valor = Proceso::find($id);
+        $estado=$valor->estado;
+        if($estado==1){
+            $cambiado=0;
+        }else{
+            $cambiado=1;
+        }
+        $proceso=Proceso::where('id', $id)->update(['estado' => $cambiado]);
+        return 'cambiado';
+    }
 
   
 }

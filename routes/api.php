@@ -21,6 +21,7 @@ use App\Http\Controllers\BachillerIniController;
 use App\Http\Controllers\FacultadEscuelaController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\SecretariaController;
+use App\Http\Controllers\PdfController;
 use App\Http\Controllers\SecretariaGeneral1Controller;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
@@ -80,9 +81,11 @@ Route::resource('bachillerFinal',BachillerFinalController::class);
 Route::get('buscardni/{codigo}', [PersonaController::class, 'buscardniuser']);
 Route::get('facuescuela',[FacultadEscuelaController::class,'facultad']);
 
+
 Route::get('mostrarescuela/{codigo}',[FacultadEscuelaController::class,'escuelas']);
 Route::get('rolesgenerales/{codigo}',[FacultadEscuelaController::class,'rolesgenerales']);
 Route::resource('adminuser',AdminUserController::class);
+Route::get('cambiarEstado/{id}', [ProcesoController::class, 'cambiarEstado']);
 
 //alumno
 Route::resource('tramite',tramiteController::class);

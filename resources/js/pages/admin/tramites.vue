@@ -137,9 +137,9 @@
 
       <v-switch
       class="ml-2"
-      v-model="switch1"
+      :input-value="proceso.estado"
+      :label="proceso.estado ? 'Activado' : 'Desactivado'"
       inset
-
       color="success"
       @click="cambiarEstado(proceso.id)"
     ></v-switch>
@@ -159,7 +159,6 @@ import Form from "vform";
     data () {
        
       return {  
-          switch1: [],
           grados:[],
           procesos:[],         
           modalidades:[],
@@ -184,7 +183,6 @@ import Form from "vform";
       async FetchProceso() {
         const { data } = await axios.get("/api/proceso");
         this.procesos = data.tramites;
-
         console.log("procesos",data);
       },async FetchGrados(){
         const { data } = await axios.get("/api/grado");
@@ -215,9 +213,17 @@ import Form from "vform";
           
 
       },async cambiarEstado(id){
-        const { data } = await axios.get(`/api/proceso/${id}`);
-        this.switch1=data.Estado;
-        console.log("Estado",this.switch);
+        await axios.get(`/api/cambiarEstado/${id}`).then(response =>{
+            this.FetchProceso();
+            this.clear();
+            this.dialog=false;
+          }).catch(error=>{
+            if(error.response.status === 422){
+              this.errores=error.response.data.errors;
+              console.log(this.errors);
+            }
+          });
+
       }, clear() {
          this.form.nombre='';
          this.form.grado=null;
@@ -226,8 +232,6 @@ import Form from "vform";
          
       }
 
-
-    
     },
   }
 </script>

@@ -608,7 +608,7 @@ export default{
           
       },async submitrequisitoeliminado(id){ 
           console.log(this.formrequi2);                  
-          this.formrequi2.delete(`/api/faserequisito/${id}`)
+          axios.delete(`/api/faserequisito/${id}`)
            .then(response =>{
             this.mostrarrequisito(this.formrequi2.fase_id);
             this.clearall();

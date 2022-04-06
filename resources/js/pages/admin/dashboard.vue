@@ -129,6 +129,11 @@ export default {
         this.procesos = data.tramites;
 
       },
+      async FetchProceso() {
+        const { data } = await axios.get("/api/pdf");
+        this.procesos = data.tramites;
+
+      },
       async FetchGrados(){
         const { data } = await axios.get("/api/grado");
 
