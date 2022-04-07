@@ -10,8 +10,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject //, MustVerifyEmail
-{
+class User extends Authenticatable implements JWTSubject , MustVerifyEmail
+{ 
     use Notifiable,
         HasFactory;
 

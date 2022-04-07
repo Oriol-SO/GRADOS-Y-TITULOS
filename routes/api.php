@@ -93,7 +93,6 @@ Route::get('fasestramite/{codigo}',[tramiteController::class,'obtenerfases']);
 Route::get('alu-faserequisito/{id}',[tramiteController::class,'obtenerfaserequisito']);
 Route::post('alu-filerequisito/',[tramiteController::class,'subirarchivorequisito']);
 
-
 //rutas scretaria general 1
 
 Route::get('expedientes',[SecretariaGeneral1Controller::class,'index']);

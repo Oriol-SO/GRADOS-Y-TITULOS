@@ -14,6 +14,7 @@ use App\Models\PersonaRole;
 use Exception;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\QueryException;
+
 class RegisterController extends Controller
 {
     use RegistersUsers;
@@ -45,11 +46,12 @@ class RegisterController extends Controller
         $curri= $this->curricula($curricula);
         $school= $this->escuela($curri);
         //  return $school[0]->FACULTAD_ID;
+
         $g=1;
         if ($date['Genero']=='F') {
             $g=0;
         }
-        try{
+         try{
             $persona=Persona::create([
 
                 'nom' => $date['Nombres'],
@@ -69,6 +71,7 @@ class RegisterController extends Controller
                 'grad_estud'=>"",
                 'abre_grad'=>"",
             ]);  
+            
             $rolesuser= PersonaRole::create([
                 'estado'=>1,
                 'persona_id'=>$persona->id,
@@ -88,7 +91,6 @@ class RegisterController extends Controller
                 'user'=>$user,]);
         }catch(QueryException $e){
             return 'error conex';} 
-        
     }
 
     /**
