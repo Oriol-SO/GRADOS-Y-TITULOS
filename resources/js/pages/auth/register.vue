@@ -94,8 +94,8 @@
          Cerrar
         </v-btn>
         <div class="py-3 text-h6">
-          Te registraste exitosamente <v-icon color="#49FF00">mdi-checkbox-marked-circle</v-icon> 
-          {{message}}
+          Registro exitoso <v-icon color="#49FF00">mdi-checkbox-marked-circle</v-icon> 
+          Hemos enviado un enlace de verificacion a <strong>{{correo}}</strong>  
         </div>
       </v-sheet>
     </v-bottom-sheet>
@@ -146,7 +146,7 @@ export default {
       if (data.status) {
         this.mustVerifyEmail = true;
         this.message = data.status;
-        //this.correo = data.correo;
+        this.correo = data.correo;
       } else {
         // Log in the user.
         const {

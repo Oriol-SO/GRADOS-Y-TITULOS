@@ -25,10 +25,11 @@ class RegisterController extends Controller
     {
         $this->middleware('guest');
     }
+    public $correo_institucional='';
     protected function registered(Request $request, User $user)
     {
         if ($user instanceof MustVerifyEmail) {
-            return response()->json(['status' => trans('verification.sent')]);
+            return response()->json(['status' => trans('verification.sent'),'correo'=>$this->correo_institucional]);
         }
 
         return response()->json($user);
@@ -90,7 +91,7 @@ class RegisterController extends Controller
                 'persona_id'=>$persona->id,
             ]);    
 
-      //  $this->reg($request,$user);
+          $this->correo_institucional=$user->email;
         
             return $user;
         }catch(QueryException $e){
