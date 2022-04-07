@@ -3,40 +3,44 @@
     <v-card elevation="0" flat class="mb-2 d-flex" >
       <v-card-title class="px-0 py-1 ml-3 text-h6">{{nomtramite.tipo_tramite}}</v-card-title>
     </v-card>
-    <v-stepper v-model="e1" >   
-      <v-stepper-header class="overflow-x-auto" style=" flex-wrap: nowrap">
-    
-        <v-stepper-step 
-          v-for="(fase,i) in parseInt(this.numfases,10)" :key="i" 
-          :complete="e1 > (fase)"        
-          :step="fase"
-          editable      
-          @click="limpiar()"
-        >  
-          fase {{fase}}
-        </v-stepper-step>
-     
-      </v-stepper-header>
-  
-            <v-stepper-items>            
-                <v-stepper-content
-                v-for="(fase,i) in fases" :key="i"
-                :step="i+1" 
-                >
-                <v-card
-                    class="mb-5 mt-0"
-                    elevation="0"
-                    style="min-height:350px;"
-                >
-                    <v-card-title class="my-0">{{fase.nombre}}</v-card-title>
-                    <v-btn 
-                        color="#2cdd9b" 
-                        class="mb-2 text-capitalize" 
-                        style="color:#fff;" elevation="0"
-                        @click="mostrarrequisito(fase.id)">
-                        Requisitos
-                    <v-icon dark right>mdi-arrow-down</v-icon>
-                    </v-btn>
+    <div>
+    <v-row no-gutters>       
+        <v-col ms="12" md="9">
+            <v-card>
+                <v-card-title class="px-0 py-1 ml-3 text-h6">Fases que te corresponden</v-card-title>
+                <v-stepper v-model="e1" >
+                <v-stepper-header non-linear>
+                    <v-stepper-step
+                    v-for="(fase,i) in parseInt(this.numfases,10)" :key="i" 
+                    :complete="e1 > (fase)"        
+                    :step="fase"
+                    editable      
+                    @click="limpiar()"
+                    >
+                    fase {{fase}}
+                    </v-stepper-step>
+
+                </v-stepper-header>
+            
+                        <v-stepper-items>            
+                            <v-stepper-content
+                            v-for="(fase,i) in fases" :key="i"
+                            :step="i+1" 
+                            >
+                            <v-card
+                                class="mb-5 mt-0"
+                                elevation="0"
+                                style="min-height:350px;"
+                            >
+                                <v-card-title class="my-0">{{fase.nombre}}</v-card-title>
+                                <v-btn 
+                                    color="#2cdd9b" 
+                                    class="mb-2 text-capitalize" 
+                                    style="color:#fff;" elevation="0"
+                                    @click="mostrarrequisito(fase.id)">
+                                    Requisitos
+                                <v-icon dark right>mdi-arrow-down</v-icon>
+                                </v-btn>
 
                                 <v-divider></v-divider>
                                 <v-list>
@@ -279,189 +283,8 @@
                         
                         color="green"
                         >
-                            <v-list-item-icon>
-                                <v-icon >mdi-check-outline</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-content  >
-                                <v-list-item class="d-flex pt-3">
-                                <v-row>
-                                   {{requisito.nombre}}  
-                                    <div class="ml-auto my-2">
-                                        <!--div v-if="requisito.revisado.length>0">revisado</div-->
-                                        <v-chip
-                                        v-if="requisito.modificado[0]==1"
-                                        color="#ff9400"
-                                        text-color="#fff"
-                                        >                       
-                                            levantado
-                                            <v-avatar
-                                                rigth
-                                                class="amber accent-3 ml-1"
-                                                text-color="#fff"
-                                            >
-                                            <v-icon>mdi-cog-clockwise</v-icon>
-                                            </v-avatar>
-                                        </v-chip>  
-                                        <v-btn 
-                                            v-if="requisito.conforme.length>0"
-                                            class=" text-capitalize" 
-                                            color="#1f6effc9" 
-                                            text-color="#fff"
-                                            dark 
-                                            small
-                                            @click="revisar(requisito)">
-                                            <v-icon dark>mdi-eye-check</v-icon>
-                                        </v-btn>
-                                        <v-btn  
-                                            v-else-if="requisito.archivo.length>0"                                   
-                                            class=" text-capitalize" 
-                                            color="#2cdd9b" 
-                                            text-color="#fff"
-                                            dark 
-                                            small
-                                            @click="revisar(requisito)">
-                                            Revisar
-                                        </v-btn>
-
-                                </div>
-                                </v-row>
-                                </v-list-item> 
-
-                            </v-list-item-content>
-                        </v-list-item>
-
-                    </v-list>
-
-                    <v-divider></v-divider>
-
-                    <v-list>
-                        <v-subheader class="font-weight-medium text-md-body-1 d-flex" v-if="requisitosPropios.length">REQUISITOS A SUBIR 
-                            <div>
-                                    <v-chip
-                                    class="ma-2"
-                                    color="#95d5ff"
-                                    text-color="black"
-                                    >                       
-                                        Subidos
-                                        <v-avatar
-                                            rigth
-                                            class="blue accent-3 ml-1"
-                                        >
-                                        {{requisitos_subidosPropios}}
-                                        </v-avatar>
-                                    </v-chip>
-                                    <v-chip
-                                    class="ma-2"
-                                    color="#b3ffce"
-                                    text-color="black"
-                                    >                       
-                                        Aprovados
-                                        <v-avatar
-                                            rigth
-                                            class="green accent-3 ml-1"
-                                        >
-                                        {{requisitos_aprovadosPropios}}
-                                        </v-avatar>
-                                    </v-chip>  
-                                    <v-chip
-                                    class="ma-2"
-                                    color="#fbef9f"
-                                    text-color="black"
-                                    >                       
-                                        observados
-                                        <v-avatar
-                                            rigth
-                                            class="amber accent-3 ml-1"
-                                        >
-                                        {{requisitos_observadosPropios}}
-                                        </v-avatar>
-                                    </v-chip>                   
-                            </div>
-                        </v-subheader>
-                        <v-list-item
-                            v-for="(requisitoP, i) in requisitosPropios"
-                            :key="i"
-                            class="mb-1"
-                            color="black"
-                            v-bind:style="requisitoP.archivo_subido.length>0?'background:#82b1ff;;':'' "
-
-                        >
-                            <v-list-item-icon>
-                                <v-icon >mdi-check-outline</v-icon>
-                            </v-list-item-icon>
-                            <v-list-item-content>
-                                <v-list-item-title class="d-flex" >{{requisitoP.nombre}}  
-                                    <div class="ml-auto">
-                                        <v-chip
-                                            v-if="requisitoP.revisado_aprovado.length>0"
-                                            color="#0ce559"
-                                            text-color="#fff"
-                                        >                       
-                                            Aprovado
-                                            <v-avatar
-                                                rigth
-                                                class="green accent-3 ml-1"
-                                                text-color="#fff"
-                                            >
-                                                <v-icon>mdi-checkbox-marked-circle</v-icon>
-                                            </v-avatar>
-                                        </v-chip>
-                                        <v-chip
-                                        v-if="requisitoP.revisado_observado.length>0 && requisito.modificado[0]==0 "
-                                        color="#ff9400"
-                                        text-color="#fff"
-                                        >                       
-                                            observado
-                                            <v-avatar
-                                                rigth
-                                                class="amber accent-3 ml-1"
-                                                text-color="#fff"
-                                            >
-                                             <v-icon>mdi-eye-circle</v-icon>
-                                            </v-avatar>
-                                        </v-chip>
-                                        <v-chip
-                                        v-if="requisitoP.modificado[0]==1"
-                                        color="#ff9400"
-                                        text-color="#fff"
-                                        >                       
-                                            levantado
-                                            <v-avatar
-                                                rigth
-                                                class="amber accent-3 ml-1"
-                                                text-color="#fff"
-                                            >
-                                            <v-icon>mdi-cog-clockwise</v-icon>
-                                            </v-avatar>
-                                        </v-chip>    
-                                        <v-btn 
-                                            class=" text-capitalize" 
-                                            color="indigo" 
-                                            dark 
-                                            small
-                                            @click="openmodal(requisitoP)">
-                                            <v-icon dark v-if="requisitoP.archivo_subido.length>0">
-                                            mdi-eye
-                                            </v-icon>
-                                            <v-icon v-else-if="requisitoP.revisado_observado.length>0 && requisitoP.modificado[0]==0" dark> mdi-file-edit</v-icon>
-                                            <!--v-icon v-else-if="requisito.revisado_observado.length>0 && requisito.modificado[0]==1" dark> mdi-eye</v-icon-->
-
-                                            <v-icon v-else dark> mdi-cloud-upload</v-icon>
-
-                                        </v-btn>
-                                    </div>  
-                                </v-list-item-title> 
-
-                            </v-list-item-content>
-                        </v-list-item>
-
-                    </v-list>
-
-                </v-card>
-                </v-stepper-content>
-            </v-stepper-items>
-        
-    </v-stepper>
+                        {{fase.nombre}}
+                        </v-stepper-step>
 
                     </v-stepper-header>
                     </v-stepper>
@@ -978,6 +801,9 @@ export default {
               this.formrevisado.aprovado=true;
               this.revisar_req=false;
               this.nom_estado_req='Este requisito esta aprobado';
+
+
+
           }else if(requisito.observacion.length>0){
               this.formrevisado.observado=true;
               this.formrevisado.observacion=requisito.observacion[0].texto;
@@ -1005,6 +831,7 @@ export default {
                 if(response.data===1){
                      this.revisar_errores='selleciona una opcion si quieres guardar cambios';
                      this.boxerror=true;
+
                 }else if(response.data===2){
                      this.revisar_errores='ya fue aprobado este documento';
                      this.boxerror=true;
