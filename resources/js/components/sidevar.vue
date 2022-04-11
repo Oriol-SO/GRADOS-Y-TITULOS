@@ -49,7 +49,7 @@
       items: { type: Array, default: [] },
     },
     data: () => ({
-      drawer: true,
+      drawer: false,
       group: null,
     }),
 

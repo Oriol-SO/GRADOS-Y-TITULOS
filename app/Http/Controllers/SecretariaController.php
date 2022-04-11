@@ -10,6 +10,7 @@ use App\Models\Fase;
 use App\Models\File;
 use App\Models\Observacione;
 use App\Models\Revisione;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -86,7 +87,7 @@ class SecretariaController extends Controller
                  //obtener rol revisador 
                  $fase_revision=Fase::where('id',$id)->first();
                 // $revisador=$fase_revision->encargado_revisar;
-                 $tramite_revision=Tramite::where('fase_actual',$this->tram)->first();
+                 $tramite_revision=Tramite::where('id',$this->tram)->first();
 
                  if($tramite_revision->fase_actual==$fase_revision-> numero){
                         if(5==$tramite_revision->receptor_rol_notify){
@@ -285,6 +286,23 @@ class SecretariaController extends Controller
             return 'user no autorizado';
         }
         
+    }
+
+    protected function sf_fasecheck($id_tram,$id_fase){
+        try{        
+            $fase=Fase::where('id',$id_fase)->first();
+
+        //obtener rol del revisador
+            if($fase->encargado_revisar==5){
+                $fase_actual=$fase->numero;
+                $tramite_fase=Tramite::where('id',$id_tram)->update(['fase_actual'=>($fase_actual+1)]);
+                return $tramite_fase;
+            }else{
+                return 'no estas autorizado para esta accion';
+            }
+        }catch(Exception $e){
+            return $e;
+        }
     }
     /**
      * Show the form for creating a new resource.
