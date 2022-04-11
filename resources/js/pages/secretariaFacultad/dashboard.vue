@@ -1,9 +1,11 @@
 <template>
         <div class="mt-5 mx-4">
-        <v-card  elevation="0">
-            <v-card-title>
-                <v-toolbar flat>
-                    <v-toolbar-title> EXPEDIENTES DE GRADUADOD POR FACULTADES</v-toolbar-title>
+        <v-card  class="pb-2">
+            <v-card-title class="ma-1 " >   
+
+                <v-row >
+                    <h4 >EXPEDIENTES </h4><h4 class="ml-2 " > DE</h4><h4  class="ml-2 "> GRADUADOD </h4><h4  class="ml-2 ">POR</h4><h4  class="ml-1 "> FACULTADES</h4>
+
                     <v-divider
                     class="mx-4"
                     inset
@@ -19,7 +21,7 @@
                     color="#FFD93D"
                     ></v-text-field> 
                     <v-spacer></v-spacer>
-                </v-toolbar>
+                </v-row>    
             </v-card-title>
         </v-card>
             <v-data-table

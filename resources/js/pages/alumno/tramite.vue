@@ -1,7 +1,7 @@
 <template>
   <div class="mx-4 mt-5">
     <v-card elevation="0" flat class="mb-2 d-flex" >
-      <v-card-title class="px-0 py-1 ml-3 text-h6">{{nomtramite.tipo_tramite}}</v-card-title>
+      <v-card-text class="px-0 py-1 ml-3 text-h6">{{nomtramite.tipo_tramite}}</v-card-text>
     </v-card>
     <v-stepper v-model="e1" >
       <v-stepper-header class="overflow-y-auto " style=" flex-wrap: nowrap">
@@ -27,7 +27,7 @@
             elevation="0"
             style="min-height:350px;"
           >
-            <v-card-title class="my-0">{{fase.nombre}}</v-card-title>
+            <v-card-text class="my-0"><h2>{{fase.nombre}}</h2></v-card-text>
             <v-btn 
               color="#2cdd9b" 
               class="mb-2 text-capitalize" 
@@ -39,8 +39,8 @@
 
             <v-divider></v-divider>
             <v-list>
-            <v-list-item-content>
-             <v-subheader class="font-weight-medium text-md-body-1 d-flex" v-if="requisitos.length" >
+            <v-list-item-content >
+             <v-subheader class="font-weight-medium text-md-body-1 d-flex " style="    height: auto;" v-if="requisitos.length" >
                     <div >
                      <v-chip
                         class="ma-2"
@@ -95,8 +95,11 @@
                       <v-icon >mdi-check-outline</v-icon>
                   </v-list-item-icon>
                   <v-list-item-content>
-                      <v-list-item-title class="d-flex" >{{requisito.nombre}}  
-                            <div class="ml-auto">
+                      <v-list-item 
+                      class="d-flex" >
+                      <v-row>
+                      {{requisito.nombre}}  
+                            <div class="ml-auto my-2" >
                                 <v-chip
                                   v-if="requisito.revisado_aprovado.length>0"
                                   color="#0ce559"
@@ -154,8 +157,9 @@
                                     <v-icon v-else dark> mdi-cloud-upload</v-icon>
 
                                 </v-btn>
-                            </div>  
-                      </v-list-item-title> 
+                            </div> 
+                            </v-row> 
+                      </v-list-item> 
 
                   </v-list-item-content>
                 </v-list-item>

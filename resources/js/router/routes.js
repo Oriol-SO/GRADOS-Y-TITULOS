@@ -85,6 +85,8 @@ export default [
     ]
   },
 
+  { path: '/prueva', name: 'prueva', component: page('prueva.vue') },
+
   { path: '*', component: page('errors/404.vue') },
 
 ]

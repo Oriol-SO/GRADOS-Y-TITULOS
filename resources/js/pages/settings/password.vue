@@ -14,7 +14,7 @@
       <v-row style="display:flex ;justify-content: center;  " class="pb-10">
         <!-- Password -->
         <v-col cols="4">
-          <v-subheader>contraseña</v-subheader>
+          <v-subheader><h3>Contraseña</h3></v-subheader>
         </v-col>
         <v-col
           cols="11"
@@ -26,7 +26,7 @@
             :rules="[ rules.min]"
             :type="show1 ? 'text' : 'password'"
             name="password"
-            label="password"
+            label="contraseña"
             hint="al menos 6 caracteres"
             counter
             @click:append="show1 = !show1"
@@ -34,7 +34,7 @@
         </v-col>
         <!-- Password Confirmation --> 
         <v-col cols="4">
-          <v-subheader>repetir contraseña</v-subheader>
+          <v-subheader><h3>Repetir contraseña</h3></v-subheader>
         </v-col>
         <v-col
           cols="11"
@@ -46,7 +46,7 @@
             :rules="[ rules.min]"
             :type="show1 ? 'text' : 'password'"
             name="password_confirmation"
-            label="password_confirmation"
+            label="confirmar contraseña"
             counter
             @click:append="show1 = !show1"
           ></v-text-field>

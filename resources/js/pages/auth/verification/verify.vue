@@ -21,12 +21,9 @@
           <div class="alert alert-success  " role="alert">
             {{ success }}
           </div>
-            <v-btn
-              
-              color="primary"
-            
-              type="submit"
-              block
+            <v-btn     
+             color="primary"
+               class="my-6 mx-2"
             >
           <router-link :to="{ name: 'login' }" 
           class="btn btn-primary"

@@ -1,6 +1,6 @@
 <template>
    <div>   
-     <div>
+     <div class="ml-3">
        <router-view></router-view>
      </div>     
    </div>  
