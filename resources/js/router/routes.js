@@ -20,7 +20,8 @@ export default [
     component: page('settings/index.vue'),
     children: [
       { path: '', redirect: { name: 'settings.password' } },
-      { path: 'profile', name: 'settings.password', component: page('settings/password.vue') }
+      { path: 'profile', name: 'settings.password', component: page('settings/password.vue') },
+      { path: 'profile/s', name: '', component: page('settings/s.vue') }
     ]
   },
 
@@ -43,8 +44,6 @@ export default [
       { path: '', redirect: { name: 'alumno.dashboard' } },
       { path: 'dashboard', name: 'alumno.dashboard', component: page('alumno/dashboard.vue') },
       { path: 'tramite/:id', name: 'alumno.tramite', component: page('alumno/tramite.vue') },
- 
-
     ]
   },
 
@@ -76,6 +75,18 @@ export default [
     ]
   },
 
+  {
+    path: '/secretaria-vicerrectorado',
+    component: page('secretariaVicerrectorado/index.vue'),
+    children: [
+      { path: '', redirect: { name: 'dashboardvice' } },
+      { path: 'dashboard', name: 'dashboardvice', component: page('secretariaVicerrectorado/dashboard.vue') },
+      { path: 'tramites/:id', name: 'vicerrectorado.tramites', component: page('secretariaVicerrectorado/tramites.vue') },
+    ]
+  },
+
+  { path: '/prueva', name: 'prueva', component: page('prueva.vue') },
 
   { path: '*', component: page('errors/404.vue') },
+
 ]

@@ -2,8 +2,9 @@
 
 <div class=" ml-4 mt-5">
   <v-card>
-    <v-card-title>
-          <v-toolbar flat >
+    <v-card-title >
+         
+          <v-row class=" ma-1">
             <v-toolbar-title> USUARIOS</v-toolbar-title>
             <v-divider
               class="mx-4"
@@ -32,7 +33,7 @@
                     v-bind="attrs"
                     v-on="on"
                     style="color:#fff;"
-                    class="text-capitalize"
+                    class="text-capitalize, mt-2"
                   >Agregar</v-btn>
                 </template>
                 <template >
@@ -272,7 +273,7 @@
                   </v-card>
                 </template>
               </v-dialog>
-          </v-toolbar>         
+              </v-row >       
     </v-card-title>   
     <v-data-table
       :headers="headers"

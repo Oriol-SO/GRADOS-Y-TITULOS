@@ -2,7 +2,7 @@
    <div>
      <sidevar :items="links"/>
     
-     <div class="mx-2" >
+     <div class="ml-3" >
        <router-view></router-view>
      </div>
     

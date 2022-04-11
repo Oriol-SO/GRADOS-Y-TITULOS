@@ -1,7 +1,7 @@
 <template>
     <div class="mt-5">
         <v-card  >
-        <v-card-title class="py-1 text-h5">{{procesos.nombre}}</v-card-title>
+        <v-card-text class="py-1 text-h5"><h3>{{procesos.nombre}}</h3></v-card-text>
         </v-card>     
 
         <template>
@@ -149,13 +149,13 @@
         </template>
             
             <template >
-                <div class="d-flex" style="width:100%; min-height:600px;">
-
+                <v-row    >
+                    <v-col md="8" sm="12">
               
                     <v-card
                         class=" mt-2 "
                         tile
-                        width="70%"
+                        
                     >
                     <v-list dense >
                     <v-subheader class="font-weight-medium text-md-body-1 d-flex">REQUISITOS 
@@ -389,8 +389,10 @@
                     </v-list>
                      
                     </v-card>
-                    <v-spacer></v-spacer>
-                    <v-card class="mt-2 ml-4 mr-2"  width="30%" tile>
+                    </v-col>
+                    
+                    <v-col sm="12" md="4" >
+                    <v-card class="mt-2">
                         <v-subheader class="font-weight-medium text-md-body-1">DETALLE REQUISITO </v-subheader>
                             <v-list three-line style="min-height:02;">
                                 <template>                                
@@ -434,9 +436,10 @@
                                     </v-list-item>
                                 
                                 </template>
-                            </v-list>
+                            </v-list>       
                     </v-card>
-                  </div>
+                    </v-col> 
+                  </v-row>
             </template>              
 
     </div>

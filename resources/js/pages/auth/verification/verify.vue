@@ -21,9 +21,9 @@
           <div class="alert alert-success  " role="alert">
             {{ success }}
           </div>
-            <v-btn              
-              color="primary"
-              class="my-6 mx-2"
+            <v-btn     
+             color="primary"
+               class="my-6 mx-2"
             >
           <router-link :to="{ name: 'login' }" 
           class="btn btn-primary"
@@ -35,13 +35,13 @@
         </template>
         <template v-else>
           <div class="alert alert-danger" role="alert">
-            {{ error || $t("error al verificar correo electrónico") }}
+            {{ error || $t("error de verificar correo electrónico") }}
           </div>
           
             <v-btn
               color="primary"
-              class="my-6 mx-2"
-              small
+               class="my-6 mx-2"
+              
             >
           <router-link
             :to="{ name: 'verification.resend' }"

@@ -1,9 +1,9 @@
 <template >
     <div class="mt-5 mx-4">
-        <v-card  elevation="0">
-            <v-card-title>
-                <v-toolbar flat>
-                    <v-toolbar-title> TUS TRAMITES</v-toolbar-title>
+        <v-card  >
+            <v-card-title class="ma-1">
+                <v-row >
+                    <v-toolbar-title class="my-2"> TUS TRAMITES</v-toolbar-title>
                     <v-divider
                     class="mx-4"
                     inset
@@ -24,13 +24,13 @@
                         max-width="450"
                         v-model="dialog"
                      >
-                        <template v-slot:activator="{ on, attrs }">
+                        <template v-slot:activator="{ on, attrs }" >
                         <v-btn
                             color="#42C2FF"
                             v-bind="attrs"
                             v-on="on"
                             style="color:#fff;"
-                            class="text-capitalize"
+                            class="text-capitalize; my-2"
                         >Agregar Tramite</v-btn>
                         </template>
                         <template>
@@ -65,7 +65,7 @@
                            </v-card>
                         </template>
                     </v-dialog>
-                </v-toolbar>
+                    </v-row>
             </v-card-title>
         </v-card>
             <v-data-table

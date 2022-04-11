@@ -801,6 +801,9 @@ export default {
               this.formrevisado.aprovado=true;
               this.revisar_req=false;
               this.nom_estado_req='Este requisito esta aprobado';
+
+
+
           }else if(requisito.observacion.length>0){
               this.formrevisado.observado=true;
               this.formrevisado.observacion=requisito.observacion[0].texto;
@@ -828,6 +831,7 @@ export default {
                 if(response.data===1){
                      this.revisar_errores='selleciona una opcion si quieres guardar cambios';
                      this.boxerror=true;
+
                 }else if(response.data===2){
                      this.revisar_errores='ya fue aprobado este documento';
                      this.boxerror=true;

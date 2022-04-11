@@ -15,19 +15,26 @@ class ProfileController extends Controller
         $user = $request->user();
 
         $this->validate($request, [
-            'nombre' => 'required',
-            'apellido1' => 'required',
-            'apellido2' => 'required',
+           
             'email' => 'required|email|unique:users,email,'.$user->id,
             'Ncelular' => 'required',
             'Direccion' => 'required',
+            'Egreso' => 'required',
+            'Nacimiento' => 'required',
+            'GradoEstudios' => 'required',
+            'Abreviatura' => 'required',
+            'Documento' => 'required',
+
         ]);
         $persona=$user->persona;
-        $persona->nom=$request->nombre;
-        $persona->apePat=$request->apellido1;
-        $persona->apeMat=$request->apellido2;
+        $persona->email=$request->email;
         $persona->numcel=$request->Ncelular;
         $persona->dom=$request->Direccion;
+        $persona->nom=$request->Egreso;
+        $persona->fecNac=$request->Nacimiento;
+        $persona->grad_estud=$request->GradoEstudios;
+        $persona->abre_grad=$request->Abreviatura;
+        $persona->numDoc=$request->Documento;
         
         $persona->save();
 
