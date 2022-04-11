@@ -1,5 +1,5 @@
 <template>
-    <div class="ml-8 mt-5">
+    <div class="mt-5">
         <v-card  >
         <v-card-title class="py-1 text-h5">{{procesos.nombre}}</v-card-title>
         </v-card>     
@@ -53,7 +53,40 @@
                                     <v-alert   dense outlined type="error" >
                                     El orden es obligatorio 
                                     </v-alert>
-                                </div>                           
+                                </div> 
+                                <v-select
+                                    v-model="formfase.rol_ejecutor"
+                                    :items="roles"
+                                    item-text='rolNombre'
+                                    item-value='id'                                                     
+                                    
+                                    return-object
+                                    
+                                    label="encargado de subir o ejecutar"
+
+                                >                                    
+                                </v-select>  
+                                <div v-if="errores.rol_ejecutor">
+                                    <v-alert   dense outlined type="error" >
+                                     el rol del encargado de subir o ejecutar es obligatorio
+                                    </v-alert>
+                                </div>   
+                                <v-select
+                                    v-model="formfase.rol_revisar"
+                                    :items="roles"
+                                    item-text='rolNombre'
+                                    item-value='id'                                                       
+                                   
+                                    return-object
+                                    
+                                    label="encargado de revisar"
+                                >                                    
+                                </v-select>  
+                                <div v-if="errores.rol_revisar">
+                                    <v-alert   dense outlined type="error" >
+                                     el rol del encargado de revisar o evaluar es obligatorio
+                                    </v-alert>
+                                </div>                     
                                                                                   
                                     <v-btn
                                     class="mr-4 text-capitalize"
@@ -332,7 +365,24 @@
                             <v-icon >mdi-check-outline</v-icon>
                         </v-list-item-icon>
                         <v-list-item-content>
-                            <v-list-item-title >{{requisito.nombre}}</v-list-item-title>
+                            <v-list-item-title class="d-flex" >{{requisito.nombre}}
+                                <div class="ml-auto">
+                                    <v-chip
+                                    color="deep-purple accent-1"
+                                    text-color="#fff"
+                                    >                       
+                                        {{requisito.rol}}
+                                        <v-avatar
+                                            rigth
+                                            class="deep-purple accent-3 ml-1"
+                                            text-color="#fff"
+                                        >
+                                        <v-icon>mdi-account-tie</v-icon>
+                                        </v-avatar>
+                                    </v-chip>
+                                </div>                             
+                            </v-list-item-title>
+
                         </v-list-item-content>
                         </v-list-item>
                     </v-list-item-group>
@@ -419,6 +469,8 @@ export default{
             nombrefase:'',
             numerofase:'',
             procesoid:this.$route.params.id,
+            rol_ejecutor:[],
+            rol_revisar:[],
           }),
         formrequi1:new Form({
             requisito:'',
@@ -505,8 +557,11 @@ export default{
       }, clear() {
          this.formfase.nombrefase='';
          this.formfase.numerofase='';
+         this.formfase.rol_ejecutor='';
+         this.formfase.rol_revisar='';
          this.errores={};         
       },async enviarfase(){
+          console.log(this.formfase)
           const {data}= await this.formfase.post(`/api/fase/`)
            .then(response =>{
             this.FetchFases();

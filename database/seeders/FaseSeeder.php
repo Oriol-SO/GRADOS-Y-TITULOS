@@ -23,7 +23,8 @@ class FaseSeeder extends Seeder
                         'nombre' => 'Cargando Requisitos Basicos',
                         'numero' => '1',
                         'fase_id'=>'101',
-                         
+                        'encargado_ejecutar'=>'10',
+                        'encargado_revisar'=>'5'
                     ],
                     [
                         'id' => '102',
@@ -31,6 +32,8 @@ class FaseSeeder extends Seeder
                         'nombre' => 'Expedito y aprobacion de Consejo de Facultad',//Resolucion de expedito, resolucion de consejo de facultad
                         'numero' => '2',
                         'fase_id'=>'102',
+                        'encargado_ejecutar'=>'5',
+                        'encargado_revisar'=>'11'
                         
                     ],
                     [
@@ -39,6 +42,8 @@ class FaseSeeder extends Seeder
                         'nombre' => 'En vicerrectorado',
                         'numero' => '3',
                         'fase_id'=>'103',
+                        'encargado_ejecutar'=>'11',
+                        'encargado_revisar'=>'3'
                          
                     ],
                     [
@@ -47,6 +52,8 @@ class FaseSeeder extends Seeder
                         'nombre' => 'Para Agendar',
                         'numero' => '4',
                         'fase_id'=>'104',
+                        'encargado_ejecutar'=>'3',
+                        'encargado_revisar'=>'3'
                         
                     ],
                     [
@@ -55,6 +62,8 @@ class FaseSeeder extends Seeder
                         'nombre' => 'Agendados',//número de consejo universitario y fecha de consejo
                         'numero' => '5',
                         'fase_id'=>'105',
+                        'encargado_ejecutar'=>'3',
+                        'encargado_revisar'=>'3'
                         
                     ],
                     [
@@ -63,6 +72,8 @@ class FaseSeeder extends Seeder
                         'nombre' => 'Aprobados',//número de Oficio y confirmar fecha y cu
                         'numero' => '6',
                         'fase_id'=>'106',
+                        'encargado_ejecutar'=>'3',
+                        'encargado_revisar'=>'3'
                          
                     ],
                     [
@@ -71,7 +82,8 @@ class FaseSeeder extends Seeder
                         'nombre' => 'En control interno',//numero de Resolucion
                         'numero' => '7',
                         'fase_id'=>'107',
-                         
+                        'encargado_ejecutar'=>'3',
+                        'encargado_revisar'=>'3'
                     ],
                     [
                         'id' => '108',
@@ -79,7 +91,8 @@ class FaseSeeder extends Seeder
                         'nombre' => 'En impresión',//requiere 60 campos mas datos internos
                         'numero' => '8',
                         'fase_id'=>'108',
-                         
+                        'encargado_ejecutar'=>'3',
+                        'encargado_revisar'=>'3'
                     ],
                     [
                         'id' => '109',
@@ -87,6 +100,8 @@ class FaseSeeder extends Seeder
                         'nombre' => 'En control de sticker',//requiere dar clik en diploma impreso 
                         'numero' => '9',
                         'fase_id'=>'109',
+                        'encargado_ejecutar'=>'3',
+                        'encargado_revisar'=>'3'
                          
                     ],
                     [
@@ -95,6 +110,8 @@ class FaseSeeder extends Seeder
                         'nombre' => 'Listo para programar entrega y madar a sunedu',//requiere numero de stiker
                         'numero' => '10',
                         'fase_id'=>'110',
+                        'encargado_ejecutar'=>'3',
+                        'encargado_revisar'=>'3'
                          
                     ],
                     [
@@ -103,7 +120,8 @@ class FaseSeeder extends Seeder
                         'nombre' => 'Programados',
                         'numero' => '11',
                         'fase_id'=>'111',
-                        
+                        'encargado_ejecutar'=>'3',
+                        'encargado_revisar'=>'3'
                     ],
                     [
                         'id' => '112',
@@ -111,110 +129,14 @@ class FaseSeeder extends Seeder
                         'nombre' => 'Finalizados',
                         'numero' => '12',
                         'fase_id'=>'112',
+                        'encargado_ejecutar'=>'3',
+                        'encargado_revisar'=>'3'
                         
                     ],
                     
                 //1 Fin Bachiller Automatico 
                 
-                //2 Inicio Bachiller Semi presencial Automatico
-                    [
-                        'id' => '201',
-                        'proceso_id' => '2',  
-                        'nombre' => 'Cargando Requisitos Basicos',
-                        'numero' => '1',
-                        'fase_id'=>'201',
-                         
-                    ],
-                    [
-                        'id' => '202',
-                        'proceso_id' => '2',  
-                        'nombre' => 'Expedito y aprobacion de Consejo de Facultad',//Resolucion de expedito, resolucion de consejo de facultad
-                        'numero' => '2',
-                        'fase_id'=>'202',
-                        
-                    ],
-                    [
-                        'id' => '203',
-                        'proceso_id' => '2',  
-                        'nombre' => 'En vicerrectorado',//oficio
-                        'numero' => '3',
-                        'fase_id'=>'203',
-                        
-                    ],
-                    [
-                        'id' => '204',
-                        'proceso_id' => '2',  
-                        'nombre' => 'Para Agendar',
-                        'numero' => '4',
-                        'fase_id'=>'204',
-                         
-                    ],
-                    [
-                        'id' => '205',
-                        'proceso_id' => '2',  
-                        'nombre' => 'Agendados',//número de consejo universitario y fecha de consejo
-                        'numero' => '5',
-                        'fase_id'=>'205',
-                         
-                    ],
-                    [
-                        'id' => '206',
-                        'proceso_id' => '2',  
-                        'nombre' => 'Aprobados',//número de Oficio y confirmar fecha y cu
-                        'numero' => '6',
-                        'fase_id'=>'206',
-                         
-                    ],
-                    [
-                        'id' => '207',
-                        'proceso_id' => '2',  
-                        'nombre' => 'En control interno',//numero de Resolucion
-                        'numero' => '7',
-                        'fase_id'=>'207',
-                         
-                    ],
-                    [
-                        'id' => '208',
-                        'proceso_id' => '2',  
-                        'nombre' => 'En impresión',//requiere 60 campos mas datos internos
-                        'numero' => '8',
-                        'fase_id'=>'208',
-                       
-                    ],
-                    [
-                        'id' => '209',
-                        'proceso_id' => '2',  
-                        'nombre' => 'En control de sticker',//requiere dar clik en diploma impreso 
-                        'numero' => '9',
-                        'fase_id'=>'209',
-                         
-                    ],
-                    [
-                        'id' => '210',
-                        'proceso_id' => '2',  
-                        'nombre' => 'Listo para programar entrega y madar a sunedu',//requiere numero de stiker
-                        'numero' => '10',
-                        'fase_id'=>'210',
-                         
-                    ],
-                    [
-                        'id' => '211',
-                        'proceso_id' => '2',  
-                        'nombre' => 'Programados',
-                        'numero' => '11',
-                        'fase_id'=>'211',
-                        
-                    ],
-                    [
-                        'id' => '212',
-                        'proceso_id' => '2',  
-                        'nombre' => 'Finalizados',
-                        'numero' => '12',
-                        'fase_id'=>'212',
-                        
-                    ],
-            
-                    //2 Fin Bachiller Semi Presencial Automatico 
+              
             
                    
                        

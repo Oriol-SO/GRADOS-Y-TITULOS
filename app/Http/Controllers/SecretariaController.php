@@ -82,7 +82,20 @@ class SecretariaController extends Controller
 
         $rol_sf=5;
         if($rol_sf===5){
-            
+                //desabilitar notificacion 
+                 //obtener rol revisador 
+                 $fase_revision=Fase::where('id',$id)->first();
+                // $revisador=$fase_revision->encargado_revisar;
+                 $tramite_revision=Tramite::where('fase_actual',$this->tram)->first();
+
+                 if($tramite_revision->fase_actual==$fase_revision-> numero){
+                        if(5==$tramite_revision->receptor_rol_notify){
+                            //eliminar notificacion
+                            Tramite::where('id',$this->tram)->update(['receptor_rol_notify'=>null]);
+                        }
+                    }
+
+
             $requisitos['alumno'] = FaseRolRequisito::where('fase_id',$id)->where('rol_id',10)->get()->map(function ($r) {
                 return [
                     'id' => $r->id,       

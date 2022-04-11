@@ -50,7 +50,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 Route::group(['middleware' => 'guest:api'], function () {
     Route::post('login', [LoginController::class, 'login']);
-    Route::post('register', [RegisterController::class, 'register']);
+    Route::post('register', [RegisterController::class, 'RegistrarUser']);
     Route::get('datauser/{codigo}', [RegisterController::class, 'datosusuario']);   
 
     Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail']);

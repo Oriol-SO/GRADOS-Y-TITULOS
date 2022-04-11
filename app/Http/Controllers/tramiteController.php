@@ -39,6 +39,7 @@ class tramiteController extends Controller
                  'modo_obtencion'=>$e->modo_obtencion,
                  'fec_inicio'=>$e-> fec_inicio,
                  'estado'=>$e->estado,
+                 'numero_fase'=>$e->numero,
                  'tramite'=>$e->tipo_tramite,
                  'total_requisitos'=>FaseRolRequisito::whereIn('fase_id',(Fase::where('proceso_id',$e->proceso_id)->get('id')))->count(), 
                  'requisitos_aprovados'=>$e->file->map(function($f){
@@ -120,7 +121,7 @@ class tramiteController extends Controller
         if($rol===10){
                 //obtener id fase anterior 
 
-                $numero_actual=(Fase::where('id',$id)->first())->numero;
+              /*  $numero_actual=(Fase::where('id',$id)->first())->numero;
                 if($numero_actual>1){
                     $num_anterior=$numero_actual-1;
                     //obtener el proceso id
@@ -130,7 +131,7 @@ class tramiteController extends Controller
 
                     $autorized=$this->alu_autorized($fase,$tramite);
                     $requisitos['autorized']=$autorized;
-                }
+                }*/
                
 
        

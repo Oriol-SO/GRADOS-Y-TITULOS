@@ -19,8 +19,8 @@ class CreateFasesTable extends Migration
             $table->integer('numero');
             $table->bigInteger('fase_id')->unsigned()->nullable();
             $table->BigInteger('proceso_id')->unsigned();
-            $table->bigInteger('encargado_ejecutar')->nullable();
-            $table->bigInteger('encargado_revisar')->nullable();
+            $table->bigInteger('encargado_ejecutar');
+            $table->bigInteger('encargado_revisar');
 
             $table->foreign('proceso_id')->references('id')->on('procesos');
             $table->foreign('fase_id')->references('id')->on('fases');

@@ -160,7 +160,15 @@
                   </v-list-item-content>
                 </v-list-item>
 
-                <v-btn @click="notificarCambios(fase.id)">notificar Cambios</v-btn>
+                <v-btn v-if="requisitos.length" 
+                @click="notificarCambios(fase.id)" 
+                color="primary" 
+                elevation="0" 
+                class="mx-auto" 
+                >notificar Cambios
+                 <v-icon right>mdi-bell</v-icon>
+                </v-btn>
+                <small v-if="requisitos.length">*Es importante que notifiques los cambios para que tus documentos sean revisados lo mas antes posible</small>
             </v-list>
 
             <v-divider></v-divider>
@@ -408,6 +416,31 @@
             </v-snackbar>
         </div>
       </template>
+      
+      <template>
+        <div class="text-center ma-2">
+
+            <v-snackbar
+                v-model="alert_notify"
+                tile
+                color="cyan darken-2"
+                top
+            >
+            Tus documentos fueron notificados
+
+            <template v-slot:action="{ attrs }">
+                <v-btn
+                color="white"
+                text
+                v-bind="attrs"
+                @click="alert_notify = false"
+                >
+                Close
+                </v-btn>
+            </template>
+            </v-snackbar>
+        </div>
+      </template>
   </div>    
 </template>
 
@@ -422,6 +455,7 @@ export default {
 
     data(){
         return{
+          alert_notify:false,
           e1: 1,
           nomtramite:[],
           fases:[],
@@ -470,7 +504,10 @@ export default {
     },methods:{
       siguiente(idfase){            
         if(this.e1<this.numfases){
-          axios.get(`/api/alu_autorized/${idfase}/${this.$route.params.id}`).then(response=>{
+                  this.e1=this.e1+1;  //copiar este codigo
+                  this.requisitos=''; //copiar este codigo
+                  this.requisitos_otros='';
+         /* axios.get(`/api/alu_autorized/${idfase}/${this.$route.params.id}`).then(response=>{
               //console.log(response.data);
             if(response.data===true){
                   this.e1=this.e1+1;  //copiar este codigo
@@ -484,7 +521,7 @@ export default {
               //console.log('auhn no tienes acceso a la siguiente fase');
             }
           
-          });
+          });*/
           
         }
       },
@@ -492,11 +529,13 @@ export default {
         if(this.e1<=this.numfases && this.e1>1 ){
          this.e1=this.e1-1;
           this.requisitos='';
+           this.requisitos_otros='';
         }
       },
       async fetchtramite(){
          const { data } = await axios.get(`/api/tramite/${this.$route.params.id}`);   
          this.nomtramite = data;
+         this.e1=data.fase_actual;
         // this.codigoproc=this.nomtramite.proceso_id;
          //console.log(this.codigoproc)
           this.fetchfase(this.nomtramite.proceso_id)
@@ -594,7 +633,8 @@ export default {
 
       async notificarCambios(id){
           await axios.get(`/api/alu-notificarcambio/${id}/${this.$route.params.id}`).then(response=>{
-            console.log(response.data);
+           // console.log(response.data);
+           this.alert_notify=true;
           })
       },
     }

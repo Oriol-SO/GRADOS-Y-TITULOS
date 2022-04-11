@@ -5,13 +5,20 @@ namespace App\Http\Controllers;
 use App\Models\Persona;
 use App\Models\PersonaRole;
 use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Http;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\QueryException;
 use phpDocumentor\Reflection\Types\Null_;
 
 class AdminUserController extends Controller
 {
+   // use RegistersUsers;
    /**
      * Display a listing of the resource.
      *
@@ -132,9 +139,12 @@ class AdminUserController extends Controller
         return $roles;
     }
     public function agregaruser($idper,$pass,$name,$email){
+
+        $fecha=now();
         $user=User::create([
             'name'=>$name,
             'email'=>$email,
+            'email_verified_at'=>$fecha,
             'password'=>Hash::make($pass),
             'persona_id'=>$idper,
         ]);
@@ -248,6 +258,7 @@ class AdminUserController extends Controller
             
             $usuario = User::where('persona_id', $persona->id)->first();
             $usuario->email = $request->correo;
+            $usuario->email_verified_at=now();
             $usuario->password = Hash::make($request->userdoc);
             $usuario->save();
            

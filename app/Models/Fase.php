@@ -13,6 +13,8 @@ class Fase extends Model
         'numero',
         'fase_id',
         'proceso_id',
+        'encargado_ejecutar',
+        'encargado_revisar',
 
     ];
     public function Proceso()

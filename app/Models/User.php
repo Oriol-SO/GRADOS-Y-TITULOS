@@ -26,6 +26,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail
         'email',
         'password',
         'persona_id',
+        'email_verified_at',
     ];
 
     public function Persona(){
