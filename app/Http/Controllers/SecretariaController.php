@@ -11,6 +11,7 @@ use App\Models\File;
 use App\Models\Observacione;
 use App\Models\Revisione;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class SecretariaController extends Controller
 {
@@ -26,34 +27,62 @@ class SecretariaController extends Controller
 
     //secretaria general tramites 
     public function sf_expedientes(){
-        $expedientes=Tramite::all()->map(function($e){
-            return[
-                'per_nom'=>$e->persona->nom.' '.$e->persona->apePat.' '.$e->persona->apeMat,
-               // 'per_apepat'=>$e->persona->apePat,
-                //'per_apemat'=>$e->persona->apeMat,
-                'id'=> $e->id,
-                'fec_inicio'=>$e-> fec_inicio,
-                'estado'=>$e->estado,
-                'tramite'=>$e->tipo_tramite,
-            ];
-        });
-        return response()->json($expedientes);
+        $rol=5;
+        if($rol==5){
+            $expedientes=Tramite::all()->map(function($e){
+                return[
+                    'per_nom'=>$e->persona->nom.' '.$e->persona->apePat.' '.$e->persona->apeMat,
+                   // 'per_apepat'=>$e->persona->apePat,
+                    //'per_apemat'=>$e->persona->apeMat,
+                    'id'=> $e->id,
+                    'tramite'=>$e->tipo_tramite,
+                    //'facultad'=>$e->
+                    'fec_inicio'=>$e-> fec_inicio,
+                    'estado'=>$e->estado,
+                    'tramite'=>$e->tipo_tramite,
+                    'total_requisitos'=>FaseRolRequisito::whereIn('fase_id',(Fase::where('proceso_id',$e->proceso_id)->get('id')))->count(), 
+                    'requisitos_aprovados'=>$e->file->map(function($f){
+                        return $f->Revisione->count();
+                    })->sum(),
+
+                    'notificacion'=>$e->receptor_rol_notify==5? true:false,
+                ];
+            });
+
+           
+            return response()->json($expedientes);
+        }else{
+            return 'user no autorizado';
+        }
+
     }
     public function sf_obtenertramite($id){
         $tramites = tramite::find($id);
         return response()->json($tramites);
     }
     public function sf_obtenerfasestramite($id){
-        $fase['fases']=Fase::where('proceso_id', $id)->get();
-        $fase['cantidad']=Fase::where('proceso_id', $id)->get()->count();
+        
+        $fase['fases']=Fase::where('proceso_id', $id)->where(function($query) {
+            $query->where('encargado_ejecutar', 5)
+                  ->orWhere('encargado_revisar', 5);
+        })->orderBy('numero', 'asc')->get();
+      //  $fase['fases_ejecutar']=Fase::where('proceso_id', $id)->where('encargado_ejecutar',5)->orderBy('numero', 'asc')->oldest()->get();
+        $fase['cantidad']=Fase::where('proceso_id', $id)->where(function($query) {
+            $query->where('encargado_ejecutar', 5)
+                  ->orWhere('encargado_revisar', 5);
+        })->get()->count();
+        //$fase['cantidadCorrespondiente']=Fase::where('proceso_id', $id)->where('encargado_ejecutar',5)->get()->count();
+        $fase['fases_tramite']=Fase::where('proceso_id',$id)->orderBy('numero', 'asc')->get();
         //$fase=Fase::all();
         return response()->json($fase);
     }
     public $tram=null;
     public function sf_requisitosfase($id, $tramite ){    
         $this->tram=$tramite;    
+
         $rol_sf=5;
         if($rol_sf===5){
+            
             $requisitos['alumno'] = FaseRolRequisito::where('fase_id',$id)->where('rol_id',10)->get()->map(function ($r) {
                 return [
                     'id' => $r->id,       
@@ -63,11 +92,27 @@ class SecretariaController extends Controller
                     'documento'=>$r->requisito->TipoArchivo->tipoNombre,
                     'extension'=>$r->requisito ->tipo_documento,
                     'archivo'=>File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get(),
-                  //  'revisado'=>Revisione::where('file_id',File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('id'))
+                    'conforme'=>Revisione::whereIn('file_id',(File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('id')))->get(),
+                    'observacion'=>Observacione::whereIn('file_id',(File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('id')))->get(),
+                    'modificado'=>File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('num_modifi')->map(function($mod){
+                        return $mod->num_modifi;
+                    }),   
+                  //  'aprovados'=>Revisione::whereIn('file_id',(File::where('tramite_id',$this->tram)->get('id')))->count(),
+                    //'observados'=>Observacione::whereIn('file_id',(File::where('tramite_id',$this->tram)->get('id')))->count(),
                 ];
             });
+            $requisitos['aprovados']=0;
+            $requisitos['observados']=0;
+           foreach ($requisitos['alumno'] as $req) {
+               if(count($req['conforme'])>0){
+                $requisitos['aprovados']++;
+               }elseif(count($req['observacion'])>0){
+                $requisitos['observados']++;
+               }
+           } 
+          
+         //$requisitos['revisados']=Revisione::where('file_id',)
 
-            
 
             $requisitos['propios']=FaseRolRequisito::where('fase_id',$id)->where('rol_id',$rol_sf)->get()->map(function ($r) {
                 return [
@@ -76,9 +121,29 @@ class SecretariaController extends Controller
                     'nombre' => $r->requisito ->nombre ,
                     'rol'=> $r->rol->id,
                     'documento'=>$r->requisito->TipoArchivo->tipoNombre,
-                    'extension'=>   $r->requisito ->tipo_documento,               
+                    'extension'=>   $r->requisito ->tipo_documento,
+                    'archivo_subido'=>File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get(),
+                    'revisado_aprovado'=>Revisione::whereIn('file_id',(File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('id')))->get(),
+                    'revisado_observado'=>Observacione::whereIn('file_id',(File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('id')))->get(), 
+                    'modificado'=>File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('num_modifi')->map(function($mod){
+                        return $mod->num_modifi;
+                    }),                
                 ];
             });
+
+            $requisitos['subidosPropios']=0;
+            $requisitos['aprovadosPropios']=0;
+            $requisitos['observadosPropios']=0;            
+           foreach ($requisitos['propios'] as $req){
+               if(count($req['revisado_aprovado'])>0){
+                $requisitos['aprovadosPropios']++;
+               }elseif(count($req['revisado_observado'])>0){
+                $requisitos['observadosPropios']++;
+               }
+               if(count($req['archivo_subido'])>0){
+                $requisitos['subidosPropios']++;
+               }
+           } 
             return response()->json($requisitos);
         }else{
             return 'usuario no autorizado';
@@ -90,39 +155,112 @@ class SecretariaController extends Controller
        // return $request;
         $rol=5;
         if($rol===5){
-            if($request->observado==false && $request->aprovado==false){
-                return 'selecciona una opcion';
-            }else{
-                if($request->observado==false && $request->aprovado==true){
-                    //aprovado
-                    $estado=Estado::create([
-                        'nombre'=>'conforme',
-                    ]);
-                    $revision=Revisione::create([
-                        'file_id'=>$request->file['id'],
-                        'persrol_id'=>$request->file['persrol_id'],
-                        'estado_id'=>$estado->id,
-                        'estado' =>1,
-                    ]);
+            //nuscar registros de revision anteriores
+            $revisados=Revisione::where('file_id',$request->file['id'])->count();
+            if($revisados>0){
+                return 'ya aprobaste este requisito';
+            }else{               
+                if($request->observado==false && $request->aprovado==false){
+                    return '1'; //seleccione una opcion
+                }else{
+                    if($request->observado==false && $request->aprovado==true){
+                        //aprovado
+                        $revision=Revisione::where('file_id',$request->file['id'])->count();
+                        if($revision>0){
+                            return '2';
+                        }else{
+                            //eliminar observaciones para aprobar
+                            Observacione::where('file_id', $request->file['id'])->delete();       
 
-                    return $revision;
-                }else if($request->observado==true && $request->aprovado==false){
-                    //observacion
-                    $request->validate([
-                        'observacion'=>'required',
-                    ]);
-                    $observacion=Observacione::create([
-                        'file_id'=>$request->file['id'],
-                        'persrol_id'=>$request->file['persrol_id'],
-                        'texto'=>$request->observacion,
-            
-                    ]);
-                    return $observacion;
+                            $revision=Revisione::create([
+                                'file_id'=>$request->file['id'],
+                                'persrol_id'=>$request->file['persrol_id'],
+                                'estado_id'=>3,
+                                'estado' =>true,
+                                
+                            ]);
+                            //cambiar estado de modificacion del archivo 
+                            File::where('id',$request->file['id'])->update(['num_modifi'=>0]);
+                            return $revision;
+                        }
+                    
+                    }else if($request->observado==true && $request->aprovado==false){
+                        //observacion
+                        $request->validate([
+                            'observacion'=>'required',
+                        ]);
+                        //eliminar observaciones anteriores
+                        Observacione::where('file_id', $request->file['id'])->delete();  
+                        //reescribir observacion
+                        $observacion=Observacione::create([
+                            'file_id'=>$request->file['id'],
+                            'persrol_id'=>$request->file['persrol_id'],
+                            'texto'=>$request->observacion,
+                
+                        ]);
+                            //cambiar estado de modificacion del archivo 
+                            File::where('id',$request->file['id'])->update(['num_modifi'=>0]);
+                        return $observacion;
+                    }
                 }
             }
         }else{
             return 'user no autorizado';
         }
+    }
+
+    protected function sf_subirrequisito(Request $request){
+        $rol=5;
+        if($rol===5){
+                       
+            $user=$request->user();
+            // $persona=$user->persona_id;
+            $personarol=$user->persona->personarole[0]->id;
+            $request->validate([
+                'archivo'=>'required'
+            ]);
+
+            //actualizar
+
+            //subir nuevo
+            //verificar que no haya archivos de este requisito
+            $file_req=File::where('tramite_id',$request->tramite)->where('faserolreq_id',$request->idfaserequi)->count();
+            if($file_req>0){                
+                //actualizar
+                $file=File::where('tramite_id',$request->tramite)->where('faserolreq_id',$request->idfaserequi)->first();
+                //buscar observaciones
+                $obser=Observacione::where('file_id',$file->id)->count();
+                if($obser>0 && $file->num_modifi==0){
+                    //borramos el archivo de la carpeta
+                    $url_borrar=str_replace('storage','public',$file->path);
+                       Storage::delete($url_borrar);
+                    //subimos la nueva ruta 
+                   
+                        $new_url=Storage::url($request->file('archivo')->store('public/requisitos'));
+
+                        //remplazamos en la base de datos
+                        $requisito=File::where('id', $file->id)->update(['path' => $new_url ,'num_modifi'=>1]);
+                         
+                        return 'actualizado';
+                   
+                }else{
+                    return 1;
+                }
+            }else{
+                $url=Storage::url($request->file('archivo')->store('public/requisitos'));
+                $requisito=File::create([
+                    'path'=>$url,
+                    'tramite_id'=>$request->tramite,
+                    'persrol_id'=>$personarol,
+                    'faserolreq_id'=>$request->idfaserequi,
+                    'num_modifi'=>0,
+                ]);
+
+                return $requisito;
+            }
+      }else{
+          return 'user no autorizado';
+      }
     }
 
     protected function sf_archivorequisito($tramite , $fasereq){

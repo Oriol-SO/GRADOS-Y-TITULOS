@@ -12,18 +12,19 @@
             ></v-divider>
             
              <v-text-field
-              v-model="search"
-              append-icon="mdi-magnify"
-              label="Buscar"
-              single-line
-              hide-details
-              color="rgb(44, 221, 155)"
+                v-model="search"
+                append-icon="mdi-magnify"
+                label="Buscar"
+                single-line
+                hide-details
+                color="rgb(44, 221, 155)"
               ></v-text-field> 
               <v-spacer></v-spacer>
               <v-dialog
                 transition="dialog-top-transition"
-                max-width="650"
+                max-width="800"
                 v-model="dialog"
+                persistent
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
@@ -174,8 +175,8 @@
                             </v-expand-transition>                        
                          
                             <v-expand-transition>
-                            <v-card-text class="mt-3"  v-model="paginaform2" v-show="paginaform2">
-                              <div class="d-flex">
+                            <v-card-text class="mt-3" style="text-align: center;!important" v-model="paginaform2" v-show="paginaform2">
+                              <div class="d-flex" style="flex-wrap:wrap;">
                                 <v-col  cols="12" md="6"  >
                                     <v-select                                   
                                     v-model="formus.facultad"
@@ -197,19 +198,39 @@
                                     
                                     ></v-select>
                                     <v-select
-                                    v-model="formus.roles"
+                                    v-model="formus.rol"
                                     :items="roles1"
                                     label="roles"
                                     item-text="rolNombre"
-                                    item-value="id"
-                                    multiple
+                                    item-value="id"                                   
                                     chips
-                                    hint="roles disponibles"
-                                    persistent-hint
+                                    hint="roles disponibles"                                    
                                     return-object
                                     
                                   ></v-select>
+                                  <v-btn color="green" text @click="addRol()">añadir Rol</v-btn>
                                 </v-col>
+
+                                <v-col cols="12" md="6" >
+                                    <v-list >
+                                      <v-list-item v-for="(role,i) in this.formus.roles" :key="i" class="mb-1" style="background: #dddddd; border-radius: 20px; text-align: justify;">
+                                            <v-list-item-content>
+                                              <v-list-item-title>{{role.roles.rolNombre}}</v-list-item-title>
+                                              <v-list-item-subtitle v-if="role.escuela.ESCUELA_ESPECIALIDAD">{{role.escuela.ESCUELA_ESPECIALIDAD}}</v-list-item-subtitle>
+                                              <v-list-item-subtitle v-else-if="role.facultad.FACULTAD">{{role.facultad.FACULTAD}}</v-list-item-subtitle>                                              
+                                              <v-list-item-subtitle v-else>UNDAC</v-list-item-subtitle>                                              
+                                            </v-list-item-content>                                     
+
+                                              <v-list-item-action>
+                                                <v-btn icon>
+                                                  <v-icon color="red lighten-1" @click="deleteRol(role)">mdi-delete</v-icon>
+                                                </v-btn>
+                                              </v-list-item-action>     
+                                        </v-list-item>
+                                    </v-list>
+                                    
+                                </v-col>
+
                                                                  
                                       <v-alert  v-if="erroresuser"   text prominent color="red"  class="px-0 py-0" >
                                               <p v-for="(error,i ) in erroresuser" :key="i" class="my-1">{{error}}</p>
@@ -260,23 +281,22 @@
       :search="search"
       class="elevation-1"
     >
-    <template v-slot:item.actions="{ item }">
-      <v-icon
-        small
-        class="mr-2"
-        @click="editItem(item)"
-      >
-        mdi-pencil
-      </v-icon>
+      <template v-slot:item.actions="{ item }">
+        <v-icon
+          small
+          class="mr-2"
+          @click="editItem(item)"
+        >
+          mdi-pencil
+        </v-icon>
 
-    </template>
-
-
-  </v-data-table>
+      </template>
+    </v-data-table>
                 <v-dialog
                 transition="dialog-top-transition"
-                max-width="650"
+                max-width="800"
                 v-model="dialogedit"
+                persistent
               >
                 <template >
                   <v-card>
@@ -375,7 +395,7 @@
                          
                             <v-expand-transition>
                             <v-card-text class="mt-3"  v-model="paginaform2" v-show="paginaform2">
-                              <div class="d-flex">
+                              <div class="d-flex" style="flex-wrap:wrap;">
                                 <v-col  cols="12" md="6"  >
                                     <v-select                                   
                                     v-model="formusE.facultad"
@@ -397,19 +417,57 @@
                                     
                                     ></v-select>
                                     <v-select
-                                    v-model="formusE.roles"
+                                    v-model="formusE.rol"
                                     :items="roles"
                                     label="roles"
                                     item-text="rolNombre"
-                                    item-value="id"
-                                    multiple
+                                    item-value="id"                                    
                                     chips
-                                    hint="roles disponibles"
-                                    persistent-hint
-                                    return-object
-                                    
+                                    hint="roles disponibles"                                 
+                                    return-object                                    
                                   ></v-select>
+
+                                  <v-btn color="green" text @click="addRolEdit()">añadir Rol</v-btn>
                                 </v-col>
+                                  <v-col cols="12" md="6" >
+                                    <v-list >
+                                    <v-subheader style="height: 20px;">ROLES ACTUALES</v-subheader>
+                                      <v-list-item v-for="(role,i) in formusE.oldroles" :key="i" class="mb-1" style="background: #ededed; height: 25px; text-align: justify;">
+                                            <v-list-item-content>
+                                              <v-list-item-title>{{role.roles}}</v-list-item-title>
+                                              <v-list-item-subtitle v-if="role.escuela">{{role.escuela}}</v-list-item-subtitle>
+                                              <v-list-item-subtitle v-else-if="role.facultad">{{role.facultad}}</v-list-item-subtitle>                                              
+                                              <v-list-item-subtitle v-else>UNDAC</v-list-item-subtitle>                                              
+                                            </v-list-item-content>                                     
+
+                                              <v-list-item-action>
+                                                <v-switch
+                                                  color="green"
+                                                  v-model="role.estado"
+                                                  :value="role.estado"  
+                                                  @click="disableRol(role.id)"                                        
+                                                ></v-switch>
+                                              </v-list-item-action>     
+                                        </v-list-item>
+                                    </v-list> 
+
+                                    <v-list >
+                                      <v-list-item v-for="(roleE,i) in formusE.roles" :key="i" class="mb-1" style="background: #dddddd; height: 25px; border-radius: 20px; text-align: justify;">
+                                            <v-list-item-content>
+                                              <v-list-item-title>{{roleE.roles.rolNombre}}</v-list-item-title>
+                                              <v-list-item-subtitle v-if="roleE.escuela.ESCUELA_ESPECIALIDAD">{{roleE.escuela.ESCUELA_ESPECIALIDAD}}</v-list-item-subtitle>
+                                              <v-list-item-subtitle v-else-if="roleE.facultad.FACULTAD">{{roleE.facultad.FACULTAD}}</v-list-item-subtitle>                                              
+                                              <v-list-item-subtitle v-else>UNDAC</v-list-item-subtitle>                                              
+                                            </v-list-item-content>                                     
+
+                                              <v-list-item-action>
+                                                <v-btn icon>
+                                                  <v-icon color="red lighten-1" @click="deleteRolEdit(roleE)">mdi-delete</v-icon>
+                                                </v-btn>
+                                              </v-list-item-action>     
+                                        </v-list-item>
+                                    </v-list>                                    
+                                  </v-col>
                                                                  
                                       <v-alert  v-if="erroresuseredit"   text prominent color="red"  class="px-0 py-0" >
                                               <p v-for="(error,i ) in erroresuseredit" :key="i" class="my-1">{{error}}</p>
@@ -452,12 +510,36 @@
                 </template>
               </v-dialog>
   </v-card>
+
+  <template>
+        <div class="text-center ma-2">
+
+            <v-snackbar
+                v-model="boxerrorRol"
+                tile
+                color="red accent-2"
+                top
+            >
+            {{ msg_ERROR_ROL }}
+
+            <template v-slot:action="{ attrs }">
+                <v-btn
+                color="white"
+                text
+                v-bind="attrs"
+                @click="boxerrorRol = false"
+                >
+                Close
+                </v-btn>
+            </template>
+            </v-snackbar>
+        </div>
+    </template>
 </div>
 </template>
 <script>
 import axios from 'axios';
 import Form from "vform";
-import { isNullLiteralTypeAnnotation } from '@babel/types';
   export default {
     data () {
       return {
@@ -504,8 +586,12 @@ import { isNullLiteralTypeAnnotation } from '@babel/types';
           facultad:'',
           escuela:'',
           roles:[],
+          rol:[],
           codalum:'',
+
+          //roles2:[],
         }),
+
         formusE: new Form({
           tipodoc:{nombre:'DNI', num:1},
           userdoc:'',
@@ -524,6 +610,8 @@ import { isNullLiteralTypeAnnotation } from '@babel/types';
           facultad:'',
           escuela:'',
           roles:[],
+          oldroles:[],
+          rol:'',
           codalum:'',
         }),
 
@@ -548,6 +636,9 @@ import { isNullLiteralTypeAnnotation } from '@babel/types';
         errorexist:'',
         erroresuseredit:'',
         errorexistedit:'', 
+      
+       boxerrorRol:false,
+       msg_ERROR_ROL:'',
       }
     },
     mounted(){
@@ -559,7 +650,39 @@ import { isNullLiteralTypeAnnotation } from '@babel/types';
       },
     },*/
     methods:{
+      async addRol(){
+         var facu= this.formus.facultad;
+         var escu=this.formus.escuela;
+         var rol=this.formus.rol;
 
+         if(rol==''){
+           this.msg_ERROR_ROL='selecciona un rol';
+           this.boxerrorRol=true;
+         }else{
+          this.formus.roles.push({'facultad':facu,'escuela':escu,'roles':rol});
+          //console.log(this.formus.roles2);
+         }         
+      }, async addRolEdit(){
+         var facu= this.formusE.facultad;
+         var escu=this.formusE.escuela;
+         var rol=this.formusE.rol;
+
+         if(rol==''){
+           this.msg_ERROR_ROL='selecciona un rol';
+           this.boxerrorRol=true;
+         }else{
+          this.formusE.roles.push({'facultad':facu,'escuela':escu,'roles':rol});
+          console.log(this.formusE.roles);
+         }         
+      },deleteRol(role){          
+          var delIndex =this.formus.roles.indexOf(role);
+          this.formus.roles.splice(delIndex, 1)
+          console.log(del);
+      },deleteRolEdit(role){          
+          var delIndex =this.formusE.roles.indexOf(role);
+          this.formusE.roles.splice(delIndex, 1)
+          console.log(del);
+      },
       async FetchPersonas() {
         const { data } = await axios.get("/api/persona");
         this.personas = data;
@@ -598,18 +721,8 @@ import { isNullLiteralTypeAnnotation } from '@babel/types';
             //console.log(this.escuelas);
           });
          //console.log(this.formus);
-      },mostrarescuelaseditfirst(){    
-                axios.get(`/api/mostrarescuela/${this.formusE.facultad.FACULTAD_ID}`)
-                .then(response=>{
-                    //this.facultades=response.data.facultades;
-                  // this.escuelas=response.data.escuelas;
-                    this.escuelas=response.data;
-                    //console.log(response.data);
-                    //console.log(this.escuelas);
-                  });
-                //console.log(this.formus);
       },mostrarescuelasedit(){
-                this.formusE.escuela.ID_ESC=null;
+                this.formusE.escuela='';
                 this.mostrarrolesedit();        
                 axios.get(`/api/mostrarescuela/${this.formusE.facultad.FACULTAD_ID}`)
                 .then(response=>{
@@ -635,7 +748,7 @@ import { isNullLiteralTypeAnnotation } from '@babel/types';
         this.btnnext=true;
         this.btnback=false;    
       },async enviaruser(){
-       // console.log(this.formus);
+        console.log(this.formus);
         await this.formus.post('/api/adminuser/').then(response=>{
               //console.log(response.data);
             if(response.data==2){
@@ -658,7 +771,7 @@ import { isNullLiteralTypeAnnotation } from '@babel/types';
 
 
       },async mostrarroles(){
-        this.formus.roles1='';
+        this.formus.rol='';
             if(this.formus.facultad==''){
               await axios.get(`/api/rolesgenerales/${1}`).then(response=>{
               //console.log(response.data);
@@ -678,8 +791,8 @@ import { isNullLiteralTypeAnnotation } from '@babel/types';
            
       },
       async mostrarrolesedit(){
-        this.formusE.roles='';
-            if(this.formusE.facultad.FACULTAD_ID==null){
+        this.formusE.rol='';
+            if(this.formusE.facultad==''){
               await axios.get(`/api/rolesgenerales/${1}`).then(response=>{
               //console.log(response.data);
               this.roles=response.data;
@@ -688,24 +801,7 @@ import { isNullLiteralTypeAnnotation } from '@babel/types';
               await axios.get(`/api/rolesgenerales/${2}`).then(response=>{
                this.roles=response.data;
               })
-              if(this.formusE.escuela.ID_ESC!=null){
-                await axios.get(`/api/rolesgenerales/${3}`).then(response=>{
-                this.roles=response.data;
-                })
-              }
-            }               
-      },  async mostrarroleseditfirst(){
-       // this.formusE.roles='';
-            if(this.formusE.facultad.FACULTAD_ID==null){
-              await axios.get(`/api/rolesgenerales/${1}`).then(response=>{
-              //console.log(response.data);
-              this.roles=response.data;
-              })
-            }else{
-              await axios.get(`/api/rolesgenerales/${2}`).then(response=>{
-               this.roles=response.data;
-              })
-              if(this.formusE.escuela.ID_ESC!=null){
+              if(this.formusE.escuela!=''){
                 await axios.get(`/api/rolesgenerales/${3}`).then(response=>{
                 this.roles=response.data;
                 })
@@ -731,6 +827,8 @@ import { isNullLiteralTypeAnnotation } from '@babel/types';
           this.formus.facultad='';
           this.formus.escuela='';
           this.formus.roles=[];
+          //this.formus.rol=[];
+
           this.formus.codalum='';
 
 
@@ -747,11 +845,6 @@ import { isNullLiteralTypeAnnotation } from '@babel/types';
       },
       closedialogedit(){
         this.dialogedit=false;
-      },mostrarselects(){
-       
-        this.mostrarroleseditfirst();
-         this.mostrarescuelaseditfirst();
-       // this.mostrar.editfirst();
       },
       editItem(item){
           //console.log(item);
@@ -771,18 +864,16 @@ import { isNullLiteralTypeAnnotation } from '@babel/types';
           this.formusE.gradoabr=item.abre_grad;
           //this.formusE.password='';
           //this.formusE.password_confirmation='';
-          this.formusE.facultad={FACULTAD:" ",FACULTAD_ID:item.facu[0].facId},
-          this.formusE.escuela={ESCUELA_ESPECIALIDAD:"",ID_ESC:item.espe,};
-          this.formusE.roles=item.roles;
+          this.formusE.facultad='',
+          this.formusE.escuela='';
+          this.formusE.roles=[];
+          this.formusE.oldroles=item.roles;          
           this.formusE.codalum=item.cod_alum;
-          //console.log(this.formusE.roles);
-         //  console.log(this.formusE);
-          this.mostrarselects();
 
+          this.mostrarrolesedit();
          
-          
       },async actualizaruser(){
-          console.log(this.formusE)
+        //  console.log(this.formusE)
             await this.formusE.put(`/api/adminuser/${this.formusE.iduser}`).then(response=>{
             //console.log(response.data);
             if(response.data==2){
@@ -804,7 +895,14 @@ import { isNullLiteralTypeAnnotation } from '@babel/types';
                       //console.log(this.erroresuseredit);
                     }
               }); 
-            }
+      },async disableRol(rol_id){
+       // console.log(rol_id);
+        await axios.get(`/api/disableRol/${rol_id}`).then(response=>{
+          if(response.data==true){
+            this.FetchPersonas();
+          }
+        })
+      }
  
     
     },

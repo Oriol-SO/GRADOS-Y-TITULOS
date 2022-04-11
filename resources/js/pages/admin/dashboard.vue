@@ -14,7 +14,13 @@
     <v-card-text class="text-h4 font-weight-thin">
         Procesos del Año
     </v-card-text>
-
+    <v-textarea
+          solo
+          name="input-7-4"
+          label="Ingrese datos"
+          v-model="formrequi1.dato"
+        ></v-textarea>
+    <v-btn @click="GenerarPDF()">PDF</v-btn>
   </v-card>
   
     <v-spacer></v-spacer>
@@ -32,7 +38,6 @@
 
     <v-card-text class="text-h4 font-weight-thin">
         Bachilleres iniciados
-      </v-btn>
     </v-card-text>
   </v-card>
   <v-spacer></v-spacer>
@@ -49,7 +54,7 @@
 
     <v-card-text class="text-h4 font-weight-thin">
         Bachilleres iniciados
-      </v-btn>
+
     </v-card-text>
   </v-card>
   <v-spacer></v-spacer>
@@ -95,6 +100,7 @@ import DoughnutChart from '~/components/DoughnutChart.js';
 import BarChart from '~/components/BarChart.js';
 import AreaChart from '~/components/AreaChart.js';
 import axios from 'axios'
+import Form from "vform";
 
 export default {
 
@@ -106,6 +112,10 @@ export default {
   },
   data(){
     return {
+      formrequi1:new Form({
+        dato:'',
+        }),
+
       yearsOptions: {
       hoverBorderWidth: 20,
       },
@@ -140,7 +150,13 @@ export default {
         this.grados = data;
 
 
-      },async FetchBachillerIni() {
+      },async GenerarPDF(){
+        const { data } = await this.formrequi1.post("/api/generatePDF");
+        console.log(data);
+
+
+      },
+      async FetchBachillerIni() {
         const { data } = await axios.get("/api/bachillerIni");
         this.bachillerIni = data.Mes;
         this.bachillerIniValue =data.Valor;

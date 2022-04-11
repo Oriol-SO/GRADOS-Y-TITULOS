@@ -76,7 +76,7 @@
 <template>
   <div class="text-center">
     <v-bottom-sheet
-      v-model="dialogconfirm"
+      v-model="mustVerifyEmail"
       persistent
       inset
     >
@@ -89,12 +89,13 @@
           class="mt-6"
           text
           color="error"
-          @click="dialogconfirm = !dialogconfirm"
+          @click="mustVerifyEmail = !mustVerifyEmail"
         >
          Cerrar
         </v-btn>
         <div class="py-3 text-h6">
-          Te registraste exitosamente <v-icon color="#49FF00">mdi-checkbox-marked-circle</v-icon>
+          Te registraste exitosamente <v-icon color="#49FF00">mdi-checkbox-marked-circle</v-icon> 
+          {{message}}
         </div>
       </v-sheet>
     </v-bottom-sheet>
@@ -118,12 +119,6 @@ export default {
     return{
 
 
-      activePicker2: null,
-     // date2: null,
-      menu2: false,
-
-      tipodocs:[{nombre:'DNI',num:1},{nombre:'PASAPORTE',num:2}],
-      codigouser:'',
       form:new Form({
           codAlu: "",
           password: "",
@@ -133,24 +128,11 @@ export default {
       mustVerifyEmail: false,
       message: "",
       correo: "",
-
-
-      facultades:[],
-      escuelas:[],
       errores:'',
-      dialogerror:false,
+     // dialogerror:false,
       dialogconfirm:false,
     }
-  }, watch: {
-
-      menu2(val){
-        val && setTimeout(() => (this.activePicker2 = 'YEAR'))
-      }
-  },mounted(){
-   // this.datosuser();
-   this.fecthfacultad();
-  },  
-  methods:{
+  },methods:{
     async register() {
       // Register the user.
       const { data } = await this.form.post("/api/register");

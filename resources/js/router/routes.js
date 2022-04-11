@@ -35,6 +35,7 @@ export default [
       { path: 'tramites', name: 'admin.tramites', component: page('admin/tramites.vue') },
       { path: 'tramite/:id', name: 'admin.tramite', component: page('admin/tramite.vue') },
       { path: 'personas-usuarios', name: 'admin.usuarios', component: page('admin/usuarios.vue') },
+      { path: 'tiny', name: 'admin.tiny', component: page('admin/tiny.vue') },
 
     ]
   },
@@ -74,10 +75,10 @@ export default [
       { path: '', redirect: { name: 'sf.dashboard' } },
       { path: 'dashboard', name: 'sf.dashboard', component: page('secretariaFacultad/dashboard.vue') },
       { path: 'tramite/:id', name: 'sf.tramite', component: page('secretariaFacultad/tramite.vue') },
-      { path: 'revisar/tramite/:tramite', name: 'sf.revisar', component: page('secretariaFacultad/revisar.vue') }
+      { path: 'tramite2/:id', name: 'sf.revisar', component: page('secretariaFacultad/tramite2.vue') }
     ]
   },
 
-  //hitler gilllllllllllllll
+
   { path: '*', component: page('errors/404.vue') },
 ]

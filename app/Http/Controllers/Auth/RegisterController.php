@@ -26,32 +26,38 @@ class RegisterController extends Controller
     {
         $this->middleware('guest');
     }
-
-    public $correo='alguien@undac.edu.pe';
     protected function registered(Request $request, User $user)
     {
         if ($user instanceof MustVerifyEmail) {
-            return response()->json(['status' => trans('messages.sent'),'correo'=>$this->correo]);
+            return response()->json(['status' => 'Verifica tu cuenta ingresando a tu correo institucional']);
         }
         
         return response()->json($user);
     }
 
-    protected function register( Request $request ){
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'password' => 'required|confirmed',
+            'password_confirmation'=>'required',
+            'codAlu'=> 'required|numeric|unique:personas,cod_alum',    
+        ]);
+    }
+
+    protected function create( array $request):User{
         
-        $this->validaruser($request);
-        $codAlu=$request->codAlu;
+        //$this->validaruser($request);
+        $codAlu=$request['codAlu'];
         $date= $this->datosusuario($codAlu);
         $curricula=$date['Curricula'];
         $curri= $this->curricula($curricula);
         $school= $this->escuela($curri);
         //  return $school[0]->FACULTAD_ID;
-
         $g=1;
         if ($date['Genero']=='F') {
             $g=0;
         }
-         try{
+        try{
             $persona=Persona::create([
 
                 'nom' => $date['Nombres'],
@@ -71,7 +77,6 @@ class RegisterController extends Controller
                 'grad_estud'=>"",
                 'abre_grad'=>"",
             ]);  
-            
             $rolesuser= PersonaRole::create([
                 'estado'=>1,
                 'persona_id'=>$persona->id,
@@ -82,41 +87,37 @@ class RegisterController extends Controller
             $user=User::create([
                 'name'=>$date['Nombres'],
                 'email'=>$date['Correo Institucional'],
-                'password'=>Hash::make($request->password),
+                'password'=>Hash::make($request['password']),
                 'persona_id'=>$persona->id,
             ]);    
-            return response()->json([
-                'persona'=>$persona,
-                'roles'=>$rolesuser,
-                'user'=>$user,]);
+
+      //  $this->reg($request,$user);
+        
+            return $user;
         }catch(QueryException $e){
             return 'error conex';} 
+        
     }
 
     /**
      * Get a validator for an incoming registration request.
      */
-    protected function validaruser($request=null)
-    {
-        return $request->validate([
-            
-            'password' => 'required|confirmed',
-            'password_confirmation'=>'required',
-            'codAlu'=> 'required|numeric|unique:personas,cod_alum',    
-        ]);
-    }
+
+
+
+
 
     /**
      * Create a new user instance after a valid registration.
      */
-    protected function create(array $data): User
+    /*protected function create(Request $request,array $data): User
     {
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
-    }
+    }*/
 
     public function datosusuario($codigo){    
                 try{
@@ -130,12 +131,12 @@ class RegisterController extends Controller
     }
     public function curricula($codigo){    
         try{
-            $escuelas = Http::get('http://api.undac.edu.pe/tasks/a3945a7384cbdcd33f49e8f5b8ec29f5/91f33e2776c526b9cca723a63476f028/curricula');
+            $curriculas = Http::get('http://api.undac.edu.pe/tasks/a3945a7384cbdcd33f49e8f5b8ec29f5/91f33e2776c526b9cca723a63476f028/curricula');
             $escuela="";
-            $escuelas=json_decode($escuelas);
-            foreach($escuelas as $escu){
-                if($escu->CURRICULA==$codigo){
-                    $escuela=$escu->ESCUELA;
+            $curriculas=json_decode($curriculas);
+            foreach($curriculas as $curri){
+                if($curri->CURRICULA==$codigo){
+                    $escuela=$curri->ESCUELA;
                 }
             }
                 return $escuela;

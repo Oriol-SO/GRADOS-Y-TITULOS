@@ -21,6 +21,7 @@ class Tramite extends Model
         'proceso_id',
         'consejo_id',
         'resolucion_id',
+        'receptor_rol_notify',
 
     ];
 

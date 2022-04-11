@@ -81,7 +81,7 @@ class AdminUserController extends Controller
                     'cod_alum'=>$request->codalum? $request->codalum:null,
                 ]);
                 
-                $rolesuser=$this->agregarroles($persona->id,  $request->roles,  $request->facultad,  $request->escuela);    
+                $rolesuser=$this->agregarroles($persona->id,  $request->roles);    
                 $user=$this->agregaruser($persona->id, $request->userdoc,$request->nombresuser,$request->correo);    
                 return response()->json([
                     'persona'=>$persona,
@@ -89,6 +89,11 @@ class AdminUserController extends Controller
                     'user'=>$user,
                 ]);
             }catch(Exception){
+               
+                try{ Persona::where('id',$persona->id)->delete();}catch(Exception){
+                    return '2';
+
+                }
                 return '2';
             }
         }
@@ -114,14 +119,14 @@ class AdminUserController extends Controller
         ]);
     }
 
-    public function agregarroles($idper,$roles,$facu,$escu){
+    public function agregarroles($idper,$roles){
         foreach ($roles as $rol ) {
             $roles=PersonaRole::create([              
                 'estado'=>1,
                 'persona_id'=>$idper,
-                'facId'=>$facu ? $facu['FACULTAD_ID']:null,
-                'escId'=> $escu ? $escu['ID_ESC']:null,
-                'rol_id'=>$rol['id'],
+                'facId'=>$rol['facultad']? $rol['facultad']['FACULTAD_ID']:null,
+                'escId'=> $rol['escuela'] ?$rol['escuela']['ID_ESC'] :null,
+                'rol_id'=>$rol['roles']['id'],
             ]); 
         }
         return $roles;
@@ -184,9 +189,27 @@ class AdminUserController extends Controller
                 'abre_grad'=>$request->gradoabr,
                 'espe'=>$request->escuela? $request->escuela['ID_ESC']:null,
      */
-    public function update(Request $request, $id)
+    public function validaruserUpdate($request = null)
     {
-        $this->validaruser($request);
+        return $request->validate([
+            'userdoc' => 'required|max:12',
+            'apeMat' => 'required',
+            'nombresuser' => 'required',
+            'genero' => 'required|max:1',
+            //'nacimiento' => 'required|date',
+            'correo' => 'required|email',
+            //'celular' => 'required|max:9',
+            'gradoestu' => 'required',
+            'gradoabr' => 'required',
+            //'password' => 'required|confirmed',
+            //'password_confirmation'=>'required',
+           // 'roles' => 'required',
+        ]);
+    }
+
+    public function update(Request $request, $id)
+    { 
+        $this->validaruserUpdate($request);
         if((Persona::where('email',$request->correo)->where('id',$id)->count())>0){
             $updatepersona=$this->updatepersona( $request, $id);
             return response()->json($updatepersona);
@@ -216,11 +239,12 @@ class AdminUserController extends Controller
             $persona->grad_estud = $request->gradoestu;
             $persona->abre_grad = $request->gradoabr;
             //$persona->numCel = $request->celular;
-            $persona->espe=$request->escuela['ID_ESC'];
+           // $persona->espe=$request->escuela['ID_ESC'];
             $persona->cod_alum=$request->codalum;
             $persona->save();
-
-            $rolesupdate=$this->actualizarroles($persona->id,  $request->roles,  $request->facultad,  $request->escuela);                
+            if( count($request->roles)>0){
+                $rolesupdate=$this->agregarroles($persona->id,  $request->roles); 
+            }                          
             
             $usuario = User::where('persona_id', $persona->id)->first();
             $usuario->email = $request->correo;
@@ -235,7 +259,7 @@ class AdminUserController extends Controller
     }
 
 
-     public function actualizarroles($id_per, $roles,$facu,$escu){
+     /*public function actualizarroles($id_per, $roles,$facu,$escu){
         $personarol=PersonaRole::where('persona_id',$id_per)->delete();
             if($personarol){
                 foreach ($roles as $rol ) {
@@ -251,8 +275,16 @@ class AdminUserController extends Controller
      
             }
 
-     }
-
+     }*/
+    protected function disablerol($id){
+        $rol=13;
+        if($rol==13){
+            PersonaRole::where('id',$id)->update(['estado'=>0]);
+            return 1;
+        }else{
+            return 'user no autorizado';
+        }
+    }
     
 
     /**

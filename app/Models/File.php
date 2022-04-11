@@ -12,7 +12,8 @@ class File extends Model
         'path',
         'tramite_id',
         'persrol_id',
-        'faserolreq_id'
+        'faserolreq_id',
+        'num_modifi',
     ];
     public function Tramite()
     {
