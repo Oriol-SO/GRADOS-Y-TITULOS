@@ -149,8 +149,8 @@
         </template>
             
             <template >
-                <v-row    >
-                    <v-col md="8" sm="12">
+                <v-row flex   >
+                    <v-col  cols="12" xl="8" lg="8" sm="12" xs="12">
               
                     <v-card
                         class=" mt-2 "
@@ -354,34 +354,38 @@
                         v-model="selectedItem"
                         color="primary"
                         mandatory
-                        
+                        class="mx-auto"
                     >
                         <v-list-item
                         v-for="(requisito, i) in requisitos"
                         :key="i"
                         @click="detallerequisito(requisito)"
+                        
                         >
                         <v-list-item-icon>
                             <v-icon >mdi-check-outline</v-icon>
                         </v-list-item-icon>
                         <v-list-item-content>
-                            <v-list-item-title class="d-flex" >{{requisito.nombre}}
-                                <div class="ml-auto">
+                            <v-list-item class="d-flex" >
+                            <v-row class="mt-2">
+                            {{requisito.nombre}}
+                                <div class="ml-auto mb-5">
                                     <v-chip
                                     color="deep-purple accent-1"
                                     text-color="#fff"
-                                    >                       
+                                    >                        
                                         {{requisito.rol}}
                                         <v-avatar
                                             rigth
-                                            class="deep-purple accent-3 ml-1"
+                                            class="deep-purple accent-3 ml-1 "
                                             text-color="#fff"
                                         >
                                         <v-icon>mdi-account-tie</v-icon>
                                         </v-avatar>
                                     </v-chip>
-                                </div>                             
-                            </v-list-item-title>
+                                </div> 
+                            </v-row>                                
+                            </v-list-item>
 
                         </v-list-item-content>
                         </v-list-item>
@@ -391,7 +395,7 @@
                     </v-card>
                     </v-col>
                     
-                    <v-col sm="12" md="4" >
+                    <v-col  lg="4" xl="8" sm="12"  xs="12">
                     <v-card class="mt-2">
                         <v-subheader class="font-weight-medium text-md-body-1">DETALLE REQUISITO </v-subheader>
                             <v-list three-line style="min-height:02;">

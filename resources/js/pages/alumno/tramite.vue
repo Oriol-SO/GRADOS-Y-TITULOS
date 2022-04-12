@@ -39,7 +39,7 @@
 
             <v-divider></v-divider>
             <v-list>
-            <v-list-item-content >
+            
              <v-subheader class="font-weight-medium text-md-body-1 d-flex " style="    height: auto;" v-if="requisitos.length" >
                     <div >
                      <v-chip
@@ -83,7 +83,7 @@
                         </v-chip>                   
                     </div>
                 </v-subheader>
-                </v-list-item-content>
+                
                 <v-list-item
                   v-for="(requisito, i) in requisitos"
                   :key="i"
