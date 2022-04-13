@@ -14,7 +14,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class SecretariaController extends Controller
+class SecretariaVicerrectoradoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,8 +26,13 @@ class SecretariaController extends Controller
         //
     }
 
-    //secretaria general tramites 
-    public function sf_expedientes(){
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    protected function sv_expedientes(){
         $rol=5;
         if($rol==5){
             $expedientes=Tramite::all()->map(function($e){
@@ -55,49 +60,44 @@ class SecretariaController extends Controller
         }else{
             return 'user no autorizado';
         }
-
     }
-    public function sf_obtenertramite($id){
-        $tramites = tramite::find($id);
-        return response()->json($tramites);
-    }
-    public function sf_obtenerfasestramite($id){
-        
+    protected function sv_obtenerfasestramite($id){
         $fase['fases']=Fase::where('proceso_id', $id)->where(function($query) {
-            $query->where('encargado_ejecutar', 5)
-                  ->orWhere('encargado_revisar', 5);
+            $query->where('encargado_ejecutar', 11)
+                  ->orWhere('encargado_revisar', 11);
         })->orderBy('numero', 'asc')->get();
       //  $fase['fases_ejecutar']=Fase::where('proceso_id', $id)->where('encargado_ejecutar',5)->orderBy('numero', 'asc')->oldest()->get();
         $fase['cantidad']=Fase::where('proceso_id', $id)->where(function($query) {
-            $query->where('encargado_ejecutar', 5)
-                  ->orWhere('encargado_revisar', 5);
+            $query->where('encargado_ejecutar', 11)
+                  ->orWhere('encargado_revisar', 11);
         })->get()->count();
         //$fase['cantidadCorrespondiente']=Fase::where('proceso_id', $id)->where('encargado_ejecutar',5)->get()->count();
         $fase['fases_tramite']=Fase::where('proceso_id',$id)->orderBy('numero', 'asc')->get();
         //$fase=Fase::all();
         return response()->json($fase);
     }
+
     public $tram=null;
-    public function sf_requisitosfase($id, $tramite ){    
+    public function sv_requisitosfase($id, $tramite ){    
         $this->tram=$tramite;    
 
-        $rol_sf=5;
-        if($rol_sf===5){
+        $rol_sf=11;
+        if($rol_sf===11){
                 //desabilitar notificacion 
                  //obtener rol revisador 
-                // $fase_revision=Fase::where('id',$id)->first();
+                 //$fase_revision=Fase::where('id',$id)->first();
                 // $revisador=$fase_revision->encargado_revisar;
                  $tramite_revision=Tramite::where('id',$this->tram)->first();
 
                  if($tramite_revision->fase_actual!=null){
-                        if(5==$tramite_revision->receptor_rol_notify){
+                        if(11==$tramite_revision->receptor_rol_notify){
                             //eliminar notificacion
                             Tramite::where('id',$this->tram)->update(['receptor_rol_notify'=>null]);
                         }
                     }
 
 
-            $requisitos['alumno'] = FaseRolRequisito::where('fase_id',$id)->where('rol_id',10)->get()->map(function ($r) {
+            $requisitos['revisar'] = FaseRolRequisito::where('fase_id',$id)->where('rol_id',5)->get()->map(function ($r) {
                 return [
                     'id' => $r->id,       
                     'requisito_id' => $r->requisito_id ,
@@ -117,7 +117,7 @@ class SecretariaController extends Controller
             });
             $requisitos['aprovados']=0;
             $requisitos['observados']=0;
-           foreach ($requisitos['alumno'] as $req) {
+           foreach ($requisitos['revisar'] as $req) {
                if(count($req['conforme'])>0){
                 $requisitos['aprovados']++;
                }elseif(count($req['observacion'])>0){
@@ -165,67 +165,68 @@ class SecretariaController extends Controller
 
     }
 
-    protected function sf_revisarrequisito(Request $request){
-       // return $request;
-        $rol=5;
-        if($rol===5){
-            //nuscar registros de revision anteriores
-            $revisados=Revisione::where('file_id',$request->file['id'])->count();
-            if($revisados>0){
-                return 'ya aprobaste este requisito';
-            }else{               
-                if($request->observado==false && $request->aprovado==false){
-                    return '1'; //seleccione una opcion
-                }else{
-                    if($request->observado==false && $request->aprovado==true){
-                        //aprovado
-                        $revision=Revisione::where('file_id',$request->file['id'])->count();
-                        if($revision>0){
-                            return '2';
-                        }else{
-                            //eliminar observaciones para aprobar
-                            Observacione::where('file_id', $request->file['id'])->delete();       
+    protected function sv_revisarrequisito(Request $request){
+        // return $request;
+         $rol=11;
+         if($rol===11){
+             //nuscar registros de revision anteriores
+             $revisados=Revisione::where('file_id',$request->file['id'])->count();
+             if($revisados>0){
+                 return 'ya aprobaste este requisito';
+             }else{               
+                 if($request->observado==false && $request->aprovado==false){
+                     return '1'; //seleccione una opcion
+                 }else{
+                     if($request->observado==false && $request->aprovado==true){
+                         //aprovado
+                         $revision=Revisione::where('file_id',$request->file['id'])->count();
+                         if($revision>0){
+                             return '2';
+                         }else{
+                             //eliminar observaciones para aprobar
+                             Observacione::where('file_id', $request->file['id'])->delete();       
+ 
+                             $revision=Revisione::create([
+                                 'file_id'=>$request->file['id'],
+                                 'persrol_id'=>$request->file['persrol_id'],
+                                 'estado_id'=>3,
+                                 'estado' =>true,
+                                 
+                             ]);
+                             //cambiar estado de modificacion del archivo 
+                             File::where('id',$request->file['id'])->update(['num_modifi'=>0]);
+                             return $revision;
+                         }
+                     
+                     }else if($request->observado==true && $request->aprovado==false){
+                         //observacion
+                         $request->validate([
+                             'observacion'=>'required',
+                         ]);
+                         //eliminar observaciones anteriores
+                         Observacione::where('file_id', $request->file['id'])->delete();  
+                         //reescribir observacion
+                         $observacion=Observacione::create([
+                             'file_id'=>$request->file['id'],
+                             'persrol_id'=>$request->file['persrol_id'],
+                             'texto'=>$request->observacion,
+                 
+                         ]);
+                             //cambiar estado de modificacion del archivo 
+                             File::where('id',$request->file['id'])->update(['num_modifi'=>0]);
+                         return $observacion;
+                     }
+                 }
+             }
+         }else{
+             return 'user no autorizado';
+         }
+     }
 
-                            $revision=Revisione::create([
-                                'file_id'=>$request->file['id'],
-                                'persrol_id'=>$request->file['persrol_id'],
-                                'estado_id'=>3,
-                                'estado' =>true,
-                                
-                            ]);
-                            //cambiar estado de modificacion del archivo 
-                            File::where('id',$request->file['id'])->update(['num_modifi'=>0]);
-                            return $revision;
-                        }
-                    
-                    }else if($request->observado==true && $request->aprovado==false){
-                        //observacion
-                        $request->validate([
-                            'observacion'=>'required',
-                        ]);
-                        //eliminar observaciones anteriores
-                        Observacione::where('file_id', $request->file['id'])->delete();  
-                        //reescribir observacion
-                        $observacion=Observacione::create([
-                            'file_id'=>$request->file['id'],
-                            'persrol_id'=>$request->file['persrol_id'],
-                            'texto'=>$request->observacion,
-                
-                        ]);
-                            //cambiar estado de modificacion del archivo 
-                            File::where('id',$request->file['id'])->update(['num_modifi'=>0]);
-                        return $observacion;
-                    }
-                }
-            }
-        }else{
-            return 'user no autorizado';
-        }
-    }
 
-    protected function sf_subirrequisito(Request $request){
-        $rol=5;
-        if($rol===5){
+     protected function sv_subirrequisito(Request $request){
+        $rol=11;
+        if($rol===11){
                        
             $user=$request->user();
             // $persona=$user->persona_id;
@@ -277,38 +278,8 @@ class SecretariaController extends Controller
       }
     }
 
-    protected function sf_archivorequisito($tramite , $fasereq){
-        $rol=5;
-        if($rol===5){
-            $archivo=File::where('tramite_id',$tramite)->where('faserolreq_id',$fasereq)->get();
-            return response()->json($archivo);
-        }else{
-            return 'user no autorizado';
-        }
-        
-    }
 
-    protected function sf_fasecheck($id_tram,$id_fase){
-        try{        
-            $fase=Fase::where('id',$id_fase)->first();
 
-        //obtener rol del revisador
-            if($fase->encargado_revisar==5){
-                $fase_actual=$fase->numero;
-                $tramite_fase=Tramite::where('id',$id_tram)->update(['fase_actual'=>($fase_actual+1)]);
-                return $tramite_fase;
-            }else{
-                return 'no estas autorizado para esta accion';
-            }
-        }catch(Exception $e){
-            return $e;
-        }
-    }
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //

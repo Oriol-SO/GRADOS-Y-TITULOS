@@ -84,7 +84,7 @@ export default [
     children: [
       { path: '', redirect: { name: 'dashboardvice' } },
       { path: 'dashboard', name: 'dashboardvice', component: page('secretariaVicerrectorado/dashboard.vue') },
-      { path: 'tramites/:id', name: 'vicerrectorado.tramites', component: page('secretariaVicerrectorado/tramites.vue') },
+      { path: 'tramite/:id', name: 'vicerrectorado.tramite', component: page('secretariaVicerrectorado/tramite.vue') },
     ]
   },
 

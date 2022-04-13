@@ -17,7 +17,7 @@
                     editable      
                     @click="limpiar()"
                     >
-                    fase {{fase}}
+                    fase {{fase+1}}
                     </v-stepper-step>
 
                 </v-stepper-header>
@@ -43,7 +43,7 @@
                                 </v-btn>
 
                                 <v-btn 
-                                v-if="fase.encargado_revisar==5"
+                                v-if="fase.encargado_revisar==11"
                                 class="mb-2 text-capitalize" 
                                 elevation="0"
                                 color="cyan lighten-2"
@@ -56,7 +56,7 @@
                                 <v-divider></v-divider>
                                 <v-list>
                                     <v-subheader class="font-weight-medium text-md-body-1 d-flex" v-if="requisitos.length" >
-                                        REQUISITOS ALUMNO 
+                                        REQUISITOS PARA REVISAR 
                                         <div>
                                             <v-chip
                                             class="ma-2"
@@ -195,7 +195,7 @@
                                         :key="i"
                                         class="mb-1"
                                         color="black"
-                                        v-bind:style="requisitoP.archivo_subido.length>0?'background:#82b1ff;':'' "
+                                        v-bind:style="requisitoP.archivo_subido.length>0?'background:#82b1ff;;':'' "
 
                                     >
                                         <v-list-item-icon>
@@ -219,7 +219,7 @@
                                                         </v-avatar>
                                                     </v-chip>
                                                     <v-chip
-                                                    v-if="requisitoP.revisado_observado.length>0 && requisitoP.modificado[0]==0 "
+                                                    v-if="requisitoP.revisado_observado.length>0 && requisito.modificado[0]==0 "
                                                     color="#ff9400"
                                                     text-color="#fff"
                                                     >                       
@@ -744,14 +744,13 @@ export default {
          //console.log(this.codigoproc)
           this.fetchfase(this.nomtramite.proceso_id)
       },async fetchfase($id){
-         const { data } =await axios.get(`/api/sf-fasestramite/${$id}`);   
+         const { data } =await axios.get(`/api/sv-fasestramite/${$id}`);   
          this.fases = data.fases;
          this.fasestramite=data.fases_tramite;
          this.numfases=data.cantidad;
       },async mostrarrequisito(id){
-
-          const {data}=await axios.get(`/api/sf-faserequisito/${id}/${this.$route.params.id}`);
-          this.requisitos=data.alumno;
+          const {data}=await axios.get(`/api/sv-faserequisito/${id}/${this.$route.params.id}`);
+          this.requisitos=data.revisar;
           this.requisitosPropios=data.propios;
           this.id_fase=id;
           this.requisitos_aprovados=data.aprovados;
@@ -759,7 +758,7 @@ export default {
           this.requisitos_aprovadosPropios=data.aprovadosPropios;
           this.requisitos_observadosPropios=data.observadosPropios;
           this.requisitos_subidosPropios=data.subidosPropios;
-          console.log(data);
+         // console.log(data);
       },
       //subir requisitos
       openmodal(requisito){        
@@ -802,10 +801,10 @@ export default {
        // console.log(this.daterequisito.archivo);
         this.url_document=URL.createObjectURL(this.daterequisito.archivo)
       },
-        async guardar(){
+    async guardar(){
        // console.log(this.daterequisito);  
        if(this.subir===true){
-        await this.daterequisito.post(`/api/sf-subirfilerequisito/`).then(response=>{
+        await this.daterequisito.post(`/api/sv-subirfilerequisito/`).then(response=>{
             console.log(response.data);
             if(response.data===1){
                this.subir_file_error='ya no se admiten mas archivos'
@@ -872,7 +871,7 @@ export default {
          this.content=requisito.nombre;
       },async revisarReq(){
           console.log(this.formrevisado);
-          await this.formrevisado.post(`/api/sf-revisarrequisito`).then(response=>{
+          await this.formrevisado.post(`/api/sv-revisarrequisito`).then(response=>{
               console.log(response.data);
                 if(response.data===1){
                      this.revisar_errores='selleciona una opcion si quieres guardar cambios';
