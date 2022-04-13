@@ -26,6 +26,7 @@ use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\tramiteController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SecretariaVicerrectoradoController;
 
 
 /*
@@ -110,3 +111,11 @@ Route::post('sf-revisarrequisito',[SecretariaController::class,'sf_revisarrequis
 Route::post('sf-subirfilerequisito',[SecretariaController::class,'sf_subirrequisito']);
 Route::get('sf-fasecheck/{tramite}/{fase}',[SecretariaController::class,'sf_fasecheck']);
 
+//rutas vicerrectorado
+
+Route::get('sv-expedientes',[SecretariaVicerrectoradoController::class,'sv_expedientes']);
+//Route::get('sf-tramite/{id}',[SecretariaController::class,'sf_obtenertramite']);
+Route::get('sv-fasestramite/{id}',[SecretariaVicerrectoradoController::class,'sv_obtenerfasestramite']);
+Route::get('sv-faserequisito/{id}/{tramite}',[SecretariaVicerrectoradoController::class,'sv_requisitosfase']);
+Route::post('sv-revisarrequisito',[SecretariaVicerrectoradoController::class,'sv_revisarrequisito']);
+Route::post('sv-subirfilerequisito',[SecretariaVicerrectoradoController::class,'sv_subirrequisito']);
