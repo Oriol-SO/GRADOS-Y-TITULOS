@@ -253,6 +253,7 @@ export default {
       mustVerifyEmail: false,
       message: "",
       correo: "",
+
       errores:'',
       errores_api:'',
       errores_api_codigo:'',
@@ -262,21 +263,17 @@ export default {
       dialog_load:false,
       //dialogconfirm:false,
     }
-  },methods:{
+  },mounted(){
+   // this.datosuser();
+   this.fecthfacultad();
+  },  
+  methods:{
     async register() {
-      // Register the user.
-      const { data } = await this.form.post("/api/register");
-      console.log(data);
-      // Must verify email fist.
-      if (data.status) {
-        this.mustVerifyEmail = true;
-        this.message = data.status;
-        this.correo = data.correo;
-      } else {
-        // Log in the user.
-        const {
-          data: { token },
-        } = await this.form.post("/api/login");
+          this.errores='';
+          this.errores_api_codigo='';
+          this.errores_api_email_title='';
+          this.errores_correo='';
+          this.errores_api='';
 
        await this.form.post("/api/register").then(response=>{
             console.log(response.data);
@@ -309,12 +306,12 @@ export default {
                 this.dialog_load=false;
         });
 
-    }
-    }
+    },
+    
   }
 
   
-}
+};
 </script>
 <style scoped>
 .main {

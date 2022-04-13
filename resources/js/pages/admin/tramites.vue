@@ -82,11 +82,6 @@
                       Limpiar
                     </v-btn>
              </form>
-
-            
-
-
-
             </v-card-text>
             <v-card-actions class="justify-end">
               <v-btn
@@ -212,6 +207,7 @@ import Form from "vform";
           
 
       },async cambiarEstado(id){
+        
         await axios.get(`/api/cambiarEstado/${id}`).then(response =>{
             this.FetchProceso();
             this.clear();

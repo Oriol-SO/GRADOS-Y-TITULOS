@@ -132,8 +132,7 @@ class ProcesoController extends Controller
     }
     protected function cambiarEstado($id)
     {   
-        
-        $valor = Proceso::find($id);
+        $valor=Proceso::where('id',$id)->first();  
         if($valor->guardado==1){
             $estado=$valor->estado;
             if($estado==1){
@@ -150,7 +149,7 @@ class ProcesoController extends Controller
     }
     protected function cambiarGuardado($id)
     {   
-        $valor = Proceso::find($id);
+        $valor=Proceso::where('id',$id)->first();  
         if($valor->estado==0){
             $guardado=$valor->guardado;
             if($guardado==1){
