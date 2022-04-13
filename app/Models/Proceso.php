@@ -13,6 +13,7 @@ class Proceso extends Model
         'grado_id',
         'moda_id',
         'tipo',
+        'estado',
 
     ];
 

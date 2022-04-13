@@ -26,6 +26,7 @@ class ProcesoController extends Controller
                 'modalidad_id' => $t->modalidade ? $t->moda_id : null,
                 'modalidad' => $t->modalidade ? $t->modalidade->modNombre : null,
                 'cantidad_fases' => $t->fase->count(),
+                'estado'=>$t->estado,
                 'cantidad_requisitos' => $t->fase->map(function ($f) {
                     return $f->faserolrequisito->count();
                 })->sum(),
@@ -62,6 +63,7 @@ class ProcesoController extends Controller
             'grado_id' => $request->grado['id'],
             'moda_id' => $request->modalidad['id'],
             'tipo' => $request->tipo,
+            'estado'=>0,
         ]);
         return response()->json([
             'tramite'=>$proceso
@@ -81,6 +83,19 @@ class ProcesoController extends Controller
              'nombre'=>$proceso->procNom
          ];
         return response()->json($response, 200);
+    }
+
+    protected function cambiarEstado($id)
+    {     
+        $proceso=Proceso::where('id',$id)->first();      
+        $estado=$proceso->estado;
+        if($estado==1){
+            $cambiado=0;
+        }else{
+            $cambiado=1;
+        }
+        Proceso::where('id', $id)->update(['estado' => $cambiado]);
+        return 'cambiado';
     }
 
     /**

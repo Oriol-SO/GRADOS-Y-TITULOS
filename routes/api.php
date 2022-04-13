@@ -85,6 +85,8 @@ Route::get('mostrarescuela/{codigo}',[FacultadEscuelaController::class,'escuelas
 Route::get('rolesgenerales/{codigo}',[FacultadEscuelaController::class,'rolesgenerales']);
 Route::resource('adminuser',AdminUserController::class);
 Route::get('disableRol/{id}',[AdminUserController::class,'disablerol']);
+Route::get('cambiarEstado/{id}',[ProcesoController::class,'cambiarEstado']);
+
 
 
 //alumno

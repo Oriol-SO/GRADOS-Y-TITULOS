@@ -110,7 +110,7 @@
     width="420"  
     border="top"
     colored-border
-    color="rgb(44, 221, 155)"
+    v-bind:color=" proceso.estado?'rgb(44, 221, 155)':'red'"
     
   >
   
@@ -129,20 +129,21 @@
         style="color:#2196f3;"
         rounded
         elevation="0"
+        v-bind:disabled="proceso.estado ? false:true"
         class="text-capitalize"
         @click=" $router.push({ path: `/admin/tramite/${proceso.id}`, }) "     
       >
         Abrir
       </v-btn>
-      <v-btn
-       color="error lighten-5"
-        style="color:#ff5722;"
-        rounded
-        elevation="0"
-        class="text-capitalize"
-      >
-        Desactivar
-      </v-btn>
+
+      <v-switch
+      class="ml-2"
+      :input-value="proceso.estado"
+      :label="proceso.estado ? 'Activado' : 'Desactivado'"
+      inset
+      color="rgb(44, 221, 155)"
+      @click="cambiarEstado(proceso.id)"
+    ></v-switch>
     </v-card-actions>
   </v-alert>
    
@@ -159,7 +160,6 @@ import Form from "vform";
     data () {
        
       return {  
-          //select:{graNom:'',id:''} ,
           grados:[],
           procesos:[],         
           modalidades:[],
@@ -184,8 +184,7 @@ import Form from "vform";
       async FetchProceso() {
         const { data } = await axios.get("/api/proceso");
         this.procesos = data.tramites;
-
-        console.log(data);
+        console.log("procesos",data);
       },async FetchGrados(){
         const { data } = await axios.get("/api/grado");
         this.grados = data;
@@ -214,6 +213,18 @@ import Form from "vform";
         
           
 
+      },async cambiarEstado(id){
+        await axios.get(`/api/cambiarEstado/${id}`).then(response =>{
+            this.FetchProceso();
+            this.clear();
+            this.dialog=false;
+          }).catch(error=>{
+            if(error.response.status === 422){
+              this.errores=error.response.data.errors;
+              console.log(this.errors);
+            }
+          });
+
       }, clear() {
          this.form.nombre='';
          this.form.grado=null;
@@ -222,8 +233,6 @@ import Form from "vform";
          
       }
 
-
-    
     },
   }
 </script>
