@@ -32,8 +32,8 @@ class VerificationController extends Controller
 
         if ($user->hasVerifiedEmail()) {
             return response()->json([
-                'status' => trans('verification.already_verified'),
-            ], 400);
+                'status' => trans('!tu cuenta ya esta verificada¡'),
+            ]);
         }
 
         $user->markEmailAsVerified();
@@ -41,7 +41,7 @@ class VerificationController extends Controller
         event(new Verified($user));
 
         return response()->json([
-            'status' => trans('verification.verified'),
+            'status' => trans('Verificaste tu cuenta exitosamente'),
         ]);
     }
 

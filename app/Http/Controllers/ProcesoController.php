@@ -16,7 +16,6 @@ class ProcesoController extends Controller
      */
     public function index()
     {
-
         $tramites['tramites'] = Proceso::all()->map(function ($t) {
             return [
                 'id' => $t->id,
@@ -26,6 +25,7 @@ class ProcesoController extends Controller
                 'modalidad_id' => $t->modalidade ? $t->moda_id : null,
                 'modalidad' => $t->modalidade ? $t->modalidade->modNombre : null,
                 'estado' =>$t->estado,
+                'guardado' =>$t->guardado,
                 'cantidad_fases' => $t->fase->count(),
                 'cantidad_requisitos' => $t->fase->map(function ($f) {
                     return $f->faserolrequisito->count();
@@ -63,7 +63,8 @@ class ProcesoController extends Controller
             'grado_id' => $request->grado['id'],
             'moda_id' => $request->modalidad['id'],
             'tipo' => $request->tipo,
-            'estado'=>$request->estado,
+            'estado'=>0,
+            'guardado'=>0,
         ]);
         return response()->json([
             'tramite'=>$proceso
@@ -80,7 +81,9 @@ class ProcesoController extends Controller
     {
         $proceso = Proceso::find($id);
          $response=[
-             'nombre'=>$proceso->procNom
+             'nombre'=>$proceso->procNom,
+             'guardado'=>$proceso->guardado,
+             'estado'=>$proceso->estado,
          ];
         return response()->json($response, 200);
     }
@@ -129,15 +132,41 @@ class ProcesoController extends Controller
     }
     protected function cambiarEstado($id)
     {   
+        
         $valor = Proceso::find($id);
-        $estado=$valor->estado;
-        if($estado==1){
-            $cambiado=0;
+        if($valor->guardado==1){
+            $estado=$valor->estado;
+            if($estado==1){
+                $cambiado=0;
+            }else{
+                $cambiado=1;
+            }
+            $proceso=Proceso::where('id', $id)->update(['estado' => $cambiado]);
+            return 'cambiado';
         }else{
-            $cambiado=1;
+            return 'el tramite no esta guardado';
         }
-        $proceso=Proceso::where('id', $id)->update(['estado' => $cambiado]);
-        return 'cambiado';
+        
+    }
+    protected function cambiarGuardado($id)
+    {   
+        $valor = Proceso::find($id);
+        if($valor->estado==0){
+            $guardado=$valor->guardado;
+            if($guardado==1){
+                $guardado=0;
+                $g=1;
+            }else{
+                $guardado=1;
+                $g=0;
+            }
+            $proceso=Proceso::where('id', $id)->update(['guardado' => $guardado]);
+            $valor = Proceso::find($id);
+            return !($valor->guardado);
+        }else{
+            return 'el tramite esta activado';
+        }
+        
     }
 
   

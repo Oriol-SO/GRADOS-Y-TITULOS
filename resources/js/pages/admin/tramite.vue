@@ -1,7 +1,7 @@
 <template>
-    <div class="ml-8 mt-5">
+    <div class="mt-5">
         <v-card  >
-        <v-card-title class="py-1 text-h5">{{procesos.nombre}}</v-card-title>
+        <v-card-text class="py-1 text-h5"><h3>{{procesos.nombre}}</h3></v-card-text>
         </v-card>     
 
         <template>
@@ -16,6 +16,7 @@
                     <div class="d-flex">
                         <v-subheader class="text-h6 d-flex" style="color:#000;">Fases del Tramite </v-subheader>
                         <v-btn 
+
                             color="#2cdd9b"
                             elevation="0" 
                             style="color:#fff;" 
@@ -53,7 +54,40 @@
                                     <v-alert   dense outlined type="error" >
                                     el Campo Orden es Obligatorio
                                     </v-alert>
-                                </div>                           
+                                </div> 
+                                <v-select
+                                    v-model="formfase.rol_ejecutor"
+                                    :items="roles"
+                                    item-text='rolNombre'
+                                    item-value='id'                                                     
+                                    
+                                    return-object
+                                    
+                                    label="encargado de subir o ejecutar"
+
+                                >                                    
+                                </v-select>  
+                                <div v-if="errores.rol_ejecutor">
+                                    <v-alert   dense outlined type="error" >
+                                     el rol del encargado de subir o ejecutar es obligatorio
+                                    </v-alert>
+                                </div>   
+                                <v-select
+                                    v-model="formfase.rol_revisar"
+                                    :items="roles"
+                                    item-text='rolNombre'
+                                    item-value='id'                                                       
+                                   
+                                    return-object
+                                    
+                                    label="encargado de revisar"
+                                >                                    
+                                </v-select>  
+                                <div v-if="errores.rol_revisar">
+                                    <v-alert   dense outlined type="error" >
+                                     el rol del encargado de revisar o evaluar es obligatorio
+                                    </v-alert>
+                                </div>                     
                                                                                   
                                     <v-btn
                                     class="mr-4 text-capitalize"
@@ -108,7 +142,9 @@
                 >
                     <div class="d-flex"  >
                         <v-card-text class="text-md-body-1 font-weight-medium" >{{ fase.nombre }} </v-card-text>
+                        
                         <v-btn
+                          v-if="estadoG"
                           icon
                           small elevation="0"  
                           color="error"
@@ -124,13 +160,13 @@
         </template>
             
             <template >
-                <div class="d-flex" style="width:100%; min-height:600px;">
-
+                <v-row    >
+                    <v-col md="8" sm="12">
               
                     <v-card
                         class=" mt-2 "
                         tile
-                        width="70%"
+                        
                     >
                     <v-list dense >
                     <v-subheader class="font-weight-medium text-md-body-1 d-flex">REQUISITOS 
@@ -318,7 +354,7 @@
                                     text
                                     @click="dialog2=false,clearall()"
                                     class="text-capitalize"
-                                >Close</v-btn>
+                                >Cerrar</v-btn>
                                 </v-card-actions>
                             </v-card>
                             </template>    
@@ -342,6 +378,7 @@
                         <div class="d-flex"  >
                             <v-list-item-title >{{requisito.nombre}}</v-list-item-title>
                             <v-btn
+                                v-if="estadoG"
                                 class=" my-auto ml-16 mr-4 " 
                                 outlined
                                 color="indigo"
@@ -357,8 +394,10 @@
                     </v-list>
                      
                     </v-card>
-                    <v-spacer></v-spacer>
-                    <v-card class="mt-2 ml-4 mr-2"  width="30%" tile>
+                    </v-col>
+                    
+                    <v-col sm="12" md="4" >
+                    <v-card class="mt-2">
                         <v-subheader class="font-weight-medium text-md-body-1">DETALLE REQUISITO </v-subheader>
                             <v-list three-line style="min-height:02;">
                                 <template>                                
@@ -366,7 +405,7 @@
                                     class="mx-auto"
                                     style="min-width:90%;"
                                     ></v-divider>
-                                <v-list-item  class="mt-1" style="min-height:50px;">
+                                    <v-list-item  class="mt-1" style="min-height:50px;">
                                     <v-list-item-content class="py-0 " style="max-height: 55px;" v-if="nombrereq" >
                                         <v-list-item-title > Nombre</v-list-item-title>
                                         <v-list-item-subtitle>{{nombrereq}}</v-list-item-subtitle>
@@ -402,10 +441,65 @@
                                     </v-list-item>
                                 
                                 </template>
-                            </v-list>
-                    </v-card>
-                  </div>
-            </template>              
+                            </v-list>       
+                        </v-card>
+                    </v-col> 
+                    <v-bottom-sheet
+                        v-if="estadoG"
+                        v-model="sheet"
+                        inset
+                        >
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn 
+                                    v-bind="attrs"
+                                    v-on="on"
+                                    color="blue-grey"                
+                                    class=" ma-2 white--text my-auto ml-auto mr-4 text-capitalize"
+                                    >
+                                Guardar
+                                <v-icon
+                                    right
+                                    dark
+                                >
+                                mdi-cloud-upload
+                                </v-icon>
+                            </v-btn>
+                        </template>
+                        <v-sheet
+                            
+                            class="text-center"
+                            height="110px"
+                        >
+                            <v-btn
+                                class="mt-1 pb-0"
+                                text
+                                color="error"
+                                @click="sheet = !sheet"
+                                >
+                            close
+                            </v-btn>
+                            <v-btn
+                                class="mt-1 pb-0"
+                                text
+                                color="green"
+                                @click="GuardarProceso(),sheet = !sheet,{ path: `/admin/tramites`} "  
+                            >
+                            Continuar
+                            </v-btn>
+                            <div class="my-1 pa-0">
+                                <v-alert
+                                    colored-border
+                                    type="info"
+                                    >
+                                    Si continua ya no podra borrar las fases ni los requisitos, solo podra agregarlos
+                                </v-alert>
+                            
+                            </div>
+                        </v-sheet>
+                    </v-bottom-sheet>
+                    
+                </v-row>
+        </template>              
 
     </div>
 </template>
@@ -417,7 +511,7 @@ export default{
 
   data(){     
      return{
-        
+        sheet: false,
         procesos:[],
         tab: null,
         fases: [],
@@ -428,6 +522,8 @@ export default{
         encargado:'',
         documento:'',
         extension:'',
+        estadoG:'',
+        estadoE:'',
         otros:[],
         dialog:false,
         dialog2:false,
@@ -437,7 +533,10 @@ export default{
         formfase: new Form({
             nombrefase:'',
             numerofase:'',
+            procesoguardado:this.$route.params.guardado,
             procesoid:this.$route.params.id,
+            rol_ejecutor:[],
+            rol_revisar:[],
           }),
         formrequi1:new Form({
             requisito:'',
@@ -468,16 +567,24 @@ export default{
       this.FetchTipoDocumento();
       this.FetchRoles();
       this.FetchPersona();
+      this.GuardarProceso();
       //console.log(this.formrequi);
     // this.formfase.procesoid=this.$route.params.id;
      // console.log(this.faseid);
 
       //console.log(this.formfase.procesoid);
+
   },methods:{
-      async FetchTramites(){
+      async GuardarProceso() {
+        const { data } = await axios.get(`/api/cambiarGuardado/${this.$route.params.id}`)
+        this.estadoG=data;
+        //console.log(data);
+      },async FetchTramites(){
           const { data } = await axios.get(`/api/proceso/${this.$route.params.id}`);   
           this.procesos = data;
-          //console.log(data);
+          this.estadoG = !(data.guardado);
+          this.estadoE = !(data.estado);
+            console.log(data);
       },
       async FetchFases(){
           const {data}=await axios.get(`/api/fase/${this.$route.params.id}`);
@@ -524,8 +631,11 @@ export default{
       }, clear() {
          this.formfase.nombrefase='';
          this.formfase.numerofase='';
+         this.formfase.rol_ejecutor='';
+         this.formfase.rol_revisar='';
          this.errores={};         
       },async enviarfase(){
+          console.log(this.formfase)
           const {data}= await this.formfase.post(`/api/fase/`)
            .then(response =>{
             this.FetchFases();
@@ -541,7 +651,6 @@ export default{
           });
       },async eliminarfase(id){
           confirm("¿Confirma eliminar el registro?");
-          
           this.formfase.delete(`/api/fase/${id}`)
           .then(response =>{
             this.FetchFases();
@@ -609,8 +718,12 @@ export default{
           });
           
       },async submitrequisitoeliminado(id){ 
-          console.log(this.formrequi2);                  
-          axios.delete(`/api/faserequisito/${id}`)
+          console.log(this.formrequi2);  
+          const {data}= await axios.get('/api/faserequisito/'); 
+          console.log(data); 
+          const{data2}=await axios.get('/api/tipoarchivo/');
+          console.log(data2);              
+          /* axios.delete(`/api/faserequisito/${id}`)
            .then(response =>{
             this.mostrarrequisito(this.formrequi2.fase_id);
             this.clearall();
@@ -621,7 +734,7 @@ export default{
               this.erroresR2=error.response.data.errors;
               console.log(this.erroresR2);
             }
-          });
+          }); */
           
       }
   }

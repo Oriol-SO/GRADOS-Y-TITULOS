@@ -53,7 +53,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 Route::group(['middleware' => 'guest:api'], function () {
     Route::post('login', [LoginController::class, 'login']);
-    Route::post('register', [RegisterController::class, 'register']);
+    Route::post('register', [RegisterController::class, 'RegistrarUser']);
     Route::get('datauser/{codigo}', [RegisterController::class, 'datosusuario']);   
 
     Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail']);
@@ -68,6 +68,8 @@ Route::group(['middleware' => 'guest:api'], function () {
 });
 
 Route::resource('proceso', ProcesoController::class);
+Route::get('cambiarEstado/{id}', [ProcesoController::class, 'cambiarEstado']);
+Route::get('cambiarGuardado/{id}', [ProcesoController::class, 'cambiarGuardado']);
 Route::resource('grado', GradoController::class);
 Route::resource('modalidades', ModalidadController::class);
 Route::resource('fase',FaseController::class);
@@ -114,4 +116,5 @@ Route::get('sf-faserequisito/{id}/{tramite}',[SecretariaController::class,'sf_re
 Route::get('sf-archivorequisito/{tramite}/{fasereq}',[SecretariaController::class,'sf_archivorequisito']);
 Route::post('sf-revisarrequisito',[SecretariaController::class,'sf_revisarrequisito']);
 Route::post('sf-subirfilerequisito',[SecretariaController::class,'sf_subirrequisito']);
+Route::get('sf-fasecheck/{tramite}/{fase}',[SecretariaController::class,'sf_fasecheck']);
 

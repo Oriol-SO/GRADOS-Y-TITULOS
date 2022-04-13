@@ -2,10 +2,10 @@
    <div>
      <sidevar :items="links"/>
     
-     <div class="ml-12" >
+     <div class="ml-3" >
        <router-view></router-view>
      </div>
-     
+    
  
    </div>
 

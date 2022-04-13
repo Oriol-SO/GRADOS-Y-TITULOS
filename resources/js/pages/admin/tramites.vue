@@ -76,10 +76,10 @@
                       @click="enviar"
                       style="color:#fff;"
                     >
-                      submit
+                      Crear
                     </v-btn>
                     <v-btn @click="clear" color="#000"  style="color:#fff;">
-                      clear
+                      Limpiar
                     </v-btn>
              </form>
 
@@ -93,7 +93,7 @@
                 text
                 @click="dialog=false,clear()"
                
-              >Close</v-btn>
+              >Cerrar</v-btn>
             </v-card-actions>
           </v-card>
         </template>
@@ -183,7 +183,7 @@ import Form from "vform";
       async FetchProceso() {
         const { data } = await axios.get("/api/proceso");
         this.procesos = data.tramites;
-        console.log("procesos",data);
+        //console.log("procesos",data);
       },async FetchGrados(){
         const { data } = await axios.get("/api/grado");
         this.grados = data;
@@ -196,8 +196,7 @@ import Form from "vform";
         console.log(data);
       }, async enviar(){
              
-         console.log(this.form);
-          
+        //  console.log(this.form);
           const { data } =await this.form.post("/api/proceso")
           .then(response =>{
             this.FetchProceso();

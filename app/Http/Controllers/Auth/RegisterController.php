@@ -17,19 +17,48 @@ use Illuminate\Database\QueryException;
 
 class RegisterController extends Controller
 {
+
+
     use RegistersUsers;
 
-    /**
+     /**
      * Create a new controller instance.
      */
+    
+    public function RegistrarUser(Request $request){
+        $request->validate([
+            'password' => 'required|confirmed',
+            'password_confirmation'=>'required',
+            'codigo'=> 'required|numeric|unique:personas,cod_alum',    
+        ]);
+        try{
+            $user=$this->datosusuario($request->codigo);        
+
+            if(isset($user['message'])){
+                return 'ERROR_1'; //el codigo no existe
+            }else{
+                if($user['Correo Institucional']==""){
+                    return 'ERROR_CORREO'; //el correo esta vacio
+                }else{
+                    $usuario=$this->register($request);
+                    return $usuario;
+                }
+            }
+        }catch(Exception $e){
+            return 'ERROR_API';
+        }
+    }
     public function __construct()
     {
         $this->middleware('guest');
     }
+
+
+    public $correo_institucional='';
     protected function registered(Request $request, User $user)
     {
         if ($user instanceof MustVerifyEmail) {
-            return response()->json(['status' => 'Verifica tu cuenta ingresando a tu correo institucional']);
+            return response()->json(['status' => trans('verification.sent'),'correo'=>$this->correo_institucional]);
         }
         
         return response()->json($user);
@@ -40,62 +69,63 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'password' => 'required|confirmed',
             'password_confirmation'=>'required',
-            'codAlu'=> 'required|numeric|unique:personas,cod_alum',    
+            'codigo'=> 'required|numeric|unique:personas,cod_alum',    
         ]);
     }
 
     protected function create( array $request):User{
         
         //$this->validaruser($request);
-        $codAlu=$request['codAlu'];
-        $date= $this->datosusuario($codAlu);
-        $curricula=$date['Curricula'];
-        $curri= $this->curricula($curricula);
-        $school= $this->escuela($curri);
-        //  return $school[0]->FACULTAD_ID;
-        $g=1;
-        if ($date['Genero']=='F') {
-            $g=0;
-        }
-        try{
-            $persona=Persona::create([
+        $codigo=$request['codigo'];
+        $date= $this->datosusuario($codigo);
 
-                'nom' => $date['Nombres'],
-                'apePat' =>  $date['Apellido paterno'],
-                'apeMat' =>  $date['Apellido materno'],
-                'gen' => $g,
-                'dom' =>  $date['Domicilio']?$date['Domicilio']:'',
-                'email' => $date['Correo Institucional'],
-                'tipDoc' => '1',
-                'numDoc' =>  $date['Dni'],
-                'fecNac' =>  $date['Fecha de nacimiento'],            
-                'numCel' => '99999999',
-                'espe' => $school[0]->ID_ESC,
-                'cod_alum'=>  $codAlu,  
-                'curri'=> $curricula, 
-                'fec_matri'=>$date['Fecha de Ingreso'],
-                'grad_estud'=>"",
-                'abre_grad'=>"",
-            ]);  
-            $rolesuser= PersonaRole::create([
-                'estado'=>1,
-                'persona_id'=>$persona->id,
-                'facId'=>$school[0]->FACULTAD_ID,
-                'escId'=>$school[0]->ID_ESC,
-                'rol_id'=>'10',
-            ]); 
-            $user=User::create([
-                'name'=>$date['Nombres'],
-                'email'=>$date['Correo Institucional'],
-                'password'=>Hash::make($request['password']),
-                'persona_id'=>$persona->id,
-            ]);    
+            $curricula=$date['Curricula'];
+            $curri= $this->curricula($curricula);
+            $school= $this->escuela($curri);
+            //  return $school[0]->FACULTAD_ID;
+            $g=1;
+            if ($date['Genero']=='F') {
+                $g=0;
+            }
+            try{
+                $persona=Persona::create([
 
-      //  $this->reg($request,$user);
-        
-            return $user;
-        }catch(QueryException $e){
-            return 'error conex';} 
+                    'nom' => $date['Nombres'],
+                    'apePat' =>  $date['Apellido paterno'],
+                    'apeMat' =>  $date['Apellido materno'],
+                    'gen' => $g,
+                    'dom' =>  $date['Domicilio']?$date['Domicilio']:'',
+                    'email' => $date['Correo Institucional'],
+                    'tipDoc' => '1',
+                    'numDoc' =>  $date['Dni'],
+                    'fecNac' =>  $date['Fecha de nacimiento'],            
+                    'numCel' => '99999999',
+                    'espe' => $school[0]->ID_ESC,
+                    'cod_alum'=>  $codigo,  
+                    'curri'=> $curricula, 
+                    'fec_matri'=>$date['Fecha de Ingreso'],
+                    'grad_estud'=>"",
+                    'abre_grad'=>"",
+                ]);  
+                $rolesuser= PersonaRole::create([
+                    'estado'=>1,
+                    'persona_id'=>$persona->id,
+                    'facId'=>$school[0]->FACULTAD_ID,
+                    'escId'=>$school[0]->ID_ESC,
+                    'rol_id'=>'10',
+                ]); 
+                $user=User::create([
+                    'name'=>$date['Nombres'],
+                    'email'=>$date['Correo Institucional'],
+                    'password'=>Hash::make($request['password']),
+                    'persona_id'=>$persona->id,
+                ]);    
+
+            $this->correo_institucional=$user->email;
+            
+                return $user;
+            }catch(QueryException $e){
+                return 'error conex';} 
         
     }
 

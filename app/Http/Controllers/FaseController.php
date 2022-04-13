@@ -56,6 +56,8 @@ class FaseController extends Controller
                     'numero' => $request->numerofase,
                     'proceso_id' => $request->procesoid,
                     'fase_id' =>null,
+                    'encargado_ejecutar'=>$request->rol_ejecutor['id'],
+                    'encargado_revisar'=>$request->rol_revisar['id'],
                     ]);
                     return response()->json([
                         'fase'=>$fase,
@@ -122,7 +124,9 @@ class FaseController extends Controller
     public function validarfase($request=null){
         return $request->validate([
             'nombrefase' => 'required',
-            'numerofase' => 'required|integer'
+            'numerofase' => 'required|integer',
+            'rol_ejecutor'=>'required',
+            'rol_revisar'=>'required',
         ]);
     }
 }

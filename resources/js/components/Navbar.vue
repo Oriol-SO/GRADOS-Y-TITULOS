@@ -1,13 +1,10 @@
 <template>
-  <v-app-bar app :color="bgNavbar"  elevation="1"  flat   >
-    <v-container class="py-0 fill-height" fluid>
-      <v-app-bar-nav-icon>
-        <v-img max-height="40" max-width="40" src="/img/u.png" />
-      </v-app-bar-nav-icon>
-      <v-app-bar-title style="color:#grey;">{{ appName }}</v-app-bar-title>
+<v-app-bar app >
 
+    <v-toolbar dense elevation="0" style="background:rgb(242, 243, 248); ">
+     <v-img class="ml-10 mr-5" max-height="30" max-width="30" src="/img/u.png" />
+      <v-toolbar-title>{{ appName }}</v-toolbar-title>
       <v-spacer></v-spacer>
-
       <v-btn v-for="(link, i) in linksVerified" :key="i" text :to="link.path"  style="color:#000;">
         {{ link.name }}
       </v-btn>
@@ -19,7 +16,7 @@
               <v-icon color="grey">mdi-account-circle</v-icon>
             </v-avatar>
           </v-btn>
-        </template>
+        </template> 
         <v-card>
           <v-list-item-content class="justify-center">
             <div class="mx-auto text-center" >
@@ -44,7 +41,8 @@
           </v-list-item-content>
         </v-card>
       </v-menu>
-    </v-container>
+    </v-toolbar>
+
   </v-app-bar>
 </template>
 
@@ -86,22 +84,7 @@ export default {
       // Redirect to login.
       this.$router.push({ name: "login" });
     },
-    changeColor() {
-      if (
-        document.body.scrollTop > 10 ||
-        document.documentElement.scrollTop > 10
-      ) {
-        this.bgNavbar = "white";
-      } else {
-        this.bgNavbar = "transparent";
-      }
-    },
+    
   },
 };
 </script>
-
-<style scoped>
-.cristal {
-  backdrop-filter: blur(10px) !important;
-}
-</style>

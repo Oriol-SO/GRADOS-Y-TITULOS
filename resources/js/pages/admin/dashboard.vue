@@ -14,13 +14,7 @@
     <v-card-text class="text-h4 font-weight-thin">
         Procesos del Año
     </v-card-text>
-    <v-textarea
-          solo
-          name="input-7-4"
-          label="Ingrese datos"
-          v-model="formrequi1.dato"
-        ></v-textarea>
-    <v-btn @click="GenerarPDF()">PDF</v-btn>
+  
   </v-card>
   
     <v-spacer></v-spacer>
@@ -81,7 +75,7 @@
           :key="i"
         >
           <td>{{proceso.nombre}}</td>
-           <td>{{Math.floor(Math.random() * 40)}} días</td>
+          <td>{{Math.floor(Math.random() * 40)}} días</td>
         </tr>
         </tbody>
      </template>
@@ -136,8 +130,8 @@ export default {
   },methods: {
       async FetchProceso() {
         const { data } = await axios.get("/api/proceso");
-        this.procesos = data.tramites;
-
+        this.procesos = data;
+        console.log(data);
       },
       async FetchProceso() {
         const { data } = await axios.get("/api/pdf");

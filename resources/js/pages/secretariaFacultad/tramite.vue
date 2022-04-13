@@ -42,6 +42,17 @@
                                 <v-icon dark right>mdi-arrow-down</v-icon>
                                 </v-btn>
 
+                                <v-btn 
+                                v-if="fase.encargado_revisar==5"
+                                class="mb-2 text-capitalize" 
+                                elevation="0"
+                                color="cyan lighten-2"
+                                style="float: right; color:#fff;"
+                                @click="aprobarfase(fase.id)"
+                                >
+                                    Aprovar Fase
+                                </v-btn>
+
                                 <v-divider></v-divider>
                                 <v-list>
                                     <v-subheader class="font-weight-medium text-md-body-1 d-flex" v-if="requisitos.length" >
@@ -265,14 +276,14 @@
                 </v-stepper>
             </v-card>
         </v-col>
-         <v-col ms="12" md="3">
+        <v-col ms="12" md="3">
             <v-card class="ml-2" elevation="0" >
                <v-subheader :inset="inset">
                     Fases del tramite
                 </v-subheader>
 
                     <v-stepper
-                    value="1"
+                    :value="fase_actualy"
                     class="mt-12"
                     vertical
                     style="display: contents;"
@@ -280,7 +291,7 @@
                     <v-stepper-header elevation="0" style="min-height:450px; overflow:auto; flex-wrap: nowrap; flex-direction: column;">
                         <v-stepper-step v-for="(fase,i) in fasestramite" :key="i"
                         :step="i+1"
-                        
+                        v-bind:complete="(i+1)<fase_actualy"
                         color="green"
                         >
                         {{fase.nombre}}
@@ -599,6 +610,30 @@
 
     </template>
 
+      <template>
+        <div class="text-center ma-2">
+
+            <v-snackbar
+                v-model="alert_fase_notify"
+                tile
+                color="red accent-2"
+                top
+            >
+            {{ msg_notify }}
+
+            <template v-slot:action="{ attrs }">
+                <v-btn
+                color="white"
+                text
+                v-bind="attrs"
+                @click="alert_fase_notify = false"
+                >
+                Close
+                </v-btn>
+            </template>
+            </v-snackbar>
+        </div>
+      </template>
     
   </div>    
 </template>
@@ -611,7 +646,10 @@ export default {
 
     data(){
         return{
+          alert_fase_notify:false,
+          msg_notify:'',
           e1: 1,
+          fase_actualy:'',
           nomtramite:[],
           fases:[],
           numfases:'',
@@ -678,7 +716,13 @@ export default {
        // this.fetchfase();
         this.numfase();
     },methods:{
-
+      async aprobarfase(id){
+          await axios.get(`/api/sf-fasecheck/${this.$route.params.id}/${id}`).then(response=>{
+              this.alert_fase_notify=true;
+              this.msg_notify='esta fase esta aprobada';
+              this.fetchtramite();
+          });
+      },
       obser(){
           this.formrevisado.aprovado=false;
           this.formrevisado.revisado=0;
@@ -695,6 +739,7 @@ export default {
       async fetchtramite(){
          const { data } = await axios.get(`/api/sf-tramite/${this.$route.params.id}`);   
          this.nomtramite = data;
+         this.fase_actualy=data.fase_actual;
         // this.codigoproc=this.nomtramite.proceso_id;
          //console.log(this.codigoproc)
           this.fetchfase(this.nomtramite.proceso_id)
@@ -801,6 +846,9 @@ export default {
               this.formrevisado.aprovado=true;
               this.revisar_req=false;
               this.nom_estado_req='Este requisito esta aprobado';
+
+
+
           }else if(requisito.observacion.length>0){
               this.formrevisado.observado=true;
               this.formrevisado.observacion=requisito.observacion[0].texto;
@@ -828,6 +876,7 @@ export default {
                 if(response.data===1){
                      this.revisar_errores='selleciona una opcion si quieres guardar cambios';
                      this.boxerror=true;
+
                 }else if(response.data===2){
                      this.revisar_errores='ya fue aprobado este documento';
                      this.boxerror=true;

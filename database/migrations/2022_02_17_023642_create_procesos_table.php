@@ -20,6 +20,7 @@ class CreateProcesosTable extends Migration
             $table->BigInteger('moda_id')->unsigned()->nullable();
             $table->string('tipo');
             $table->boolean('estado')->default(true);
+            $table->boolean('guardado')->default(false);
             $table->foreign('grado_id')->references('id')->on('grados');
             $table->foreign('moda_id')->references('id')->on('modalidades');
             

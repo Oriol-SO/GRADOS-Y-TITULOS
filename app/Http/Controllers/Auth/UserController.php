@@ -30,6 +30,10 @@ class UserController extends Controller
             'Ncelular'=>$persona->numcel,
             'Nacimiento'=>$persona->fecNac,
             'GradoEstudios'=>$persona->grad_estud,
+            'Abreviatura'=>$persona->abre_grad,
+            'Egreso'=>$persona->fec_egre,
+            'Documento'=>$persona->numDoc,
+
         );
         return response()->json($datosUser);
         
