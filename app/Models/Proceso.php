@@ -14,6 +14,7 @@ class Proceso extends Model
         'moda_id',
         'tipo',
         'estado',
+        'guardado',
 
     ];
 

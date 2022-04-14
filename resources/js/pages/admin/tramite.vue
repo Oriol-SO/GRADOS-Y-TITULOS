@@ -16,6 +16,7 @@
                     <div class="d-flex">
                         <v-subheader class="text-h6 d-flex" style="color:#000;">Fases del Tramite </v-subheader>
                         <v-btn 
+                            v-if="estadoE && uso"
                             color="#2cdd9b"
                             elevation="0" 
                             style="color:#fff;" 
@@ -51,7 +52,7 @@
                                 ></v-text-field> 
                                 <div v-if="errores.numerofase">
                                     <v-alert   dense outlined type="error" >
-                                    El orden es obligatorio 
+                                    el Campo Orden es Obligatorio
                                     </v-alert>
                                 </div> 
                                 <v-select
@@ -139,10 +140,20 @@
                     :key="i"
 
                 >
-                    <v-card flat  >
+                    <div class="d-flex"  >
+                        <v-card-text class="text-md-body-1 font-weight-medium" >{{ fase.nombre }} </v-card-text>
                         
-                    <v-card-text class="text-md-body-1 font-weight-medium" >{{ fase.nombre }} </v-card-text>
-                    </v-card>
+                        <v-btn
+                          v-if="estadoG"
+                          icon
+                          small elevation="0"  
+                          color="error"
+                          class="my-auto ml-n16"
+                          @click="eliminarfase(fase.id)"
+                        >
+                          <v-icon>mdi-delete</v-icon>
+                        </v-btn>
+                    </div>
                 </v-tab-item>
                 </v-tabs-items>
             </v-card>
@@ -167,7 +178,8 @@
                             <template v-slot:activator="{ on, attrs }" >
                                 <div class="d-flex" style="width: 100%;">
                                     
-                                <v-btn v-if="faseid" color="#2cdd9b" small elevation="0" style="color:#fff;"  class=" ml-auto text-capitalize"  
+                                <v-btn v-if="faseid && estadoE && uso" 
+                                color="#2cdd9b" small elevation="0" style="color:#fff;"  class=" ml-auto text-capitalize"  
                                 v-bind="attrs"
                                 v-on="on" >Agregar requisito</v-btn> 
                                 </div>
@@ -343,7 +355,7 @@
                                     text
                                     @click="dialog2=false,clearall()"
                                     class="text-capitalize"
-                                >Close</v-btn>
+                                >Cerrar</v-btn>
                                 </v-card-actions>
                             </v-card>
                             </template>    
@@ -364,26 +376,20 @@
                         <v-list-item-icon>
                             <v-icon >mdi-check-outline</v-icon>
                         </v-list-item-icon>
-                        <v-list-item-content>
-                            <v-list-item-title class="d-flex" >{{requisito.nombre}}
-                                <div class="ml-auto">
-                                    <v-chip
-                                    color="deep-purple accent-1"
-                                    text-color="#fff"
-                                    >                       
-                                        {{requisito.rol}}
-                                        <v-avatar
-                                            rigth
-                                            class="deep-purple accent-3 ml-1"
-                                            text-color="#fff"
-                                        >
-                                        <v-icon>mdi-account-tie</v-icon>
-                                        </v-avatar>
-                                    </v-chip>
-                                </div>                             
-                            </v-list-item-title>
-
-                        </v-list-item-content>
+                        <div class="d-flex"  >
+                            <v-list-item-title >{{requisito.nombre}}</v-list-item-title>
+                            <v-btn
+                                v-if="estadoG"
+                                class=" my-auto ml-16 mr-4 " 
+                                outlined
+                                color="indigo"
+                                small elevation="0"  
+                                depressed
+                                @click="submitrequisitoeliminado(requisito.id)"
+                            >
+                                <v-icon>mdi-delete</v-icon>
+                            </v-btn>
+                        </div>
                         </v-list-item>
                     </v-list-item-group>
                     </v-list>
@@ -400,7 +406,7 @@
                                     class="mx-auto"
                                     style="min-width:90%;"
                                     ></v-divider>
-                                <v-list-item  class="mt-1" style="min-height:50px;">
+                                    <v-list-item  class="mt-1" style="min-height:50px;">
                                     <v-list-item-content class="py-0 " style="max-height: 55px;" v-if="nombrereq" >
                                         <v-list-item-title > Nombre</v-list-item-title>
                                         <v-list-item-subtitle>{{nombrereq}}</v-list-item-subtitle>
@@ -437,10 +443,64 @@
                                 
                                 </template>
                             </v-list>       
-                    </v-card>
+                        </v-card>
                     </v-col> 
-                  </v-row>
-            </template>              
+                    <v-bottom-sheet
+                        v-if="estadoG"
+                        v-model="sheet"
+                        inset
+                        >
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn 
+                                    v-bind="attrs"
+                                    v-on="on"
+                                    color="blue-grey"                
+                                    class=" ma-2 white--text my-auto ml-auto mr-4 text-capitalize"
+                                    >
+                                Guardar
+                                <v-icon
+                                    right
+                                    dark
+                                >
+                                mdi-cloud-upload
+                                </v-icon>
+                            </v-btn>
+                        </template>
+                        <v-sheet
+                            
+                            class="text-center"
+                            height="110px"
+                        >
+                            <v-btn
+                                class="mt-1 pb-0"
+                                text
+                                color="error"
+                                @click="sheet = !sheet"
+                                >
+                            close
+                            </v-btn>
+                            <v-btn
+                                class="mt-1 pb-0"
+                                text
+                                color="green"
+                                @click="GuardarProceso(),sheet = !sheet,{ path: `/admin/tramites`} "  
+                            >
+                            Continuar
+                            </v-btn>
+                            <div class="my-1 pa-0">
+                                <v-alert
+                                    colored-border
+                                    type="info"
+                                    >
+                                    Si continua ya no podra borrar las fases ni los requisitos, solo podra agregarlos
+                                </v-alert>
+                            
+                            </div>
+                        </v-sheet>
+                    </v-bottom-sheet>
+                    
+                </v-row>
+        </template>              
 
     </div>
 </template>
@@ -452,6 +512,7 @@ export default{
 
   data(){     
      return{
+        sheet: false,
         procesos:[],
         tab: null,
         fases: [],
@@ -462,6 +523,9 @@ export default{
         encargado:'',
         documento:'',
         extension:'',
+        estadoG:'',
+        estadoE:'',
+        uso:'',
         otros:[],
         dialog:false,
         dialog2:false,
@@ -471,6 +535,7 @@ export default{
         formfase: new Form({
             nombrefase:'',
             numerofase:'',
+            procesoguardado:this.$route.params.guardado,
             procesoid:this.$route.params.id,
             rol_ejecutor:[],
             rol_revisar:[],
@@ -504,16 +569,25 @@ export default{
       this.FetchTipoDocumento();
       this.FetchRoles();
       this.FetchPersona();
+      this.GuardarProceso();
       //console.log(this.formrequi);
     // this.formfase.procesoid=this.$route.params.id;
      // console.log(this.faseid);
 
       //console.log(this.formfase.procesoid);
+
   },methods:{
-      async FetchTramites(){
+      async GuardarProceso() {
+        const { data } = await axios.get(`/api/cambiarGuardado/${this.$route.params.id}`)
+        this.estadoG=data;
+        //console.log(data);
+      },async FetchTramites(){
           const { data } = await axios.get(`/api/proceso/${this.$route.params.id}`);   
           this.procesos = data;
-          //console.log(data);
+          this.estadoG = !(data.guardado);
+          this.estadoE = !(data.estado);
+          this.uso=!(data.uso);
+        console.log(this.uso);
       },
       async FetchFases(){
           const {data}=await axios.get(`/api/fase/${this.$route.params.id}`);
@@ -564,7 +638,6 @@ export default{
          this.formfase.rol_revisar='';
          this.errores={};         
       },async enviarfase(){
-          console.log(this.formfase)
           const {data}= await this.formfase.post(`/api/fase/`)
            .then(response =>{
             this.FetchFases();
@@ -578,6 +651,21 @@ export default{
             //  console.log(this.errores);
             }
           });
+      },async eliminarfase(id){
+          confirm("¿Confirma eliminar el registro?");
+          this.formfase.delete(`/api/fase/${id}`)
+          .then(response =>{
+            this.FetchFases();
+            this.clear();
+            this.dialog=false;
+            
+          }).catch(error=>{
+            if(error.response.status === 422){
+              this.errores=error.response.data.errors;
+              console.log(this.errores);
+            }
+          });
+
       },async FetchAllrequisitos(){
              const {data}=await axios.get(`/api/requisito/`);
              this.allrequisitos=data;
@@ -602,8 +690,7 @@ export default{
       },clearall(){
           this.limpiarnuevo();
           this.limpiarselect();          
-      },async submitrequisito(){ 
-          console.log(this.formrequi1);                  
+      },async submitrequisito(){                  
           const {data}= await this.formrequi1.post('/api/faserequisito/')
            .then(response =>{
             this.mostrarrequisito(this.formrequi1.fase_id);
@@ -616,8 +703,7 @@ export default{
             }
           });
           
-      },async submitrequisitonuevo(){ 
-          console.log(this.formrequi2);                  
+      },async submitrequisitonuevo(){                 
           const {data}= await this.formrequi2.post('/api/requisito/')
            .then(response =>{
             this.mostrarrequisito(this.formrequi2.fase_id);
@@ -630,6 +716,24 @@ export default{
             //  console.log(this.erroresR2);
             }
           });
+          
+      },async submitrequisitoeliminado(id){ 
+          /* console.log(this.formrequi2);  
+          const {data}= await axios.get(`/api/ver/${id}`); 
+          console.log("fase",data);  
+          console.log("fase",id);    */   
+          axios.delete(`/api/faserequisito/${id}`)
+           .then(response =>{
+            this.mostrarrequisito(this.formrequi2.fase_id);
+            this.clearall();
+            this.dialog2=false;
+            console.log(response);
+          }).catch(error=>{
+            if(error.response.status === 422){
+              this.erroresR2=error.response.data.errors;
+              console.log(this.erroresR2);
+            }
+          }); 
           
       }
   }

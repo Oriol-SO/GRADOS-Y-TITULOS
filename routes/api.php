@@ -21,12 +21,15 @@ use App\Http\Controllers\BachillerIniController;
 use App\Http\Controllers\FacultadEscuelaController;
 use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\SecretariaController;
+use App\Http\Controllers\EditorController;
+use App\Http\Controllers\PdfController;
 use App\Http\Controllers\SecretariaGeneral1Controller;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\tramiteController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SecretariaVicerrectoradoController;
+
 
 
 /*
@@ -66,6 +69,7 @@ Route::group(['middleware' => 'guest:api'], function () {
 });
 
 Route::resource('proceso', ProcesoController::class);
+
 Route::resource('grado', GradoController::class);
 Route::resource('modalidades', ModalidadController::class);
 Route::resource('fase',FaseController::class);
@@ -80,14 +84,18 @@ Route::resource('bachillerFinal',BachillerFinalController::class);
 
 Route::get('buscardni/{codigo}', [PersonaController::class, 'buscardniuser']);
 Route::get('facuescuela',[FacultadEscuelaController::class,'facultad']);
+Route::get('ver/{id}',[FaseRequisitoController::class,'ver']);
 
 Route::get('mostrarescuela/{codigo}',[FacultadEscuelaController::class,'escuelas']);
 Route::get('rolesgenerales/{codigo}',[FacultadEscuelaController::class,'rolesgenerales']);
 Route::resource('adminuser',AdminUserController::class);
 Route::get('disableRol/{id}',[AdminUserController::class,'disablerol']);
-Route::get('cambiarEstado/{id}',[ProcesoController::class,'cambiarEstado']);
+Route::get('cambiarEstado/{id}', [ProcesoController::class, 'cambiarEstado']);
+Route::get('cambiarGuardado/{id}', [ProcesoController::class, 'cambiarGuardado']);
 
-
+//pdf
+Route::post('/generatePDF', [PdfController::class,'Addtopdf']);
+Route::get('/editor',[EditorController::class,'editor']);
 
 //alumno
 Route::resource('tramite',tramiteController::class);
@@ -97,7 +105,6 @@ Route::post('alu-filerequisito/',[tramiteController::class,'subirarchivorequisit
 Route::get('alu_autorized/{fase}/{tramite}',[tramiteController::class,'alu_autorized']);
 Route::get('alu-notificarcambio/{fase}/{tramite}',[tramiteController::class,'alu_notificarCambio']);
 Route::get('alu-proceso',[tramiteController::class,'alu_procesos']);
-
 
 //rutas scretaria general 1
 

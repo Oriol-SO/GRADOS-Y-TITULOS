@@ -26,8 +26,8 @@ export default {
     links: [
       { title: "Dashboard", icon: "mdi-view-dashboard", to: "admin.dashboard" },
       { title: "Tramites", icon: "mdi-folder", to: "admin.tramites" },
-      { title: "Personas/Usuarios", icon: "mdi-account-multiple",to: "admin.usuarios",
-      },
+      { title: "Personas/Usuarios", icon: "mdi-account-multiple",to: "admin.usuarios"},
+      { title: "tiny", icon: "mdi-file-pdf-box",to: "admin.tiny"},
     ],
   }),
 

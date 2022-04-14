@@ -76,24 +76,19 @@
                       @click="enviar"
                       style="color:#fff;"
                     >
-                      submit
+                      Crear
                     </v-btn>
                     <v-btn @click="clear" color="#000"  style="color:#fff;">
-                      clear
+                      Limpiar
                     </v-btn>
              </form>
-
-            
-
-
-
             </v-card-text>
             <v-card-actions class="justify-end">
               <v-btn
                 text
                 @click="dialog=false,clear()"
                
-              >Close</v-btn>
+              >Cerrar</v-btn>
             </v-card-actions>
           </v-card>
         </template>
@@ -128,21 +123,34 @@
         color="blue lighten-5"
         style="color:#2196f3;"
         rounded
-        elevation="0"
+        elevation="0"        
         class="text-capitalize"
         @click=" $router.push({ path: `/admin/tramite/${proceso.id}`, }) "     
       >
         Abrir
       </v-btn>
-
+      
       <v-switch
+      v-if="proceso.guardado"
       class="ml-2"
       :input-value="proceso.estado"
       :label="proceso.estado ? 'Activado' : 'Desactivado'"
       inset
       color="rgb(44, 221, 155)"
       @click="cambiarEstado(proceso.id)"
-    ></v-switch>
+      ></v-switch>
+      <v-chip
+        v-if="proceso.uso"
+        class="ml-auto "
+        color="primary"
+        outlined
+        pill
+      >
+      <v-icon left>
+        mdi-alert-circle
+      </v-icon>
+        En uso
+      </v-chip>
     </v-card-actions>
   </v-alert>
    
@@ -159,6 +167,7 @@ import Form from "vform";
     data () {
        
       return {  
+          tramite:[],
           grados:[],
           procesos:[],         
           modalidades:[],
@@ -177,27 +186,23 @@ import Form from "vform";
       this.FetchProceso();
       this.FetchGrados();
       this.FetchModalidad();
+      this.FetchTramite();
     }, 
     
     methods:{
       async FetchProceso() {
         const { data } = await axios.get("/api/proceso");
         this.procesos = data.tramites;
-        console.log("procesos",data);
+        
       },async FetchGrados(){
         const { data } = await axios.get("/api/grado");
         this.grados = data;
-
-        console.log(data);
       },async FetchModalidad(){
         const { data } = await axios.get("/api/modalidades");
         this.modalidades = data;
-
-        console.log(data);
       }, async enviar(){
              
-         console.log(this.form);
-          
+        //  console.log(this.form);
           const { data } =await this.form.post("/api/proceso")
           .then(response =>{
             this.FetchProceso();
