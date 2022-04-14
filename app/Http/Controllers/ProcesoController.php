@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Proceso;
 use App\Models\Grado;
 use App\Models\Modalidade;
+use App\Models\Tramite;
 
 class ProcesoController extends Controller
 {
@@ -18,6 +19,7 @@ class ProcesoController extends Controller
     {
         $tramites['tramites'] = Proceso::all()->map(function ($t) {
             return [
+                'uso'=>Tramite::where('proceso_id',$t->id)->where('estado',0)->first()?1:0,
                 'id' => $t->id,
                 'nombre' => $t->procNom,
                 'grado_id' => $t->grado ? $t->grado_id : null,
@@ -27,6 +29,7 @@ class ProcesoController extends Controller
                 'estado' =>$t->estado,
                 'guardado' =>$t->guardado,
                 'cantidad_fases' => $t->fase->count(),
+                'estado'=>$t->estado,
                 'cantidad_requisitos' => $t->fase->map(function ($f) {
                     return $f->faserolrequisito->count();
                 })->sum(),
@@ -64,7 +67,6 @@ class ProcesoController extends Controller
             'moda_id' => $request->modalidad['id'],
             'tipo' => $request->tipo,
             'estado'=>0,
-            'guardado'=>0,
         ]);
         return response()->json([
             'tramite'=>$proceso
@@ -84,8 +86,22 @@ class ProcesoController extends Controller
              'nombre'=>$proceso->procNom,
              'guardado'=>$proceso->guardado,
              'estado'=>$proceso->estado,
+             'uso'=>Tramite::where('proceso_id',$id)->where('estado',0)->first()?1:0,
          ];
         return response()->json($response, 200);
+    }
+
+    protected function cambiarEstado($id)
+    {     
+        $proceso=Proceso::where('id',$id)->first();      
+        $estado=$proceso->estado;
+        if($estado==1){
+            $cambiado=0;
+        }else{
+            $cambiado=1;
+        }
+        Proceso::where('id', $id)->update(['estado' => $cambiado]);
+        return 'cambiado';
     }
 
     /**
@@ -130,43 +146,20 @@ class ProcesoController extends Controller
             'modalidad' => 'required'
         ]);
     }
-    protected function cambiarEstado($id)
-    {   
-        $valor=Proceso::where('id',$id)->first();  
-        if($valor->guardado==1){
-            $estado=$valor->estado;
-            if($estado==1){
-                $cambiado=0;
-            }else{
-                $cambiado=1;
-            }
-            $proceso=Proceso::where('id', $id)->update(['estado' => $cambiado]);
-            return 'cambiado';
-        }else{
-            return 'el tramite no esta guardado';
-        }
-        
-    }
+    
     protected function cambiarGuardado($id)
     {   
         $valor=Proceso::where('id',$id)->first();  
-        if($valor->estado==0){
-            $guardado=$valor->guardado;
-            if($guardado==1){
+        $guardado=$valor->guardado;
+        if($guardado==1){
                 $guardado=0;
                 $g=1;
-            }else{
+        }else{
                 $guardado=1;
                 $g=0;
-            }
-            $proceso=Proceso::where('id', $id)->update(['guardado' => $guardado]);
-            $valor = Proceso::find($id);
-            return !($valor->guardado);
-        }else{
-            return 'el tramite esta activado';
         }
-        
-    }
-
-  
+        $proceso=Proceso::where('id', $id)->update(['guardado' => $guardado]);
+        $valor = Proceso::find($id);
+        return !($valor->guardado);
+    } 
 }

@@ -39,7 +39,6 @@
   <v-card 
     class=" mt-3 ml-2 mr-3"
     color="white"
-
   >
     <v-card-text>
       <area-chart :data="porFacultadx" :options="yearsOptions"></area-chart>
@@ -130,23 +129,13 @@ export default {
   },methods: {
       async FetchProceso() {
         const { data } = await axios.get("/api/proceso");
-        this.procesos = data;
-        console.log(data);
-      },
-      async FetchProceso() {
-        const { data } = await axios.get("/api/pdf");
         this.procesos = data.tramites;
-
+        console.log(this.procesos);
       },
       async FetchGrados(){
         const { data } = await axios.get("/api/grado");
 
         this.grados = data;
-
-
-      },async GenerarPDF(){
-        const { data } = await this.formrequi1.post("/api/generatePDF");
-        console.log(data);
 
 
       },

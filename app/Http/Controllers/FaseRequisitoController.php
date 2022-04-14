@@ -17,11 +17,15 @@ class FaseRequisitoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
         //
     }
-
+    public function ver($id)
+    {
+        $faserol = FaseRolRequisito::where('id',$id)->get();
+        return $faserol;
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -110,9 +114,9 @@ class FaseRequisitoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy( $id)
+    public function destroy($id)
     {
-        $FaseDelete=FaseRolRequisito::delete($id);
+        $FaseDelete=FaseRolRequisito::where('id',$id)->delete();
         return response()->json([
             $FaseDelete,
             'mensajeFRR'=>'La FaseRolRequisito se elimino'

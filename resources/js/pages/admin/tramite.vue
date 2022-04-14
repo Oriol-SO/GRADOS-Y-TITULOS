@@ -16,7 +16,7 @@
                     <div class="d-flex">
                         <v-subheader class="text-h6 d-flex" style="color:#000;">Fases del Tramite </v-subheader>
                         <v-btn 
-
+                            v-if="estadoE && uso"
                             color="#2cdd9b"
                             elevation="0" 
                             style="color:#fff;" 
@@ -178,7 +178,8 @@
                             <template v-slot:activator="{ on, attrs }" >
                                 <div class="d-flex" style="width: 100%;">
                                     
-                                <v-btn v-if="faseid" color="#2cdd9b" small elevation="0" style="color:#fff;"  class=" ml-auto text-capitalize"  
+                                <v-btn v-if="faseid && estadoE && uso" 
+                                color="#2cdd9b" small elevation="0" style="color:#fff;"  class=" ml-auto text-capitalize"  
                                 v-bind="attrs"
                                 v-on="on" >Agregar requisito</v-btn> 
                                 </div>
@@ -384,7 +385,7 @@
                                 color="indigo"
                                 small elevation="0"  
                                 depressed
-                                @click="submitrequisitoeliminado(requisitos.id)"
+                                @click="submitrequisitoeliminado(requisito.id)"
                             >
                                 <v-icon>mdi-delete</v-icon>
                             </v-btn>
@@ -524,6 +525,7 @@ export default{
         extension:'',
         estadoG:'',
         estadoE:'',
+        uso:'',
         otros:[],
         dialog:false,
         dialog2:false,
@@ -584,7 +586,8 @@ export default{
           this.procesos = data;
           this.estadoG = !(data.guardado);
           this.estadoE = !(data.estado);
-            console.log(data);
+          this.uso=!(data.uso);
+        console.log(this.uso);
       },
       async FetchFases(){
           const {data}=await axios.get(`/api/fase/${this.$route.params.id}`);
@@ -635,7 +638,6 @@ export default{
          this.formfase.rol_revisar='';
          this.errores={};         
       },async enviarfase(){
-          console.log(this.formfase)
           const {data}= await this.formfase.post(`/api/fase/`)
            .then(response =>{
             this.FetchFases();
@@ -688,8 +690,7 @@ export default{
       },clearall(){
           this.limpiarnuevo();
           this.limpiarselect();          
-      },async submitrequisito(){ 
-          console.log(this.formrequi1);                  
+      },async submitrequisito(){                  
           const {data}= await this.formrequi1.post('/api/faserequisito/')
            .then(response =>{
             this.mostrarrequisito(this.formrequi1.fase_id);
@@ -702,8 +703,7 @@ export default{
             }
           });
           
-      },async submitrequisitonuevo(){ 
-          console.log(this.formrequi2);                  
+      },async submitrequisitonuevo(){                 
           const {data}= await this.formrequi2.post('/api/requisito/')
            .then(response =>{
             this.mostrarrequisito(this.formrequi2.fase_id);
@@ -718,12 +718,11 @@ export default{
           });
           
       },async submitrequisitoeliminado(id){ 
-          console.log(this.formrequi2);  
-          const {data}= await axios.get('/api/faserequisito/'); 
-          console.log(data); 
-          const{data2}=await axios.get('/api/tipoarchivo/');
-          console.log(data2);              
-          /* axios.delete(`/api/faserequisito/${id}`)
+          /* console.log(this.formrequi2);  
+          const {data}= await axios.get(`/api/ver/${id}`); 
+          console.log("fase",data);  
+          console.log("fase",id);    */   
+          axios.delete(`/api/faserequisito/${id}`)
            .then(response =>{
             this.mostrarrequisito(this.formrequi2.fase_id);
             this.clearall();
@@ -734,7 +733,7 @@ export default{
               this.erroresR2=error.response.data.errors;
               console.log(this.erroresR2);
             }
-          }); */
+          }); 
           
       }
   }

@@ -69,8 +69,7 @@ Route::group(['middleware' => 'guest:api'], function () {
 });
 
 Route::resource('proceso', ProcesoController::class);
-Route::get('cambiarEstado/{id}', [ProcesoController::class, 'cambiarEstado']);
-Route::get('cambiarGuardado/{id}', [ProcesoController::class, 'cambiarGuardado']);
+
 Route::resource('grado', GradoController::class);
 Route::resource('modalidades', ModalidadController::class);
 Route::resource('fase',FaseController::class);
@@ -85,12 +84,14 @@ Route::resource('bachillerFinal',BachillerFinalController::class);
 
 Route::get('buscardni/{codigo}', [PersonaController::class, 'buscardniuser']);
 Route::get('facuescuela',[FacultadEscuelaController::class,'facultad']);
-
+Route::get('ver/{id}',[FaseRequisitoController::class,'ver']);
 
 Route::get('mostrarescuela/{codigo}',[FacultadEscuelaController::class,'escuelas']);
 Route::get('rolesgenerales/{codigo}',[FacultadEscuelaController::class,'rolesgenerales']);
 Route::resource('adminuser',AdminUserController::class);
 Route::get('disableRol/{id}',[AdminUserController::class,'disablerol']);
+Route::get('cambiarEstado/{id}', [ProcesoController::class, 'cambiarEstado']);
+Route::get('cambiarGuardado/{id}', [ProcesoController::class, 'cambiarGuardado']);
 
 //pdf
 Route::post('/generatePDF', [PdfController::class,'Addtopdf']);

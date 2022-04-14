@@ -105,7 +105,7 @@
     width="420"  
     border="top"
     colored-border
-    color="rgb(44, 221, 155)"
+    v-bind:color=" proceso.estado?'rgb(44, 221, 155)':'red'"
     
   >
   
@@ -124,20 +124,34 @@
         style="color:#2196f3;"
         rounded
         elevation="0"
+        
         class="text-capitalize"
         @click=" $router.push({ path: `/admin/tramite/${proceso.id}`, }) "     
       >
         Abrir
       </v-btn>
-
+      
       <v-switch
+      v-if="proceso.guardado"
       class="ml-2"
       :input-value="proceso.estado"
       :label="proceso.estado ? 'Activado' : 'Desactivado'"
       inset
-      color="success"
+      color="rgb(44, 221, 155)"
       @click="cambiarEstado(proceso.id)"
-    ></v-switch>
+      ></v-switch>
+      <v-chip
+        v-if="proceso.uso"
+        class="ml-auto "
+        color="primary"
+        outlined
+        pill
+      >
+      <v-icon left>
+        mdi-alert-circle
+      </v-icon>
+        En uso
+      </v-chip>
     </v-card-actions>
   </v-alert>
    
@@ -154,6 +168,7 @@ import Form from "vform";
     data () {
        
       return {  
+          tramite:[],
           grados:[],
           procesos:[],         
           modalidades:[],
@@ -172,23 +187,20 @@ import Form from "vform";
       this.FetchProceso();
       this.FetchGrados();
       this.FetchModalidad();
+      this.FetchTramite();
     }, 
     
     methods:{
       async FetchProceso() {
         const { data } = await axios.get("/api/proceso");
         this.procesos = data.tramites;
-        //console.log("procesos",data);
+        
       },async FetchGrados(){
         const { data } = await axios.get("/api/grado");
         this.grados = data;
-
-        console.log(data);
       },async FetchModalidad(){
         const { data } = await axios.get("/api/modalidades");
         this.modalidades = data;
-
-        console.log(data);
       }, async enviar(){
              
         //  console.log(this.form);
@@ -207,7 +219,6 @@ import Form from "vform";
           
 
       },async cambiarEstado(id){
-        
         await axios.get(`/api/cambiarEstado/${id}`).then(response =>{
             this.FetchProceso();
             this.clear();

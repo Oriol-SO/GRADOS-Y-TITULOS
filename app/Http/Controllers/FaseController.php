@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Fase;
 use PhpParser\Node\Stmt\Break_;
+use App\Models\FaseRolRequisito;
 
 class FaseController extends Controller
 {
@@ -114,9 +115,10 @@ class FaseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Fase $fase)
+    public function destroy($fase)
     {
-        $fase->delete();
+        $FaseDelete=FaseRolRequisito::where('fase_id',$fase)->delete();
+        $fase = Fase::where('id',$fase)->delete();
         return response()->json([
             'mensaje'=>'Fase eliminada'
         ]);
