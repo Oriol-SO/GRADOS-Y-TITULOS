@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use App\Models\FaseRolRequisito;
 use App\Models\File;
 use App\Models\Observacione;
+use App\Models\Proceso;
 use App\Models\Revisione;
 use Illuminate\Support\Facades\Storage;
 
@@ -50,6 +51,20 @@ class tramiteController extends Controller
         return response()->json($tramites);
     }
 
+
+   protected function alu_procesos(){
+    $tramites['tramites'] = Proceso::where('estado',1)->get()->map(function($t){
+        return [
+            'id' => $t->id,
+            'nombre' => $t->procNom,
+            'grado_id' => $t->grado ? $t->grado_id : null,
+            'grado' => $t->grado ? $t->grado->graNom : null,
+            'modalidad_id' => $t->modalidade ? $t->moda_id : null,
+            'modalidad' => $t->modalidade ? $t->modalidade->modNombre : null,
+        ];
+    });
+    return $tramites ;
+   }
     /**
      * Show the form for creating a new resource.
      *

@@ -9,18 +9,18 @@
             <v-card>
                 <v-card-title class="px-0 py-1 ml-3 text-h6">Fases que te corresponden</v-card-title>
                 <v-stepper v-model="e1" >
-                <v-stepper-header non-linear>
-                    <v-stepper-step
-                    v-for="(fase,i) in parseInt(this.numfases,10)" :key="i" 
-                    :complete="e1 > (fase)"        
-                    :step="fase"
-                    editable      
-                    @click="limpiar()"
-                    >
-                    fase {{fase+1}}
-                    </v-stepper-step>
+                    <v-stepper-header non-linear>
+                        <v-stepper-step
+                        v-for="(fase,i) in parseInt(this.numfases,10)" :key="i" 
+                        :complete="e1 > (fase)"        
+                        :step="fase"
+                        editable      
+                        @click="limpiar()"
+                        >
+                         accion {{fase}}
+                        </v-stepper-step>
 
-                </v-stepper-header>
+                    </v-stepper-header>
             
                         <v-stepper-items>            
                             <v-stepper-content
@@ -32,7 +32,7 @@
                                 elevation="0"
                                 style="min-height:350px;"
                             >
-                                <v-card-title class="my-0">{{fase.nombre}}</v-card-title>
+                                <v-card-title class="my-0 text-subtitle-1"><strong>FASE-></strong> {{fase.nombre}}</v-card-title>
                                 <v-btn 
                                     color="#2cdd9b" 
                                     class="mb-2 text-capitalize" 
@@ -292,9 +292,10 @@
                         <v-stepper-step v-for="(fase,i) in fasestramite" :key="i"
                         :step="i+1"
                         v-bind:complete="(i+1)<fase_actualy"
-                        color="green"
+                        v-bind:color="(i+1)==fase_actualy?'orange':'#6df78e'"
+                       
                         >
-                        {{fase.nombre}}
+                         <strong>{{i+1}}</strong>{{' '+ fase.nombre}}
                         </v-stepper-step>
 
                     </v-stepper-header>
@@ -616,7 +617,7 @@
             <v-snackbar
                 v-model="alert_fase_notify"
                 tile
-                color="green accent-2"
+                :color="color_alert_fase_notify"
                 top
             >
             {{ msg_notify }}
@@ -647,6 +648,7 @@ export default {
     data(){
         return{
           alert_fase_notify:false,
+          color_alert_fase_notify:'',
           msg_notify:'',
           e1: 1,
           fase_actualy:'',
@@ -717,10 +719,23 @@ export default {
         this.numfase();
     },methods:{
       async aprobarfase(id){
-          await axios.get(`/api/sf-fasecheck/${this.$route.params.id}/${id}`).then(response=>{
-              this.alert_fase_notify=true;
-              this.msg_notify='esta fase esta aprobada';
-              this.fetchtramite();
+          await axios.get(`/api/sv-fasecheck/${this.$route.params.id}/${id}`).then(response=>{
+              console.log(response.data);
+              if(response.data=='1'){
+                this.alert_fase_notify=true;                
+                this.msg_notify='esta fase esta aprobada';
+                this.color_alert_fase_notify='green';
+                this.e1=this.e1+1;
+                this.fetchtramite();
+              }else if(response.data=='2'){
+                this.alert_fase_notify=true;                
+                this.msg_notify='la fase ya fue aprobada';
+                this.color_alert_fase_notify='blue';
+              } else if(response.data=='3'){
+                this.alert_fase_notify=true;                
+                this.msg_notify='las fases anteriores aun no se aprueban';
+                this.color_alert_fase_notify='red';
+              }            
           });
       },
       obser(){
@@ -748,6 +763,7 @@ export default {
          this.fases = data.fases;
          this.fasestramite=data.fases_tramite;
          this.numfases=data.cantidad;
+        
       },async mostrarrequisito(id){
           const {data}=await axios.get(`/api/sv-faserequisito/${id}/${this.$route.params.id}`);
           this.requisitos=data.revisar;
@@ -899,3 +915,4 @@ export default {
     }
 }
 </script>
+

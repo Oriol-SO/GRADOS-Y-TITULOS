@@ -137,7 +137,7 @@ export default {
         close(){
         this.dialog=false;
       },async FetchProceso() {
-        const { data } = await axios.get("/api/proceso");
+        const { data } = await axios.get("/api/alu-proceso");
         this.proceso = data.tramites;
 
         //console.log(data);

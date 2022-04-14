@@ -616,7 +616,7 @@
             <v-snackbar
                 v-model="alert_fase_notify"
                 tile
-                color="green accent-2"
+                :color="color_alert_fase_notify"
                 top
             >
             {{ msg_notify }}
@@ -647,6 +647,7 @@ export default {
     data(){
         return{
           alert_fase_notify:false,
+          color_alert_fase_notify:'',
           msg_notify:'',
           e1: 1,
           fase_actualy:'',
@@ -718,9 +719,22 @@ export default {
     },methods:{
       async aprobarfase(id){
           await axios.get(`/api/sf-fasecheck/${this.$route.params.id}/${id}`).then(response=>{
-              this.alert_fase_notify=true;
-              this.msg_notify='esta fase esta aprobada';
-              this.fetchtramite();
+            console.log(response.data);
+              if(response.data=='1'){
+                this.alert_fase_notify=true;                
+                this.msg_notify='esta fase esta aprobada';
+                this.color_alert_fase_notify='green';
+                this.fetchtramite();
+                this.e1=this.e1+1;
+              }else if(response.data=='2'){
+                this.alert_fase_notify=true;                
+                this.msg_notify='la fase ya fue aprobada';
+                this.color_alert_fase_notify='blue';
+              } else if(response.data=='3'){
+                this.alert_fase_notify=true;                
+                this.msg_notify='las fases anteriores aun no se aprueban';
+                this.color_alert_fase_notify='red';
+              }   
           });
       },
       obser(){

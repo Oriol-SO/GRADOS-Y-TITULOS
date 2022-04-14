@@ -129,7 +129,6 @@
         style="color:#2196f3;"
         rounded
         elevation="0"
-        v-bind:disabled="proceso.estado ? false:true"
         class="text-capitalize"
         @click=" $router.push({ path: `/admin/tramite/${proceso.id}`, }) "     
       >

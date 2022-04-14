@@ -278,6 +278,34 @@ class SecretariaVicerrectoradoController extends Controller
       }
     }
 
+    public function sv_fasecheck($id_tram,$id_fase){
+        try{ 
+            //comprovar si esta fase esta aprovada
+            $fase_tramite=(Tramite::where('id',$id_tram)->first())->fase_actual;
+
+            $fase=Fase::where('id',$id_fase)->first();
+            //obtener rol del revisador
+            if($fase->encargado_revisar==11){
+                $fase_actual=$fase->numero;
+                if($fase_actual==$fase_tramite){
+                    $tramite_fase=Tramite::where('id',$id_tram)->update(['fase_actual'=>($fase_actual+1)]);
+                    return '1';
+                }else{
+                    if($fase_actual<$fase_tramite){
+                        return '2';
+                    }else if($fase_actual>$fase_tramite){
+                        return '3';
+                    }
+                    //return 'no se puede aprovar esta fase';
+                }
+
+            }else{
+                return 'no estas autorizado para esta accion';
+            }
+        }catch(Exception $e){
+            return $e;
+        } 
+    }
 
 
     public function create()

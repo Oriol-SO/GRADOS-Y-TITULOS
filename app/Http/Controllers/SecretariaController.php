@@ -289,14 +289,26 @@ class SecretariaController extends Controller
     }
 
     protected function sf_fasecheck($id_tram,$id_fase){
-        try{        
-            $fase=Fase::where('id',$id_fase)->first();
+        try{ 
+            //comprovar si esta fase esta aprovada
+            $fase_tramite=(Tramite::where('id',$id_tram)->first())->fase_actual;
 
-        //obtener rol del revisador
+            $fase=Fase::where('id',$id_fase)->first();
+            //obtener rol del revisador
             if($fase->encargado_revisar==5){
                 $fase_actual=$fase->numero;
-                $tramite_fase=Tramite::where('id',$id_tram)->update(['fase_actual'=>($fase_actual+1)]);
-                return $tramite_fase;
+                if($fase_actual==$fase_tramite){
+                    $tramite_fase=Tramite::where('id',$id_tram)->update(['fase_actual'=>($fase_actual+1)]);
+                    return '1';
+                }else{
+                    if($fase_actual<$fase_tramite){
+                        return '2';
+                    }else if($fase_actual>$fase_tramite){
+                        return '3';
+                    }
+                   // return'las fases anteriores no fueron aprobadas';
+                }
+
             }else{
                 return 'no estas autorizado para esta accion';
             }
