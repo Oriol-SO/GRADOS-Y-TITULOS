@@ -106,9 +106,7 @@ Route::get('alu_autorized/{fase}/{tramite}',[tramiteController::class,'alu_autor
 Route::get('alu-notificarcambio/{fase}/{tramite}',[tramiteController::class,'alu_notificarCambio']);
 Route::get('alu-proceso',[tramiteController::class,'alu_procesos']);
 
-//rutas scretaria general 1
 
-Route::get('expedientes',[SecretariaGeneral1Controller::class,'index']);
 
 //rutas secretaria facultad 
 
@@ -130,3 +128,9 @@ Route::get('sv-faserequisito/{id}/{tramite}',[SecretariaVicerrectoradoController
 Route::post('sv-revisarrequisito',[SecretariaVicerrectoradoController::class,'sv_revisarrequisito']);
 Route::post('sv-subirfilerequisito',[SecretariaVicerrectoradoController::class,'sv_subirrequisito']);
 Route::get('sv-fasecheck/{tramite}/{fase}',[SecretariaVicerrectoradoController::class,'sv_fasecheck']);
+
+//rutas scretaria general 1
+Route::get('sg1-expedientes',[SecretariaGeneral1Controller::class,'index']);
+Route::post('agendarExpediente',[SecretariaGeneral1Controller::class,'sg1_agendar_expediente']);
+Route::get('expd-agendados',[SecretariaGeneral1Controller::class,'expedientes_agendados']);
+Route::get('sg1-resoluciones',[SecretariaGeneral1Controller::class,'sg1_resoluciones']);
