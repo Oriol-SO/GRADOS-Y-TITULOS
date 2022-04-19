@@ -544,7 +544,6 @@ export default{
             requisito:'',
             rol:'',
             fase_id:'',
-
         }),
         formrequi2:new Form({
             nombre:'',
@@ -552,15 +551,10 @@ export default{
             tipodocumento:'',
             extension:'',
             fase_id:'',
-
         }),
-
-
         allrequisitos:[],
         tipoarchivos:[],
         roles:[],
-
-        
      } 
   },mounted(){
       this.FetchTramites();
@@ -571,8 +565,8 @@ export default{
       this.FetchPersona();
       this.GuardarProceso();
       //console.log(this.formrequi);
-    // this.formfase.procesoid=this.$route.params.id;
-     // console.log(this.faseid);
+      // this.formfase.procesoid=this.$route.params.id;
+      // console.log(this.faseid);
 
       //console.log(this.formfase.procesoid);
 
