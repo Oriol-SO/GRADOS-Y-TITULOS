@@ -22,9 +22,7 @@
             v-for="gruposexpediente in gruposexpedientes"
             :key="gruposexpediente.id"
             cols="12"
-            sm="6"
-            md="4"
-            lg="3"
+
             class="pa-4"
           >
             <v-card >
