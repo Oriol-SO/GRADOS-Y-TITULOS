@@ -36,7 +36,8 @@
                     color="#2cdd9b"
                     elevation="0" 
                     style="color:#fff;" 
-                    class="my-auto ml-auto mr-4 text-capitalize">Enviar
+                    class="my-auto ml-auto mr-4 text-capitalize"
+                    >Enviar
                 </v-btn>
               </div>
               
