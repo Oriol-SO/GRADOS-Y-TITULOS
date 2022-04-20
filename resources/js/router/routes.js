@@ -26,8 +26,10 @@ export default [
   },
 
 
+
   {
-    path: '/admin',component: page('admin/index.vue'),
+    
+    path: '/admin',component: page('admin/index.vue' ) ,
     children: [
       { path: '', redirect: { name: 'admin.dashboard' } },
       { path: 'dashboard', name: 'admin.dashboard', component: page('admin/dashboard.vue') },
@@ -67,6 +69,7 @@ export default [
   {
     path: '/secretaria-facultad',
     component: page('secretariaFacultad/index.vue'),
+    
     children: [
       { path: '', redirect: { name: 'sf.dashboard' } },
       { path: 'dashboard', name: 'sf.dashboard', component: page('secretariaFacultad/dashboard.vue') },
