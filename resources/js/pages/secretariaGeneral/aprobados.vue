@@ -1,124 +1,208 @@
 <template>
   <v-container fluid>
+
     <v-data-iterator
-      :items="resoluciones"
+      :items="aprobados"
       :items-per-page.sync="itemsPerPage"
+      hide-default-footer
     >
       <template v-slot:header>
         <v-toolbar
           class="mb-2"
+          color="rgb(13, 240, 214)"
+          dark
           flat
+          text-color="rgb(0, 0, 0, 0.87)"
         >
-          <v-toolbar-title class="text-h6">EXPEDIENTES APROVADOS</v-toolbar-title>
+          <v-toolbar-title class="black--text ">EXPEDIENTES APROBADOS</v-toolbar-title>
         </v-toolbar>
       </template>
-
-      <template v-slot:default="props">
+      <template >
         <v-row>
-          <v-col
-            v-for="resolucion in props.resoluciones"
-            :key="resolucion.id"
+          <v-spacer
+            v-for="aprobado in aprobados"
+            :key="aprobado.id"
             cols="12"
             sm="12"
-            md="12"          
+            md="12"
+  
+            class="pa-4"
           >
-            <v-card>
-              <template>
-                <v-data-table
-                  :headers="headers"
-                  :items="tramites_por_resolucion"                 
-                  hide-default-footer
-                  class="elevation-1"
-                ></v-data-table>
-              </template>
+            <v-card >
+              <v-card-title>
+                Consejo Nro:{{ aprobado.consejo_id }}
+                <v-btn color="primary" class="ml-auto" >N° Resolucion</v-btn>
+              </v-card-title>
+              
+              <v-divider></v-divider>
+
+              <v-list dense>
+                
+                <v-simple-table
+                :items-per-page="2">
+                    <template v-slot:default>
+                    <thead>
+                        <tr>
+                        <th class="text-left text-h6" >
+                            Nombre
+                        </th>
+                        <th class="text-left text-h6">
+                            Tramite
+                        </th>
+                        <th class="text-left text-h6">
+                            Fecha de inicio
+                        </th>
+                        <th class="text-left text-h6">
+                            Estado
+                        </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                        v-for="(tramite,i) in aprobado.tramite"
+                        :key="i"
+                        >
+                        <td>{{ tramite.per_nom }}</td>
+                        <td>{{ tramite.tramite }}</td>
+                        <td>{{ tramite.fec_inicio }}</td>
+                        <td>{{ tramite.estado }}</td>
+                        </tr>
+                    </tbody>
+                    </template>
+                </v-simple-table>
+              </v-list>
+              <tfoot>
+              <td colspan="4" class="pl-4 #515252--text text-md-body-1 text-right">
+              <em> Fecha de Resolucion: {{ aprobado.consejo_fecha }}</em></td>
+              <td></td>
+              </tfoot>
             </v-card>
-          </v-col>
+          </v-spacer>
         </v-row>
       </template>
-
     </v-data-iterator>
+
+    <template>
+      <v-dialog
+        transition="dialog-top-transition"
+        max-width="450"
+        persistent
+        v-model="dialogenviar"
+      >                      
+        <template>
+            <v-card>
+            <v-toolbar
+                class="text-h6"
+                color="#0df0d6"
+                dark
+                elevation="0"
+            >Aprobación</v-toolbar>
+            <form>
+                <v-card-text>
+                <v-text-field
+                v-model="form.numero"
+                label="Número de oficio">
+                </v-text-field>
+                <v-text-field
+                v-model="form.consejo"            
+                label="número de consejo">
+                </v-text-field>                
+                <v-text-field
+                v-model="form.fecha"
+                type="date"
+                label="Fecha de consejo">
+                </v-text-field>
+
+                <v-btn class="mt-3 " 
+                style="color:#fff;" 
+                elevation="0" 
+                color="#42C2FF" 
+                @click="aprobar()">
+                Guardar</v-btn> 
+                </v-card-text>                                                              
+            </form>
+
+            <v-card-actions>
+                <v-btn class="ml-auto"
+                    text
+                    @click="close()"
+                >Close</v-btn>
+            </v-card-actions>
+            </v-card>
+        </template>
+    </v-dialog>
+    </template>
   </v-container>
 </template>
 
 <script>
 import axios from 'axios';
-  export default {
+import Form from "vform";
+export default {
     data(){
-      return{
-          itemsPerPage: 4,
-         headers: [
+        return{
+            dialogAgendar:false,
+            singleSelect: true,
+            tab: null,
+            headers: [
             { text: 'Nombres y apellidos', value: 'per_nom' },
             //{text: 'Facultad',align: 'start', value: '',},
-            { text: 'Tramite', value: 'tramite_nombre' },           
-            { text: 'fecha de inicio', value: 'fec_inicio' },
-            { text: 'avance', value:'avance',sortable: false},            
-            { text: 'estado', value: 'estado' },
+            { text: 'Tramite', value: 'tramite' },           
+            { text: 'Fecha de inicio', value: 'fec_inicio' },
+            { text: 'Consejo id', value:'consejo_id',sortable: false},            
+            { text: 'Estado', value: 'estado' },
             ],
-        items: [
-          {
-            name: 'Frozen Yogurt',
-            calories: 159,
-            fat: 6.0,
-            carbs: 24,
-            protein: 4.0,
-            sodium: 87,
-            calcium: '14%',
-            iron: '1%',
-          },
-          {
-            name: 'Ice cream sandwich',
-            calories: 237,
-            fat: 9.0,
-            carbs: 37,
-            protein: 4.3,
-            sodium: 129,
-            calcium: '8%',
-            iron: '1%',
-          },
-          {
-            name: 'Eclair',
-            calories: 262,
-            fat: 16.0,
-            carbs: 23,
-            protein: 6.0,
-            sodium: 337,
-            calcium: '6%',
-            iron: '7%',
-          },
-          {
-            name: 'Cupcake',
-            calories: 305,
-            fat: 3.7,
-            carbs: 67,
-            protein: 4.3,
-            sodium: 413,
-            calcium: '3%',
-            iron: '8%',
-          },
-        ],
-        resoluciones:[],
-        tramites_por_resolucion:[],
-      }
+            aprobados:[],
+            grados:[],
+            search:'',
 
-    },
-    mounted(){
-      this.fetchAgendados();
-    },
-    methods:{
-      async fetchAgendados(){
-       // console.log('hola');
-         await axios.get('/api/sg1-resoluciones/').then(response=>{
-             console.log(response.data);
-             this.resoluciones=response.data.resolucion_grupo;
-             this.tramites_por_resolucion=response.data.tramites_por_grupo;
-             console.log(this.tramites_por_resolucion)
-         }).catch(error=>{
-          if(error.response.status === 422){
-                const errores=error.response.data.errors;
-                console.log(errores);               
-              }
-          });
-      }
-    },
-  }
+            form: new Form({
+                selected: [],
+                numero:'',
+                fecha:'',
+            })
+        }
+    },mounted(){
+            this.aprobexpedientes();
+            this.tipogrados();
+    },methods:{
+        close(){
+            this.dialogAgendar=false;
+            this.form.numero='';
+            this.form.fecha=null;
+        },
+        async tipogrados(){
+            const {data}= await axios.get('/api/grado/');
+            this.grados=data;
+            console.log("grados",this.grados);
+        },
+        async aprobexpedientes(){
+            const {data}= await axios.get('/api/expd_aprobados/');
+            this.aprobados=data;
+            console.log("aprobados",this.aprobados);
+        },
+        abrirAgendar(){
+            if(this.form.selected.length>0){
+                this.dialogAgendar=true;
+            }else{
+                console.log('no seleccionaste nada')
+            }
+        },
+        async agendar(){
+            console.log(this.form)
+            await this.form.post(`/api/agendarExpediente/`).then(response=>{
+                console.log(response.data)
+                this.fetchexpedientes();
+                this.close();
+            });
+        },
+    }
+}
 </script>
+<style>
+ thead.v-data-table-header th[role=columnheader] {
+  font-size: 14px !important;
+  color:#000;
+  background:#0df0d6 !important;
+}
+</style>
