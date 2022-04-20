@@ -28,10 +28,18 @@
             class="pa-4"
           >
             <v-card >
-              <v-card-title >
-                Resolucion Numero:{{ gruposexpediente.resolucion_numero }}
-              </v-card-title>
-              <v-btn>Enviar</v-btn>
+              <div class="d-flex">
+                <v-card-title>
+                    Resolucion Numero:{{ gruposexpediente.resolucion_numero }}
+                </v-card-title>
+                <v-btn 
+                    color="#2cdd9b"
+                    elevation="0" 
+                    style="color:#fff;" 
+                    class="my-auto ml-auto mr-4 text-capitalize">Enviar
+                </v-btn>
+              </div>
+              
               <v-divider></v-divider>
 
               <v-list dense>
