@@ -86,8 +86,7 @@ class SecretariaGeneral1Controller extends Controller
     }
     protected function sg1_resoluciones(){
         
-        $agendados['resolucion_grupo']=Resolucione::where('estado',1)->get();
-        $agendados['tramites_por_grupo']=Resolucione::where('estado',1)->get()->map(function($a){
+        $agendados=Resolucione::where('estado',1)->get()->map(function($a){
             return[
                 'resolucion'=>$a->id,
                 'resolucion_fecha'=>$a->fecha,
@@ -99,13 +98,11 @@ class SecretariaGeneral1Controller extends Controller
                         'tramite'=>$e->tipo_tramite,
                         'fec_inicio'=>$e-> fec_inicio,
                         'estado'=>$e->estado,
-                        'tramite_nombre'=>$e->tipo_tramite,
                     ];
                 }),
             ];
         });
-        return response()->json($agendados);
-        
+        return response()->json($agendados); 
     }
 
     /**

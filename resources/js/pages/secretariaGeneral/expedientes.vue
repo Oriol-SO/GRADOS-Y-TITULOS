@@ -156,7 +156,7 @@ export default {
             if(this.form.selected.length>0){
                 this.dialogAgendar=true;
             }else{
-                console.log('no seleecionaste nada')
+                console.log('no seleccionaste nada')
             }
         },
         async agendar(){
