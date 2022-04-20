@@ -22,16 +22,17 @@
             v-for="gruposexpediente in gruposexpedientes"
             :key="gruposexpediente.id"
             cols="12"
-            sm="6"
-            md="4"
-            lg="3"
+            sm="12"
+            md="12"
+  
             class="pa-4"
           >
             <v-card >
-              <v-card-title >
-                Resolucion Numero:{{ gruposexpediente.resolucion_numero }}
+              <v-card-title>
+                Consejo Nro:{{ gruposexpediente.resolucion_numero }}
+                <v-btn color="primary" class="ml-auto" @click="enviar(gruposexpediente.resolucion)">Enviar</v-btn>
               </v-card-title>
-              <v-btn>Enviar</v-btn>
+              
               <v-divider></v-divider>
 
               <v-list dense>
@@ -79,6 +80,57 @@
         </v-row>
       </template>
     </v-data-iterator>
+
+    <template>
+      <v-dialog
+        transition="dialog-top-transition"
+        max-width="450"
+        persistent
+        v-model="dialogenviar"
+      >                      
+        <template>
+            <v-card>
+            <v-toolbar
+                class="text-h6"
+                color="#0df0d6"
+                dark
+                elevation="0"
+            >Aprobación</v-toolbar>
+            <form>
+                <v-card-text>
+                <v-text-field
+                v-model="form.numero"
+                label="Número de oficio">
+                </v-text-field>
+                <v-text-field
+                v-model="form.consejo"            
+                label="número de consejo">
+                </v-text-field>                
+                <v-text-field
+                v-model="form.fecha"
+                type="date"
+                label="Fecha de consejo">
+                </v-text-field>
+
+                <v-btn class="mt-3 " 
+                style="color:#fff;" 
+                elevation="0" 
+                color="#42C2FF" 
+                @click="aprobar()">
+                Guardar</v-btn> 
+                </v-card-text>                                                              
+            </form>
+
+            <v-card-actions>
+                <v-btn class="ml-auto"
+                    text
+                    @click="close()"
+                >Close</v-btn>
+            </v-card-actions>
+            </v-card>
+        </template>
+    </v-dialog>
+    </template>
   </v-container>
 </template>
 
@@ -89,56 +141,47 @@ export default {
     data(){
         return{
             itemsPerPage: 4,
-            dialogAgendar:false,
+            dialogenviar:false,
             expedientes:[],
             gruposexpedientes:[],
-            headers: [
-            { text: 'Nombres y apellidos', value: 'per_nom' },
-            //{text: 'Facultad',align: 'start', value: '',},
-            { text: 'Tramite', value: 'tramite' },           
-            { text: 'fecha de inicio', value: 'fec_inicio' },
-            { text: 'avance', value:'avance',sortable: false},            
-            { text: 'estado', value: 'estado' },
-            ],
+  
             expedientes:[],
             search:'',
 
             form: new Form({
-                selected: [],
+               // selected: [],
+                resolucion:'',
                 numero:'',
+                consejo:'',
                 fecha:'',
             })
         }
     },mounted(){
-            this.fetchexpedientes();
+           // this.fetchexpedientes();
             this.grupoexpedientes();
     },methods:{
         close(){
-            this.dialogAgendar=false;
+            this.dialogenviar=false;
             this.form.numero='';
+            this.form.consejo='';
+            this.form.resolucion='';
             this.form.fecha=null;
         },async grupoexpedientes(){
             const {data}= await axios.get('/api/sg1-resoluciones/');
             this.gruposexpedientes=data;
             console.log("grupo",this.gruposexpedientes);
-        },async fetchexpedientes(){
-            const {data}= await axios.get('/api/expd-agendados/');
-            this.expedientes=data;
-            console.log(this.expedientes);
-        },
-        abrirAgendar(){
+        },enviar(id_reso){
+            console.log(id_reso);
+            this.form.resolucion=id_reso;
+            this.dialogenviar=true;
             
-            if(this.form.selected.length>0){
-                this.dialogAgendar=true;
-
-            }else{
-                console.log('no seleccionaste nada')
-            }
         },
-        async agendar(){
+        async aprobar(){
             //console.log(this.form)
-            await this.form.post(`/api/agendarExpediente/`).then(response=>{
+            await this.form.post(`/api/aprobar-consejo/`).then(response=>{
                 console.log(response.data)  
+                this.close();
+                this.gruposexpedientes();
             });
         },
     }

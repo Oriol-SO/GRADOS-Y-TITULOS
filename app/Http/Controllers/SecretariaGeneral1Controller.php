@@ -104,6 +104,62 @@ class SecretariaGeneral1Controller extends Controller
         });
         return response()->json($agendados); 
     }
+    protected function sg1_apro_consejo(Request $request){
+        $rol=3;
+        $request->validate([
+            'numero'=>'required|numeric',
+            'fecha'=>'required|date',
+            'consejo'=>'required',
+            'resolucion'=>'required',
+        ]); 
+        if($rol==3){
+            try{
+                $consejo=Consejo::create([
+                    'numero'=>$request->consejo,
+                    'fecha'=>$request->fecha,
+                    'estado'=>1, 
+                    'num_oficio'=>$request->numero,                       
+                ]);
+
+                    //obtener datos de los tramites de esta resolucion
+                    $tramites_resolucion=Resolucione::where('id',$request->resolucion)->get()->map(function($a){
+                        return[
+                            'tramites'=>$a->tramite->map(function($e){
+                                return[         
+                                    'id'=> $e->id,
+                                    'consejo_id'=>$e->consejo_id,                                
+                                ];
+                            }),
+                        ];
+                    });
+                    
+
+               foreach($tramites_resolucion[0]['tramites'] as $tramite){
+                    //comprovar si el tramite tiene un cosejo
+                    $expediente= $tramite['id'];
+                    $consejoTram=Tramite::where('id',$expediente)->first();
+                    if($consejoTram->cosejo_id ==null || $consejoTram->consejo_id  =='' ){                       
+                        //agregar la aprobacio a los expedientes
+                        Tramite::where('id',$expediente)->update(['consejo_id'=>$consejo->id]);
+                        
+                    }
+               }
+
+               //cambiar el estado de la resolucion
+
+               Resolucione::where('id',$request->resolucion)->update(['estado'=>0]);
+
+                
+            }catch(Exception $e){
+                return $e;
+            }       
+       
+        }else{
+            return 'user no autorizado';
+        }
+        
+
+    }
 
     /**
      * Show the form for creating a new resource.
