@@ -142,12 +142,8 @@ export default {
         return{
             itemsPerPage: 4,
             dialogenviar:false,
-            expedientes:[],
             gruposexpedientes:[],
-  
-            expedientes:[],
             search:'',
-
             form: new Form({
                // selected: [],
                 resolucion:'',
@@ -174,7 +170,6 @@ export default {
             console.log(id_reso);
             this.form.resolucion=id_reso;
             this.dialogenviar=true;
-            
         },
         async aprobar(){
             //console.log(this.form)

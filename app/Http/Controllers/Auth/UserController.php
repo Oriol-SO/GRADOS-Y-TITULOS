@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\models\Persona;
+use App\Models\PersonaRole;
 use Illuminate\Support\Arr;
 
 class UserController extends Controller
@@ -18,6 +19,7 @@ class UserController extends Controller
         $persona=$user->persona;
 
         $datosUser=array(
+            'role'=>(PersonaRole::where('persona_id',$persona->id)->first())->rol_id,
             'email'=>$user->email,
             'nombre'=>$persona->nom,
             'apellido1'=>$persona->apePat,

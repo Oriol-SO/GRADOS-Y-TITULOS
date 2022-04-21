@@ -39,7 +39,7 @@ export default {
   data(){
     return{
       tab:null,
-      items:['todos','bachiller','titulos','maestria']
+      items:['todos','bachiller','titulos','maestria'],
     }
   }
 }

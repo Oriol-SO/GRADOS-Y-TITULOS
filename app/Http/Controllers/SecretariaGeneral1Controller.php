@@ -7,8 +7,12 @@ use App\Models\Tramite;
 use Illuminate\Http\Request;
 use App\Models\FaseRolRequisito;
 use App\Models\Fase;
+use App\Models\Grado;
 use App\Models\Resolucione;
+use App\Models\Persona;
+use App\Models\User;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class SecretariaGeneral1Controller extends Controller
 {
@@ -83,6 +87,58 @@ class SecretariaGeneral1Controller extends Controller
          
         });
         return response()->json($agendados);
+    }
+    protected function expedientes_aprobados($id){
+        if($id==0){
+          /* $aprobados=DB::table('tramites')
+            ->join('consejos', function ($join) {
+                $join->on('tramites.consejo_id', '=', 'consejos.id');                    
+            })->where('consejos.estado', 1)
+            ->get()->map(function($e){
+                return[
+                    'per_nom'=>$e->persona->nom.' '.$e->persona->apePat.' '.$e->persona->apeMat,           
+                    'id'=> $e->id,
+                    'tramite'=>$e->tipo_tramite,
+                    'fec_inicio'=>$e-> fec_inicio,
+                    'estado'=>$e->estado,
+                    'consejo_numero'=>$e->consejo->numero,
+                ];
+            });*/
+
+             /* $aprobados=Tramite::where('consejo_id','<>',null)->get()->map(function($e){
+                if($e->consejo->estado==1){
+                    return[
+                        'per_nom'=>$e->persona->nom.' '.$e->persona->apePat.' '.$e->persona->apeMat,           
+                        'id'=> $e->id,
+                        'tramite'=>$e->tipo_tramite,
+                        'fec_inicio'=>$e-> fec_inicio,
+                        'estado'=>$e->estado,
+                        'consejo_numero'=>$e->consejo->numero,
+                    ];
+                }
+
+            });*/
+            $apro=array();
+           $aprobados=Consejo::where('estado',1)->get()->map(function($c) use(&$apro){
+                $c->tramite->map(function($e) use($c,&$apro){
+                        array_push($apro,[
+                            'per_nom'=>$e->persona->nom.' '.$e->persona->apePat.' '.$e->persona->apeMat,           
+                            'id'=> $e->id,
+                            'tramite'=>$e->tipo_tramite,
+                            'fec_inicio'=>$e-> fec_inicio,
+                            'estado'=>$e->estado,
+                            'consejo_numero'=>$e->consejo->numero,
+                         ] );
+                    });
+                    
+              
+            });
+           // return $apro;
+            return response()->json($apro);
+        }else{
+        
+        }
+
     }
     protected function sg1_resoluciones(){
         
@@ -159,6 +215,12 @@ class SecretariaGeneral1Controller extends Controller
         }
         
 
+    }
+
+
+    protected function sq1_grados(){      
+        $todo=[['id'=>'all','graNom'=>'Todo'],['id'=>'1','graNom'=>'Bachiller'],['id'=>'2','graNom'=>'Titulo']];
+        return $todo;
     }
 
     /**

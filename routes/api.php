@@ -135,3 +135,5 @@ Route::post('agendarExpediente',[SecretariaGeneral1Controller::class,'sg1_agenda
 Route::get('expd-agendados',[SecretariaGeneral1Controller::class,'expedientes_agendados']);
 Route::get('sg1-resoluciones',[SecretariaGeneral1Controller::class,'sg1_resoluciones']);
 Route::post('aprobar-consejo',[SecretariaGeneral1Controller::class,'sg1_apro_consejo']);
+Route::get('expd_aprobados/{id}',[SecretariaGeneral1Controller::class,'expedientes_aprobados']);
+Route::get('secre-gen-grado',[SecretariaGeneral1Controller::class,'sq1_grados']);
