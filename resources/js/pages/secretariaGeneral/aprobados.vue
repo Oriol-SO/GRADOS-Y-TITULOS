@@ -1,7 +1,26 @@
 <template>
   <v-container fluid>
+  <v-tabs
+        v-model="tab"
+          align-with-title
+        >
+          <v-tabs-slider color="yellow"></v-tabs-slider>
 
-    <v-data-iterator
+          <v-tab
+            v-for="grado in grados"
+            :key="grado.id"
+          >
+            {{ grado.graNom }}
+          </v-tab>
+        </v-tabs>
+
+        <v-tabs-items v-model="tab">
+        <v-tab-item
+        v-for="grado in grados"
+        :key="grado.id"
+        >
+        <v-card flat>
+          <v-data-iterator
       :items="aprobados"
       :items-per-page.sync="itemsPerPage"
       hide-default-footer
@@ -22,6 +41,7 @@
           <v-spacer
             v-for="aprobado in aprobados"
             :key="aprobado.id"
+            
             cols="12"
             sm="12"
             md="12"
@@ -61,6 +81,7 @@
                         <tr
                         v-for="(tramite,i) in aprobado.tramite"
                         :key="i"
+                        v-if="grado.id==tramite.grado"
                         >
                         <td>{{ tramite.per_nom }}</td>
                         <td>{{ tramite.tramite }}</td>
@@ -81,6 +102,10 @@
         </v-row>
       </template>
     </v-data-iterator>
+        </v-card>
+      </v-tab-item>
+     </v-tabs-items>
+    
 
     <template>
       <v-dialog

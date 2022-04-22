@@ -29,8 +29,8 @@
           >
             <v-card >
               <v-card-title>
-                Consejo Nro:{{ gruposexpediente.resolucion_numero }}
-                <v-btn color="primary" class="ml-auto" @click="enviar(gruposexpediente.resolucion)">Enviar</v-btn>
+                Consejo Nro:{{ gruposexpediente.consejo_numero }}
+                <v-btn color="primary" class="ml-auto" @click="enviar(gruposexpediente.consejo)">Enviar</v-btn>
               </v-card-title>
               
               <v-divider></v-divider>
@@ -72,8 +72,8 @@
               </v-list>
               <tfoot>
               <td colspan="4" class="pl-4 #515252--text text-md-body-1 text-right">
-              <em> Fecha de Resolucion: {{ gruposexpediente.resolucion_fecha }}</em></td>
-              <td></td>
+              <em> Fecha de Consejo: {{ gruposexpediente.consejo_fecha }}</em></td>
+              <td></td> 
               </tfoot>
             </v-card>
           </v-spacer>
@@ -102,15 +102,15 @@
                 v-model="form.numero"
                 label="Número de oficio">
                 </v-text-field>
-                <v-text-field
+                <!--v-text-field
                 v-model="form.consejo"            
-                label="número de consejo">
+                label="Número de consejo">
                 </v-text-field>                
                 <v-text-field
                 v-model="form.fecha"
                 type="date"
                 label="Fecha de consejo">
-                </v-text-field>
+                </v-text-field-->
 
                 <v-btn class="mt-3 " 
                 style="color:#fff;" 
@@ -146,7 +146,6 @@ export default {
             search:'',
             form: new Form({
                // selected: [],
-                resolucion:'',
                 numero:'',
                 consejo:'',
                 fecha:'',
@@ -160,15 +159,16 @@ export default {
             this.dialogenviar=false;
             this.form.numero='';
             this.form.consejo='';
-            this.form.resolucion='';
             this.form.fecha=null;
         },async grupoexpedientes(){
             const {data}= await axios.get('/api/sg1-resoluciones/');
-            this.gruposexpedientes=data;
+            this.gruposexpedientes=data;  
             console.log("grupo",this.gruposexpedientes);
-        },enviar(id_reso){
-            console.log(id_reso);
-            this.form.resolucion=id_reso;
+        },enviar(id_cose){
+            console.log(id_cose); 
+            this.form.consejo=id_cose;
+            this.form.fecha=this.gruposexpedientes[id_cose]['consejo_fecha'];
+            console.log("fecha",this.form.fecha);
             this.dialogenviar=true;
         },
         async aprobar(){
@@ -176,7 +176,7 @@ export default {
             await this.form.post(`/api/aprobar-consejo/`).then(response=>{
                 console.log(response.data)  
                 this.close();
-                this.gruposexpedientes();
+                this.grupoexpedientes();
             });
         },
     }
