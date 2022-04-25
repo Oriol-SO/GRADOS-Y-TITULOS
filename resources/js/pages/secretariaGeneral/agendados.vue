@@ -80,7 +80,7 @@
                 v-model="form.numero"
                 label="Número de oficio">
                 </v-text-field>
-                <v-text-field
+                <!--v-text-field
                 v-model="form.consejo"            
                 label="número de consejo">
                 </v-text-field>                
@@ -88,7 +88,7 @@
                 v-model="form.fecha"
                 type="date"
                 label="Fecha de consejo">
-                </v-text-field>
+                </v-text-field-->
 
                 <v-btn class="mt-3 " 
                 style="color:#fff;" 
@@ -130,7 +130,7 @@ export default {
           { text: 'Estado', value: 'estado' },
         ],
 
-
+            id_consejo=null,
             itemsPerPage: 4,
             dialogenviar:false,
             gruposexpedientes:[],

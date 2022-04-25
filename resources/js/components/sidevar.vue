@@ -27,14 +27,14 @@
           permanent
         >
         <router-link 
-                v-for="(item,i) in items" :key="i" :to="{name: item.to}" link style="text-decoration:none">   
-                  <v-list-item link class="iconos" style="color:white;">
-                    <v-list-item-icon>
-                      <v-icon color="white">{{item.icon}}</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>{{item.title}}</v-list-item-title>
-                  </v-list-item>
-                </router-link>
+          v-for="(item,i) in items" :key="i" :to="{name: item.to}" link style="text-decoration:none">   
+            <v-list-item link class="iconos" style="color:white;">
+              <v-list-item-icon>
+                <v-icon color="white">{{item.icon}}</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>{{item.title}}</v-list-item-title>
+            </v-list-item>
+        </router-link>
             
         </v-list-item-group>
       </v-list>

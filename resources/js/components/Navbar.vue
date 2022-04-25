@@ -59,6 +59,9 @@ export default {
     //],
     bgNavbar: "#fff",
   }),
+    props: {
+      dashboard:'/admin',
+    },
 
   computed: {
     ...mapGetters({
