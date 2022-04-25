@@ -4,9 +4,9 @@
       <v-card-title class="px-0 py-1 ml-3 text-h6">{{nomtramite.tipo_tramite}}</v-card-title>
     </v-card>
     <div>
-    <v-row no-gutters>       
-        <v-col ms="12" md="9">
-            <v-card>
+    <v-row no-gutters >       
+        <v-col class="pa-1"  cols="12" xl="9" lg="9" sm="12" xs="12" >
+            <v-card >
                 <v-card-title class="px-0 py-1 ml-3 text-h6">Fases que te corresponden</v-card-title>
                 <v-stepper v-model="e1" >
                 <v-stepper-header non-linear>
@@ -33,9 +33,10 @@
                                 style="min-height:350px;"
                             >
                                 <v-card-title class="my-0">{{fase.nombre}}</v-card-title>
+                                <v-row>
                                 <v-btn 
                                     color="#2cdd9b" 
-                                    class="mb-2 text-capitalize" 
+                                    class="mr-2 mb-2 text-capitalize" 
                                     style="color:#fff;" elevation="0"
                                     @click="mostrarrequisito(fase.id)">
                                     Requisitos
@@ -44,7 +45,7 @@
 
                                 <v-btn 
                                 v-if="fase.encargado_revisar==5"
-                                class="mb-2 text-capitalize" 
+                                class="mb-5 text-capitalize" 
                                 elevation="0"
                                 color="cyan lighten-2"
                                 style="float: right; color:#fff;"
@@ -52,10 +53,10 @@
                                 >
                                     Aprovar Fase
                                 </v-btn>
-
+                                </v-row>
                                 <v-divider></v-divider>
                                 <v-list>
-                                    <v-subheader class="font-weight-medium text-md-body-1 d-flex" v-if="requisitos.length" >
+                                    <v-subheader class="font-weight-medium text-md-body-1 d-flex" style=" height: auto;"  v-if="requisitos.length" >
                                         REQUISITOS ALUMNO 
                                         <div>
                                             <v-chip
@@ -98,8 +99,10 @@
                                             <v-icon >mdi-check-outline</v-icon>
                                         </v-list-item-icon>
                                         <v-list-item-content  >
-                                            <v-list-item-title class="d-flex" >{{requisito.nombre}}  
-                                                <div class="ml-auto">
+                                            <v-list-item class="d-flex" >
+                                            <v-row>
+                                            {{requisito.nombre}}  
+                                                <div class="ml-auto my-2">
                                                     <!--div v-if="requisito.revisado.length>0">revisado</div-->
                                                     <v-chip
                                                     v-if="requisito.modificado[0]==1"
@@ -137,7 +140,8 @@
                                                     </v-btn>
 
                                             </div>
-                                            </v-list-item-title> 
+                                            </v-row>
+                                            </v-list-item> 
 
                                         </v-list-item-content>
                                     </v-list-item>
@@ -276,7 +280,7 @@
                 </v-stepper>
             </v-card>
         </v-col>
-        <v-col ms="12" md="3">
+         <v-col class="pa-1"  lg="3" xl="3" sm="12"  xs="12">
             <v-card class="ml-2" elevation="0" >
                <v-subheader :inset="inset">
                     Fases del tramite
@@ -288,7 +292,7 @@
                     vertical
                     style="display: contents;"
                     >
-                    <v-stepper-header elevation="0" style="min-height:450px; overflow:auto; flex-wrap: nowrap; flex-direction: column;">
+                    <v-stepper-header elevation="0" style="min-height:476px; overflow:auto; flex-wrap: nowrap; flex-direction: column;">
                         <v-stepper-step v-for="(fase,i) in fasestramite" :key="i"
                         :step="i+1"
                         v-bind:complete="(i+1)<fase_actualy"

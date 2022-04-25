@@ -1,7 +1,5 @@
 <template>
-
   <v-container fluid class="fill-height main">
-
     <v-flex>
       <v-card
         class="mx-auto my-auto h-100 transparente py-6"
