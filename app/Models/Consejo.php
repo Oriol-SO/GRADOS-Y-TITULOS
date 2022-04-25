@@ -9,8 +9,10 @@ class Consejo extends Model
 {
     use HasFactory;
     protected $fillable=[
-
-
+        'numero',
+        'fecha',
+        'estado',
+        'num_oficio',
     ];
 
     public function Tramite()

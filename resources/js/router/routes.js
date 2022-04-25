@@ -3,11 +3,13 @@ function page(path) {
 }
 
 export default [
+  
   { path: '/', redirect: { name: 'login' } },
 
   { path: '/login', name: 'login', component: page('auth/login.vue') },
 
   { path: '/home', name: 'home', component: page('home.vue') },
+  { path: '/pdf', name: 'pdf', component: page('app/Http/Controllers/PdfController.php') },
 
   { path: '/register', name: 'register', component: page('auth/register.vue') },
   { path: '/password/reset', name: 'password.request', component: page('auth/password/email.vue') },
@@ -36,6 +38,7 @@ export default [
       { path: 'tramites', name: 'admin.tramites', component: page('admin/tramites.vue') },
       { path: 'tramite/:id', name: 'admin.tramite', component: page('admin/tramite.vue') },
       { path: 'personas-usuarios', name: 'admin.usuarios', component: page('admin/usuarios.vue') },
+      { path: 'tiny', name: 'admin.tiny', component: page('admin/tiny.vue') },
 
     ]
   },
@@ -84,7 +87,7 @@ export default [
     children: [
       { path: '', redirect: { name: 'dashboardvice' } },
       { path: 'dashboard', name: 'dashboardvice', component: page('secretariaVicerrectorado/dashboard.vue') },
-      { path: 'tramites/:id', name: 'vicerrectorado.tramites', component: page('secretariaVicerrectorado/tramites.vue') },
+      { path: 'tramite/:id', name: 'vicerrectorado.tramite', component: page('secretariaVicerrectorado/tramite.vue') },
     ]
   },
 

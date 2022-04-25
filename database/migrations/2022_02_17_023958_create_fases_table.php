@@ -23,7 +23,7 @@ class CreateFasesTable extends Migration
             $table->bigInteger('encargado_revisar');
 
             $table->foreign('proceso_id')->references('id')->on('procesos');
-            $table->foreign('fase_id')->references('id')->on('fases');
+            // $table->foreign('fase_id')->references('id')->on('fases');
 
 
             $table->timestamps();

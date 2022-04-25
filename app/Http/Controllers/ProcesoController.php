@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Proceso;
 use App\Models\Grado;
 use App\Models\Modalidade;
+use App\Models\Tramite;
 
 class ProcesoController extends Controller
 {
@@ -16,16 +17,19 @@ class ProcesoController extends Controller
      */
     public function index()
     {
-
         $tramites['tramites'] = Proceso::all()->map(function ($t) {
             return [
+                'uso'=>Tramite::where('proceso_id',$t->id)->where('estado',0)->first()?1:0,
                 'id' => $t->id,
                 'nombre' => $t->procNom,
                 'grado_id' => $t->grado ? $t->grado_id : null,
                 'grado' => $t->grado ? $t->grado->graNom : null,
                 'modalidad_id' => $t->modalidade ? $t->moda_id : null,
                 'modalidad' => $t->modalidade ? $t->modalidade->modNombre : null,
+                'estado' =>$t->estado,
+                'guardado' =>$t->guardado,
                 'cantidad_fases' => $t->fase->count(),
+                'estado'=>$t->estado,
                 'cantidad_requisitos' => $t->fase->map(function ($f) {
                     return $f->faserolrequisito->count();
                 })->sum(),
@@ -62,6 +66,7 @@ class ProcesoController extends Controller
             'grado_id' => $request->grado['id'],
             'moda_id' => $request->modalidad['id'],
             'tipo' => $request->tipo,
+            'estado'=>0,
         ]);
         return response()->json([
             'tramite'=>$proceso
@@ -78,9 +83,25 @@ class ProcesoController extends Controller
     {
         $proceso = Proceso::find($id);
          $response=[
-             'nombre'=>$proceso->procNom
+             'nombre'=>$proceso->procNom,
+             'guardado'=>$proceso->guardado,
+             'estado'=>$proceso->estado,
+             'uso'=>Tramite::where('proceso_id',$id)->where('estado',0)->first()?1:0,
          ];
         return response()->json($response, 200);
+    }
+
+    protected function cambiarEstado($id)
+    {     
+        $proceso=Proceso::where('id',$id)->first();      
+        $estado=$proceso->estado;
+        if($estado==1){
+            $cambiado=0;
+        }else{
+            $cambiado=1;
+        }
+        Proceso::where('id', $id)->update(['estado' => $cambiado]);
+        return 'cambiado';
     }
 
     /**
@@ -125,6 +146,20 @@ class ProcesoController extends Controller
             'modalidad' => 'required'
         ]);
     }
-
-  
+    
+    protected function cambiarGuardado($id)
+    {   
+        $valor=Proceso::where('id',$id)->first();  
+        $guardado=$valor->guardado;
+        if($guardado==1){
+                $guardado=0;
+                $g=1;
+        }else{
+                $guardado=1;
+                $g=0;
+        }
+        $proceso=Proceso::where('id', $id)->update(['guardado' => $guardado]);
+        $valor = Proceso::find($id);
+        return !($valor->guardado);
+    } 
 }

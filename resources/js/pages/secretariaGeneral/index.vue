@@ -1,7 +1,7 @@
 <template>
    <div>   
    <sidevar :items="links"/>
-     <div class="ml-12" >
+     <div class="mx-2" >
        <router-view></router-view>
      </div>     
    </div>  

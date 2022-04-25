@@ -10,6 +10,7 @@ use App\Models\Fase;
 use App\Models\File;
 use App\Models\Observacione;
 use App\Models\Revisione;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -84,11 +85,11 @@ class SecretariaController extends Controller
         if($rol_sf===5){
                 //desabilitar notificacion 
                  //obtener rol revisador 
-                 $fase_revision=Fase::where('id',$id)->first();
+                // $fase_revision=Fase::where('id',$id)->first();
                 // $revisador=$fase_revision->encargado_revisar;
-                 $tramite_revision=Tramite::where('fase_actual',$this->tram)->first();
+                 $tramite_revision=Tramite::where('id',$this->tram)->first();
 
-                 if($tramite_revision->fase_actual==$fase_revision-> numero){
+                 if($tramite_revision->fase_actual!=null){
                         if(5==$tramite_revision->receptor_rol_notify){
                             //eliminar notificacion
                             Tramite::where('id',$this->tram)->update(['receptor_rol_notify'=>null]);
@@ -285,6 +286,35 @@ class SecretariaController extends Controller
             return 'user no autorizado';
         }
         
+    }
+
+    protected function sf_fasecheck($id_tram,$id_fase){
+        try{ 
+            //comprovar si esta fase esta aprovada
+            $fase_tramite=(Tramite::where('id',$id_tram)->first())->fase_actual;
+
+            $fase=Fase::where('id',$id_fase)->first();
+            //obtener rol del revisador
+            if($fase->encargado_revisar==5){
+                $fase_actual=$fase->numero;
+                if($fase_actual==$fase_tramite){
+                    $tramite_fase=Tramite::where('id',$id_tram)->update(['fase_actual'=>($fase_actual+1)]);
+                    return '1';
+                }else{
+                    if($fase_actual<$fase_tramite){
+                        return '2';
+                    }else if($fase_actual>$fase_tramite){
+                        return '3';
+                    }
+                   // return'las fases anteriores no fueron aprobadas';
+                }
+
+            }else{
+                return 'no estas autorizado para esta accion';
+            }
+        }catch(Exception $e){
+            return $e;
+        }
     }
     /**
      * Show the form for creating a new resource.

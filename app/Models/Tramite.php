@@ -35,9 +35,9 @@ class Tramite extends Model
         return $this->hasOne(Diploma::class,'tramite_id','id');
     }
 
-    public function Resolucion()
+    public function Resolucione()
     {
-        return $this->belongsTo(Resolucion::class,'resolucion_id','id');
+        return $this->belongsTo(Resolucione::class,'resolucion_id','id');
     }
 
     public function Consejo()

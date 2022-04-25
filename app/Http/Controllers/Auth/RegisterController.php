@@ -14,6 +14,7 @@ use App\Models\PersonaRole;
 use Exception;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\QueryException;
+
 class RegisterController extends Controller
 {
 
@@ -59,7 +60,7 @@ class RegisterController extends Controller
         if ($user instanceof MustVerifyEmail) {
             return response()->json(['status' => trans('verification.sent'),'correo'=>$this->correo_institucional]);
         }
-
+        
         return response()->json($user);
     }
 

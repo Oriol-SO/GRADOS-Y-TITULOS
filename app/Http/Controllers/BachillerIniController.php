@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Formatos\PdfController;
 use Illuminate\Http\Request;
 use App\Models\tablainicio;
 
@@ -84,5 +85,15 @@ class BachillerIniController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function pdf(){
+        $documento = new PdfController(); 
+        $documento=$documento->pdf->Output('S');
+        //Almaceno el documento  
+        
+        $path = 'documentos/0/Especial1.pdf';
+        Storage::put($path, $documento);
+         
+        return response()->json(["status" => 'Documento cargado', "path" => $path]);
     }
 }

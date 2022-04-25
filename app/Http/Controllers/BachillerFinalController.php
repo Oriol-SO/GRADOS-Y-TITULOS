@@ -14,7 +14,7 @@ class BachillerFinalController extends Controller
      */
     public function index()
     {
-        $BachillerFinal=tablafinal::all('Finalizados');
+        $BachillerFinal=tablafinal::all();
         return $BachillerFinal;
     }
 

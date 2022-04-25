@@ -33,15 +33,27 @@
                                 style="min-height:350px;"
                             >
                                 <v-card-title class="my-0">{{fase.nombre}}</v-card-title>
+                                <v-row>
                                 <v-btn 
                                     color="#2cdd9b" 
-                                    class="mb-2 text-capitalize" 
+                                    class="mr-2 mb-2 text-capitalize" 
                                     style="color:#fff;" elevation="0"
                                     @click="mostrarrequisito(fase.id)">
                                     Requisitos
                                 <v-icon dark right>mdi-arrow-down</v-icon>
                                 </v-btn>
 
+                                <v-btn 
+                                v-if="fase.encargado_revisar==5"
+                                class="mb-5 text-capitalize" 
+                                elevation="0"
+                                color="cyan lighten-2"
+                                style="float: right; color:#fff;"
+                                @click="aprobarfase(fase.id)"
+                                >
+                                    Aprovar Fase
+                                </v-btn>
+                                </v-row>
                                 <v-divider></v-divider>
                                 <v-list>
                                     <v-subheader class="font-weight-medium text-md-body-1 d-flex" style=" height: auto;"  v-if="requisitos.length" >
@@ -187,7 +199,7 @@
                                         :key="i"
                                         class="mb-1"
                                         color="black"
-                                        v-bind:style="requisitoP.archivo_subido.length>0?'background:#82b1ff;;':'' "
+                                        v-bind:style="requisitoP.archivo_subido.length>0?'background:#82b1ff;':'' "
 
                                     >
                                         <v-list-item-icon>
@@ -211,7 +223,7 @@
                                                         </v-avatar>
                                                     </v-chip>
                                                     <v-chip
-                                                    v-if="requisitoP.revisado_observado.length>0 && requisito.modificado[0]==0 "
+                                                    v-if="requisitoP.revisado_observado.length>0 && requisitoP.modificado[0]==0 "
                                                     color="#ff9400"
                                                     text-color="#fff"
                                                     >                       
@@ -275,7 +287,7 @@
                 </v-subheader>
 
                     <v-stepper
-                    value="1"
+                    :value="fase_actualy"
                     class="mt-12"
                     vertical
                     style="display: contents;"
@@ -283,7 +295,7 @@
                     <v-stepper-header elevation="0" style="min-height:476px; overflow:auto; flex-wrap: nowrap; flex-direction: column;">
                         <v-stepper-step v-for="(fase,i) in fasestramite" :key="i"
                         :step="i+1"
-                        
+                        v-bind:complete="(i+1)<fase_actualy"
                         color="green"
                         >
                         {{fase.nombre}}
@@ -602,6 +614,30 @@
 
     </template>
 
+      <template>
+        <div class="text-center ma-2">
+
+            <v-snackbar
+                v-model="alert_fase_notify"
+                tile
+                :color="color_alert_fase_notify"
+                top
+            >
+            {{ msg_notify }}
+
+            <template v-slot:action="{ attrs }">
+                <v-btn
+                color="white"
+                text
+                v-bind="attrs"
+                @click="alert_fase_notify = false"
+                >
+                Close
+                </v-btn>
+            </template>
+            </v-snackbar>
+        </div>
+      </template>
     
   </div>    
 </template>
@@ -614,7 +650,11 @@ export default {
 
     data(){
         return{
+          alert_fase_notify:false,
+          color_alert_fase_notify:'',
+          msg_notify:'',
           e1: 1,
+          fase_actualy:'',
           nomtramite:[],
           fases:[],
           numfases:'',
@@ -681,7 +721,26 @@ export default {
        // this.fetchfase();
         this.numfase();
     },methods:{
-
+      async aprobarfase(id){
+          await axios.get(`/api/sf-fasecheck/${this.$route.params.id}/${id}`).then(response=>{
+            console.log(response.data);
+              if(response.data=='1'){
+                this.alert_fase_notify=true;                
+                this.msg_notify='esta fase esta aprobada';
+                this.color_alert_fase_notify='green';
+                this.fetchtramite();
+                this.e1=this.e1+1;
+              }else if(response.data=='2'){
+                this.alert_fase_notify=true;                
+                this.msg_notify='la fase ya fue aprobada';
+                this.color_alert_fase_notify='blue';
+              } else if(response.data=='3'){
+                this.alert_fase_notify=true;                
+                this.msg_notify='las fases anteriores aun no se aprueban';
+                this.color_alert_fase_notify='red';
+              }   
+          });
+      },
       obser(){
           this.formrevisado.aprovado=false;
           this.formrevisado.revisado=0;
@@ -698,6 +757,7 @@ export default {
       async fetchtramite(){
          const { data } = await axios.get(`/api/sf-tramite/${this.$route.params.id}`);   
          this.nomtramite = data;
+         this.fase_actualy=data.fase_actual;
         // this.codigoproc=this.nomtramite.proceso_id;
          //console.log(this.codigoproc)
           this.fetchfase(this.nomtramite.proceso_id)
@@ -707,6 +767,7 @@ export default {
          this.fasestramite=data.fases_tramite;
          this.numfases=data.cantidad;
       },async mostrarrequisito(id){
+
           const {data}=await axios.get(`/api/sf-faserequisito/${id}/${this.$route.params.id}`);
           this.requisitos=data.alumno;
           this.requisitosPropios=data.propios;
@@ -716,7 +777,7 @@ export default {
           this.requisitos_aprovadosPropios=data.aprovadosPropios;
           this.requisitos_observadosPropios=data.observadosPropios;
           this.requisitos_subidosPropios=data.subidosPropios;
-         // console.log(data);
+          console.log(data);
       },
       //subir requisitos
       openmodal(requisito){        
