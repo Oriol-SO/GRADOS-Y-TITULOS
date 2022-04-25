@@ -162,8 +162,9 @@ export default {
         },
         async aprobar(){
             //console.log(this.form)
+            //aprobar
             await this.form.post(`/api/aprobar-consejo/`+this.id_consejo).then(response=>{
-                console.log(response.data)  
+                console.log(response.data);  
                 this.close();
                 this.grupoexpedientes();
             });

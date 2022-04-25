@@ -239,7 +239,7 @@ class SecretariaGeneral1Controller extends Controller
                             }),
                         ];
                     });
-                    
+                    //nada de nada
 
                foreach($tramites_resolucion[0]['tramites'] as $tramite){
                     //comprovar si el tramite tiene un cosejo
