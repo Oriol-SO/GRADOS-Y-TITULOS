@@ -8,16 +8,14 @@
       <template v-slot:header>
         <v-toolbar
           class="mb-2"
-          color="rgb(13, 240, 214)"
-          dark
           flat
-          text-color="rgb(0, 0, 0, 0.87)"
         >
+        
           <v-toolbar-title class="black--text ">EXPEDIENTES AGENDADOS</v-toolbar-title>
         </v-toolbar>
       </template>
       <template >
-        <v-row>
+        
           <v-spacer
             v-for="gruposexpediente in gruposexpedientes"
             :key="gruposexpediente.id"
@@ -25,59 +23,39 @@
             sm="12"
             md="12"
   
-            class="pa-4"
+            class="py-2"
           >
             <v-card >
               <v-card-title>
-                Consejo Nro:{{ gruposexpediente.resolucion_numero }}
-                <v-btn color="primary" class="ml-auto" @click="enviar(gruposexpediente.resolucion)">Enviar</v-btn>
-              </v-card-title>
-              
-              <v-divider></v-divider>
-
-              <v-list dense>
+              <v-row >
+              <div>
+                Consejo Nro:{{ gruposexpediente.resolucion_numero }} 
                 
-                <v-simple-table
-                :items-per-page="2">
-                    <template v-slot:default>
-                    <thead>
-                        <tr>
-                        <th class="text-left text-h6" >
-                            Nombre
-                        </th>
-                        <th class="text-left text-h6">
-                            Tramite
-                        </th>
-                        <th class="text-left text-h6">
-                            Fecha de inicio
-                        </th>
-                        <th class="text-left text-h6">
-                            Estado
-                        </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr
-                        v-for="(tramite,i) in gruposexpediente.tramite"
-                        :key="i"
-                        >
-                        <td>{{ tramite.per_nom }}</td>
-                        <td>{{ tramite.tramite }}</td>
-                        <td>{{ tramite.fec_inicio }}</td>
-                        <td>{{ tramite.estado }}</td>
-                        </tr>
-                    </tbody>
-                    </template>
-                </v-simple-table>
-              </v-list>
-              <tfoot>
+                              <tfoot>
               <td colspan="4" class="pl-4 #515252--text text-md-body-1 text-right">
               <em> Fecha de Resolucion: {{ gruposexpediente.resolucion_fecha }}</em></td>
               <td></td>
               </tfoot>
+              </div>
+              </v-row>
+                <v-btn color="primary" class="ml-auto" @click="enviar(gruposexpediente.resolucion)">Enviar</v-btn>
+              </v-card-title>
+              
+              <v-divider></v-divider>
+                
+                  <v-card>
+                 <v-data-table
+                   :headers="headers"
+                   :items="gruposexpediente.tramite"
+                   hide-default-footer
+                 ></v-data-table>
+               
+             
+
+              </v-card>
             </v-card>
           </v-spacer>
-        </v-row>
+       
       </template>
     </v-data-iterator>
 
@@ -125,7 +103,7 @@
                 <v-btn class="ml-auto"
                     text
                     @click="close()"
-                >Close</v-btn>
+                >Cerrar</v-btn>
             </v-card-actions>
             </v-card>
         </template>
@@ -140,6 +118,19 @@ import Form from "vform";
 export default {
     data(){
         return{
+           headers: [
+          {
+            text: 'nombre',
+            align: 'start',
+            filterable: false,
+            value: 'per_nom' ,
+          },
+          { text: 'Tramite', value: 'tramite' },
+          { text: 'Fecha de inicio', value: 'fec_inicio' },
+          { text: 'Estado', value: 'estado' },
+        ],
+
+
             itemsPerPage: 4,
             dialogenviar:false,
             gruposexpedientes:[],
