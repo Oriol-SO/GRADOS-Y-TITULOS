@@ -7,10 +7,12 @@ use App\Models\Tramite;
 use Illuminate\Http\Request;
 use App\Models\FaseRolRequisito;
 use App\Models\Fase;
+use App\Models\Grado;
 use App\Models\Resolucione;
-
-
+use App\Models\Persona;
+use App\Models\User;
 use Exception;
+use Illuminate\Support\Facades\DB;
 
 class SecretariaGeneral1Controller extends Controller
 {
@@ -88,26 +90,57 @@ class SecretariaGeneral1Controller extends Controller
         });
         return response()->json($agendados);
     }
-    protected function expedientes_aprobados(){
-        $consejo=Consejo::where('estado',1)->get()->map(function($c){
-            return[
-                'consejo_id'=>$c->id,
-                'consejo_fecha'=>$c->fecha,
-                'consejo_numero'=>$c->numero,
-                
-                'tramite'=>$c->tramite->map(function($e){
+    protected function expedientes_aprobados($id){
+        if($id==0){
+          /* $aprobados=DB::table('tramites')
+            ->join('consejos', function ($join) {
+                $join->on('tramites.consejo_id', '=', 'consejos.id');                    
+            })->where('consejos.estado', 1)
+            ->get()->map(function($e){
+                return[
+                    'per_nom'=>$e->persona->nom.' '.$e->persona->apePat.' '.$e->persona->apeMat,           
+                    'id'=> $e->id,
+                    'tramite'=>$e->tipo_tramite,
+                    'fec_inicio'=>$e-> fec_inicio,
+                    'estado'=>$e->estado,
+                    'consejo_numero'=>$e->consejo->numero,
+                ];
+            });*/
+
+             /* $aprobados=Tramite::where('consejo_id','<>',null)->get()->map(function($e){
+                if($e->consejo->estado==1){
                     return[
                         'per_nom'=>$e->persona->nom.' '.$e->persona->apePat.' '.$e->persona->apeMat,           
                         'id'=> $e->id,
                         'tramite'=>$e->tipo_tramite,
                         'fec_inicio'=>$e-> fec_inicio,
                         'estado'=>$e->estado,
-                        'grado'=>$e->proceso->grado_id,
+                        'consejo_numero'=>$e->consejo->numero,
                     ];
-                }),
-            ];
-        });
-        return response()->json($consejo);
+                }
+
+            });*/
+            $apro=array();
+           $aprobados=Consejo::where('estado',1)->get()->map(function($c) use(&$apro){
+                $c->tramite->map(function($e) use($c,&$apro){
+                        array_push($apro,[
+                            'per_nom'=>$e->persona->nom.' '.$e->persona->apePat.' '.$e->persona->apeMat,           
+                            'id'=> $e->id,
+                            'tramite'=>$e->tipo_tramite,
+                            'fec_inicio'=>$e-> fec_inicio,
+                            'estado'=>$e->estado,
+                            'consejo_numero'=>$e->consejo->numero,
+                         ] );
+                    });
+                    
+              
+            });
+           // return $apro;
+            return response()->json($apro);
+        }else{
+        
+        }
+
     }
     protected function sg1_resoluciones(){
         
@@ -129,24 +162,20 @@ class SecretariaGeneral1Controller extends Controller
         });
         return response()->json($agendados); 
     }
-    protected function sg1_apro_consejo(Request $request){
+    protected function sg1_apro_consejo(Request $request,$id){
         $rol=3;
         $request->validate([
             'numero'=>'required|numeric',
-            'fecha'=>'required|date',
-            'consejo'=>'required',
         ]); 
         if($rol==3){
             try{
-                $consejo=Consejo::create([
-                    'numero'=>$request->consejo,
-                    'fecha'=>$request->fecha,
-                    'estado'=>1, 
+                $consejo=Consejo::where('id',$id)->update([
+                    'estado'=>0, 
                     'num_oficio'=>$request->numero,                       
                 ]);
 
                     //obtener datos de los tramites de esta consejo
-                    $tramites_consejo=Consejo::where('id',$request->consejo)->get()->map(function($a){
+                    /* $tramites_consejo=Consejo::where('id',$request->consejo)->get()->map(function($a){
                         return[
                             'tramites'=>$a->tramite->map(function($e){
                                 return[         
@@ -155,10 +184,10 @@ class SecretariaGeneral1Controller extends Controller
                                 ];
                             }),
                         ];
-                    });
+                    }); */
                     
 
-               foreach($tramites_consejo[0]['tramites'] as $tramite){
+               /* foreach($tramites_consejo[0]['tramites'] as $tramite){
                     //comprovar si el tramite tiene un cosejo
                     $expediente= $tramite['id'];
                     $consejoTram=Tramite::where('id',$expediente)->first();
@@ -167,11 +196,11 @@ class SecretariaGeneral1Controller extends Controller
                         Tramite::where('id',$expediente)->update(['consejo_id'=>$consejo->id]);
                         
                     }
-               }
+               } */
 
                //cambiar el estado de la resolucion
 
-               Consejo::where('id',$request->consejo)->update(['estado'=>0]);
+               /* Consejo::where('id',$request->consejo)->update(['estado'=>0]); */
 
                 
             }catch(Exception $e){
@@ -183,6 +212,66 @@ class SecretariaGeneral1Controller extends Controller
         }
         
 
+    }
+    protected function sg1_apro_resolucion(Request $request){
+        $rol=3;
+        $request->validate([
+            'numero'=>'required|numeric',
+            'fecha'=>'required|date',
+            
+        ]); 
+        if($rol==3){
+            try{
+                $resolucion=Resolucion::create([
+                    'numero'=>$request->resolucion,
+                    'fecha'=>$request->resolucion,
+                    'estado'=>1,                        
+                ]);
+
+                    //obtener datos de los tramites de esta consejo
+                    $tramites_resolucion=Resolucion::where('id',$request->resolucion)->get()->map(function($a){
+                        return[
+                            'tramites'=>$a->tramite->map(function($e){
+                                return[         
+                                    'id'=> $e->id,
+                                    'consejo_id'=>$e->resolucion_id,                                
+                                ];
+                            }),
+                        ];
+                    });
+                    
+
+               foreach($tramites_resolucion[0]['tramites'] as $tramite){
+                    //comprovar si el tramite tiene un cosejo
+                    $expediente= $tramite['id'];
+                    $ResolucionTram=Tramite::where('id',$expediente)->first();
+                    if($ResolucionTram->resolucion_id ==null || $ResolucionTram->resolucion_id  =='' ){                       
+                        //agregar la aprobacio a los expedientes
+                        Tramite::where('id',$expediente)->update(['resolucion_id'=>$resolucion->id]);
+                        
+                    }
+               }
+
+               //cambiar el estado de la resolucion
+
+               Resolucion::where('id',$request->resolucion)->update(['estado'=>0]);
+
+                
+            }catch(Exception $e){
+                return $e;
+            }       
+       
+        }else{
+            return 'user no autorizado';
+        }
+        
+
+    }
+
+
+    protected function sq1_grados(){      
+        $todo=[['id'=>'all','graNom'=>'Todo'],['id'=>'1','graNom'=>'Bachiller'],['id'=>'2','graNom'=>'Titulo']];
+        return $todo;
     }
 
     /**

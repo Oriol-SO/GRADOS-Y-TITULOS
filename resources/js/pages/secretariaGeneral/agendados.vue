@@ -140,6 +140,7 @@ import Form from "vform";
 export default {
     data(){
         return{
+            id_consejo:null,
             itemsPerPage: 4,
             dialogenviar:false,
             gruposexpedientes:[],
@@ -147,8 +148,6 @@ export default {
             form: new Form({
                // selected: [],
                 numero:'',
-                consejo:'',
-                fecha:'',
             })
         }
     },mounted(){
@@ -166,14 +165,14 @@ export default {
             console.log("grupo",this.gruposexpedientes);
         },enviar(id_cose){
             console.log(id_cose); 
-            this.form.consejo=id_cose;
-            this.form.fecha=this.gruposexpedientes[id_cose]['consejo_fecha'];
+            this.id_consejo=id_cose;
             console.log("fecha",this.form.fecha);
             this.dialogenviar=true;
+           
         },
         async aprobar(){
             //console.log(this.form)
-            await this.form.post(`/api/aprobar-consejo/`).then(response=>{
+            await this.form.post(`/api/aprobar-consejo/`+this.id_consejo).then(response=>{
                 console.log(response.data)  
                 this.close();
                 this.grupoexpedientes();

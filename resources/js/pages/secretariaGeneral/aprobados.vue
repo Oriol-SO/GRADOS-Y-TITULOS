@@ -1,111 +1,37 @@
 <template>
   <v-container fluid>
-  <v-tabs
-        v-model="tab"
-          align-with-title
-        >
-          <v-tabs-slider color="yellow"></v-tabs-slider>
-
-          <v-tab
-            v-for="grado in grados"
-            :key="grado.id"
-          >
-            {{ grado.graNom }}
-          </v-tab>
-        </v-tabs>
-
-        <v-tabs-items v-model="tab">
-        <v-tab-item
-        v-for="grado in grados"
-        :key="grado.id"
-        >
-        <v-card flat>
-          <v-data-iterator
-      :items="aprobados"
-      :items-per-page.sync="itemsPerPage"
-      hide-default-footer
-    >
-      <template v-slot:header>
-        <v-toolbar
-          class="mb-2"
-          color="rgb(13, 240, 214)"
-          dark
-          flat
-          text-color="rgb(0, 0, 0, 0.87)"
-        >
-          <v-toolbar-title class="black--text ">EXPEDIENTES APROBADOS</v-toolbar-title>
-        </v-toolbar>
-      </template>
-      <template >
-        <v-row>
-          <v-spacer
-            v-for="aprobado in aprobados"
-            :key="aprobado.id"
-            
-            cols="12"
-            sm="12"
-            md="12"
-  
-            class="pa-4"
-          >
-            <v-card >
-              <v-card-title>
-                Consejo Nro:{{ aprobado.consejo_id }}
-                <v-btn color="primary" class="ml-auto" >N° Resolucion</v-btn>
-              </v-card-title>
-              
-              <v-divider></v-divider>
-
-              <v-list dense>
-                
-                <v-simple-table
-                :items-per-page="2">
-                    <template v-slot:default>
-                    <thead>
-                        <tr>
-                        <th class="text-left text-h6" >
-                            Nombre
-                        </th>
-                        <th class="text-left text-h6">
-                            Tramite
-                        </th>
-                        <th class="text-left text-h6">
-                            Fecha de inicio
-                        </th>
-                        <th class="text-left text-h6">
-                            Estado
-                        </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr
-                        v-for="(tramite,i) in aprobado.tramite"
-                        :key="i"
-                        v-if="grado.id==tramite.grado"
-                        >
-                        <td>{{ tramite.per_nom }}</td>
-                        <td>{{ tramite.tramite }}</td>
-                        <td>{{ tramite.fec_inicio }}</td>
-                        <td>{{ tramite.estado }}</td>
-                        </tr>
-                    </tbody>
-                    </template>
-                </v-simple-table>
-              </v-list>
-              <tfoot>
-              <td colspan="4" class="pl-4 #515252--text text-md-body-1 text-right">
-              <em> Fecha de Resolucion: {{ aprobado.consejo_fecha }}</em></td>
-              <td></td>
-              </tfoot>
-            </v-card>
-          </v-spacer>
-        </v-row>
-      </template>
-    </v-data-iterator>
-        </v-card>
-      </v-tab-item>
-     </v-tabs-items>
-    
+    <v-card elevation="0">
+        <v-toolbar class="mt-3" color="#0df0d6" dark style="color:#000;" elevation="0">
+          <v-toolbar-title > EXPEDIENTES CON RESOLUCIÓN</v-toolbar-title>
+            <template v-slot:extension>
+              <v-tabs v-model="tab">
+              <v-tabs-slider color="#000"></v-tabs-slider>
+                <v-tab
+                  style="color:#000;"
+                  v-for="item in items"
+                  :key="item.id"
+               
+                >
+                  {{ item.graNom }}
+                </v-tab>
+              </v-tabs>        
+            </template>
+        </v-toolbar>         
+            <v-divider class="mt-2"></v-divider>
+            <v-tabs-items v-model="tab" >
+              <v-tab-item
+                v-for="item in items"
+                :key="item.id"
+              >
+                <v-card elevation="0" style="background:rgb(242 243 248);" >
+                  <v-data-table
+                    :headers="headers"
+                    :items="aprobados" 
+                  ></v-data-table>
+                </v-card>
+              </v-tab-item>
+            </v-tabs-items>
+      </v-card>
 
     <template>
       <v-dialog
@@ -126,16 +52,12 @@
                 <v-card-text>
                 <v-text-field
                 v-model="form.numero"
-                label="Número de oficio">
-                </v-text-field>
-                <v-text-field
-                v-model="form.consejo"            
-                label="número de consejo">
+                label="Número de Resolucion">
                 </v-text-field>                
                 <v-text-field
                 v-model="form.fecha"
                 type="date"
-                label="Fecha de consejo">
+                label="Fecha de Resolucion">
                 </v-text-field>
 
                 <v-btn class="mt-3 " 
@@ -150,12 +72,12 @@
             <v-card-actions>
                 <v-btn class="ml-auto"
                     text
-                    @click="close()"
+                    @click  ="close()"
                 >Close</v-btn>
             </v-card-actions>
             </v-card>
         </template>
-    </v-dialog>
+      </v-dialog>
     </template>
   </v-container>
 </template>
@@ -166,6 +88,9 @@ import Form from "vform";
 export default {
     data(){
         return{
+          dialogenviar:false,
+            tab:null,
+            //items:['todos','bachiller','titulos',],
             dialogAgendar:false,
             singleSelect: true,
             tab: null,
@@ -174,37 +99,43 @@ export default {
             //{text: 'Facultad',align: 'start', value: '',},
             { text: 'Tramite', value: 'tramite' },           
             { text: 'Fecha de inicio', value: 'fec_inicio' },
-            { text: 'Consejo id', value:'consejo_id',sortable: false},            
+            { text: 'Consejo', value:'consejo_numero',sortable: false},            
             { text: 'Estado', value: 'estado' },
             ],
             aprobados:[],
-            grados:[],
+            items:[],
             search:'',
 
             form: new Form({
                 selected: [],
                 numero:'',
                 fecha:'',
-            })
+                consejo:'',
+            }),
+            primerTab:0,
+
         }
     },mounted(){
-            this.aprobexpedientes();
+            this.fetchExpedientes(this.primerTab);
             this.tipogrados();
     },methods:{
         close(){
+            this.dialogenviar=false;
             this.dialogAgendar=false;
             this.form.numero='';
             this.form.fecha=null;
         },
         async tipogrados(){
-            const {data}= await axios.get('/api/grado/');
-            this.grados=data;
-            console.log("grados",this.grados);
+            const {data}= await axios.get('/api/secre-gen-grado/');
+            this.items=data;
+            //this.primerTab=data[0].id;
         },
-        async aprobexpedientes(){
-            const {data}= await axios.get('/api/expd_aprobados/');
-            this.aprobados=data;
-            console.log("aprobados",this.aprobados);
+        async fetchExpedientes(id){
+            await axios.get('/api/expd_aprobados/'+id).then(response=>{
+                this.aprobados=response.data;
+                console.log("aprobados",this.aprobados);
+            });
+
         },
         abrirAgendar(){
             if(this.form.selected.length>0){
@@ -219,6 +150,19 @@ export default {
                 console.log(response.data)
                 this.fetchexpedientes();
                 this.close();
+            });
+        },enviar(id_cose){
+            console.log(id_cose); 
+            this.form.consejo=id_cose;
+            console.log("fecha",this.form.fecha);
+            this.dialogenviar=true;
+        },
+        async aprobar(){
+            //console.log(this.form)
+            await this.form.post(`/api/aprobar-resolucion/`).then(response=>{
+                console.log(response.data)  
+                this.close();
+                this.aprobados(); 
             });
         },
     }

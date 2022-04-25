@@ -12,11 +12,12 @@ export default (to, from, next, roles) => {
 
   // Split roles into an array
   roles = roles.split(',')
-
+  console.log(user.role,roles)
   // Check if the user has one of the required roles...
-  if (!roles.includes(user.role)) {
+  if (!roles.includes('13')) {
     next('/unauthorized')
   }
+
 
   next()
 }
