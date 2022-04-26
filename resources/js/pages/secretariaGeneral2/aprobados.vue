@@ -36,6 +36,7 @@
                      v-model="form.selected"
                     show-select
                     class="elevation-1"
+                    group-by="consejo_numero"
                   >
                      <template v-slot:top>
                         <v-switch

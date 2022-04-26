@@ -91,6 +91,20 @@ export default [
     ]
   },
 
+  {
+    path: '/secretaria-general-dos',
+    component: page('secretariaGeneral2/index.vue'),
+    children: [
+      { path: '', redirect: { name: 'sg2.dashboard' } },
+      { path: 'dashboard', name: 'sg2.dashboard', component: page('secretariaGeneral2/dashboard.vue') },
+      { path: 'expedientes-aprobados', name: 'sg2.aprobados', component: page('secretariaGeneral2/aprobados.vue') },
+      { path: 'por-imprimir', name: 'sg2.imprimir', component: page('secretariaGeneral2/imprimir.vue') },
+      { path: 'programar-entrega', name: 'sg2.programar', component: page('secretariaGeneral2/programar.vue') },
+      { path: 'programados', name: 'sg2.entregar', component: page('secretariaGeneral2/programados.vue') },
+      
+    ]
+  },
+
   { path: '/prueva', name: 'prueva', component: page('prueva.vue') },
 
   { path: '*', component: page('errors/404.vue') },
