@@ -136,6 +136,7 @@ Route::get('expd-agendados',[SecretariaGeneral1Controller::class,'expedientes_ag
 Route::get('sg1-resoluciones',[SecretariaGeneral1Controller::class,'sg1_resoluciones']);
 Route::post('aprobar-consejo/{id}',[SecretariaGeneral1Controller::class,'sg1_apro_consejo']);
 Route::post('aprobar-resolucion',[SecretariaGeneral1Controller::class,'sg1_apro_resolucion']);
+Route::post('enviar-datos-reso-interno',[SecretariaGeneral1Controller::class,'enviar_datos_resolucion_internos']);
 Route::get('expd_aprobados/{id}',[SecretariaGeneral1Controller::class,'expedientes_aprobados']);
 Route::get('secre-gen-grado',[SecretariaGeneral1Controller::class,'sq1_grados']);
 Route::get('expd_con_resolu/{id}',[SecretariaGeneral1Controller::class,'sg1_expe_con_resolucion']);
