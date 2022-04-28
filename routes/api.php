@@ -24,6 +24,7 @@ use App\Http\Controllers\SecretariaController;
 use App\Http\Controllers\EditorController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\SecretariaGeneral1Controller;
+use App\Http\Controllers\SecretariaGeneral2Controller;
 use App\Http\Controllers\Settings\PasswordController;
 use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\tramiteController;
@@ -136,7 +137,12 @@ Route::get('expd-agendados',[SecretariaGeneral1Controller::class,'expedientes_ag
 Route::get('sg1-resoluciones',[SecretariaGeneral1Controller::class,'sg1_resoluciones']);
 Route::post('aprobar-consejo/{id}',[SecretariaGeneral1Controller::class,'sg1_apro_consejo']);
 Route::post('aprobar-resolucion',[SecretariaGeneral1Controller::class,'sg1_apro_resolucion']);
+Route::post('enviar-datos-reso-interno',[SecretariaGeneral1Controller::class,'enviar_datos_resolucion_internos']);
 Route::get('expd_aprobados/{id}',[SecretariaGeneral1Controller::class,'expedientes_aprobados']);
+
 Route::get('secre-gen-grado',[SecretariaGeneral1Controller::class,'sq1_grados']);
 Route::get('expd_con_resolu/{id}',[SecretariaGeneral1Controller::class,'sg1_expe_con_resolucion']);
 Route::get('enviar_resolu/{id}',[SecretariaGeneral1Controller::class,'sg1_enviar_resolu']);
+
+Route::get('sg2_expd_aprobados/{id}',[SecretariaGeneral2Controller::class,'sg2_expedientes_aprobados']);
+Route::get('sg2_datos_internos_imprimir/{id}',[SecretariaGeneral2Controller::class,'sg2_get_imprimir']);

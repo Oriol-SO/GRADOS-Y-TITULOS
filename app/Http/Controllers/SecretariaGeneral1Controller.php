@@ -10,6 +10,10 @@ use App\Models\Fase;
 use App\Models\Grado;
 use App\Models\Resolucione;
 use App\Models\Persona;
+use App\Models\PersonaRole;
+use App\Models\Proceso;
+use App\Models\Denominacion;
+use App\Models\Diploma;
 use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -107,7 +111,7 @@ class SecretariaGeneral1Controller extends Controller
                 ];
             });*/
 
-             /* $aprobados=Tramite::where('consejo_id','<>',null)->get()->map(function($e){
+            /*$aprobados=Tramite::where('consejo_id','<>',null)->get()->map(function($e){
                 if($e->consejo->estado==1){
                     return[
                         'per_nom'=>$e->persona->nom.' '.$e->persona->apePat.' '.$e->persona->apeMat,           
@@ -120,7 +124,7 @@ class SecretariaGeneral1Controller extends Controller
                 }
 
             });*/
-            /*$apro=array();
+            $apro=array();
               $aprobados=Consejo::where('estado',0)->get()->map(function($c) use(&$apro){
                 $c->tramite->map(function($e) use($c,&$apro){
                         array_push($apro,[
@@ -134,7 +138,7 @@ class SecretariaGeneral1Controller extends Controller
                     });
                     
               
-            });*/
+            });
 
             $apro=Tramite::where('resolucion_id',null)->whereIn('consejo_id',Consejo::where('estado',0)->get('id'))->get()->map(function($e){
                 //if($e->consejo->estado==0){
@@ -251,7 +255,7 @@ class SecretariaGeneral1Controller extends Controller
                         //comprovar si el tramite tiene un cosejo
                         $expediente= $tramite_res['id'];
                         $resoluTram=Tramite::where('id',$expediente)->first();
-                        if($resoluTram->resolucion_id ==null || $resoluTram->resolucion_id  =='' ){                       
+                        if($resoluTram->resolucion_id == null || $resoluTram->resolucion_id  =='' ){                       
                             //agregar la resolucion a los expedientes
                             if($resoluTram->consejo_id!= null || $resoluTram->consejo_id!= '' ){
                                 Tramite::where('id',$expediente)->update(['resolucion_id'=>$resolucion->id]);
@@ -299,7 +303,293 @@ class SecretariaGeneral1Controller extends Controller
             ];
         });
         return response()->json($apro);
+        }
     }
+    
+    protected function sg1_enviar_resolu(Request $request,$id){
+        $tramite=Tramite::where('consejo_id',$id)->first();
+        $persona=Persona::where('id',$tramite->persona_id)->first();
+        $personarole=PersonaRole::where('persona_id',$persona->id)->first();
+        $proceso=Proceso::where('id',$tramite->proceso_id)->first();
+        $grado=Grado::where('id',$proceso->grado_id)->first();
+        //$denominacion=Denominacion::where('grado_id',$grado->id)->first();
+
+        $array =[[
+                'Nombre'=>'CODUNI',
+                'Valor'=>$persona->cod_alum,   
+                ],
+                [
+                'Nombre'=>'RAZ_SOC',
+                'Valor'=>'UNIVERSIDAD NACIONAL DANIEL ALCIDES CARRION',   
+                ],
+                [
+                'Nombre'=>'MATRI_FEC',
+                'Valor'=>$persona->fec_matri,   
+                ],
+                [
+                'Nombre'=>'FAC_NOM',
+                'Valor'=>$personarole->facId,   
+                ],
+                [
+                'Nombre'=>'CARR_PROG',
+                'Valor'=>$personarole->escId,   
+                ],
+                [
+                'Nombre'=>'ESC_POS',
+                'Valor'=>'',   
+                ],
+                [
+                'Nombre'=>'EGRES_FEC',
+                'Valor'=>$persona->fec_egre,   
+                ],
+                [
+                'Nombre'=>'APEPAT',
+                'Valor'=>$persona->apePat,   
+                ],
+                [
+                'Nombre'=>'APEMAT',
+                'Valor'=>$persona->apeMat,   
+                ],
+                [
+                'Nombre'=>'NOMBRE',
+                'Valor'=>$persona->nom,   
+                ],
+                [
+                'Nombre'=>'SEXO',
+                'Valor'=>$persona->gen,   
+                ],
+                [
+                'Nombre'=>'DOCU_TIP',
+                'Valor'=>$persona->tipDoc,   
+                ],
+                [
+                'Nombre'=>'DOCU_NUM',
+                'Valor'=>$persona->numDoc,   
+                ],
+                [
+                'Nombre'=>'PROG_BACH',
+                'Valor'=>'',   
+                ],
+                [
+                'Nombre'=>'GRAD_TITU',
+                'Valor'=>$persona->grad_estud,   
+                ],
+                [
+                'Nombre'=>'DEN_GRAD',
+                'Valor'=>'Falta dato',   
+                ],
+                [
+                'Nombre'=>'SEG_ESP',
+                'Valor'=>'',   
+                ],
+                [
+                'Nombre'=>'TRAB_INV',
+                'Valor'=>$tramite->trabajo ? $tramite->trabajo->nombre:'',
+                ],
+                [
+                'Nombre'=>'REG_METADATO',
+                'Valor'=> $tramite->trabajo ? $tramite->trabajo->url_repositorio:'',
+                ],
+                [
+                'Nombre'=>'MODOBT' ,
+                'Valor'=> $tramite->trabajo ? $tramite->trabajo->modo_sustentacion:'',
+                ],
+                [
+                'Nombre'=>'NUM_CRED' ,
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'PROG_ESTU',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'PROC_TITULO_PED',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'PROG_ACREDIT',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'FEC_INICIO_ACREDIT',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'FEC_FIN_ACREDIT',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'FEC_INICIO_MOD_TIT_ACREDIT',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'FEC_FIN_MOD_TIT_ACREDIT',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'FEC_SOLICIT_GRAD_TIT',
+                'Valor'=>$tramite->fec_inicio,
+                ],
+                [
+                'Nombre'=>'FEC_TRAB_GRAD_TIT' ,
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'TRAB_INVEST_ORIGINAL',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'MOD_EST' ,
+                'Valor'=> $tramite->modo_obtencion,
+                ],
+                [
+                'Nombre'=>'ABRE_GYT',
+                'Valor'=> $grado->graAbr,
+                ],
+                [
+                'Nombre'=>'PROC_REV_PAIS',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'PROC_REV_UNIV',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'PROC_REV_GRADO',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'CRIT_REV',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'RESO_NUM',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'RESO_FEC',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'DIPL_FEC_ORG',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'DIPL_FEC_DUP',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'DIPL_TIP_EMI',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'REG_LIBRO',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'REG_FOLIO',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'REG_REGISTRO',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'CARGO1',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'AUTORIDAD1',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'CARGO2',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'AUTORIDAD2',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'CARGO3',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'AUTORIDAD3',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'PROC_PAIS_EXT',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'PROC_GRADO_EXT',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'REG_OFICIO',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'FEC_MAT_PROG',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'FEC_INICIO_PROG',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'FEC_FIN_PROG',
+                'Valor'=> '',
+                ],
+                [
+                'Nombre'=>'MOD_SUSTENTACION',
+                'Valor'=> '',
+                ],
+        ];
+        return response($array); 
+    }
+    protected function enviar_datos_resolucion_internos(Request $request){
+        $rol=3;
+        $request->validate([
+            'folio'=>'required|numeric',
+            'libro'=>'required|numeric',
+            'registro'=>'required|numeric',
+            'tramite_id'=>'required|numeric',
+        ]); 
+        if($rol==3){
+            
+                $diploma=Diploma::create([
+                    'tramite_id'=>$request->tramite_id,
+                    'lib_foli'=>$request->folio,
+                    'num_lib'=>$request->libro,
+                    'num_lib_regis'=>$request->registro,
+                    'num_sticker'=>'null',
+                    'num_info_vice'=>'null',    
+                ]);
+                
+                return $request;
+                    //obtener datos de los tramites de esta consejo
+                 
+                    /* foreach($request->selected as $tramite_res){
+                        //comprovar si el tramite tiene un cosejo
+                        $expediente= $tramite_res['id'];
+                        $resoluTram=Tramite::where('id',$expediente)->first();
+                        if($resoluTram->resolucion_id ==null || $resoluTram->resolucion_id  =='' ){                       
+                            //agregar la resolucion a los expedientes
+                            Tramite::where('id',$expediente)->update(['resolucion_id'=>$resolucion->id]);                            
+                        }
+                   } */
+
+               //cambiar el estado del consejo
+
+              // Resolucione::where('id',$request->resolucion)->update(['estado'=>0]);     
+       
+        }else{
+            return 'user no autorizado';
+        }
+        
+
     }
 
     /**

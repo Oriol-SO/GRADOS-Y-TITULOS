@@ -10,6 +10,13 @@ class Diploma extends Model
     use HasFactory;
     protected $fillable=[
 
+        'tramite_id',
+        'num_lib',
+        'num_lib_regis',
+        'lib_foli',
+        'num_sticker',
+        'fec_hor_entre',
+        'num_info_vice',
 
     ];
 

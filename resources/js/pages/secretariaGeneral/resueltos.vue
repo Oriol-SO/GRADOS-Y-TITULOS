@@ -5,7 +5,6 @@
           <v-toolbar-title class="d-flex" style="width:100%;" > EXPEDIENTES CON RESOLUCIÓN
    
           </v-toolbar-title>
-            <template v-slot:extension>
               <v-tabs v-model="tab">
               <v-tabs-slider color="#000"></v-tabs-slider>
                 <v-tab
@@ -17,7 +16,6 @@
                   {{ item.graNom }}
                 </v-tab>
               </v-tabs>        
-            </template>
         </v-toolbar>         
             <v-divider class="mt-2"></v-divider>
             <v-tabs-items v-model="tab" >
@@ -32,6 +30,7 @@
                     :items="conresolucion" 
                     :items-per-page="10"
                     class="elevation-1"
+                    group-by="consejo_numero"
                   >
                     <template v-slot:item.actions="{ item }">
                         <v-btn
@@ -50,7 +49,59 @@
               </v-tab-item>
             </v-tabs-items>
       </v-card>
+  <template>
+      <v-dialog
+        transition="dialog-top-transition"
+        max-width="450"
+        persistent
+        v-model="dialogenviar"
+      >                      
+        <template>
+            <v-card>
+            <v-toolbar
+                class="text-h6"
+                color="#0df0d6"
+                dark
+                elevation="0"
+            >Detalles de Expediente</v-toolbar>
+            <form>
+                <v-card-text>
+                <div class="text-overline mb-4">
+                <p v-for="(dato,i) in datos.data" :key="i"
+                >"{{dato.Nombre}}":"{{dato.Valor}}"</p>
+                </div>
+                <v-text-field
+                v-model="form.folio"
+                label="Número de Folio">
+                </v-text-field>                
+                <v-text-field
+                v-model="form.libro"
+                label="Número de Libro">
+                </v-text-field>
+                <v-text-field
+                v-model="form.registro"
+                label="Número de Registro">
+                </v-text-field>
+                <v-btn class="mt-3 " 
+                style="color:#fff;" 
+                elevation="0" 
+                color="#42C2FF" 
+                @click="Addresolucion()">
+                Aceptar</v-btn>
 
+                </v-card-text>                                                              
+            </form>
+
+            <v-card-actions>
+                <v-btn class="ml-auto"
+                    text
+                    @click  ="close()"
+                >Cancelar</v-btn>
+            </v-card-actions>
+            </v-card>
+        </template>
+      </v-dialog>
+    </template>
   </v-container>
 </template>
 
@@ -78,10 +129,15 @@ export default {
             ],
             conresolucion:[],
             items:[],
+            form: new Form({
+                folio:'',
+                libro:'',
+                registro:'',
+                tramite_id:'',
+            }),  
             
-  
             primerTab:0,
-
+            datos:[],
         }
     },mounted(){
             this.fetchExpedientes(this.primerTab);
@@ -90,25 +146,31 @@ export default {
         close(){
             this.dialogenviar=false;
             //this.dialogAgendar=false;
-            this.form.numero='';
-            this.form.fecha=null;
-            this.form.selected=[];
+            this.form.folio='';
+            this.form.libro='';
+            this.form.registro='';
+            this.form.tramite_id='';
         },
         async tipogrados(){
             const {data}= await axios.get('/api/secre-gen-grado/');
             this.items=data;
             //this.primerTab=data[0].id;
-        },
-        async fetchExpedientes(id){
+        },async fetchExpedientes(id){
             await axios.get('/api/expd_con_resolu/'+id).then(response=>{
                 this.conresolucion=response.data;
-                console.log("aprobados",this.conresolucion);
             });
 
         },async enviar_expe(item){
-            console.log(item.id)
-            await axios.get('/api/enviar_resolu/'+id).then(response=>{
-                console.log(response.data)
+            this.form.tramite_id=item.id;
+            this.datos=await axios.get('/api/enviar_resolu/'+item.id);
+            this.dialogenviar=true;
+            
+        },async Addresolucion(){
+            //console.log(this.form);
+            await this.form.post(`/api/enviar-datos-reso-interno/`).then(response=>{
+                console.log(response.data);  
+                this.close();
+                this.fetchExpedientes(this.primerTab); 
             });
         }
        

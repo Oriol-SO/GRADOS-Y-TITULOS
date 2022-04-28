@@ -161,8 +161,7 @@ export default {
         },
         abrirReso(){  
             if(this.form.selected.length>0){
-                this.dialogenviar=true;
-                
+                this.dialogenviar=true; 
             }else{
                 console.log('no seleccionaste nada')
             }
@@ -180,4 +179,3 @@ export default {
     }
 }
 </script>
-
