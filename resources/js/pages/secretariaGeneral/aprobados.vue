@@ -161,8 +161,7 @@ export default {
         },
         abrirReso(){  
             if(this.form.selected.length>0){
-                this.dialogenviar=true;
-                
+                this.dialogenviar=true; 
             }else{
                 console.log('no seleccionaste nada')
             }
@@ -181,9 +180,9 @@ export default {
 }
 </script>
 <style>
- thead.v-data-table-header th[role=columnheader] {
+ thead.v-data-table-headers th[role=columnheader] {
   font-size: 14px !important;
-  color:#000;
-  background:#0df0d6 !important;
+  color:#4A148C;
+  background:#4A148C !important;
 }
 </style>

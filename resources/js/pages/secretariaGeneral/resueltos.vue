@@ -5,7 +5,6 @@
           <v-toolbar-title class="d-flex" style="width:100%;" > EXPEDIENTES CON RESOLUCIÓN
    
           </v-toolbar-title>
-            <template v-slot:extension>
               <v-tabs v-model="tab">
               <v-tabs-slider color="#000"></v-tabs-slider>
                 <v-tab
@@ -17,7 +16,6 @@
                   {{ item.graNom }}
                 </v-tab>
               </v-tabs>        
-            </template>
         </v-toolbar>         
             <v-divider class="mt-2"></v-divider>
             <v-tabs-items v-model="tab" >
@@ -32,6 +30,7 @@
                     :items="conresolucion" 
                     :items-per-page="10"
                     class="elevation-1"
+                    group-by="consejo_numero"
                   >
                     <template v-slot:item.actions="{ item }">
                         <v-btn

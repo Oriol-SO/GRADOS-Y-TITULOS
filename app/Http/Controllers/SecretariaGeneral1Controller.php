@@ -111,7 +111,7 @@ class SecretariaGeneral1Controller extends Controller
                 ];
             });*/
 
-             /* $aprobados=Tramite::where('consejo_id','<>',null)->get()->map(function($e){
+            /*$aprobados=Tramite::where('consejo_id','<>',null)->get()->map(function($e){
                 if($e->consejo->estado==1){
                     return[
                         'per_nom'=>$e->persona->nom.' '.$e->persona->apePat.' '.$e->persona->apeMat,           
@@ -124,7 +124,7 @@ class SecretariaGeneral1Controller extends Controller
                 }
 
             });*/
-            /*$apro=array();
+            $apro=array();
               $aprobados=Consejo::where('estado',0)->get()->map(function($c) use(&$apro){
                 $c->tramite->map(function($e) use($c,&$apro){
                         array_push($apro,[
@@ -138,9 +138,9 @@ class SecretariaGeneral1Controller extends Controller
                     });
                     
               
-            });*/
+            });
 
-            $apro=Tramite::where('resolucion_id',null)->get()->map(function($e){
+            /* $apro=Tramite::where('resolucion_id',null)->where('consejo_id','<>',null)->get()->map(function($e){
                 return[
                     'per_nom'=>$e->persona->nom.' '.$e->persona->apePat.' '.$e->persona->apeMat,           
                     'id'=> $e->id,
@@ -150,7 +150,7 @@ class SecretariaGeneral1Controller extends Controller
                     'consejo_numero'=>$e->consejo->numero,
                     'consejo_id'=>$e->consejo->id,
                 ];
-            });
+            }); */
 
 
            // return $apro;
@@ -252,9 +252,11 @@ class SecretariaGeneral1Controller extends Controller
                         //comprovar si el tramite tiene un cosejo
                         $expediente= $tramite_res['id'];
                         $resoluTram=Tramite::where('id',$expediente)->first();
-                        if($resoluTram->resolucion_id ==null || $resoluTram->resolucion_id  =='' ){                       
+                        if($resoluTram->resolucion_id == null || $resoluTram->resolucion_id  =='' ){                       
                             //agregar la resolucion a los expedientes
-                            Tramite::where('id',$expediente)->update(['resolucion_id'=>$resolucion->id]);                            
+                            if($resoluTram->consejo_id!= null || $resoluTram->consejo_id!= '' ){
+                                Tramite::where('id',$expediente)->update(['resolucion_id'=>$resolucion->id]);
+                            }                            
                         }
                    }
 
@@ -299,6 +301,7 @@ class SecretariaGeneral1Controller extends Controller
         return response()->json($apro);
         }
     }
+    
     protected function sg1_enviar_resolu(Request $request,$id){
         $tramite=Tramite::where('consejo_id',$id)->first();
         $persona=Persona::where('id',$tramite->persona_id)->first();
