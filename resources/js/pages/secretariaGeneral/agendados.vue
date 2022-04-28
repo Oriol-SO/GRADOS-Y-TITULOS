@@ -9,9 +9,11 @@
         <v-toolbar
           class="mb-2"
           flat
+          color="#2B5683"
+         
         >
         
-          <v-toolbar-title class="black--text ">EXPEDIENTES AGENDADOS</v-toolbar-title>
+          <v-toolbar-title class="white--text " >EXPEDIENTES AGENDADOS</v-toolbar-title>
         </v-toolbar>
       </template>
       <template >
@@ -38,7 +40,7 @@
               </tfoot>
               </div>
               </v-row>
-                <v-btn color="primary" class="ml-auto" @click="enviar(gruposexpediente.consejo)">Enviar</v-btn>
+                <v-btn color="#5bc0de " class="ml-auto white--text" @click="enviar(gruposexpediente.consejo)">Enviar</v-btn>
               </v-card-title>
               
               <v-divider></v-divider>
@@ -48,9 +50,8 @@
                    :headers="headers"
                    :items="gruposexpediente.tramite"
                    hide-default-footer
+                   id="agendados"
                  ></v-data-table>
-               
-             
 
               </v-card>
             </v-card>
@@ -125,9 +126,9 @@ export default {
             filterable: false,
             value: 'per_nom' ,
           },
-          { text: 'Tramite', value: 'tramite' },
-          { text: 'Fecha de inicio', value: 'fec_inicio' },
-          { text: 'Estado', value: 'estado' },
+          { text: 'Tramite', value: 'tramite'},
+          { text: 'Fecha de inicio', value: 'fec_inicio'},
+          { text: 'Estado', value: 'estado'},
         ],
 
             id_consejo:null,
@@ -173,9 +174,9 @@ export default {
 }
 </script>
 <style>
- thead.v-data-table-header th[role=columnheader] {
+ #agendados .v-data-table-header th[role=columnheader] {
   font-size: 14px !important;
-  color:#000;
-  background:#0df0d6 !important;
+  color:white;
+  background-color: #337ab7 !important;
 }
 </style>

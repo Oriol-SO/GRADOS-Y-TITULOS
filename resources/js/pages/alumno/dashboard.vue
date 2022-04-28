@@ -26,7 +26,7 @@
                      >
                         <template v-slot:activator="{ on, attrs }" >
                         <v-btn
-                            color="#42C2FF"
+                            color="#00bcd4"
                             v-bind="attrs"
                             v-on="on"
                             style="color:#fff;"
@@ -60,7 +60,7 @@
                                 <v-btn class="ml-auto"
                                     text
                                     @click="close()"
-                                >Close</v-btn>
+                                >cerrar</v-btn>
                             </v-card-actions>
                            </v-card>
                         </template>
@@ -74,6 +74,7 @@
                 :items-per-page="10"
                 :search="search"
                 class="elevation-1"
+                id="agendados"
                 >
                     <template v-slot:item.avance="{ item }">
                         <div style="min-width:120px;">
@@ -162,10 +163,3 @@ export default {
     }
 }
 </script>
-<style>
- thead.v-data-table-header th[role=columnheader] {
-  font-size: 14px !important;
-  color:#000;
-  background:#42C2FF;
-}
-</style> 

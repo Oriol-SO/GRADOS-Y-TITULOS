@@ -9,7 +9,13 @@
                style="font-size:70px; font-family: 'Vollkorn', serif; display: contents; ">
                 Grados y Títulos <br>
             </p> 
-                 <hr>Universidad Nacional Daniel Alcides Carrion <hr>
+            
+            <p style="font-family: 'Bebas Neue', cursive; ">
+            <hr>
+                 Universidad Nacional Daniel Alcides Carrion
+                 <hr>
+            </p>
+          
           </div>  
         </v-layout> 
       </v-flex>

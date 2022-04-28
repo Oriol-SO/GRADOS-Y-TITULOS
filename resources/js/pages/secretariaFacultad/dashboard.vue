@@ -1,9 +1,10 @@
 <template>
         <div class="mt-5 mx-4">
-        <v-card  class="pb-2">
+        <v-card  class="pb-2" >
             <v-card-title class="ma-1 " >   
 
-                <v-row >
+                <v-row  >
+                
                     <h4 >EXPEDIENTES </h4><h4 class="ml-2 " > DE</h4><h4  class="ml-2 "> GRADUADOD </h4><h4  class="ml-2 ">POR</h4><h4  class="ml-1 "> FACULTADES</h4>
 
                     <v-divider
@@ -30,6 +31,7 @@
                 :items-per-page="10"
                 :search="search"
                 class="elevation-1"
+                id="agendados"
                 >
                 <template v-slot:item.notify="{ item }">
                     <v-chip
@@ -100,10 +102,3 @@ export default {
     }
 }
 </script>
-<style>
- thead.v-data-table-header th[role=columnheader] {
-  font-size: 14px !important;
-  color:#000;
-  background:#FFD93D;
-}
-</style>

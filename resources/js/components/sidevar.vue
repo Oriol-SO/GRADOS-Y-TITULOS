@@ -5,9 +5,9 @@
       elevation="0"
       fixed
       width="45"
-      style="margin-top:0px; margin-left:5px;  "                  
+      style="margin-top:0px; margin-left:5px ; background-color: #22489D ;  "                  
     >
-      <v-app-bar-nav-icon  color="secondary" style="font-size:50px" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon  color="white" style="font-size:50px" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
     </v-app-bar>
     <v-navigation-drawer
       v-model="drawer"
