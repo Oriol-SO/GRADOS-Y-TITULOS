@@ -209,6 +209,7 @@
                                     return-object
                                     
                                   ></v-select>
+                                 
                                   <v-btn color="green" text @click="addRol()">añadir Rol</v-btn>
                                 </v-col>
 
@@ -427,8 +428,8 @@
                                     hint="roles disponibles"                                 
                                     return-object                                    
                                   ></v-select>
-
-                                  <v-btn color="green" text @click="addRolEdit()">añadir Rol</v-btn>
+                                  <v-btn elevation="3"  color="green" small  @click="addRolEdit()">añadir Rol</v-btn>
+                                  
                                 </v-col>
                                   <v-col cols="12" md="6" >
                                     <v-list >
@@ -478,10 +479,12 @@
                                       </v-alert>                              
                                
                               </div>
+                              <div style="text-align: center">
                               <v-btn color="primary" elevation="0" @click="actualizaruser()">Actualizar </v-btn>
+                              </div> 
                             </v-card-text>  
                             </v-expand-transition>                        
-                      
+                    
                        </v-card-text>                      
                     </form>                
   

@@ -1,14 +1,16 @@
 <template>
   <v-container fluid>
     <v-card elevation="0">
-        <v-toolbar class="mt-3" color="#0df0d6" dark style="color:#000;" elevation="0">
-          <v-toolbar-title class="d-flex" style="width:100%;" > EXPEDIENTES CON RESOLUCIÓN
-   
-          </v-toolbar-title>
+     <v-card elevation="0">
+      <v-card-title class="px-0 py-1 ml-3 text-h6">EXPEDIENTES CON RESOLUCIÓN</v-card-title>
+     </v-card>
+        <v-toolbar float class="mt-3" color="#E3F2FD" elevation="0"> 
+            
               <v-tabs v-model="tab">
-              <v-tabs-slider color="#000"></v-tabs-slider>
+              <v-tabs-slider ></v-tabs-slider>
                 <v-tab
-                  style="color:#000;"
+                
+               
                   v-for="item in items"
                   :key="item.id"
                
@@ -16,6 +18,7 @@
                   {{ item.graNom }}
                 </v-tab>
               </v-tabs>        
+           
         </v-toolbar>         
             <v-divider class="mt-2"></v-divider>
             <v-tabs-items v-model="tab" >
@@ -119,13 +122,13 @@ export default {
             singleSelect: true,
             tab: null,
             headers: [
-            { text: 'Nombres y apellidos', value: 'per_nom' },
+            { text: 'Nombres y apellidos', value: 'per_nom',class: 'indigo darken-4 white--text' },
             //{text: 'Facultad',align: 'start', value: '',},
-            { text: 'Tramite', value: 'tramite' },           
-            { text: 'Fecha de inicio', value: 'fec_inicio' },
-            { text: 'Consejo', value:'consejo_numero',sortable: false},            
-            { text: 'Estado', value: 'estado' },
-            { text: 'Acciones', value: 'actions', sortable: false },
+            { text: 'Tramite', value: 'tramite',class: 'indigo darken-4 white--text' },           
+            { text: 'Fecha de inicio', value: 'fec_inicio',class: 'indigo darken-4 white--text' },
+            { text: 'Consejo', value:'consejo_numero',sortable: false,class: 'indigo darken-4 white--text'},            
+            { text: 'Estado', value: 'estado',class: 'indigo darken-4 white--text' },
+            { text: 'Acciones', value: 'actions', sortable: false,class: 'indigo darken-4 white--text' },
             ],
             conresolucion:[],
             items:[],

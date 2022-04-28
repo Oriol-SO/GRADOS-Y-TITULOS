@@ -1,17 +1,17 @@
 <template>
-<v-app-bar app >
+<v-app-bar app style=" background-color: #22489D; ; ">
 
-    <v-toolbar dense elevation="0" style="background:rgb(242, 243, 248); ">
-     <v-img class="ml-10 mr-5" max-height="30" max-width="30" src="/img/u.png" />
-      <v-toolbar-title>{{ appName }}</v-toolbar-title>
+    <v-toolbar dense elevation="0" style="    background-color: #22489D ;  color:white">
+     <v-img class="ml-10 mr-5" max-height="38" max-width="38" src="/img/u.png" />
+      <v-toolbar-title >{{ appName }}</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn v-for="(link, i) in linksVerified" :key="i" text :to="link.path"  style="color:#000;">
+      <v-btn v-for="(link, i) in linksVerified" :key="i" text :to="link.path"  style=" color:white;">
         {{ link.name }}
       </v-btn>
 
       <v-menu v-if="user" bottom min-width="240px" rounded offset-y>
         <template v-slot:activator="{ on }">
-          <v-btn icon elevation="0" color="transparent" dense x-large v-on="on">
+          <v-btn  icon elevation="0" color="white" dense x-large v-on="on">
             <v-avatar  size="32" >
               <v-icon color="grey">mdi-account-circle</v-icon>
             </v-avatar>
