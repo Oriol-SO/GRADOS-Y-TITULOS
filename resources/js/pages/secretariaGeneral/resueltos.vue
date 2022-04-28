@@ -115,10 +115,3 @@ export default {
     }
 }
 </script>
-<style>
- thead.v-data-table-header th[role=columnheader] {
-  font-size: 14px !important;
-  color:#000;
-  background:#0df0d6 !important;
-}
-</style>

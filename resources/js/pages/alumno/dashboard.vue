@@ -68,12 +68,13 @@
                     </v-row>
             </v-card-title>
         </v-card>
-            <v-data-table
+            <v-data-table 
                 :headers="headers"
                 :items="tramitesuser"     
                 :items-per-page="10"
                 :search="search"
                 class="elevation-1"
+                id="alumno"
                 >
                     <template v-slot:item.avance="{ item }">
                         <div style="min-width:120px;">
@@ -163,9 +164,9 @@ export default {
 }
 </script>
 <style>
- thead.v-data-table-header th[role=columnheader] {
+ #alumno .v-data-table-header th[role=columnheader] {
   font-size: 14px !important;
   color:#000;
-  background:#42C2FF;
+  background:#42C2FF !important;
 }
 </style> 

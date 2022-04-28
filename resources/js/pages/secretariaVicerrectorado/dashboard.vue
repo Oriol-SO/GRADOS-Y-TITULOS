@@ -30,6 +30,7 @@
                 :items-per-page="10"
                 :search="search"
                 class="elevation-1"
+                id="secre_vice"
                 >
                 <template v-slot:item.notify="{ item }">
                     <v-chip
@@ -101,9 +102,9 @@ export default {
 }
 </script>
 <style>
- thead.v-data-table-header th[role=columnheader] {
+#secre_vice .v-data-table-header th[role=columnheader] {
   font-size: 14px !important;
   color:#000;
-  background:#FFD93D;
+  background:#FFD93D !important;
 }
 </style>

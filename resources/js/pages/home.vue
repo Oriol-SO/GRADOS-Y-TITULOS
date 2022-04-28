@@ -8,7 +8,7 @@
             <p class=" text-center text-justify"
                style="font-size:70px; font-family: 'Vollkorn', serif; display: contents; ">
                 Grados y Títulos <br>
-            </p> 
+            </p  > 
                  <hr>Universidad Nacional Daniel Alcides Carrion <hr>
           </div>  
         </v-layout> 

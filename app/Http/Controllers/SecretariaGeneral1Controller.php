@@ -136,16 +136,19 @@ class SecretariaGeneral1Controller extends Controller
               
             });*/
 
-            $apro=Tramite::where('resolucion_id',null)->get()->map(function($e){
-                return[
-                    'per_nom'=>$e->persona->nom.' '.$e->persona->apePat.' '.$e->persona->apeMat,           
-                    'id'=> $e->id,
-                    'tramite'=>$e->tipo_tramite,
-                    'fec_inicio'=>$e-> fec_inicio,
-                    'estado'=>$e->estado,
-                    'consejo_numero'=>$e->consejo->numero,
-                    'consejo_id'=>$e->consejo->id,
-                ];
+            $apro=Tramite::where('resolucion_id',null)->whereIn('consejo_id',Consejo::where('estado',0)->get('id'))->get()->map(function($e){
+                //if($e->consejo->estado==0){
+                    return[
+                        'per_nom'=>$e->persona->nom.' '.$e->persona->apePat.' '.$e->persona->apeMat,           
+                        'id'=> $e->id,
+                        'tramite'=>$e->tipo_tramite,
+                        'fec_inicio'=>$e-> fec_inicio,
+                        'estado'=>$e->estado,
+                        'consejo_numero'=>$e->consejo->numero,
+                        'consejo_id'=>$e->consejo->id,
+                    ];
+              //  }else{ return null}
+             
             });
 
 
@@ -250,7 +253,10 @@ class SecretariaGeneral1Controller extends Controller
                         $resoluTram=Tramite::where('id',$expediente)->first();
                         if($resoluTram->resolucion_id ==null || $resoluTram->resolucion_id  =='' ){                       
                             //agregar la resolucion a los expedientes
-                            Tramite::where('id',$expediente)->update(['resolucion_id'=>$resolucion->id]);                            
+                            if($resoluTram->consejo_id!= null || $resoluTram->consejo_id!= '' ){
+                                Tramite::where('id',$expediente)->update(['resolucion_id'=>$resolucion->id]);
+                            }
+                                                        
                         }
                    }
 
