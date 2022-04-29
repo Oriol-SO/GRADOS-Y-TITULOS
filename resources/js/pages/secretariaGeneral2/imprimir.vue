@@ -42,8 +42,8 @@
                         elevation="0"
                         style="color:#fff;"
                         class="text-capitalize"
-                        @click="enviar_expe(item)"    
-                        >  <v-icon left class="ml-1">mdi-check</v-icon> Imprimido</v-btn>
+                        @click="enviar_imprimir(item)"    
+                        >  <v-icon left class="ml-1">mdi-printer</v-icon> Imprimir</v-btn>
 
                     </template>
                   </v-data-table>
@@ -76,7 +76,7 @@
                 style="color:#fff;" 
                 elevation="0" 
                 color="#42C2FF" 
-                @click="close()">
+                @click="postImprimir()">
                 Aceptar</v-btn>
 
                 </v-card-text>                                                              
@@ -120,9 +120,7 @@ export default {
             conresolucion:[],
             items:[],
             form: new Form({
-                folio:'',
-                libro:'',
-                registro:'',
+                diploma_id:'',
                 tramite_id:'',
             }),  
             
@@ -136,9 +134,7 @@ export default {
         close(){
             this.dialogenviar=false;
             //this.dialogAgendar=false;
-            this.form.folio='';
-            this.form.libro='';
-            this.form.registro='';
+            this.form.diploma_id='';
             this.form.tramite_id='';
         },
         async tipogrados(){
@@ -150,14 +146,15 @@ export default {
                 this.conresolucion=response.data;
             });
 
-        },async enviar_expe(item){
+        },async enviar_imprimir(item){
             this.form.tramite_id=item.id;
-            this.datos=await axios.get('/api/enviar_resolu/'+item.id);
+            this.form.diploma_id=item.diploma;
+            this.datos=await axios.get('/api/get_60_campos/'+item.id);
             this.dialogenviar=true;
             
-        },async Addresolucion(){
-            //console.log(this.form);
-            await this.form.post(`/api/enviar-datos-reso-interno/`).then(response=>{
+        },async postImprimir(){
+            console.log(this.form);
+            await this.form.post(`/api/imprimir/`).then(response=>{
                 console.log(response.data);  
                 this.close();
                 this.fetchExpedientes(this.primerTab); 

@@ -289,24 +289,68 @@ class SecretariaGeneral1Controller extends Controller
 
     protected function sg1_expe_con_resolucion ($id){
         if($id==0){
-
-
-        $apro=Tramite::where('resolucion_id','<>',null)->get()->map(function($e){
-            return[
-                'per_nom'=>$e->persona->nom.' '.$e->persona->apePat.' '.$e->persona->apeMat,           
-                'id'=> $e->id,
-                'tramite'=>$e->tipo_tramite,
-                'fec_inicio'=>$e-> fec_inicio,
-                'estado'=>$e->estado,
-                'consejo_numero'=>$e->consejo->numero,
-                'consejo_id'=>$e->consejo->id,
-            ];
-        });
-        return response()->json($apro);
+            
+            $tramite_diplomas=Diploma::all()->map(function($e){
+                return [$e->tramite_id];
+            });
+            $apro=Tramite::where('resolucion_id','<>',null)->whereNotIn('id',$tramite_diplomas)->get()->map(function($e){
+                return[
+                    'per_nom'=>$e->persona->nom.' '.$e->persona->apePat.' '.$e->persona->apeMat,           
+                    'id'=> $e->id,
+                    'tramite'=>$e->tipo_tramite,
+                    'fec_inicio'=>$e-> fec_inicio,
+                    'estado'=>$e->estado,
+                    'consejo_numero'=>$e->consejo->numero,
+                    'consejo_id'=>$e->consejo->id,
+                ];
+            });
+            return response()->json($apro);
         }
     }
     
-    protected function sg1_enviar_resolu(Request $request,$id){
+    protected function sg1_expe_impresos ($id){
+        if($id==0){
+
+        $tramite_diplomas=Diploma::where('est_impreso',1)->get()->map(function($e){
+            return [$e->tramite_id];
+        });
+            
+ 
+            $apro=Tramite::where('resolucion_id','<>',null)->whereIn('id',$tramite_diplomas)->get()->map(function($e){
+
+                return[
+                    'per_nom'=>$e->persona->nom.' '.$e->persona->apePat.' '.$e->persona->apeMat,           
+                    'id'=> $e->id,
+                    'tramite'=>$e->tipo_tramite,
+                    'fec_inicio'=>$e-> fec_inicio,
+                    'estado'=>$e->estado,
+                    'consejo_numero'=>$e->consejo->numero,
+                    'consejo_id'=>$e->consejo->id,
+                    'diploma'=>$e->diploma->id,                    
+                ];
+            });
+        return response()->json($apro);
+        }
+    }
+    protected function sg1_add_sticker(Request $request){
+        $request->validate([
+            'sticker'=>'required',
+            'tramite_id'=>'required|numeric',
+            'diploma_id'=>'required|numeric',
+
+        ]);
+        try{       
+            Diploma::where('id',$request->diploma_id)->where('tramite_id',$request->tramite_id)->update([
+                'num_sticker'=>$request->sticker,
+            ]);
+            return 'agregado';
+        }catch(Exception $e){
+            return $e;
+        }
+
+    }
+
+    protected function sg_get_60_campos(Request $request,$id){
         $tramite=Tramite::where('consejo_id',$id)->first();
         $persona=Persona::where('id',$tramite->persona_id)->first();
         $personarole=PersonaRole::where('persona_id',$persona->id)->first();
