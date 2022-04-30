@@ -621,6 +621,24 @@ class SecretariaGeneral1Controller extends Controller
         return response()->json($apro);
         }
     }
+
+    protected function sg1_add_sticker(Request $request){
+        $request->validate([
+            'sticker'=>'required',
+            'tramite_id'=>'required|numeric',
+            'diploma_id'=>'required|numeric',
+
+        ]);
+        try{       
+            Diploma::where('id',$request->diploma_id)->where('tramite_id',$request->tramite_id)->update([
+                'num_sticker'=>$request->sticker,
+            ]);
+            return 'agregado';
+        }catch(Exception $e){
+            return $e;
+        }
+
+    }
     /**
      * Show the form for creating a new resource.
      *

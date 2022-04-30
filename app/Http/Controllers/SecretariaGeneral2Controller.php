@@ -81,8 +81,6 @@ class SecretariaGeneral2Controller extends Controller
 
         }catch(Exception $e){
             return $e;
-        }       
-
-        
+        }        
     }
 }

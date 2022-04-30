@@ -161,11 +161,12 @@ export default {
         },async fetchExpedientes(id){
             await axios.get('/api/expd_con_resolu/'+id).then(response=>{
                 this.conresolucion=response.data;
+                console.log(this.conresolucion);
             });
 
         },async enviar_expe(item){
             this.form.tramite_id=item.id;
-            this.datos=await axios.get('/api/enviar_resolu/'+item.id);
+            this.datos=await axios.get('/api/get_60_campos/'+item.id);
             this.dialogenviar=true;
             
         },async Addresolucion(){
