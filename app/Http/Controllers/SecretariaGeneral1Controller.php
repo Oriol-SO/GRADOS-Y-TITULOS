@@ -311,7 +311,7 @@ class SecretariaGeneral1Controller extends Controller
         }
     }
     
-    protected function sg1_enviar_resolu(Request $request,$id){
+    protected function sg_get_60_campos(Request $request,$id){
         $tramite=Tramite::where('consejo_id',$id)->first();
         $persona=Persona::where('id',$tramite->persona_id)->first();
         $personarole=PersonaRole::where('persona_id',$persona->id)->first();

@@ -148,4 +148,6 @@ Route::post('sg1-add-sticker',[SecretariaGeneral1Controller::class,'sg1_add_stic
 
 Route::get('sg2_expd_aprobados/{id}',[SecretariaGeneral2Controller::class,'sg2_expedientes_aprobados']);
 Route::get('sg2_datos_internos_imprimir/{id}',[SecretariaGeneral2Controller::class,'sg2_get_imprimir']);
+Route::get('sg2-get-programar/{id}',[SecretariaGeneral2Controller::class,'sg2_get_programar']);
 Route::post('imprimir',[SecretariaGeneral2Controller::class,'sg2_post_imprimir']);
+Route::post('sg2-add-fecha-entrega',[SecretariaGeneral2Controller::class,'sg2_add_fecha_entrega']);
