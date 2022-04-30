@@ -50,8 +50,10 @@ class SecretariaGeneral2Controller extends Controller
     protected function sg2_get_imprimir ($id){
         if($id==0){
 
-
-        $apro=Tramite::where('resolucion_id','<>',null,)->get()->map(function($e){
+            $tramite_diplomas=Diploma::all()->map(function($e){
+                return [$e->tramite_id];
+            });
+        $apro=Tramite::where('resolucion_id','<>',null,)->whereIn('id',$tramite_diplomas)->get()->map(function($e){
                 return[
                 'per_nom'=>$e->persona->nom.' '.$e->persona->apePat.' '.$e->persona->apeMat,           
                 'id'=> $e->id,
@@ -60,9 +62,25 @@ class SecretariaGeneral2Controller extends Controller
                 'estado'=>$e->estado,
                 'consejo_numero'=>$e->consejo->numero,
                 'consejo_id'=>$e->consejo->id,
+                'diploma'=>$e->diploma->id,
+                'estado_impri'=>$e->diploma->est_impreso,
             ];
         });
         return response()->json($apro);
         }
+    }
+
+    protected function sg2_post_imprimir(Request $request){
+        $request->validate([
+            'tramite_id'=>'required',
+            'diploma_id'=>'required',
+        ]);
+        try{
+
+        $tram_diplo=Diploma::where('id',$request->diploma_id)->where('tramite_id',$request->tramite_id)->update(['est_impreso'=>1]);
+
+        }catch(Exception $e){
+            return $e;
+        }        
     }
 }

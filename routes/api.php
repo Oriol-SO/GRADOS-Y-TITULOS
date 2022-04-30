@@ -142,7 +142,10 @@ Route::get('expd_aprobados/{id}',[SecretariaGeneral1Controller::class,'expedient
 
 Route::get('secre-gen-grado',[SecretariaGeneral1Controller::class,'sq1_grados']);
 Route::get('expd_con_resolu/{id}',[SecretariaGeneral1Controller::class,'sg1_expe_con_resolucion']);
-Route::get('enviar_resolu/{id}',[SecretariaGeneral1Controller::class,'sg1_enviar_resolu']);
+Route::get('get_60_campos/{id}',[SecretariaGeneral1Controller::class,'sg_get_60_campos']);
+Route::get('sg1-expe-impresos/{id}',[SecretariaGeneral1Controller::class,'sg1_expe_impresos']);
+Route::post('sg1-add-sticker',[SecretariaGeneral1Controller::class,'sg1_add_sticker']);
 
 Route::get('sg2_expd_aprobados/{id}',[SecretariaGeneral2Controller::class,'sg2_expedientes_aprobados']);
 Route::get('sg2_datos_internos_imprimir/{id}',[SecretariaGeneral2Controller::class,'sg2_get_imprimir']);
+Route::post('imprimir',[SecretariaGeneral2Controller::class,'sg2_post_imprimir']);

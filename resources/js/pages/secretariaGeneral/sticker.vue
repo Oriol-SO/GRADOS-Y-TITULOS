@@ -79,7 +79,7 @@
                 style="color:#fff;" 
                 elevation="0" 
                 color="#42C2FF" 
-                @click="Addresolucion()">
+                @click="AddSticker()">
                 Aceptar</v-btn>
 
                 </v-card-text>                                                              
@@ -125,6 +125,7 @@ export default {
             form: new Form({
                 sticker:'',
                 tramite_id:'',
+                diploma_id:'',
             }),  
             
             primerTab:0,
@@ -139,24 +140,26 @@ export default {
             //this.dialogAgendar=false;
             this.form.sticker='';
             this.form.tramite_id='';
+            this.form.diploma_id='';
         },
         async tipogrados(){
             const {data}= await axios.get('/api/secre-gen-grado/');
             this.items=data;
             //this.primerTab=data[0].id;
         },async fetchExpedientes(id){
-            await axios.get('/api/expd_con_resolu/'+id).then(response=>{
+            await axios.get('/api/sg1-expe-impresos/'+id).then(response=>{
                 this.conresolucion=response.data;
             });
 
         },async enviar_expe(item){
             this.form.tramite_id=item.id;
+            this.form.diploma_id=item.diploma;
             this.datos=await axios.get('/api/enviar_resolu/'+item.id);
             this.dialogenviar=true;
             
-        },async Addresolucion(){
+        },async AddSticker(){
             //console.log(this.form);
-            await this.form.post(`/api/enviar-datos-reso-interno/`).then(response=>{
+            await this.form.post(`/api/sg1-add-sticker/`).then(response=>{
                 console.log(response.data);  
                 this.close();
                 this.fetchExpedientes(this.primerTab); 
