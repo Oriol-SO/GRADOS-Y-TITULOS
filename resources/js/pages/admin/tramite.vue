@@ -1,12 +1,16 @@
 <template>
     <div class="mt-5">
         <v-card  >
-        <v-card-text class="py-1 text-h5"><h3>{{procesos.nombre}}</h3></v-card-text>
+        <v-toolbar
+          class="mb-2 rounded"
+          flat
+          color="#2B5683"
+        >
+          <v-toolbar-title class="white--text " >{{procesos.nombre}}</v-toolbar-title>
+        </v-toolbar>
         </v-card>     
-
         <template>
             <v-card class="mt-1">
-            
                 <v-dialog
                     transition="dialog-top-transition"
                     max-width="600"
@@ -17,7 +21,7 @@
                         <v-subheader class="text-h6 d-flex" style="color:#000;">Fases del Tramite </v-subheader>
                         <v-btn 
                             v-if="estadoE && uso"
-                            color="#2cdd9b"
+                            color="primary"
                             elevation="0" 
                             style="color:#fff;" 
                             class="my-auto ml-auto mr-4 text-capitalize"
@@ -107,7 +111,7 @@
                             text
                             @click="dialog=false,clear()"
                             class="text-capitalize"
-                        >Close</v-btn>
+                        >Cerrar</v-btn>
                         </v-card-actions>
                     </v-card>
                 </template>    
@@ -115,7 +119,7 @@
                
                 <v-tabs
                 v-model="tab"
-                background-color="blue lighten-1"
+                background-color="#337ab7 "
                 dark
                 next-icon="mdi-arrow-right-bold-box-outline"
                 prev-icon="mdi-arrow-left-bold-box-outline"
@@ -127,7 +131,7 @@
                     :key="i"
                     style="color:#fff;"
                     class="text-h7"
-                    active-class="blue darken-4 "
+                    active-class="light-blue darken-4 "
                    @click="mostrarid(fase,i)"
                 >
                     {{ fase.numero }}

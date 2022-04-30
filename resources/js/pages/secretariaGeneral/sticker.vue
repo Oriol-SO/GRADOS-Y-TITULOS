@@ -1,6 +1,7 @@
 <template>
   <v-container fluid>
     <v-card elevation="0">
+    
         <v-toolbar class="mt-3" color="#0df0d6" dark style="color:#000;" elevation="0">
           <v-toolbar-title class="d-flex" style="width:100%;" > Control de Sticker
    
@@ -11,7 +12,7 @@
                   style="color:#000;"
                   v-for="item in items"
                   :key="item.id"
-               
+                
                 >
                   {{ item.graNom }}
                 </v-tab>
@@ -31,6 +32,7 @@
                     :items-per-page="10"
                     class="elevation-1"
                     group-by="consejo_numero"
+                    id="color_table"
                   >
                     <template v-slot:item.actions="{ item }">
                         <v-btn
@@ -72,7 +74,8 @@
                 v-model="form.sticker"
                 label="Número de sticker">
                 </v-text-field>                
-                <v-btn class="mt-3 " 
+                <v-btn 
+                class="mt-3 text-capitalize" 
                 style="color:#fff;" 
                 elevation="0" 
                 color="#42C2FF" 

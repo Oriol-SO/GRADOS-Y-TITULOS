@@ -16,12 +16,12 @@
                     label="Buscar"
                     single-line
                     hide-details
-                    color="#0df0d6"
+                    color="primary"
                     ></v-text-field> 
                     <v-spacer></v-spacer>   
                      <template>
                             <v-btn                        
-                            color="#0df0d6" 
+                            color="primary"  
                             style="color:#fff;" 
                             class="text-capitalize"
                             @click="abrirAgendar()"
@@ -82,6 +82,7 @@
             show-select
             class="elevation-1"
             v-model="form.selected"
+            id="color_table"
             >
             <template v-slot:top>
                 <v-switch

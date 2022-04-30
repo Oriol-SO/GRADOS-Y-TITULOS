@@ -7,12 +7,10 @@
     >
       <template v-slot:header>
         <v-toolbar
-          class="mb-2"
+          class="mb-2 rounded"
           flat
           color="#2B5683"
-         
         >
-        
           <v-toolbar-title class="white--text " >EXPEDIENTES AGENDADOS</v-toolbar-title>
         </v-toolbar>
       </template>
@@ -32,7 +30,6 @@
               <v-row >
               <div>
                 Consejo Nro:{{ gruposexpediente.consejo_numero }} 
-                
               <tfoot>
               <td colspan="4" class="pl-4 #515252--text text-md-body-1 text-right">
               <em> Fecha de Consejo: {{ gruposexpediente.consejo_fecha }}</em></td>
@@ -50,7 +47,7 @@
                    :headers="headers"
                    :items="gruposexpediente.tramite"
                    hide-default-footer
-                   id="agendados"
+                   id="color_table"
                  ></v-data-table>
 
               </v-card>
@@ -173,14 +170,10 @@ export default {
     }
 }
 </script>
-<<<<<<< HEAD
-
-=======
 <style>
- #agendados .v-data-table-header th[role=columnheader] {
+ #color_table .v-data-table-header th[role=columnheader] {
   font-size: 14px !important;
   color:white;
   background-color: #337ab7 !important;
 }
 </style>
->>>>>>> 746b4340fd93f5f65232ca77cf00db3ce529a8a6

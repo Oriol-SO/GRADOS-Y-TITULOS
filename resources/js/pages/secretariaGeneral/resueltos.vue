@@ -1,19 +1,22 @@
 <template>
   <v-container fluid>
+    <template >
+        <v-toolbar
+          class="mb-2 rounded"
+          flat
+          color="#2B5683"
+        >
+          <v-toolbar-title class="white--text " >EXPEDIENTES CON RESOLUCIÓN</v-toolbar-title>
+       </v-toolbar>
+     </template>
+
     <v-card elevation="0">
-     <v-card elevation="0">
-      <v-card-title class="px-0 py-1 ml-3 text-h6">EXPEDIENTES CON RESOLUCIÓN</v-card-title>
-     </v-card>
         <v-toolbar float class="mt-3" color="#E3F2FD" elevation="0"> 
-            
               <v-tabs v-model="tab">
               <v-tabs-slider ></v-tabs-slider>
                 <v-tab
-                
-               
                   v-for="item in items"
                   :key="item.id"
-               
                 >
                   {{ item.graNom }}
                 </v-tab>
@@ -34,6 +37,7 @@
                     :items-per-page="10"
                     class="elevation-1"
                     group-by="consejo_numero"
+                    id="color_table"
                   >
                     <template v-slot:item.actions="{ item }">
                         <v-btn

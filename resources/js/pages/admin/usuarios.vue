@@ -29,7 +29,7 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
-                    color="rgb(44, 221, 155)"
+                    color="primary"
                     v-bind="attrs"
                     v-on="on"
                     style="color:#fff;"
@@ -282,6 +282,7 @@
       :items-per-page="10"
       :search="search"
       class="elevation-1"
+      id="color_table"
     >
       <template v-slot:item.actions="{ item }">
         <v-icon

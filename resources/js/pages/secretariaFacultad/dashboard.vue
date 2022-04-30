@@ -31,7 +31,7 @@
                 :items-per-page="10"
                 :search="search"
                 class="elevation-1"
-                id="secre_facu"
+                id="color_table"
                 >
                 <template v-slot:item.notify="{ item }">
                     <v-chip
@@ -102,10 +102,3 @@ export default {
     }
 }
 </script>
-<style>
- #secre_facu .v-data-table-header th[role=columnheader] {
-  font-size: 14px !important;
-  color:#000;
-  background:#FFD93D !important;
-}
-</style>

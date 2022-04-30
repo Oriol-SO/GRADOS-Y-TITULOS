@@ -74,7 +74,7 @@
                 :items-per-page="10"
                 :search="search"
                 class="elevation-1"
-                id="alumno"
+                id="agendados"
                 >
                     <template v-slot:item.avance="{ item }">
                         <div style="min-width:120px;">

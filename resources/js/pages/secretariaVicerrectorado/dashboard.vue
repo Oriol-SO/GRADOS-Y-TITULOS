@@ -30,7 +30,7 @@
                 :items-per-page="10"
                 :search="search"
                 class="elevation-1"
-                id="secre_vice"
+                id="color_table"
                 >
                 <template v-slot:item.notify="{ item }">
                     <v-chip

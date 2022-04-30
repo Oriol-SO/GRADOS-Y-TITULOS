@@ -33,6 +33,7 @@
                     :items-per-page="10"
                     class="elevation-1"
                     group-by="consejo_numero"
+                    id="color_table"
                   >
                     <template v-slot:item.actions="{ item }">
                         <v-btn

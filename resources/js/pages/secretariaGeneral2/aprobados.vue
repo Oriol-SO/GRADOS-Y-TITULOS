@@ -56,6 +56,7 @@
                    :headers="headers"
                    :items="gruposexpediente.tramite"
                    hide-default-footer
+                   id="color_table"
                  ></v-data-table>
               </v-card>
             </v-card>

@@ -2,10 +2,10 @@
   <v-card class="mt-3 mx-4" style="min-height:600px;" >
     <v-toolbar
       flat
-      color="primary"
+      color="#2B5683"
       dark
     >
-      <v-toolbar-title> Mi Perfil</v-toolbar-title>
+      <v-toolbar-title > Mi Perfil</v-toolbar-title>
     </v-toolbar>
     <v-tabs orizontal >
       <v-tab>
