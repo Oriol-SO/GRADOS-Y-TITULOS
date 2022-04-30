@@ -20,7 +20,7 @@
       <v-list
         nav
         dense
-      >
+        >
         <v-list-item-group
           v-model="group"
           active-class="deep-lead--text text--accent-4"
