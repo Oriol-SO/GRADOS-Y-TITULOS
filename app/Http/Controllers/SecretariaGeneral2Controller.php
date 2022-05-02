@@ -116,4 +116,5 @@ class SecretariaGeneral2Controller extends Controller
 
             return 'actualizado';
     }
+    
 }

@@ -145,6 +145,7 @@ Route::get('expd_con_resolu/{id}',[SecretariaGeneral1Controller::class,'sg1_expe
 Route::get('get_60_campos/{id}',[SecretariaGeneral1Controller::class,'sg_get_60_campos']);
 Route::get('sg1-expe-impresos/{id}',[SecretariaGeneral1Controller::class,'sg1_expe_impresos']);
 Route::post('sg1-add-sticker',[SecretariaGeneral1Controller::class,'sg1_add_sticker']);
+Route::get('sg1-get-sunedu',[SecretariaGeneral1Controller::class,'sg1_get_sunedu']);
 
 Route::get('sg2_expd_aprobados/{id}',[SecretariaGeneral2Controller::class,'sg2_expedientes_aprobados']);
 Route::get('sg2_datos_internos_imprimir/{id}',[SecretariaGeneral2Controller::class,'sg2_get_imprimir']);

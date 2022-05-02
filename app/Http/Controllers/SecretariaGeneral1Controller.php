@@ -310,7 +310,11 @@ class SecretariaGeneral1Controller extends Controller
         return response()->json($apro);
         }
     }
-    
+    protected function sg1_get_sunedu(){
+
+            return "hola";
+
+    }
     protected function sg_get_60_campos(Request $request,$id){
         $tramite=Tramite::where('consejo_id',$id)->first();
         $persona=Persona::where('id',$tramite->persona_id)->first();
