@@ -25,6 +25,6 @@
 .main {
   background-size: cover;
   height: 100%;
-  background:#f5f7ff;
+  background:#051733;
 }
 </style>

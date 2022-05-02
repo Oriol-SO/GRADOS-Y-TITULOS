@@ -43,7 +43,7 @@
                         <v-btn
                         small
                         rounded
-                        color="#45EBA5"
+                        color="#fc4a1a"
                         elevation="0"
                         style="color:#fff;"
                         class="text-capitalize"
