@@ -94,7 +94,7 @@ export default {
             this.fetchexpedientes();
     },methods:{
         async fetchexpedientes(){
-            const {data}= await axios.get('/api/sf-expedientes/');
+            const {data}= await axios.get('/api/sv-expedientes/');
             this.expedientes=data;
             console.log(this.expedientes);
         }
