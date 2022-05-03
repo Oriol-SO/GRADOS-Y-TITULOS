@@ -151,7 +151,6 @@ export default {
         },async enviar_expe(item){
             this.form.tramite_id=item.id;
             this.form.diploma_id=item.diploma;
-            this.datos=await axios.get('/api/get_60_campos/'+item.id);
             this.dialogenviar=true;
             
         },async AddSticker(){

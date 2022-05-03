@@ -33,11 +33,6 @@ export default {
          to: "sg2.programar",
       }, //Se asigna n resolucion,consejo y fecha
       {
-        title: "Datos internos",
-        icon:  "mdi-table",
-        to: "sg.resueltos",
-      }, //se asigna libro, reg unico y folio
-      {
         title: "Programados para hoy",
         icon:  "mdi-timeline-clock",
        to: "sg2.entregar",

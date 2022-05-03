@@ -310,9 +310,9 @@ class SecretariaGeneral1Controller extends Controller
         return response()->json($apro);
         }
     }
-    
+ 
     protected function sg_get_60_campos(Request $request,$id){
-        $tramite=Tramite::where('consejo_id',$id)->first();
+        $tramite=Tramite::where('id',$id)->first();
         $persona=Persona::where('id',$tramite->persona_id)->first();
         $personarole=PersonaRole::where('persona_id',$persona->id)->first();
         $proceso=Proceso::where('id',$tramite->proceso_id)->first();
@@ -600,7 +600,7 @@ class SecretariaGeneral1Controller extends Controller
     protected function sg1_expe_impresos ($id){
         if($id==0){
 
-        $tramite_diplomas=Diploma::where('est_impreso',1)->get()->map(function($e){
+        $tramite_diplomas=Diploma::where('est_impreso',1)->where('num_sticker',null)->get()->map(function($e){
             return [$e->tramite_id];
         });
             
@@ -640,13 +640,13 @@ class SecretariaGeneral1Controller extends Controller
 
     }
 
-    protected function sg1_get_sunedu2(){  
+    protected function sg1_get_sunedu(){  
 
         $tramite_diplomas=Diploma::where('num_sticker','<>',null)->get()->map(function($e){
             return [$e->tramite_id];
         });
 
-        $tramites=Consejo::where('estado',0)->get()->map(function($a) use(&$tramite_diplomas){
+        $consejos=Consejo::where('estado',0)->get()->map(function($a) use(&$tramite_diplomas){
             return [                
                 'consejo'=>$a->id,
                 'consejo_fecha'=>$a->fecha,
@@ -662,8 +662,14 @@ class SecretariaGeneral1Controller extends Controller
                 }),
             ];
         });
+        $for_sunedu=array();
+        foreach( $consejos as $tram){
+            if(count($tram['tramite'])>0){
+                array_push($for_sunedu,$tram);
+            }
+        }
 
-        return response()->json($tramite_diplomas);
+        return response()->json($for_sunedu,200);
         
     }
     

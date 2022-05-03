@@ -20,7 +20,7 @@ class CreateDiplomasTable extends Migration
                 $table->string('num_lib_regis');
                 $table->integer('lib_foli');
                 $table->string('num_sticker');
-                $table->date('fec_hor_entre')->nullable();
+                $table->timestamp('fec_hor_entre')->nullable();
                 $table->string('num_info_vice');
                 $table->boolean('est_impreso')->default(0);
 
