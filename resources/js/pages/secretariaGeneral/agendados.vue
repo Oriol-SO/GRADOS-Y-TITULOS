@@ -173,14 +173,3 @@ export default {
     }
 }
 </script>
-<<<<<<< HEAD
-
-=======
-<style>
- #agendados .v-data-table-header th[role=columnheader] {
-  font-size: 14px !important;
-  color:white;
-  background-color: #337ab7 !important;
-}
-</style>
->>>>>>> 746b4340fd93f5f65232ca77cf00db3ce529a8a6

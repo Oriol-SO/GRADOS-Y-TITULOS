@@ -124,7 +124,7 @@ class SecretariaGeneral1Controller extends Controller
                 }
 
             });*/
-            $apro=array();
+            /*$apro=array();
               $aprobados=Consejo::where('estado',0)->get()->map(function($c) use(&$apro){
                 $c->tramite->map(function($e) use($c,&$apro){
                         array_push($apro,[
@@ -138,7 +138,7 @@ class SecretariaGeneral1Controller extends Controller
                     });
                     
               
-            });
+            });*/
 
             $apro=Tramite::where('resolucion_id',null)->whereIn('consejo_id',Consejo::where('estado',0)->get('id'))->get()->map(function($e){
                 //if($e->consejo->estado==0){
@@ -311,7 +311,7 @@ class SecretariaGeneral1Controller extends Controller
         }
     }
     
-    protected function sg1_enviar_resolu(Request $request,$id){
+    protected function sg_get_60_campos(Request $request,$id){
         $tramite=Tramite::where('consejo_id',$id)->first();
         $persona=Persona::where('id',$tramite->persona_id)->first();
         $personarole=PersonaRole::where('persona_id',$persona->id)->first();
@@ -639,6 +639,34 @@ class SecretariaGeneral1Controller extends Controller
         }
 
     }
+
+    protected function sg1_get_sunedu2(){  
+
+        $tramite_diplomas=Diploma::where('num_sticker','<>',null)->get()->map(function($e){
+            return [$e->tramite_id];
+        });
+
+        $tramites=Consejo::where('estado',0)->get()->map(function($a) use(&$tramite_diplomas){
+            return [                
+                'consejo'=>$a->id,
+                'consejo_fecha'=>$a->fecha,
+                'consejo_numero'=>$a->numero,
+                'tramite'=>Tramite::whereIn('id',$tramite_diplomas)->where('consejo_id',$a->id)->get()->map(function($e){
+                    return[
+                        'per_nom'=>$e->persona->nom.' '.$e->persona->apePat.' '.$e->persona->apeMat,           
+                        'id'=> $e->id,
+                        'tramite'=>$e->tipo_tramite,
+                        'fec_inicio'=>$e-> fec_inicio,
+                        'estado'=>$e->estado,
+                    ];
+                }),
+            ];
+        });
+
+        return response()->json($tramite_diplomas);
+        
+    }
+    
     /**
      * Show the form for creating a new resource.
      *

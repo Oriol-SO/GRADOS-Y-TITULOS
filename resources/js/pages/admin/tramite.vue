@@ -1,116 +1,116 @@
 <template>
     <div class="mt-5">
-        <v-card  >
-        <v-card-text class="py-1 text-h5"><h3>{{procesos.nombre}}</h3></v-card-text>
+        <v-card elevation="0" >
+        <v-card-text class="py-2 text-h5" elevation="0">{{procesos.nombre}}</v-card-text>
         </v-card>     
 
         <template>
-            <v-card class="mt-1">
+            <v-card class="mt-1" elevation="0">
             
                 <v-dialog
                     transition="dialog-top-transition"
                     max-width="600"
                     v-model="dialog"
                 >   
-                <template v-slot:activator="{ on, attrs }" >
-                    <div class="d-flex">
-                        <v-subheader class="text-h6 d-flex" style="color:#000;">Fases del Tramite </v-subheader>
-                        <v-btn 
-                            v-if="estadoE && uso"
+                    <template v-slot:activator="{ on, attrs }" >
+                        <div class="d-flex">
+                            <v-subheader class="text-h6 d-flex" style="color:#000;">Fases del Tramite </v-subheader>
+                            <v-btn 
+                                v-if="estadoE && uso"
+                                color="#2cdd9b"
+                                elevation="0" 
+                                style="color:#fff;" 
+                                class="my-auto ml-auto mr-4 text-capitalize"
+                                v-bind="attrs"
+                                v-on="on"
+                            >Agregar Fase</v-btn> 
+                        </div>
+                    </template>              
+
+                    <template >
+                        <v-card>
+                            <v-toolbar
                             color="#2cdd9b"
-                            elevation="0" 
-                            style="color:#fff;" 
-                            class="my-auto ml-auto mr-4 text-capitalize"
-                            v-bind="attrs"
-                            v-on="on"
-                        >Agregar Fase</v-btn> 
-                    </div>
-                </template>              
+                            dark
+                            >Agregar Nueva fase en este tramite</v-toolbar>
+                            <v-card-text>
+                                <form>
+                                    <v-text-field
+                                        v-model="formfase.nombrefase"
+                                        label="Nombre"
+                                        required
+                                    ></v-text-field> 
+                                    <div v-if="errores.nombrefase">
+                                        <v-alert   dense outlined type="error" >
+                                        El campo Nombre es obligatorio 
+                                        </v-alert>
+                                    </div>
+                                    <v-text-field
+                                        v-model="formfase.numerofase"
+                                        label="Numero de orden"
+                                        required
+                                    ></v-text-field> 
+                                    <div v-if="errores.numerofase">
+                                        <v-alert   dense outlined type="error" >
+                                        el Campo Orden es Obligatorio
+                                        </v-alert>
+                                    </div> 
+                                    <v-select
+                                        v-model="formfase.rol_ejecutor"
+                                        :items="roles"
+                                        item-text='rolNombre'
+                                        item-value='id'                                                     
+                                        
+                                        return-object
+                                        
+                                        label="encargado de subir o ejecutar"
 
-                <template >
-                    <v-card>
-                        <v-toolbar
-                        color="#2cdd9b"
-                        dark
-                        >Agregar Nueva fase en este tramite</v-toolbar>
-                        <v-card-text>
-                            <form>
-                                <v-text-field
-                                    v-model="formfase.nombrefase"
-                                    label="Nombre"
-                                    required
-                                ></v-text-field> 
-                                <div v-if="errores.nombrefase">
-                                    <v-alert   dense outlined type="error" >
-                                    El campo Nombre es obligatorio 
-                                    </v-alert>
-                                </div>
-                                <v-text-field
-                                    v-model="formfase.numerofase"
-                                    label="Numero de orden"
-                                    required
-                                ></v-text-field> 
-                                <div v-if="errores.numerofase">
-                                    <v-alert   dense outlined type="error" >
-                                    el Campo Orden es Obligatorio
-                                    </v-alert>
-                                </div> 
-                                <v-select
-                                    v-model="formfase.rol_ejecutor"
-                                    :items="roles"
-                                    item-text='rolNombre'
-                                    item-value='id'                                                     
+                                    >                                    
+                                    </v-select>  
+                                    <div v-if="errores.rol_ejecutor">
+                                        <v-alert   dense outlined type="error" >
+                                        el rol del encargado de subir o ejecutar es obligatorio
+                                        </v-alert>
+                                    </div>   
+                                    <v-select
+                                        v-model="formfase.rol_revisar"
+                                        :items="roles"
+                                        item-text='rolNombre'
+                                        item-value='id'                                                       
                                     
-                                    return-object
-                                    
-                                    label="encargado de subir o ejecutar"
-
-                                >                                    
-                                </v-select>  
-                                <div v-if="errores.rol_ejecutor">
-                                    <v-alert   dense outlined type="error" >
-                                     el rol del encargado de subir o ejecutar es obligatorio
-                                    </v-alert>
-                                </div>   
-                                <v-select
-                                    v-model="formfase.rol_revisar"
-                                    :items="roles"
-                                    item-text='rolNombre'
-                                    item-value='id'                                                       
-                                   
-                                    return-object
-                                    
-                                    label="encargado de revisar"
-                                >                                    
-                                </v-select>  
-                                <div v-if="errores.rol_revisar">
-                                    <v-alert   dense outlined type="error" >
-                                     el rol del encargado de revisar o evaluar es obligatorio
-                                    </v-alert>
-                                </div>                     
-                                                                                  
-                                    <v-btn
-                                    class="mr-4 text-capitalize"
-                                    color="#2cdd9b"
-                                    style="color:#fff;"
-                                        @click="enviarfase()"                                            
-                                    >
-                                    Enviar
-                                    </v-btn>
-                                    <v-btn  @click="clear" color="#000"  style="color:#fff;" class="text-capitalize">
-                                    Limpiar
-                                    </v-btn>
-                            </form>                     
-                        </v-card-text>
-                        <v-card-actions class="justify-end">
-                        <v-btn
-                            text
-                            @click="dialog=false,clear()"
-                            class="text-capitalize"
-                        >Close</v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </template>    
+                                        return-object
+                                        
+                                        label="encargado de revisar"
+                                    >                                    
+                                    </v-select>  
+                                    <div v-if="errores.rol_revisar">
+                                        <v-alert   dense outlined type="error" >
+                                        el rol del encargado de revisar o evaluar es obligatorio
+                                        </v-alert>
+                                    </div>                     
+                                                                                    
+                                        <v-btn
+                                        class="mr-4 text-capitalize"
+                                        color="#2cdd9b"
+                                        style="color:#fff;"
+                                            @click="enviarfase()"                                            
+                                        >
+                                        Enviar
+                                        </v-btn>
+                                        <v-btn  @click="clear" color="#000"  style="color:#fff;" class="text-capitalize">
+                                        Limpiar
+                                        </v-btn>
+                                </form>                     
+                            </v-card-text>
+                            <v-card-actions class="justify-end">
+                            <v-btn
+                                text
+                                @click="dialog=false,clear()"
+                                class="text-capitalize"
+                            >Close</v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </template>    
                 </v-dialog>
                
                 <v-tabs
@@ -122,16 +122,16 @@
 
             
                 >
-                <v-tab
-                    v-for="(fase,i) in fases"
-                    :key="i"
-                    style="color:#fff;"
-                    class="text-h7"
-                    active-class="blue darken-4 "
-                   @click="mostrarid(fase,i)"
-                >
-                    {{ fase.numero }}
-                </v-tab>
+                    <v-tab
+                        v-for="(fase,i) in fases"
+                        :key="i"
+                        style="color:#fff;"
+                        class="text-h7"
+                        active-class="blue darken-4 "
+                    @click="mostrarid(fase,i)"
+                    >
+                        {{ fase.numero }}
+                    </v-tab>
                 </v-tabs>
 
                 <v-tabs-items v-model="tab">
@@ -166,7 +166,7 @@
                     <v-card
                         class=" mt-2 "
                         tile
-                        
+                        elevation="0"
                     >
                     <v-list dense >
                     <v-subheader class="font-weight-medium text-md-body-1 d-flex">REQUISITOS 
@@ -408,7 +408,7 @@
                     </v-col>
                     
                     <v-col  lg="4" xl="8" sm="12"  xs="12">
-                    <v-card class="mt-2">
+                    <v-card class="mt-2" elevation="0">
                         <v-subheader class="font-weight-medium text-md-body-1">DETALLE REQUISITO </v-subheader>
                             <v-list three-line style="min-height:02;">
                                 <template>                                

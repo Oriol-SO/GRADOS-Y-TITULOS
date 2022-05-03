@@ -32,7 +32,9 @@
                     :items="conresolucion" 
                     :items-per-page="10"
                     class="elevation-1"
+                    show-group-by="consejo_numero"
                     group-by="consejo_numero"
+                    
                   >
                     <template v-slot:item.actions="{ item }">
                         <v-btn
@@ -113,7 +115,7 @@ export default {
             //{text: 'Facultad',align: 'start', value: '',},
             { text: 'Tramite', value: 'tramite' },           
             { text: 'Fecha de inicio', value: 'fec_inicio' },
-            { text: 'Consejo', value:'consejo_numero',sortable: false},            
+            { text: 'Consejo', value:'consejo_numero'},            
             { text: 'Estado', value: 'estado' },
             { text: 'Acciones', value: 'actions', sortable: false },
             ],

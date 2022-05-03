@@ -1,7 +1,7 @@
 <template>
-<v-app-bar app style=" background-color: #22489D; " elevation="0">
+<v-app-bar app style=" background-color: #22489d; " elevation="0" >
 
-    <v-toolbar dense elevation="0" style="    background-color: transparent;  color:white">
+    <v-toolbar dense elevation="0" style="    background-color: transparent;  color:#fff;">
      <v-img class="ml-10 mr-5" max-height="38" max-width="38" src="/img/u.png" />
       <v-toolbar-title >{{ appName }}</v-toolbar-title>
       <v-spacer></v-spacer>
