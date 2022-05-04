@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-card elevation="0">
         <v-toolbar class="mt-3" color="#0df0d6" dark style="color:#000;" elevation="0">
-          <v-toolbar-title class="d-flex" style="width:100%;" > Control de Sticker
+          <v-toolbar-title class="d-flex" style="width:100%;" > Programdos para Hoy
    
           </v-toolbar-title>
               <v-tabs v-model="tab">
@@ -144,8 +144,9 @@ export default {
             this.items=data;
             //this.primerTab=data[0].id;
         },async fetchExpedientes(id){
-            await axios.get('/api/sg1-expe-impresos/'+id).then(response=>{
+            await axios.get('/api/sg2-get-programados/'+id).then(response=>{
                 this.conresolucion=response.data;
+                console.log(this.conresolucion);
             });
 
         },async enviar_expe(item){

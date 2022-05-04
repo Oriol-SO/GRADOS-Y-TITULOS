@@ -568,9 +568,7 @@ class SecretariaGeneral1Controller extends Controller
                     'tramite_id'=>$request->tramite_id,
                     'lib_foli'=>$request->folio,
                     'num_lib'=>$request->libro,
-                    'num_lib_regis'=>$request->registro,
-                    'num_sticker'=>'null',
-                    'num_info_vice'=>'null',    
+                    'num_lib_regis'=>$request->registro,   
                 ]);
                 
                 return $request;
@@ -597,16 +595,13 @@ class SecretariaGeneral1Controller extends Controller
 
     }
 
-    protected function sg1_expe_impresos ($id){
+    protected function sg1_expe_impresos($id){
         if($id==0){
 
         $tramite_diplomas=Diploma::where('est_impreso',1)->where('num_sticker',null)->get()->map(function($e){
             return [$e->tramite_id];
         });
-            
- 
-            $apro=Tramite::where('resolucion_id','<>',null)->whereIn('id',$tramite_diplomas)->get()->map(function($e){
-
+            $apro=Tramite::whereIn('id',$tramite_diplomas)->where('resolucion_id','<>',null)->get()->map(function($e){
                 return[
                     'per_nom'=>$e->persona->nom.' '.$e->persona->apePat.' '.$e->persona->apeMat,           
                     'id'=> $e->id,
@@ -618,7 +613,7 @@ class SecretariaGeneral1Controller extends Controller
                     'diploma'=>$e->diploma->id,                    
                 ];
             });
-        return response()->json($apro);
+        return response()->json($apro,200);
         }
     }
 

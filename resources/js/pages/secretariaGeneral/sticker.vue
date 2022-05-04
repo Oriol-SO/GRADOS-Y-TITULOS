@@ -146,6 +146,7 @@ export default {
         },async fetchExpedientes(id){
             await axios.get('/api/sg1-expe-impresos/'+id).then(response=>{
                 this.conresolucion=response.data;
+                console.log(this.conresolucion);
             });
 
         },async enviar_expe(item){

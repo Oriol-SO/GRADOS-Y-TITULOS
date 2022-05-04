@@ -152,3 +152,4 @@ Route::get('sg2_datos_internos_imprimir/{id}',[SecretariaGeneral2Controller::cla
 Route::get('sg2-get-programar/{id}',[SecretariaGeneral2Controller::class,'sg2_get_programar']);
 Route::post('imprimir',[SecretariaGeneral2Controller::class,'sg2_post_imprimir']);
 Route::post('sg2-add-fecha-entrega',[SecretariaGeneral2Controller::class,'sg2_add_fecha_entrega']);
+Route::get('sg2-get-programados/{id}',[SecretariaGeneral2Controller::class,'sg2_get_programados']);
