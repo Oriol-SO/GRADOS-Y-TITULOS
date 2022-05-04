@@ -35,7 +35,9 @@ class SecretariaGeneral1Controller extends Controller
                     //'facultad'=>$e->
                     'fec_inicio'=>$e-> fec_inicio,
                     'estado'=>$e->estado,
-                    'tramite'=>$e->tipo_tramite,    
+                    'tramite'=>$e->tipo_tramite,   
+                    'total_fases'=>Fase::where('proceso_id',$e->proceso_id)->count(), 
+                    'fase_actual'=>$e->fase_actual, 
                 ];
         });
         return response()->json($expedientes,200);
@@ -618,6 +620,8 @@ class SecretariaGeneral1Controller extends Controller
             Diploma::where('id',$request->diploma_id)->where('tramite_id',$request->tramite_id)->update([
                 'num_sticker'=>$request->sticker,
             ]);
+
+            $this->aprobar_fase_one($request->tramite_id);
             return 'agregado';
         }catch(Exception $e){
             return $e;

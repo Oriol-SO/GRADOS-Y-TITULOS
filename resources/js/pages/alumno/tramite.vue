@@ -206,6 +206,13 @@
                 </v-list-item>
             </v-list>
 
+            <v-list v-if="otros_detalles.length">
+               <v-subheader class="font-weight-medium text-md-body-1 d-flex"  >Otros Detalles</v-subheader> 
+               <v-card>
+                  {{otros_detalles}}
+               </v-card>              
+            </v-list>
+
           </v-card>
 
           <v-btn color="warning" style="color:#fff;" rounded @click="atras()">
@@ -468,6 +475,7 @@ export default {
           numfases:'',
           requisitos:[],
           requisitos_otros:[],
+          otros_detalles:[],
           dialog:false,
           
           nom_requisito:'',
@@ -513,6 +521,7 @@ export default {
                   this.e1=this.e1+1;  //copiar este codigo
                   this.requisitos=''; //copiar este codigo
                   this.requisitos_otros='';
+                  this.otros_detalles='';
          /* axios.get(`/api/alu_autorized/${idfase}/${this.$route.params.id}`).then(response=>{
               //console.log(response.data);
             if(response.data===true){
@@ -536,6 +545,7 @@ export default {
          this.e1=this.e1-1;
           this.requisitos='';
            this.requisitos_otros='';
+              this.otros_detalles='';
         }
       },
       async fetchtramite(){
@@ -553,6 +563,7 @@ export default {
           const {data}=await axios.get(`/api/alu-faserequisito/${id}/${this.$route.params.id}`);
           this.requisitos=data.alumno;
           this.requisitos_otros=data.otros;
+          this.otros_detalles=data.otros_detalles;
            this.requisitos_aprovados=data.aprovados;
            this.requisitos_observados=data.observados;
            this.requisitos_subidos=data.subidos;
