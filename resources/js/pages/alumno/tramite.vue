@@ -38,9 +38,9 @@
              </v-btn>
 
             <v-divider></v-divider>
-            <v-list>
+            <v-list v-if="requisitos.length">
             
-             <v-subheader class="font-weight-medium text-md-body-1 d-flex " style="    height: auto;" v-if="requisitos.length" >
+             <v-subheader class="font-weight-medium text-md-body-1 d-flex " style="    height: auto;"  >
                     <div >
                      <v-chip
                         class="ma-2"
@@ -174,10 +174,9 @@
                 </v-btn>
                 <small v-if="requisitos.length">*Es importante que notifiques los cambios para que tus documentos sean revisados lo mas antes posible</small>
             </v-list>
-
-            <v-divider></v-divider>
-            <v-list>
-               <v-subheader class="font-weight-medium text-md-body-1 d-flex" v-if="requisitos_otros.length" >Otros Requisitos</v-subheader>
+                    
+            <v-list v-else-if="requisitos_otros.length">
+              <v-subheader class="font-weight-medium text-md-body-1 d-flex" >Otros Requisitos</v-subheader>
                 <v-list-item
                   v-for="(requisito_otro, i) in requisitos_otros"
                   :key="i"
@@ -204,7 +203,17 @@
                     </v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
-            </v-list>
+            </v-list>            
+
+           
+                 <v-list v-else-if="otros_detalles.length ">
+                  <v-subheader class="font-weight-medium text-md-body-1 d-flex"  >Otros Detalles</v-subheader> 
+                  <v-card v-if="otros_detalles.length">
+                      {{otros_detalles}}
+                  </v-card>              
+                </v-list>
+       
+         
 
           </v-card>
 
@@ -468,6 +477,7 @@ export default {
           numfases:'',
           requisitos:[],
           requisitos_otros:[],
+          otros_detalles:[],
           dialog:false,
           
           nom_requisito:'',
@@ -513,6 +523,7 @@ export default {
                   this.e1=this.e1+1;  //copiar este codigo
                   this.requisitos=''; //copiar este codigo
                   this.requisitos_otros='';
+                  this.otros_detalles='';
          /* axios.get(`/api/alu_autorized/${idfase}/${this.$route.params.id}`).then(response=>{
               //console.log(response.data);
             if(response.data===true){
@@ -536,6 +547,7 @@ export default {
          this.e1=this.e1-1;
           this.requisitos='';
            this.requisitos_otros='';
+              this.otros_detalles='';
         }
       },
       async fetchtramite(){
@@ -553,6 +565,7 @@ export default {
           const {data}=await axios.get(`/api/alu-faserequisito/${id}/${this.$route.params.id}`);
           this.requisitos=data.alumno;
           this.requisitos_otros=data.otros;
+          this.otros_detalles=data.otros_detalles;
            this.requisitos_aprovados=data.aprovados;
            this.requisitos_observados=data.observados;
            this.requisitos_subidos=data.subidos;

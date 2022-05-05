@@ -46,10 +46,8 @@ class SecretariaVicerrectoradoController extends Controller
                     'fec_inicio'=>$e-> fec_inicio,
                     'estado'=>$e->estado,
                     'tramite'=>$e->tipo_tramite,
-                    'total_requisitos'=>FaseRolRequisito::whereIn('fase_id',(Fase::where('proceso_id',$e->proceso_id)->get('id')))->count(), 
-                    'requisitos_aprovados'=>$e->file->map(function($f){
-                        return $f->Revisione->count();
-                    })->sum(),
+                    'total_fases'=>Fase::where('proceso_id',$e->proceso_id)->count(), 
+                    'fase_actual'=>$e->fase_actual,
 
                     'notificacion'=>$e->receptor_rol_notify==11? true:false,
                 ];

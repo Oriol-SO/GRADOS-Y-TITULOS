@@ -70,6 +70,14 @@ class SecretariaGeneral2Controller extends Controller
         return response()->json($apro);
         }
     }
+    protected function aprobar_fase_one($tramite_id){        
+
+        $tramite=Tramite::where('id',$tramite_id)->first();
+        $fase_actual=$tramite->fase_actual;                                   
+            //actualizar la fase
+            Tramite::where('id',$tramite_id)->update(['fase_actual'=>$fase_actual+1]);     
+
+    }
 
     protected function sg2_post_imprimir(Request $request){
         $request->validate([
@@ -77,8 +85,8 @@ class SecretariaGeneral2Controller extends Controller
             'diploma_id'=>'required',
         ]);
         try{
-
         $tram_diplo=Diploma::where('id',$request->diploma_id)->where('tramite_id',$request->tramite_id)->update(['est_impreso'=>1]);
+        $this->aprobar_fase_one($request->tramite_id);
 
         }catch(Exception $e){
             return $e;
@@ -115,7 +123,7 @@ class SecretariaGeneral2Controller extends Controller
         ]);
             $fech_hora=Diploma::where('tramite_id',$request->tramite_id)->where('id',$request->diploma_id)
             ->update(['fec_hor_entre'=>$request->fecha]);
-
+            $this->aprobar_fase_one($request->tramite_id);
             return 'actualizado';
     }
     protected function sg2_get_programados($id){
