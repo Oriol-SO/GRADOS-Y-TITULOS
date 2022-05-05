@@ -27,7 +27,7 @@ class SecretariaGeneral1Controller extends Controller
      */
     public function index()
     {
-        $expedientes=Tramite::where('consejo_id',null)->get()->map(function($e){
+        $expedientes=Tramite::where('consejo_id',null)/*->where('receptor_rol_notify',3)*/->get()->map(function($e){
                 return[
                     'per_nom'=>$e->persona->nom.' '.$e->persona->apePat.' '.$e->persona->apeMat,
                     'id'=> $e->id,
@@ -40,7 +40,27 @@ class SecretariaGeneral1Controller extends Controller
         });
         return response()->json($expedientes,200);
     }
+    protected function aprobar_fase_nultiple($tramites){
+        foreach($tramites as $tram){
+            //comprovar si el tramite tiene un cosejo
+            $expediente= $tram['id'];
+            $tramite=Tramite::where('id',$expediente)->first();
+            $fase_actual=$tramite->fase_actual;                                   
+                //actualizar la fase
+                Tramite::where('id',$expediente)->update(['fase_actual'=>$fase_actual+1]);
+                
+            
+       }
+    }
 
+    protected function aprobar_fase_one($tramite_id){        
+
+            $tramite=Tramite::where('id',$tramite_id)->first();
+            $fase_actual=$tramite->fase_actual;                                   
+                //actualizar la fase
+                Tramite::where('id',$tramite_id)->update(['fase_actual'=>$fase_actual+1]);     
+
+    }
 
     protected function sg1_agendar_expediente(Request $request){
         $rol=3;
@@ -56,7 +76,8 @@ class SecretariaGeneral1Controller extends Controller
                     'numero'=>$request->numero,
                     'fecha'=>$request->fecha,
                     'estado'=>1,
-                    'num_oficio'=>0,                      
+                    'num_oficio'=>0,       
+                            
                 ]);
                foreach($request->selected as $tramite_age){
                     //comprovar si el tramite tiene un cosejo
@@ -68,6 +89,9 @@ class SecretariaGeneral1Controller extends Controller
                         
                     }
                }
+
+               //aprobar fase
+               $this->aprobar_fase_nultiple($request->selected);
 
                 
             }catch(Exception $e){
@@ -195,35 +219,10 @@ class SecretariaGeneral1Controller extends Controller
                     'num_oficio'=>$request->numero,                       
                 ]);
 
-                    //obtener datos de los tramites de esta consejo
-                    /* $tramites_consejo=Consejo::where('id',$request->consejo)->get()->map(function($a){
-                        return[
-                            'tramites'=>$a->tramite->map(function($e){
-                                return[         
-                                    'id'=> $e->id,
-                                    'consejo_id'=>$e->consejo_id,                                
-                                ];
-                            }),
-                        ];
-                    }); */
-                    
+                //obtener tramites del consejo
+                $tramites=Tramite::where('id',$id)->get();
+                $this->aprobar_fase_nultiple($tramites);
 
-               /* foreach($tramites_consejo[0]['tramites'] as $tramite){
-                    //comprovar si el tramite tiene un cosejo
-                    $expediente= $tramite['id'];
-                    $consejoTram=Tramite::where('id',$expediente)->first();
-                    if($consejoTram->cosejo_id ==null || $consejoTram->consejo_id  =='' ){                       
-                        //agregar la aprobacio a los expedientes
-                        Tramite::where('id',$expediente)->update(['consejo_id'=>$consejo->id]);
-                        
-                    }
-               } */
-
-               //cambiar el estado de la resolucion
-
-               /* Consejo::where('id',$request->consejo)->update(['estado'=>0]); */
-
-                
             }catch(Exception $e){
                 return $e;
             }       
@@ -264,6 +263,7 @@ class SecretariaGeneral1Controller extends Controller
                         }
                    }
 
+                    $this->aprobar_fase_nultiple($request->selected);
                //cambiar el estado del consejo
 
               // Resolucione::where('id',$request->resolucion)->update(['estado'=>0]);
@@ -554,6 +554,7 @@ class SecretariaGeneral1Controller extends Controller
         ];
         return response($array); 
     }
+
     protected function enviar_datos_resolucion_internos(Request $request){
         $rol=3;
         $request->validate([
@@ -568,25 +569,12 @@ class SecretariaGeneral1Controller extends Controller
                     'tramite_id'=>$request->tramite_id,
                     'lib_foli'=>$request->folio,
                     'num_lib'=>$request->libro,
-                    'num_lib_regis'=>$request->registro,   
+                    'num_lib_regis'=>$request->registro,
+                       
                 ]);
                 
-                return $request;
-                    //obtener datos de los tramites de esta consejo
-                 
-                    /* foreach($request->selected as $tramite_res){
-                        //comprovar si el tramite tiene un cosejo
-                        $expediente= $tramite_res['id'];
-                        $resoluTram=Tramite::where('id',$expediente)->first();
-                        if($resoluTram->resolucion_id ==null || $resoluTram->resolucion_id  =='' ){                       
-                            //agregar la resolucion a los expedientes
-                            Tramite::where('id',$expediente)->update(['resolucion_id'=>$resolucion->id]);                            
-                        }
-                   } */
-
-               //cambiar el estado del consejo
-
-              // Resolucione::where('id',$request->resolucion)->update(['estado'=>0]);     
+                $this->aprobar_fase_one($request->tramite_id);
+                return 'ok';  
        
         }else{
             return 'user no autorizado';
@@ -601,7 +589,9 @@ class SecretariaGeneral1Controller extends Controller
         $tramite_diplomas=Diploma::where('est_impreso',1)->where('num_sticker',null)->get()->map(function($e){
             return [$e->tramite_id];
         });
-            $apro=Tramite::whereIn('id',$tramite_diplomas)->where('resolucion_id','<>',null)->get()->map(function($e){
+            
+ 
+            $apro=Tramite::where('resolucion_id','<>',null)->whereIn('id',$tramite_diplomas)->get()->map(function($e){
                 return[
                     'per_nom'=>$e->persona->nom.' '.$e->persona->apePat.' '.$e->persona->apeMat,           
                     'id'=> $e->id,

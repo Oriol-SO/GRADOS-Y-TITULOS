@@ -278,9 +278,19 @@ class tramiteController extends Controller
     }
 
 
-    protected function alu_notificarCambio($fase_id,$tramite){
-        $receptor_notify=(Fase::where('id',$fase_id)->first())->encargado_revisar;
-        Tramite::where('id',$tramite)->update(['receptor_rol_notify'=>$receptor_notify]);
+    protected function notificarCambio($fase_id,$tramite){
+        $numero_fase_actual=(Tramite::where('id',$tramite)->first())->fase_actual;
+        $fase=(Fase::where('id',$fase_id)->first());
+        $fase_num_a_notificar=$fase->numero;
+        
+        if($fase_num_a_notificar<$numero_fase_actual){
+            return '0';
+        }else{
+            $receptor_notify=$fase->encargado_revisar;
+            Tramite::where('id',$tramite)->update(['receptor_rol_notify'=>$receptor_notify]);
+            return '1';
+        }
+       
     }   
     /**
      * Show the form for editing the specified resource.
