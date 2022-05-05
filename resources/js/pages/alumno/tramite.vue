@@ -38,9 +38,9 @@
              </v-btn>
 
             <v-divider></v-divider>
-            <v-list>
+            <v-list v-if="requisitos.length">
             
-             <v-subheader class="font-weight-medium text-md-body-1 d-flex " style="    height: auto;" v-if="requisitos.length>0" >
+             <v-subheader class="font-weight-medium text-md-body-1 d-flex " style="    height: auto;"  >
                     <div >
                      <v-chip
                         class="ma-2"
@@ -174,10 +174,9 @@
                 </v-btn>
                 <small v-if="requisitos.length">*Es importante que notifiques los cambios para que tus documentos sean revisados lo mas antes posible</small>
             </v-list>
-
-            <v-divider></v-divider>
-            <v-list>
-               <v-subheader class="font-weight-medium text-md-body-1 d-flex" v-if="requisitos_otros.length" >Otros Requisitos</v-subheader>
+                    
+            <v-list v-else-if="requisitos_otros.length">
+              <v-subheader class="font-weight-medium text-md-body-1 d-flex" >Otros Requisitos</v-subheader>
                 <v-list-item
                   v-for="(requisito_otro, i) in requisitos_otros"
                   :key="i"
@@ -204,14 +203,17 @@
                     </v-list-item-title>
                   </v-list-item-content>
                 </v-list-item>
-            </v-list>
+            </v-list>            
 
-            <v-list v-if="otros_detalles.length">
-               <v-subheader class="font-weight-medium text-md-body-1 d-flex"  >Otros Detalles</v-subheader> 
-               <v-card>
-                  {{otros_detalles}}
-               </v-card>              
-            </v-list>
+           
+                 <v-list v-else-if="otros_detalles.length ">
+                  <v-subheader class="font-weight-medium text-md-body-1 d-flex"  >Otros Detalles</v-subheader> 
+                  <v-card v-if="otros_detalles.length">
+                      {{otros_detalles}}
+                  </v-card>              
+                </v-list>
+       
+         
 
           </v-card>
 
