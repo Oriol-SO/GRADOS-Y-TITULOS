@@ -40,7 +40,7 @@
             <v-divider></v-divider>
             <v-list>
             
-             <v-subheader class="font-weight-medium text-md-body-1 d-flex " style="    height: auto;" v-if="requisitos.length" >
+             <v-subheader class="font-weight-medium text-md-body-1 d-flex " style="    height: auto;" v-if="requisitos.length>0" >
                     <div >
                      <v-chip
                         class="ma-2"

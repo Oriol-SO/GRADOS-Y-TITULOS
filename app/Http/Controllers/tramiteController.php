@@ -206,7 +206,7 @@ class tramiteController extends Controller
            if($numeroFase==4){
                if($numeroFase<$fase_actual){
                   //consejo
-                  return 'tu tramite ya esta agendado';
+                  return [['NOMBRE'=>'','VALOR'=> 'tu tramite ya esta agendado'],['NOMBRE'=>'CONSEJO','VALOR'=>'1']];
                 }else{
                   return 'tu tramite esta en espera de ser agendado';                
                 }
@@ -239,8 +239,11 @@ class tramiteController extends Controller
            }
            else if($numeroFase==8){ 
             return $consejo=Tramite::where('id',$tramite)->get()->map(function($t){
-                return[
-                    'libro'=>$t->diploma->num_lib,
+                return[[
+                        'NOMBRE'=>'libro',
+                        'VALOR'=>$t->diploma->num_lib,
+                        ],
+            
                     'Folio'=>$t->diploma->lib_foli,
                     'registro'=>$t->diploma->num_lib_regis,
                 ];
@@ -297,7 +300,7 @@ class tramiteController extends Controller
                //consejo
                return 'felicidades ya tienes tu bachiller';
              }else{
-               return 'tu tramite esta cerca de finalizar ';                
+               return 'tu tramite aun no se ha finalizado ';                
              }
                 
          }
