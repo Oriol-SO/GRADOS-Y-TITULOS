@@ -585,7 +585,6 @@ export default{
           this.faseid=(data[0].id);   
           this.formrequi1.fase_id=(data[0].id);
           this.formrequi2.fase_id=(data[0].id);
-          
           this.mostrarrequisito(data[0].id);
       },
        async Roles(){
