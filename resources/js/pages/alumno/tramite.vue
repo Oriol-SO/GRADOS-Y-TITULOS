@@ -207,7 +207,7 @@
 
            
                  <v-list v-else-if="otros_detalles.length ">
-                  <v-subheader class="font-weight-medium text-md-body-1 d-flex"  >Otros Detalles</v-subheader> 
+                  <v-subheader class="font-weight-medium text-md-body-1 d-flex"  >Otros Detalles</v-subheader>   
                   <v-card v-if="otros_detalles.length">
                       {{otros_detalles}}
                   </v-card>              
@@ -666,4 +666,6 @@ export default {
       },
     }
 }
+
+//hitler es gil
 </script>

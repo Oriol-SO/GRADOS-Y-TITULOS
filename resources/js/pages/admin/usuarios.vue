@@ -1,14 +1,14 @@
 <template>
 
 <div class=" ml-4 mt-5">
-  <v-card>
-    <v-card-title >
+  <v-card elevation="0">
+    <v-card-title elevation="0">
          
           <v-row class=" ma-1">
-            <v-toolbar-title> USUARIOS</v-toolbar-title>
+            <v-toolbar-title class="text-h6"> Usuarios</v-toolbar-title>
             <v-divider
               class="mx-4"
-              inset
+              inset             
               vertical
             ></v-divider>
             
@@ -33,8 +33,9 @@
                     v-bind="attrs"
                     v-on="on"
                     style="color:#fff;"
-                    class="text-capitalize, mt-2"
-                  >Agregar</v-btn>
+                    class="text-capitalize mt-2"
+                    elevation="0"
+                  > <v-icon dark left>mdi-account-plus</v-icon> Agregar</v-btn>
                 </template>
                 <template >
                   <v-card>
@@ -276,21 +277,46 @@
               </v-dialog>
               </v-row >       
     </v-card-title>   
-    <v-data-table
+    <v-data-table 
+   
       :headers="headers"
       :items="personas"     
       :items-per-page="10"
       :search="search"
-      class="elevation-1"
+      class="elevation-0 "
+      id="usuario"
     >
-      <template v-slot:item.actions="{ item }">
-        <v-icon
-          small
-          class="mr-2"
-          @click="editItem(item)"
+    <template v-slot:item.avatar="{ item }">
+      <v-avatar
+        size="26px"
+      >
+        <img 
+          v-if="item.gen==1"
+          alt="Avatar"
+          src="/img/avatar_varones.svg"
         >
-          mdi-pencil
-        </v-icon>
+        <img 
+          v-else
+          alt="Avatar"
+          src="/img/avatar mujeres.svg"
+        >
+      </v-avatar>        
+    </template>
+      <template v-slot:item.actions="{ item }">
+
+          <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              @click="editItem(item)"  
+              v-bind="attrs"
+              v-on="on"
+            >
+               mdi-pencil-box-outline
+            </v-icon>
+          </template>
+          <span>Editar</span>
+        </v-tooltip>
+      
 
       </template>
     </v-data-table>
@@ -299,6 +325,7 @@
                 max-width="800"
                 v-model="dialogedit"
                 persistent
+
               >
                 <template >
                   <v-card>
@@ -549,15 +576,10 @@ import Form from "vform";
       return {
         search:'',
         headers: [
-          {
-            text: 'Usuarios',
-            align: 'start',
-            sortable: false,
-            value: 'nom',
-          
-          },
-          { text: 'documento', value: 'numDoc' },
-          { text: 'Email', value: 'email' },
+          {text: '',value: 'avatar', sortable: false, width:'20px' },
+          {text: 'Usuarios', value: 'nom', },
+          { text: 'documento', value: 'numDoc', sortable: false },
+          { text: 'Email', value: 'email', sortable: false },
           //{ text: 'telefono', value: 'numcel' },
           { text: 'Escuela', value: 'espe' },
           { text: 'Actions', value: 'actions', sortable: false },
@@ -915,9 +937,13 @@ import Form from "vform";
 </script> 
 
 <style>
- thead.v-data-table-header th[role=columnheader] {
-  font-size: 14px !important;
-  color:#000;
-  background:rgb(44, 221, 155);
+ #usuario .v-data-table-header th[role=columnheader] {
+  font-size: 16px !important;
+  color:#304156;
+  background:#f2f3f8 !important;
+}
+
+ #usuario .v-data-table-header tr:hover {
+    background-color: red !important;
 }
 </style>
