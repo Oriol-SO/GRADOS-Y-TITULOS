@@ -42,7 +42,7 @@
                                     ></v-text-field> 
                                     <div v-if="errores.nombrefase">
                                         <v-alert   dense outlined type="error" >
-                                        El campo Nombre es obligatorio 
+                                        El Campo Nombre es obligatorio 
                                         </v-alert>
                                     </div>
                                     <v-text-field
@@ -52,7 +52,7 @@
                                     ></v-text-field> 
                                     <div v-if="errores.numerofase">
                                         <v-alert   dense outlined type="error" >
-                                        el Campo Orden es Obligatorio
+                                        El Campo Orden es Obligatorio
                                         </v-alert>
                                     </div> 
                                     <v-select
@@ -69,7 +69,7 @@
                                     </v-select>  
                                     <div v-if="errores.rol_ejecutor">
                                         <v-alert   dense outlined type="error" >
-                                        el rol del encargado de subir o ejecutar es obligatorio
+                                        El rol del encargado de subir o ejecutar es obligatorio
                                         </v-alert>
                                     </div>   
                                     <v-select
@@ -141,7 +141,9 @@
 
                 >
                     <div class="d-flex"  >
-                        <v-card-text class="text-md-body-1 font-weight-medium" >{{ fase.nombre }} </v-card-text>
+                        <v-card-text class="text-md-body-1 font-weight-medium" >
+                        {{ fase.nombre }} | Encargado Ejecutar {{fase.ejecutar.rolNombre}} | Encargado Revisar {{fase.revisar.rolNombre}}
+                        </v-card-text>
                         
                         <v-btn
                           v-if="estadoG"
@@ -190,7 +192,7 @@
                                 <v-toolbar
                                 color="#3DB2FF"
                                 dark
-                                >Agregar Nuevo requisito en esta fase</v-toolbar>
+                                >Agregar Nuevo requisito | Encargado de ejecutar </v-toolbar>
                                 <v-card-text>                                                                
                                 <template>
                                     <v-card elevation="0" class="mt-2">
@@ -224,26 +226,7 @@
                                                                 </v-alert>
                                                             </div>
                                                         </v-row>
-                                                        <v-row fluid>  
-                                                            <v-select
-                                                            v-model="formrequi1.rol"                                                                               
-                                                            required          
-                                                            :items="roles"
-                                                            item-text='rolNombre'
-                                                            item-value='id'
-                                                            label="Seleccionar rol"
-                                                            persistent
-                                                            return-object
-                                                            single-line                                                                      
-                                                            ></v-select>                                                                                
-                                                        </v-row>
-                                                        <v-row>
-                                                            <div>
-                                                                <v-alert v-if="erroresR1.rol"   dense outlined type="error" >
-                                                                            {{erroresR1.rol[0]}}
-                                                                </v-alert>
-                                                            </div>
-                                                        </v-row>
+
                                                                                                                     
                                                     </v-container> 
                                                         <v-btn
@@ -565,10 +548,12 @@ export default{
         allrequisitos:[],
         tipoarchivos:[],
         roles:[],
+        rol:[],
      } 
   },mounted(){
       this.FetchTramites();
       this.FetchFases();
+      this.Roles();
       this.FetchAllrequisitos();
       this.FetchTipoDocumento();
       this.FetchRoles();
@@ -596,10 +581,17 @@ export default{
       async FetchFases(){
           const {data}=await axios.get(`/api/fase/${this.$route.params.id}`);
           this.fases=data;
+          console.log("fases",this.fases);
           this.faseid=(data[0].id);   
           this.formrequi1.fase_id=(data[0].id);
           this.formrequi2.fase_id=(data[0].id);
+          
           this.mostrarrequisito(data[0].id);
+      },
+       async Roles(){
+          const {data}=await axios.get(`/api/roles/ `);
+          this.rol=data;
+          console.log("fase",this.faseid);
       },
         mostrarid(fase,i){
          // console.log(fase.id);
@@ -694,7 +686,8 @@ export default{
       },clearall(){
           this.limpiarnuevo();
           this.limpiarselect();          
-      },async submitrequisito(){                  
+      },async submitrequisito(){ 
+          console.log("requisito",this.formrequi1);                 
           const {data}= await this.formrequi1.post('/api/faserequisito/')
            .then(response =>{
             this.mostrarrequisito(this.formrequi1.fase_id);

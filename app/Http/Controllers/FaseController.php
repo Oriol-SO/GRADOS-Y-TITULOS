@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Fase;
+use App\Models\Role;
 use PhpParser\Node\Stmt\Break_;
 use App\Models\FaseRolRequisito;
 
@@ -16,7 +17,8 @@ class FaseController extends Controller
      */
     public function index()
     {
-        //
+        $fase=Fase::all();
+        return $fase;
     }
 
     /**
@@ -81,7 +83,36 @@ class FaseController extends Controller
      */
     public function show($id)
     {
-        $fase=Fase::where('proceso_id', $id)->orderBy('numero', 'asc')->oldest()->get();
+        $encargados=Fase::where('proceso_id', $id)->orderBy('numero', 'asc')->oldest()->get()->map(function($f){
+            return[
+                'encargado_ejecutar'=>$f->encargado_ejecutar,
+                'encargado_revisar'=>$f->encargado_revisar,
+            ];
+        });
+        $Rol_eje=Role::where('rol_id',$encargados[0]['encargado_ejecutar'])->get()->map(function($r){
+            return[
+                'encargado_ejecutar'=>$r->rolNombre,
+            ];
+        });
+        $Rol_revi=Role::where('rol_id',$encargados[0]['encargado_revisar'])->get()->map(function($r){
+            return[
+                'encargado_revisar'=>$r->rolNombre,
+            ];
+        });
+        $r="hola";
+        $fase=Fase::where('proceso_id', $id)->orderBy('numero', 'asc')->oldest()->get()->map(function($f){
+            return[
+                'encargado_ejecutar'=>$f->encargado_ejecutar,
+                'encargado_revisar'=>$f->encargado_revisar,
+                'fase_id'=>$f->fase_id,
+                'id'=>$f->id,
+                'nombre'=>$f->nombre,
+                'numero'=>$f->numero,
+                'proceso_id'=>$f->proceso_id,
+                'ejecutar'=>Role::where('rol_id',$f->encargado_ejecutar)->select('rolNombre')->first(),
+                'revisar'=>Role::where('rol_id',$f->encargado_revisar)->select('rolNombre')->first(),
+                ];
+        });
        // $primerid=Fase::where('proceso_id', $id)->get();
         return response()->json($fase, 200);
     }
@@ -130,5 +161,27 @@ class FaseController extends Controller
             'rol_ejecutor'=>'required',
             'rol_revisar'=>'required',
         ]);
+    }
+    protected function roles($fase){
+        //$fase=id de la fase
+        $Fase= Fase::where('proceso_id',$fase)->get()->map(function($f){
+            return[
+                'encargado_ejecutar'=>$f->encargado_ejecutar,
+                'encargado_revisar'=>$f->encargado_revisar,
+            ];
+        });
+
+        $Rol_eje=Role::where('rol_id',$Fase[0]['encargado_ejecutar'])->get()->map(function($r){
+            return[
+                'encargado_ejecutar'=>$r->rolNombre,
+            ];
+        });
+        $Rol_revi=Role::where('rol_id',$Fase[0]['encargado_revisar'])->get()->map(function($r){
+            return[
+                'encargado_revisar'=>$r->rolNombre,
+            ];
+        });
+        return ['encargado_ejecutar'=>$Rol_eje[0]['encargado_ejecutar'],'encargado_revisar'=>$Rol_revi[0]['encargado_revisar']];
+    
     }
 }

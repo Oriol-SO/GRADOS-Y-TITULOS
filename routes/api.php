@@ -79,6 +79,7 @@ Route::resource('requisito',RequisitoController::class);
 Route::resource('persona',PersonaController::class);
 Route::resource('tipoarchivo',TipoArchivoController::class);
 Route::resource('rol',RolController::class);
+Route::get('roles/{fase}',[FaseController::class,'roles']);
 
 Route::resource('bachillerIni',BachillerIniController::class);
 Route::resource('bachillerFinal',BachillerFinalController::class);
