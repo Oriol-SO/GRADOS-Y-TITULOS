@@ -5,7 +5,10 @@
      <v-img class="ml-10 mr-5" max-height="38" max-width="38" src="/img/u.png" />
       <v-toolbar-title >{{ appName }}</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn v-for="(link, i) in linksVerified" :key="i" text :to="link.path"  style=" color:white;">
+       <v-btn  plain to="/admin/dashboard" color="#fff"  >
+        Dashboard
+      </v-btn>
+      <v-btn v-for="(link, i) in linksVerified" :key="i"  plain :to="link.path" color="#fff"  >
         {{ link.name }}
       </v-btn>
 
@@ -13,7 +16,7 @@
         <template v-slot:activator="{ on }">
           <v-btn  icon elevation="0" color="white" dense x-large v-on="on">
             <v-avatar  size="32" >
-              <v-icon color="grey">mdi-account-circle</v-icon>
+              <v-icon color="#fff">mdi-account-school</v-icon>
             </v-avatar>
           </v-btn>
         </template> 
