@@ -1,8 +1,8 @@
 <template>
 
 <div class=" ml-4 mt-5">
-  <v-card elevation="0">
-    <v-card-title elevation="0">
+  <v-card elevation="0" class="card-shadow">
+    <v-card-title elevation="0" class="card-shadow">
          
           <v-row class=" ma-1">
             <v-toolbar-title class="text-h6"> Usuarios</v-toolbar-title>
@@ -29,12 +29,12 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
-                    color="rgb(44, 221, 155)"
+                    color="#2dce89"
                     v-bind="attrs"
                     v-on="on"
-                    style="color:#fff;"
-                    class="text-capitalize mt-2"
-                    elevation="0"
+                    style="color:#fff; font-weight: 600;"
+                    class="text-capitalize mt-2 btn-shadow"
+                   
                   > <v-icon dark left>mdi-account-plus</v-icon> Agregar</v-btn>
                 </template>
                 <template >
@@ -283,7 +283,6 @@
       :items="personas"     
       :items-per-page="10"
       :search="search"
-      class="elevation-0 "
       id="usuario"
     >
     <template v-slot:item.avatar="{ item }">
@@ -943,7 +942,10 @@ import Form from "vform";
   background:#f2f3f8 !important;
 }
 
- #usuario .v-data-table-header tr:hover {
-    background-color: red !important;
+ #usuario, .card-shadow  {
+    box-shadow: 0 0 2rem 0 rgba(136,152,170,.15)!important;
+}
+.btn-shadow{
+  box-shadow: 0 7px 14px rgba(50,50,93,.1),0 3px 6px rgba(0,0,0,.08)!important;
 }
 </style>

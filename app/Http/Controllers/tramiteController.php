@@ -18,7 +18,9 @@ use App\Models\Observacione;
 use App\Models\Proceso;
 use App\Models\Revisione;
 use App\Models\Consejo;
+use App\Models\Grado;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Contracts\Service\Attribute\Required;
 
 class tramiteController extends Controller
 {
@@ -50,9 +52,18 @@ class tramiteController extends Controller
         return response()->json($tramites);
     }
 
+    protected function alu_grados(){
+        $grados=Grado::all()->map(function($g){
+            return[
+                'id'=>$g->id,
+                'graNom'=>$g->graNom
+             ];
+        });
+        return $grados;
+    }
+   protected function alu_procesos($grado){
 
-   protected function alu_procesos(){
-    $tramites['tramites'] = Proceso::where('estado',1)->get()->map(function($t){
+    $tramites['tramites'] = Proceso::where('grado_id',$grado)->where('estado',1)->get()->map(function($t){
         return [
             'id' => $t->id,
             'nombre' => $t->procNom,
@@ -82,11 +93,33 @@ class tramiteController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validar($request);
+        //$this->validar($request);
+
+        $request->validate([
+            'grado'=>'required',
+            'tipotramite'=>'required'
+        ]);
+        if ($request->grado['id']==2){
+            $request->validate([
+                'grado'=>'required',
+                'tipotramite'=>'required',
+                'titulo'=>'required',
+                'integrantes'=>'required',
+            ]);
+            
+            return 'proximamente';
+
+
+        }else if($request->grado['id']==1){                      
+            $this->add_tramite($request,null);
+        }else{
+            return 'no esta disponible';
+        }
+     
+    }
+    public function add_tramite($request,$trabajo){
         $user=$request->user();
         $persona=$user->persona;
-        //$modalidad=Modalidade::find($request->tipotramite['modalidad_id']);
-        //$fase=Fase::where('proceso_id','')->limit(1)->get();
         $tramite=Tramite::create([
             'fec_inicio'=> Carbon::now(),
             'fecha_vencimiento'=>null,
@@ -94,20 +127,14 @@ class tramiteController extends Controller
             'tipo_tramite'=>$request->tipotramite['nombre'],
             'fase_actual'=>'1',
             'estado'=>0,
-            'trabajo_id'=>null,
+            'trabajo_id'=>$trabajo,
             'persona_id'=>$persona->id,
             'proceso_id'=>$request->tipotramite['id'],
             'consejo_id'=>null,
             'resolucion_id'=>null,         
         ]);
 
-        return response()->json($tramite);
-
-    }
-    public function validar($request=null){
-       return  $request->validate([
-            'tipotramite' => 'required',
-        ]);
+        return 'agregado';        
     }
 
     /**
@@ -246,7 +273,7 @@ class tramiteController extends Controller
                             ['NOMBRE'=>'Fecha de resolucion','VALOR'=>$t->resolucione->fecha],
                         ];
                     });
-                }else{
+                }else{ 
                     return 'tu tramite esta en espera de pasos anteriores';                
                 }
            }

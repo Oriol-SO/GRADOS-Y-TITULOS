@@ -105,7 +105,8 @@ Route::get('fasestramite/{codigo}',[tramiteController::class,'obtenerfases']);
 Route::get('alu-faserequisito/{id}/{tramite}',[tramiteController::class,'obtenerfaserequisito']);
 Route::post('alu-filerequisito/',[tramiteController::class,'subirarchivorequisito']);
 Route::get('alu_autorized/{fase}/{tramite}',[tramiteController::class,'alu_autorized']);
-Route::get('alu-proceso',[tramiteController::class,'alu_procesos']);
+Route::get('alu-proceso/{id}',[tramiteController::class,'alu_procesos']);
+Route::get('alu-grados',[tramiteController::class,'alu_grados']);
 
 
 //notificar cambios del tramite

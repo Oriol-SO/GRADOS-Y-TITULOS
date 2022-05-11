@@ -1,0 +1,104 @@
+<template>
+<v-app-bar app style=" background-color: #fff; " elevation="1" elevate-on-escroll height="80">
+
+    <v-toolbar dense elevation="0" style=" background-color: transparent;  ">
+     <v-img class="ml-1" max-height="68" max-width="68" src="/img/u.png" />
+      <!--v-toolbar-title class="text-h6" >{{ appName }}</v-toolbar-title-->
+      <v-spacer></v-spacer>
+       <v-btn  plain to="/admin/dashboard" :color="letra_color" size="42" >
+        Dashboard
+      </v-btn>
+      <v-btn v-for="(link, i) in linksVerified" :key="i" size="42" plain :to="link.path" :color="letra_color"  >
+        {{ link.name }}
+      </v-btn>
+
+      <v-menu v-if="user" bottom min-width="220px" rounded offset-y>
+        <template v-slot:activator="{ on }">
+          <v-btn  icon elevation="0" :color="letra_color" dense x-large v-on="on">
+            <v-avatar  size="42" >
+              <v-icon :color="letra_color">mdi-account-school</v-icon>
+            </v-avatar>
+          </v-btn>
+        </template> 
+        <v-card>
+          <v-list-item-content >
+            <div style="flex-direction:column;">
+                <div class="text-center">
+                    <h4 class="text-wrap">{{ user.nombre }}</h4>
+                    <p class="text-caption mt-1">
+                      {{ user.email }}
+                    </p>
+                </div>     
+                <v-divider class="my-1"></v-divider>   
+                  <div style="    display: table-caption;">
+                    <v-btn depressed rounded text to="/admin">
+                    <v-icon left>mdi-view-dashboard</v-icon>
+                      Dashboard
+                    </v-btn>
+              
+                    <v-btn depressed rounded text to="/settings">
+                    <v-icon left>mdi-account-box-outline</v-icon>
+                      Perfil
+                    </v-btn>
+                  
+                    <v-btn depressed rounded text @click="logout">
+                    <v-icon left>mdi-logout</v-icon>
+                      Salir
+                    </v-btn>
+                  </div>             
+               
+            </div>
+          </v-list-item-content>
+        </v-card>
+      </v-menu>
+    </v-toolbar>
+
+  </v-app-bar>
+</template>
+
+<script>
+import { mapGetters } from "vuex";
+
+export default {
+  data: () => ({
+    appName: window.config.appName,
+    // links: [
+    //   { name: "Inicio", path: "/home", notUser: false },
+    // { name: "Iniciar sesión", path: "/login", notUser: true },
+    // { name: "Registrarme", path: "/registro", notUser: true },
+    //],
+    bgNavbar: "#fff",
+    letra_color:'#000',
+  }),
+    props: {
+      dashboard:'/admin',
+    },
+
+  computed: {
+    ...mapGetters({
+      user: "auth/user",
+    }),
+    linksVerified: function () {
+      return [{ name: "Inicio", path: "/home" }];
+      //return this.links.filter((link) => !(link.notUser && this.user));
+    },
+  },
+
+  mounted() {
+    window.onscroll = () => {
+      //this.changeColor();
+    };
+  },
+
+  methods: {
+    async logout() {
+      // Log out the user.
+      await this.$store.dispatch("auth/logout");
+      await this.$store.dispatch("admin/dashboard");
+      // Redirect to login.
+      this.$router.push({ name: "login" });
+    },
+    
+  },
+};
+</script>

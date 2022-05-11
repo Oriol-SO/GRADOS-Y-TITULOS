@@ -1,6 +1,6 @@
 <template>
     <div class="mt-5 mx-4">
-        <v-card  elevation="0">
+        <v-card id="toolbar">
             <v-card-title>
                 <v-toolbar flat>
                     <v-toolbar-title> AGENDAR EXPEDIENTES</v-toolbar-title>
@@ -16,14 +16,15 @@
                     label="Buscar"
                     single-line
                     hide-details
-                    color="#0df0d6"
+                    color="primary"
                     ></v-text-field> 
                     <v-spacer></v-spacer>   
                      <template>
-                            <v-btn                        
-                            color="#0df0d6" 
-                            style="color:#fff;" 
-                            class="text-capitalize"
+                            <v-btn  
+                                                 
+                            color="rgb(45, 206, 137)"
+                            style="color:#fff; font-weight: 600;" 
+                            class="text-capitalize btn-shadow"
                             @click="abrirAgendar()"
                             >Agendar</v-btn>
                     </template>
@@ -80,7 +81,8 @@
             :single-select="singleSelect"
             :search="search"
             show-select
-            class="elevation-1"
+            id="expedientes"
+            
             v-model="form.selected"
             >
             <template v-slot:top>
@@ -171,9 +173,22 @@ export default {
 }
 </script>
 <style>
- thead.v-data-table-header th[role=columnheader] {
-  font-size: 14px !important;
-  color:#000;
-  background-color:#0d6 !important;
+ #expedientes .v-data-table-header th[role=columnheader] {
+  font-size: 16px !important;
+  color:#304156;
+  background-color:rgb(231 235 243) !important; 
  }
+
+#expedientes ,#toolbar {
+ -webkit-box-shadow: 0 2px 12px -1px rgb(85 85 85 / 8%), 0 4px 12px 0 rgb(85 85 85 / 6%), 0 1px 12px 0 rgb(85 85 85 / 3%);
+ box-shadow: 0 2px 12px -1px rgb(85 85 85 / 8%), 0 4px 12px 0 rgb(85 85 85 / 6%), 0 1px 12px 0 rgb(85 85 85 / 3%);
+-moz-box-shadow:0 2px 12px -1px rgb(85 85 85 / 8%), 0 4px 12px 0 rgb(85 85 85 / 6%), 0 1px 12px 0 rgb(85 85 85 / 3%);
+/*-moz-box-shadow: 0px 2px 15px -4px rgb(0 0 0 / 15%);*/
+
+}
+
+.btn-shadow{
+  box-shadow: 0 7px 14px rgba(50,50,93,.1),0 3px 6px rgba(0,0,0,.08)!important;
+}
 </style>
+
