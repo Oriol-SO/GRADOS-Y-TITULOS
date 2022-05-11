@@ -281,7 +281,9 @@ class tramiteController extends Controller
            }else if($numeroFase==10){
             if($numeroFase<$fase_actual){
                 //consejo
+                //fecha de entrega para el dia tal
                 return 'tu tramite ya tiene una fecha para ser entregado';
+                
                 /*
                 return $consejo=Tramite::where('id',$tramite)->get()->map(function($t){
                     return[
