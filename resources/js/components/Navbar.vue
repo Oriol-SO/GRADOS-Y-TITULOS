@@ -1,5 +1,5 @@
 <template>
-<v-app-bar app style=" background-color: #051733; " elevation="0">
+<v-app-bar app style=" background-color: #125872; " elevation="0">
 
     <v-toolbar dense elevation="0" style="    background-color: transparent;  color:white">
      <v-img class="ml-10 mr-5" max-height="38" max-width="38" src="/img/u.png" />

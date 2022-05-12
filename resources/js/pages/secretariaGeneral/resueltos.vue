@@ -1,16 +1,9 @@
 <template>
   <v-container fluid>
-    <template >
-        <v-toolbar
-          class="mb-2 rounded"
-          flat
-          color="#2B5683"
-        >
-          <v-toolbar-title class="white--text " >EXPEDIENTES CON RESOLUCIÓN</v-toolbar-title>
-       </v-toolbar>
-     </template>
-
     <v-card elevation="0">
+     <v-card elevation="0">
+      <v-card-title class="px-0 py-1 ml-3 text-h6">EXPEDIENTES CON RESOLUCIÓN</v-card-title>
+     </v-card>
         <v-toolbar float class="mt-3" color="#E3F2FD" elevation="0"> 
               <v-tabs v-model="tab">
               <v-tabs-slider ></v-tabs-slider>
@@ -20,15 +13,14 @@
                 >
                   {{ item.graNom }}
                 </v-tab>
-              </v-tabs>        
-           
+              </v-tabs>         
         </v-toolbar>         
             <v-divider class="mt-2"></v-divider>
             <v-tabs-items v-model="tab" >
               <v-tab-item
                 v-for="item in items"
                 :key="item.id"
-              >
+               >
                 <v-card elevation="0" style="background:rgb(242 243 248);" >
                 
                   <v-data-table
@@ -37,13 +29,12 @@
                     :items-per-page="10"
                     class="elevation-1"
                     group-by="consejo_numero"
-                    id="color_table"
-                  >
+                  > 
                     <template v-slot:item.actions="{ item }">
                         <v-btn
                         small
                         rounded
-                        color="#fc4a1a"
+                        color="#45EBA5"
                         elevation="0"
                         style="color:#fff;"
                         class="text-capitalize"
@@ -59,47 +50,75 @@
   <template>
       <v-dialog
         transition="dialog-top-transition"
-        max-width="450"
-        persistent
+        width="650"
+       
         v-model="dialogenviar"
       >                      
         <template>
             <v-card>
-            <v-toolbar
+              <v-toolbar
                 class="text-h6"
                 color="#0df0d6"
                 dark
                 elevation="0"
-            >Detalles de Expediente</v-toolbar>
-            <form>
-                <v-card-text>
-                <div class="text-overline mb-4">
-                <p v-for="(dato,i) in datos.data" :key="i"
-                >"{{dato.Nombre}}":"{{dato.Valor}}"</p>
-                </div>
-                <v-text-field
-                v-model="form.folio"
-                label="Número de Folio">
-                </v-text-field>                
-                <v-text-field
-                v-model="form.libro"
-                label="Número de Libro">
-                </v-text-field>
-                <v-text-field
-                v-model="form.registro"
-                label="Número de Registro">
-                </v-text-field>
-                <v-btn class="mt-3 " 
-                style="color:#fff;" 
-                elevation="0" 
-                color="#42C2FF" 
-                @click="Addresolucion()">
-                Aceptar</v-btn>
+              >Detalles de Expediente</v-toolbar>
+              
+                <form style="margin:0; justify-content:center;" >
+                <v-row no-gutters >
+                <v-col cols="7"  >
+                  <v-card-actions>
+                    <v-btn
+                      color="orange lighten-2"
+                      text
+                     >
+                      ver detalles de expedientes
+                    </v-btn>
+                     <v-spacer></v-spacer>
+                    <v-btn
+                      icon
+                      @click="show = !show"
+                     >
+                      <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+                    </v-btn>
+                  </v-card-actions>
+                  <v-card-text>
+                    <div v-show="show">
+                        <v-divider></v-divider>
+                      <v-card-text >
+                        <p v-for="(dato,i) in datos.data" :key="i"
+                        >"{{dato.Nombre}}":"{{dato.Valor}}"</p>
+                      </v-card-text>
+                    </div>
+                  </v-card-text> 
+                  </v-col>
 
-                </v-card-text>                                                              
-            </form>
-
-            <v-card-actions>
+                  <v-col cols="5" >
+                  <v-card style=" position: fixed ;    width: max-content;" > 
+                    <v-text-field
+                      v-model="form.folio"
+                      label="Número de Folio">
+                    </v-text-field>                
+                    <v-text-field
+                      v-model="form.libro"
+                      label="Número de Libro">
+                    </v-text-field>
+                    <v-text-field
+                      v-model="form.registro"
+                      label="Número de Registro">
+                    </v-text-field>
+                    <v-btn class="mt-3 " 
+                      style="color:#fff;" 
+                      elevation="0" 
+                      color="#42C2FF" 
+                      @click="Addresolucion()">
+                      Aceptar
+                    </v-btn>
+                  </v-card> 
+                  </v-col>   
+                </v-row>                                                          
+                </form>
+               
+                <v-card-actions>
                 <v-btn class="ml-auto"
                     text
                     @click  ="close()"
@@ -116,8 +135,11 @@
 import axios from 'axios';
 import Form from "vform";
 export default {
+ 
     data(){
+      
         return{
+          show: false,
           //singleSelect: true,
           dialogenviar:false,
             tab:null,

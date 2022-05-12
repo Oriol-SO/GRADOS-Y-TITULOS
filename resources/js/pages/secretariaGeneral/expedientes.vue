@@ -1,8 +1,8 @@
 <template>
     <div class="mt-5 mx-4">
         <v-card  elevation="0">
-            <v-card-title>
-                <v-toolbar flat>
+            <v-card-title style="background:#CCDDEC">
+                <v-toolbar flat style="background:transparent">
                     <v-toolbar-title> AGENDAR EXPEDIENTES</v-toolbar-title>
                     <v-divider
                     class="mx-4"
@@ -21,7 +21,7 @@
                     <v-spacer></v-spacer>   
                      <template>
                             <v-btn                        
-                            color="primary"  
+                            color="#2FCED7"  
                             style="color:#fff;" 
                             class="text-capitalize"
                             @click="abrirAgendar()"

@@ -174,6 +174,6 @@ export default {
  #color_table .v-data-table-header th[role=columnheader] {
   font-size: 14px !important;
   color:white;
-  background-color: #337ab7 !important;
+  background-color:#499BC3 !important;
 }
 </style>

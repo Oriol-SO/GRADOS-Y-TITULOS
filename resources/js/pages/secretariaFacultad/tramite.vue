@@ -7,7 +7,7 @@
         <v-toolbar
           class="mb-2 rounded"
           flat
-          color="#2B5683"
+          color="#40768A "
         >
           <v-toolbar-title class="white--text " >{{nomtramite.tipo_tramite}}</v-toolbar-title>
        </v-toolbar>
@@ -18,7 +18,7 @@
     <v-row no-gutters >       
         <v-col class="pa-1"  cols="12" xl="9" lg="9" sm="12" xs="12" >
             <v-card >
-                <v-card-title  class="px-0 py-2 ml-0 pl-3 text-h6  white--text" style="background-color: #337ab7">Fases que te corresponden</v-card-title>
+                <v-card-title  class="px-0 py-2 ml-0 pl-3 text-h6  white--text" style="background-color: #1F94BF">Fases que te corresponden</v-card-title>
                 <v-stepper v-model="e1" >
                 <v-stepper-header non-linear>
                     <v-stepper-step
@@ -293,7 +293,7 @@
         </v-col>
          <v-col class="pa-1"  lg="3" xl="3" sm="12"  xs="12">
             <v-card class="ml-2" elevation="0" >
-               <v-subheader :inset="inset" style="background-color: #337ab7 " class=" white--text text-h7">
+               <v-subheader :inset="inset" style="background-color: #1F94BF " class=" white--text text-h7">
                     Fases del tramite
                 </v-subheader>
 

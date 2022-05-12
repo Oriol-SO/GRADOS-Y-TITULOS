@@ -1,30 +1,31 @@
-
 <template>
-  <v-container class="main"  fluid grid-list-md>
-    <v-layout row wrap align-space-between justify-space-between fill-height>
-      <v-flex style="text-align:center;">
-        <v-layout align-center justify-center fill-height  >
-          <div   >      
-            <p class=" text-center text-justify"
-               style="font-size:70px; font-family: 'Vollkorn', serif; display: contents; ">
-                Grados y Títulos <br>
-            </p> 
-                 <hr>Universidad Nacional Daniel Alcides Carrion <hr>
-          </div>  
-        </v-layout> 
-      </v-flex>
-      <v-flex class=" d-flex align-center">    
-        <v-img max-height="800" width="800"
-              class=" darken-1" src="/img/home.png" />
-      </v-flex >
-    </v-layout>
+  <v-container class="grey lighten-5">
+    <v-row no-gutters>
+      <v-col
+        cols="12"
+        sm="6"
+        md="8"
+      >
+        <v-card
+          class="pa-2"
+          outlined
+          tile
+        >
+          .col-12 .col-sm-6 .col-md-8
+        </v-card>
+      </v-col>
+      <v-col
+        cols="6"
+        md="4"
+      >
+        <v-card
+          class="pa-2"
+          outlined
+          tile
+        >
+          .col-6 .col-md-4
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
-
-<style scoped>
-.main {
-  background-size: cover;
-  height: 100%;
-  background:#051733;
-}
-</style>
