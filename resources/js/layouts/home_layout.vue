@@ -1,11 +1,11 @@
 <template>
   <v-app id="inspire" style="background:#f8f9fe;">
     <navbar />
-    <v-main  >
+    <v-main class="py-0" >
       <transition name="fade" mode="out-in"> <child /> </transition>
     </v-main>
     <piepage />
-      </v-app>
+  </v-app>
 </template>
 
 <script>

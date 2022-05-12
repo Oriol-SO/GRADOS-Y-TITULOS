@@ -35,22 +35,22 @@
                 class="d-flex flex-wrap"
               >
                 <v-btn
-                color="primary" dark class="font-weight-bold " elevation="0" x-large to="/alumno">
+                color="primary" dark class="font-weight-bold " elevation="0" x-large to="/register">
                   Comienza ahora
                 </v-btn>
 
                 <!--span class="font-weight-bold ml-6 mr-4 my-4">or</span-->
 
-                <!--v-btn
+                <v-btn
                   :ripple="false"
-                  class="pa-1 font-weight-bold "
+                  class="pa-1 font-weight-bold ml-2"
                   height="auto"
                   color="#42a5f6"
                   text
                   x-large
                 >
-                  Get Started Now
-                </v-btn-->
+                  Inicia Session
+                </v-btn>
               </div>
             </v-responsive>
           </v-container>
@@ -255,8 +255,7 @@
 </template>
 <script>
 export default {
-    layout: "home_layout",
-    middleware: ["auth"],
+    layout: "home_layout",   
 
     computed: {
       minHeight () {

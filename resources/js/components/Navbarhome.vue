@@ -1,56 +1,36 @@
 <template>
-<v-app-bar app style=" background-color: #fff; " elevation="1" elevate-on-escroll height="80">
+<v-app-bar id="home-app-bar" app style=" background-color: transparent; position: absolute;" elevation="0" elevate-on-escroll height="80">
 
     <v-toolbar dense elevation="0" style=" background-color: transparent;  ">
      <v-img class="ml-1" max-height="68" max-width="68" src="/img/u.png" />
       <!--v-toolbar-title class="text-h6" >{{ appName }}</v-toolbar-title-->
       <v-spacer></v-spacer>
-       <v-btn  plain to="/admin/dashboard" :color="letra_color" size="42" >
-        Dashboard
-      </v-btn>
-      <v-btn v-for="(link, i) in linksVerified" :key="i" size="42" plain :to="link.path" :color="letra_color"  >
+      <div>
+        <v-tabs
+          class="hidden-sm-and-down"        
+          color="#42a5f6"
+          optional
+          background-color="transparent"
+          dark
+        >
+          <v-tab
+            v-for="(link, i) in linksVerified" :key="i"
+            :to="link.path"
+            :ripple="false"  
+            class="font-weight-bold"         
+            text
+            
+          >
+            {{ link.name }}
+          </v-tab>
+        </v-tabs>
+      </div>
+        
+      <!--v-btn v-for="(link, i) in linksVerified" :key="i" size="42"  :to="link.path" :color="letra_color"  class="mr-3">
         {{ link.name }}
-      </v-btn>
+      </v-btn-->
 
-      <v-menu v-if="user" bottom min-width="220px" rounded offset-y>
-        <template v-slot:activator="{ on }">
-          <v-btn  icon elevation="0" :color="letra_color" dense x-large v-on="on">
-            <v-avatar  size="42" >
-              <v-icon :color="letra_color">mdi-account-school</v-icon>
-            </v-avatar>
-          </v-btn>
-        </template> 
-        <v-card>
-          <v-list-item-content >
-            <div style="flex-direction:column;">
-                <div class="text-center">
-                    <h4 class="text-wrap">{{ user.nombre }}</h4>
-                    <p class="text-caption mt-1">
-                      {{ user.email }}
-                    </p>
-                </div>     
-                <v-divider class="my-1"></v-divider>   
-                  <div style="    display: table-caption;">
-                    <v-btn depressed rounded text to="/admin">
-                    <v-icon left>mdi-view-dashboard</v-icon>
-                      Dashboard
-                    </v-btn>
-              
-                    <v-btn depressed rounded text to="/settings">
-                    <v-icon left>mdi-account-box-outline</v-icon>
-                      Perfil
-                    </v-btn>
-                  
-                    <v-btn depressed rounded text @click="logout">
-                    <v-icon left>mdi-logout</v-icon>
-                      Salir
-                    </v-btn>
-                  </div>             
-               
-            </div>
-          </v-list-item-content>
-        </v-card>
-      </v-menu>
+     
     </v-toolbar>
 
   </v-app-bar>
@@ -68,7 +48,7 @@ export default {
     // { name: "Registrarme", path: "/registro", notUser: true },
     //],
     bgNavbar: "#fff",
-    letra_color:'#000',
+    letra_color:'#fff',
   }),
     props: {
       dashboard:'/admin',
@@ -79,7 +59,7 @@ export default {
       user: "auth/user",
     }),
     linksVerified: function () {
-      return [{ name: "Inicio", path: "/home" }];
+      return [{ name: "Inicio", path: "/home" },{name:'Iniciar Sesión', path:"/login"},{name:'Registrate', path:"/register"}];
       //return this.links.filter((link) => !(link.notUser && this.user));
     },
   },
@@ -90,15 +70,19 @@ export default {
     };
   },
 
-  methods: {
-    async logout() {
-      // Log out the user.
-      await this.$store.dispatch("auth/logout");
-      await this.$store.dispatch("admin/dashboard");
-      // Redirect to login.
-      this.$router.push({ name: "login" });
-    },
-    
-  },
+
 };
+
+//background-color: rgba(25, 46, 79,0.84);
 </script>
+
+<style>
+#home-app-bar .v-tabs-slider {
+    max-width: 24px;
+    margin: 0 auto;
+}
+
+#home-app-bar .theme--dark.v-tabs > .v-tabs-bar .v-tab:not(.v-tab--active), .theme--dark.v-tabs > .v-tabs-bar .v-tab:not(.v-tab--active) > .v-icon, .theme--dark.v-tabs > .v-tabs-bar .v-tab:not(.v-tab--active) > .v-btn, .theme--dark.v-tabs > .v-tabs-bar .v-tab--disabled {
+    color: rgb(255 255 255) !important;
+}
+</style>
