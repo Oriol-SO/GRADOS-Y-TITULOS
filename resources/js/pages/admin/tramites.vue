@@ -100,8 +100,8 @@
   style="display:flex; flex-wrap:wrap; justify-content: space-evenly;"
  >
  
-      <v-alert v-for="(proceso,i) in procesos" :key="i"
-    class="mt-5 mb-5 ml-1 mr-1  "    
+  <v-alert v-for="(proceso,i) in procesos" :key="i"
+    class="mt-5 mb-5 ml-1 mr-1  card-shadow"    
     width="420"  
     border="top"
     colored-border
@@ -241,6 +241,9 @@ import Form from "vform";
   }
 </script>
 
-<style >
- 
+<style > 
+
+.card-shadow {
+    box-shadow: 0 0 2rem 0 rgba(136,152,170,.15)!important;
+}
 </style>

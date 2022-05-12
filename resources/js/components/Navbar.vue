@@ -1,5 +1,5 @@
 <template>
-<v-app-bar app style=" background-color: #051733; " elevation="0">
+<v-app-bar app style=" background-color: rgb(25, 46, 79); " elevation="0">
 
     <v-toolbar dense elevation="0" style="    background-color: transparent;  color:#fff;">
      <v-img class="ml-10 mr-5" max-height="38" max-width="38" src="/img/u.png" />
@@ -12,38 +12,45 @@
         {{ link.name }}
       </v-btn>
 
-      <v-menu v-if="user" bottom min-width="240px" rounded offset-y>
-        <template v-slot:activator="{ on }">
-          <v-btn  icon elevation="0" color="white" dense x-large v-on="on">
-            <v-avatar  size="32" >
-              <v-icon color="#fff">mdi-account-school</v-icon>
-            </v-avatar>
-          </v-btn>
-        </template> 
-        <v-card>
-          <v-list-item-content class="justify-center">
-            <div class="mx-auto text-center" >
-             
-              <h4 class="text-wrap">{{ user.nombre }}</h4>
-              <p class="text-caption mt-1">
-                {{ user.email }}
-              </p>
-              <v-divider class="my-3"></v-divider>
-               <v-btn depressed rounded text to="/admin">
-                Dashboard
-              </v-btn>
-              <v-divider class="my-3"></v-divider>
-              <v-btn depressed rounded text to="/settings">
-                Editar perfil
-              </v-btn>
-              <v-divider class="my-3"></v-divider>
-              <v-btn depressed rounded text @click="logout">
-                Cerrar sesión
-              </v-btn>
-            </div>
-          </v-list-item-content>
-        </v-card>
-      </v-menu>
+        <v-menu v-if="user" bottom min-width="220px" rounded offset-y>
+          <template v-slot:activator="{ on }">
+            <v-btn  icon elevation="0" :color="letra_color" dense x-large v-on="on">
+              <v-avatar  size="42" >
+                <v-icon :color="letra_color">mdi-account-school</v-icon>
+              </v-avatar>
+            </v-btn>
+          </template> 
+          <v-card>
+            <v-list-item-content >
+              <div style="flex-direction:column;">
+                  <div class="text-center">
+                      <h4 class="text-wrap">{{ user.nombre }}</h4>
+                      <p class="text-caption mt-1">
+                        {{ user.email }}
+                      </p>
+                  </div>     
+                  <v-divider class="my-1"></v-divider>   
+                    <div style="    display: table-caption;">
+                      <v-btn depressed rounded text to="/admin">
+                      <v-icon left>mdi-view-dashboard</v-icon>
+                        Dashboard
+                      </v-btn>
+                
+                      <v-btn depressed rounded text to="/settings">
+                      <v-icon left>mdi-account-box-outline</v-icon>
+                        Perfil
+                      </v-btn>
+                    
+                      <v-btn depressed rounded text @click="logout">
+                      <v-icon left>mdi-logout</v-icon>
+                        Salir
+                      </v-btn>
+                    </div>             
+                
+              </div>
+            </v-list-item-content>
+          </v-card>
+        </v-menu>
     </v-toolbar>
 
   </v-app-bar>
@@ -61,6 +68,7 @@ export default {
     // { name: "Registrarme", path: "/registro", notUser: true },
     //],
     bgNavbar: "#fff",
+    letra_color:"#fff",
   }),
     props: {
       dashboard:'/admin',
@@ -93,4 +101,6 @@ export default {
     
   },
 };
+//#051733;
 </script>
+

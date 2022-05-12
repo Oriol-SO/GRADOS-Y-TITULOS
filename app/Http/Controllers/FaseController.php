@@ -83,7 +83,7 @@ class FaseController extends Controller
      */
     public function show($id)
     {
-        $encargados=Fase::where('proceso_id', $id)->orderBy('numero', 'asc')->oldest()->get()->map(function($f){
+       /* $encargados=Fase::where('proceso_id', $id)->orderBy('numero', 'asc')->oldest()->get()->map(function($f){
             return[
                 'encargado_ejecutar'=>$f->encargado_ejecutar,
                 'encargado_revisar'=>$f->encargado_revisar,
@@ -99,6 +99,7 @@ class FaseController extends Controller
                 'encargado_revisar'=>$r->rolNombre,
             ];
         });
+        $r="hola";*/
         $fase=Fase::where('proceso_id', $id)->orderBy('numero', 'asc')->oldest()->get()->map(function($f){
             return[
                 'encargado_ejecutar'=>$f->encargado_ejecutar,
