@@ -1,5 +1,5 @@
 <template>
-  <v-footer padless style="background:#000; color:#fff; min-height:80px;">
+  <v-footer padless style="background:#000; color:#fff; min-height:60px;">
   <v-row>
     <v-col
       cols="12"
@@ -23,12 +23,12 @@
     </v-col>
 
     <v-col
-      class="text-right"
+      class="text-right pr-5"
       cols="12"
       md="6"
       
     >
-      Copyright ©  {{ new Date().getFullYear() }}  Grados y Titulos
+    Copyright ©  {{ new Date().getFullYear() }}  Grados y Titulos 
     </v-col>  
   </v-row>
 

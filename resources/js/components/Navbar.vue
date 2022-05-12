@@ -5,9 +5,7 @@
      <v-img class="ml-10 mr-5" max-height="38" max-width="38" src="/img/u.png" />
       <v-toolbar-title >{{ appName }}</v-toolbar-title>
       <v-spacer></v-spacer>
-       <v-btn  plain to="/admin/dashboard" color="#fff"  >
-        Dashboard
-      </v-btn>
+
       <v-btn v-for="(link, i) in linksVerified" :key="i"  plain :to="link.path" color="#fff"  >
         {{ link.name }}
       </v-btn>
@@ -79,7 +77,7 @@ export default {
       user: "auth/user",
     }),
     linksVerified: function () {
-      return [{ name: "Inicio", path: "/home" }];
+      return [{ name: "Dashboard", path: "/admin" }];
       //return this.links.filter((link) => !(link.notUser && this.user));
     },
   },
@@ -96,7 +94,7 @@ export default {
       await this.$store.dispatch("auth/logout");
       await this.$store.dispatch("admin/dashboard");
       // Redirect to login.
-      this.$router.push({ name: "login" });
+      this.$router.push({ name: "home" });
     },
     
   },
