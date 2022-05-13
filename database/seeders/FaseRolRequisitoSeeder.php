@@ -45,6 +45,10 @@ class FaseRolRequisitoSeeder extends Seeder
                 'fase_id'=>'101',
             ],
             
+
+            //titulo
+
+      
             
         ]);
     }
