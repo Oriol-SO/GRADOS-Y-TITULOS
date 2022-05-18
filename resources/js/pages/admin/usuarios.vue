@@ -277,8 +277,7 @@
               </v-dialog>
               </v-row >       
     </v-card-title>   
-    <v-data-table 
-   
+    <v-data-table    
       :headers="headers"
       :items="personas"     
       :items-per-page="10"

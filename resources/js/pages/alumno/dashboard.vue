@@ -21,7 +21,7 @@
                     <v-spacer></v-spacer>
                     <v-dialog
                         transition="dialog-top-transition"
-                        max-width="450"
+                        max-width="550"
                         v-model="dialog"
                         persistent
                      >
@@ -59,12 +59,46 @@
                                      v-model="form.titulo"
                                      label="Titulo de Investigación"
                                     ></v-text-field>
+                                    <v-row no-gutters>
+                                        <v-col cols="12" sm="4" class="pr-2">
+                                            <v-select
+                                            v-model="form.integrantes"
+                                            label="numero de integrantes"
+                                            :items="[1,2]"
+                                            ></v-select>
+                                        </v-col>
+                                        <v-col cols="12" sm="8"  >
+                                            <v-select
+                                            v-model="form.linea_inv"
+                                            label="linea de investigacion"
+                                            :items="lineas_inv"
+                                            item-text="inveNombre"
+                                            item-value="id"
+                                            return-object
+                                            ></v-select>
+                                        </v-col>
+                                    </v-row>
+
+                                    <v-row>
+                                        <v-col cols="12" sm="10">
+                                            <v-file-input
+                                                v-model="form.url"
+                                                placeholder="Pick an avatar"
+                                                prepend-icon="mdi-file"
+                                                label="Plan de tesis"
+                                            ></v-file-input>
+                                        </v-col>
+                                        <v-col cols="12" sm="2" class="text-center d-flex">
+                                                <v-icon
+                                                class="my-auto"
+                                                large
+                                                 @click="view_file()"
+                                                >mdi-eye</v-icon>
+                                        </v-col>
+                                    </v-row>                            
                                     
-                                    <v-select
-                                     v-model="form.integrantes"
-                                     label="numero de integrantes"
-                                     :items="[1,2]"
-                                    ></v-select>
+                              
+
                                     </div>                            
 
                                     <v-select 
@@ -140,6 +174,7 @@ export default {
             proceso:[],
             tramitesuser:[],
             grados:[],
+            lineas_inv:[],
             headers: [
             {
                 text: 'Tramite',
@@ -160,11 +195,14 @@ export default {
                 grado:'',
                 titulo:'',
                 integrantes:'',
+                linea_inv:'',
+                url:'',
             }),
         }
     },mounted(){
         this.fecthtramitesper();
         this.FetchGrados();
+        this.fetchlineas();
     },methods:{
         close(){
         this.dialog=false;
@@ -195,6 +233,14 @@ export default {
 
 
 
+      },
+      async fetchlineas(){
+          await axios.get('/api/lineas-inv').then(response=>{
+              console.log(response.data)
+               this.lineas_inv=response.data;               
+          });
+        
+        
       }
     }
 }

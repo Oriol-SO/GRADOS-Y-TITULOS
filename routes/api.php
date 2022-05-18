@@ -108,6 +108,9 @@ Route::get('alu_autorized/{fase}/{tramite}',[tramiteController::class,'alu_autor
 Route::get('alu-proceso/{id}',[tramiteController::class,'alu_procesos']);
 Route::get('alu-grados',[tramiteController::class,'alu_grados']);
 
+//lineas de investigacion
+Route::get('lineas-inv',[tramiteController::class,'lineas_inv']);
+
 
 //notificar cambios del tramite
 Route::get('notificarcambio-tramite/{fase}/{tramite}',[tramiteController::class,'notificarCambio']);

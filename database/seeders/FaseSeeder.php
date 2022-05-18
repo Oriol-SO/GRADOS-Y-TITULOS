@@ -375,7 +375,7 @@ class FaseSeeder extends Seeder
             'nombre' => 'solicitudes para inscripción de proyecto y designación de asesor',
             'numero' => '1',
             'fase_id' => '1301',
-            'encargado_revisar'=>'12',
+            'encargado_revisar'=>'5',
             'encargado_ejecutar'=>'10'//alumno
         ],
         [
@@ -384,7 +384,7 @@ class FaseSeeder extends Seeder
             'nombre' => 'Designación de asesor',//Resoluciones
             'numero' => '2',
             'fase_id' => '1302',
-            'encargado_revisar'=>'12',
+            'encargado_revisar'=>'5',
             'encargado_ejecutar'=>'5'//sec Fac
         ],
         [
@@ -393,7 +393,7 @@ class FaseSeeder extends Seeder
             'nombre' => 'Informe de originalidad',//Asesor//Resoluciones
             'numero' => '3',
             'fase_id' => '1303',
-            'encargado_revisar'=>'12',
+            'encargado_revisar'=>'5',
             'encargado_ejecutar'=>'9'//Asesor
         ],
         [
@@ -402,7 +402,7 @@ class FaseSeeder extends Seeder
             'nombre' => 'Resolución de inscripción de tesis',//secretaria de facultad//Resoluciones
             'numero' => '4',
             'fase_id' => '1304',
-            'encargado_revisar'=>'12',
+            'encargado_revisar'=>'5',
             'encargado_ejecutar'=>'5'//sec Fac
         ],
         [
@@ -411,7 +411,7 @@ class FaseSeeder extends Seeder
             'nombre' => 'Solicitud de aprobación de investigación',//Fut
             'numero' => '5',
             'fase_id' => '1305',
-            'encargado_revisar'=>'12',
+            'encargado_revisar'=>'5',
             'encargado_ejecutar'=>'10'//alumno
         ],
         [
@@ -420,7 +420,7 @@ class FaseSeeder extends Seeder
             'nombre' => 'Informe aprobatorio(Borrador de tesis)',
             'numero' => '6',
             'fase_id' => '1306',
-            'encargado_revisar'=>'12',
+            'encargado_revisar'=>'5',
             'encargado_ejecutar'=>'9'//Asesor
         ],
         [
@@ -429,7 +429,7 @@ class FaseSeeder extends Seeder
             'nombre' => 'Solicitud para nombramiento de jurados',
             'numero' => '7',
             'fase_id' => '1307',
-            'encargado_revisar'=>'12',
+            'encargado_revisar'=>'5',
             'encargado_ejecutar'=>'10'//alumno
         ],
         [
@@ -438,7 +438,7 @@ class FaseSeeder extends Seeder
             'nombre' => 'Nombramiento de jurados',//Resolución
             'numero' => '8',
             'fase_id' => '1308',
-            'encargado_revisar'=>'12',
+            'encargado_revisar'=>'5',
             'encargado_ejecutar'=>'5'//sec Fac
         ],
         [
@@ -447,16 +447,16 @@ class FaseSeeder extends Seeder
             'nombre' => 'Informe de jurados',//Informe
             'numero' => '9',
             'fase_id' => '1309',
-            'encargado_revisar'=>'12',
+            'encargado_revisar'=>'5',
             'encargado_ejecutar'=>'8'//jurados
         ],
         [
             'id' => '1310',
             'proceso_id' => '13',  
-            'nombre' => 'Cargando solicitud para aprobación de tesis',//número de resolución y fecha
+            'nombre' => 'Cargando solicitud para aprobación de tesis',
             'numero' => '10',
             'fase_id' => '1310',
-            'encargado_revisar'=>'12',
+            'encargado_revisar'=>'5',
             'encargado_ejecutar'=>'10'//alumno
         ],
         [
@@ -465,7 +465,7 @@ class FaseSeeder extends Seeder
             'nombre' => 'Revision de tesis Aprobación',//resolucion de aprobacion de tesis
             'numero' => '11',
             'fase_id' => '1311',
-            'encargado_revisar'=>'12',
+            'encargado_revisar'=>'5',
             'encargado_ejecutar'=>'5'//secretaria de facultad
         ],
         [
@@ -474,7 +474,7 @@ class FaseSeeder extends Seeder
             'nombre' => 'Solicitud para ser declarado expedito y completar requisitos',
             'numero' => '12',
             'fase_id' => '1312',
-            'encargado_revisar'=>'12',
+            'encargado_revisar'=>'5',
             'encargado_ejecutar'=>'10'//alumno
         ],
         [
@@ -483,7 +483,7 @@ class FaseSeeder extends Seeder
             'nombre' => 'Expediente para expedito',//Resolución de expedito si aprobado
             'numero' => '13',
             'fase_id' => '1313',
-            'encargado_revisar'=>'12',
+            'encargado_revisar'=>'5',
             'encargado_ejecutar'=>'5'//secretaria de facultad
         ],
         [
@@ -492,7 +492,7 @@ class FaseSeeder extends Seeder
             'nombre' => 'Solicitud de fecha y hora de sustentación',//fut
             'numero' => '14',
             'fase_id' => '1314',
-            'encargado_revisar'=>'12',
+            'encargado_revisar'=>'5',
             'encargado_ejecutar'=>'10'//alumno
         ],
         [
@@ -501,7 +501,7 @@ class FaseSeeder extends Seeder
             'nombre' => 'Programación de fecha y hora de sustentación',//Oficio
             'numero' => '15',
             'fase_id' => '1315',
-            'encargado_revisar'=>'12',
+            'encargado_revisar'=>'5',
             'encargado_ejecutar'=>'5'//secretaria de Facultad
         ],
         [
@@ -510,7 +510,7 @@ class FaseSeeder extends Seeder
             'nombre' => 'Solicitud para aprobación de título profesional por consejo de facultad',
             'numero' => '16',
             'fase_id' => '1316',
-            'encargado_revisar'=>'12',
+            'encargado_revisar'=>'5',
             'encargado_ejecutar'=>'10'//alumno
         ],
         [
@@ -519,8 +519,8 @@ class FaseSeeder extends Seeder
             'nombre' => 'Revisión en consejo de facultad',//Resolución
             'numero' => '17',
             'fase_id' => '1317',
-            'encargado_revisar'=>'12',
-            'encargado_ejecutar'=>'12'//secGen
+            'encargado_revisar'=>'5',
+            'encargado_ejecutar'=>'5'//secGen
         ],
         [
             'id' => '1318',
@@ -528,8 +528,8 @@ class FaseSeeder extends Seeder
             'nombre' => 'En vicerrectorado',//oficio
             'numero' => '18',
             'fase_id' => '1318',
-            'encargado_revisar'=>'12',
-            'encargado_ejecutar'=>'12'
+            'encargado_revisar'=>'3',
+            'encargado_ejecutar'=>'11'
         ],
         [
             'id' => '1319',
@@ -537,7 +537,7 @@ class FaseSeeder extends Seeder
             'nombre' => 'Para Agendar',
             'numero' => '19',
             'fase_id' => '1319',
-            'encargado_revisar'=>'12',
+            'encargado_revisar'=>'3',
             'encargado_ejecutar'=>'3'
         ],
         [
@@ -546,7 +546,7 @@ class FaseSeeder extends Seeder
             'nombre' => 'Agendados',//número de consejo universitario y fecha de consejo
             'numero' => '20',
             'fase_id' => '1320',
-            'encargado_revisar'=>'12',
+            'encargado_revisar'=>'3',
             'encargado_ejecutar'=>'3'
         ],
         [
@@ -564,7 +564,7 @@ class FaseSeeder extends Seeder
             'nombre' => 'En control interno',//numero de Resolucion
             'numero' => '22',
             'fase_id' => '1322',
-            'encargado_revisar'=>'12',
+            'encargado_revisar'=>'3',
             'encargado_ejecutar'=>'3'
         ],
         [
@@ -573,8 +573,8 @@ class FaseSeeder extends Seeder
             'nombre' => 'En impresión',//requiere 60 campos mas datos internos
             'numero' => '23',
             'fase_id' => '1323',
-            'encargado_revisar'=>'12',
-            'encargado_ejecutar'=>'12'
+            'encargado_revisar'=>'3',
+            'encargado_ejecutar'=>'3'
         ],
         [
             'id' => '1324',
@@ -582,7 +582,7 @@ class FaseSeeder extends Seeder
             'nombre' => 'En control de sticker',//requiere dar clik en diploma impreso 
             'numero' => '24',
             'fase_id' => '1324',
-            'encargado_revisar'=>'12',
+            'encargado_revisar'=>'3',
             'encargado_ejecutar'=>'3'
         ],
         [
@@ -591,8 +591,8 @@ class FaseSeeder extends Seeder
             'nombre' => 'Listo para programar entrega y madar a sunedu',//requiere numero de stiker
             'numero' => '25',
             'fase_id' => '1325',
-            'encargado_revisar'=>'12',
-            'encargado_ejecutar'=>'12'
+            'encargado_revisar'=>'3',
+            'encargado_ejecutar'=>'3'
         ],
         [
             'id' => '1326',
@@ -600,8 +600,8 @@ class FaseSeeder extends Seeder
             'nombre' => 'Programados',
             'numero' => '26',
             'fase_id' => '1326',
-            'encargado_revisar'=>'12',
-            'encargado_ejecutar'=>'12'
+            'encargado_revisar'=>'3',
+            'encargado_ejecutar'=>'3'
         ],
         [
             'id' => '1327',
@@ -609,7 +609,7 @@ class FaseSeeder extends Seeder
             'nombre' => 'Finalizados',
             'numero' => '27',
             'fase_id' => '1327',
-            'encargado_revisar'=>'12',
+            'encargado_revisar'=>'3',
             'encargado_ejecutar'=>'3'
         ],
     //13 fin Titulo presencial      
