@@ -247,8 +247,127 @@ class FaseSeeder extends Seeder
             ],
 
         //2 Fin Bachiller Semi Presencial Automatico 
-    
-        //INICIO TITULO
+
+
+
+
+
+
+
+        //4 Inicio BACHILLER PRESENCIAL TRABAJO UNDAC
+            [
+                'id' => '401',
+                'proceso_id' => '4',  
+                'nombre' => 'Cargando Requisitos Basicos',
+                'numero' => '1',
+                'fase_id'=>'401',
+                'encargado_revisar'=>'5',
+                'encargado_ejecutar'=>'10'
+            ],
+            [
+                'id' => '402',
+                'proceso_id' => '4',  
+                'nombre' => 'Expedito y aprobacion de Consejo de Facultad',//Resolucion de expedito, resolucion de consejo de facultad
+                'numero' => '2',
+                'fase_id'=>'402',
+                'encargado_revisar'=>'11',
+                'encargado_ejecutar'=>'5'
+            ],
+            [
+                'id' => '403',
+                'proceso_id' => '4',  
+                'nombre' => 'En vicerrectorado',//oficio
+                'numero' => '3',
+                'fase_id'=>'403',
+                'encargado_revisar'=>'3',
+                'encargado_ejecutar'=>'11'
+            ],
+            [
+                'id' => '404',
+                'proceso_id' => '4',  
+                'nombre' => 'Para Agendar',
+                'numero' => '4',
+                'fase_id'=>'404',
+                'encargado_revisar'=>'3',
+                'encargado_ejecutar'=>'3'
+            ],
+            [
+                'id' => '405',
+                'proceso_id' => '4',  
+                'nombre' => 'Agendados',//número de consejo universitario y fecha de consejo
+                'numero' => '5',
+                'fase_id'=>'405',
+                'encargado_revisar'=>'3',
+                'encargado_ejecutar'=>'3'
+            ],
+            [
+                'id' => '406',
+                'proceso_id' => '4',  
+                'nombre' => 'Aprobados',//número de Oficio y confirmar fecha y cu
+                'numero' => '6',
+                'fase_id'=>'406',
+                'encargado_revisar'=>'3',
+                'encargado_ejecutar'=>'3'
+            ],
+            [
+                'id' => '407',
+                'proceso_id' => '4',  
+                'nombre' => 'En control interno',//numero de Resolucion
+                'numero' => '7',
+                'fase_id'=>'407',
+                'encargado_revisar'=>'3',
+                'encargado_ejecutar'=>'3'
+            ],
+            [
+                'id' => '408',
+                'proceso_id' => '4',  
+                'nombre' => 'En impresión',//requiere 60 campos mas datos internos
+                'numero' => '8',
+                'fase_id'=>'408',
+                'encargado_revisar'=>'3',
+                'encargado_ejecutar'=>'12'
+            ],
+            [
+                'id' => '409',
+                'proceso_id' => '4',  
+                'nombre' => 'En control de sticker',//requiere dar clik en diploma impreso 
+                'numero' => '9',
+                'fase_id'=>'409',
+                'encargado_revisar'=>'3',
+                'encargado_ejecutar'=>'3'
+            ],
+            [
+                'id' => '410',
+                'proceso_id' => '4',  
+                'nombre' => 'Listo para programar entrega y madar a sunedu',//requiere numero de stiker
+                'numero' => '10',
+                'fase_id'=>'410',
+                'encargado_revisar'=>'3',
+                'encargado_ejecutar'=>'12'
+            ],
+            [
+                'id' => '411',
+                'proceso_id' => '4',  
+                'nombre' => 'Programados',
+                'numero' => '11',
+                'fase_id'=>'411',
+                'encargado_revisar'=>'3',
+                'encargado_ejecutar'=>'12'
+            ],
+            [
+                'id' => '412',
+                'proceso_id' => '4',  
+                'nombre' => 'Finalizados',
+                'numero' => '12',
+                'fase_id'=>'412',
+                'encargado_revisar'=>'3',
+                'encargado_ejecutar'=>'3'
+            ],
+
+        //4 fin BACHILLER PRESENCIAL TRABAJO UNDAC 
+
+    //FIN BACHILLER
+    //INICIO TITULO
         //13 inicio Titulo presencial
         [
             'id' => '1301',
@@ -436,7 +555,7 @@ class FaseSeeder extends Seeder
             'nombre' => 'Aprobados',//número de Oficio y confirmar fecha y cu
             'numero' => '21',
             'fase_id' => '1321',
-            'encargado_revisar'=>'3',
+            'encargado_revisar'=>'12',
             'encargado_ejecutar'=>'3'
         ],
         [

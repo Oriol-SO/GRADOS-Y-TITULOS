@@ -9,7 +9,11 @@ class Trabajo extends Model
 {
     use HasFactory;
     protected $fillable=[
-
+        'modo_sustentacion',
+        'url_repositorio',
+        'nombre',
+        'lineainv_id',
+        'fecha_sustentacion',
 
     ];
 

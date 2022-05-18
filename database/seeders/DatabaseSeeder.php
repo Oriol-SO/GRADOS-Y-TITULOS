@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
             BachillerIni::class,
             BachillerFinal::class,
             EstadoSeeder::class,
+            LineasInvestigacionSeede::class,
         ]);
     }
 }
