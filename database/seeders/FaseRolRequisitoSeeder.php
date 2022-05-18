@@ -602,6 +602,73 @@ class FaseRolRequisitoSeeder extends Seeder
         //fin titulo automatico
 
 
+    //Inicio Procesos Segundarios
+        //inicio constancia de Primera Matricula
+        [
+            'id'=>'93',
+            'rol_id'=>'10',
+            'fase_id' => '2001',
+            'requisito_id' => '5101',
+        ],
+        [
+            'id'=>'94',
+            'rol_id'=>'10',
+            'fase_id' => '2001',
+            'requisito_id' => '5102',
+        ],
+        [
+            'id'=>'95',
+            'rol_id'=>'14',
+            'fase_id' => '2002',
+            'requisito_id' => '5103',
+        ],
+        //Fin Constancia de Matricula
+        //Inicio Certificado de Estudios
+        [
+            'id'=>'96',
+            'rol_id'=>'10',
+            'fase_id' => '2101',
+            'requisito_id' => '5201',
+        ],
+        [
+            'id'=>'97',
+            'rol_id'=>'10',
+            'fase_id' => '2101',
+            'requisito_id' => '5202',
+        ],
+        [
+            'id'=>'98',
+            'rol_id'=>'10',
+            'fase_id' => '2101',
+            'requisito_id' => '5203',
+        ],
+        [
+            'id'=>'99',
+            'rol_id'=>'10',
+            'fase_id' => '2101',
+            'requisito_reqId' => '5204',
+        ],
+        [
+            'id'=>'100',
+            'rol_id'=>'10',
+            'fase_id' => '2101',
+            'requisito_id' => '5205',
+        ],
+        [
+            'id'=>'101',
+            'rol_id'=>'10',
+            'fase_id' => '2101',
+            'requisito_id' => '5206',
+        ],
+        [
+            'id'=>'102',
+            'rol_id'=>'14',
+            'fase_id' => '2102',
+            'requisito_id' => '5207',
+        ],
+        //Fin de Certificado de Estudios
+    //Fin Procesos Segundarios     
+
 
         
         ]);

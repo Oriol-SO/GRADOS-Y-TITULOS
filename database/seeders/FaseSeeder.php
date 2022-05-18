@@ -613,7 +613,51 @@ class FaseSeeder extends Seeder
             'encargado_ejecutar'=>'3'
         ],
     //13 fin Titulo presencial      
-                 
+
+    
+    //Inicio Procesos Segundarios
+        //20inicio Contancia de Primera Matricula
+        [
+            'id' => '2001',
+            'proceso_id' => '100',  
+            'nombre' => 'Cargando Requisitos Basicos',
+            'numero' => '1',
+            'fase_id' => '2001',
+            'encargado_revisar'=>'5',
+            'encargado_ejecutar'=>'10'//alumno
+        ],
+        [
+            'id' => '2002',
+            'proceso_id' => '100',  
+            'nombre' => 'Entrega de Constancia',
+            'numero' => '2',
+            'fase_id' => '2002',
+            'encargado_revisar'=>'14',
+            'encargado_ejecutar'=>'14'//jefe de registros academicos
+        ],
+        //20fin Constancia de Primera Matricula
+        //21inicio Certificado de Estudios
+        [
+            'id' => '2101',
+            'proceso_id' => '101',  
+            'nombre' => 'Cargando Requisitos Basicos',
+            'numero' => '1',
+            'fase_id' => '2101',
+            'encargado_revisar'=>'5',
+            'encargado_ejecutar'=>'10'//alumno
+        ],
+        [
+            'id' => '2102',
+            'proceso_id' => '101',  
+            'nombre' => 'Entrega de Certificado',
+            'numero' => '2',
+            'fase_id' => '2102',
+            'encargado_revisar'=>'14',
+            'encargado_ejecutar'=>'14'//jefe de registros academicos
+        ],
+        //21fin Certificado de Estudios
+
+    //Fin Procesos Segundarios
                   ]);
     }
 }
