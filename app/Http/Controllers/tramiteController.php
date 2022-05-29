@@ -19,6 +19,7 @@ use App\Models\Proceso;
 use App\Models\Revisione;
 use App\Models\Consejo;
 use App\Models\Grado;
+use App\Models\Involucrado;
 use App\Models\LineaDeInvestigacione;
 use App\Models\LineaInvestigacione;
 use App\Models\LineaInvestigacionEscuela;
@@ -102,12 +103,16 @@ class tramiteController extends Controller
      */
     public function store(Request $request)
     {
+       
         //$this->validar($request);
+        
 
         $request->validate([
             'grado'=>'required',
             'tipotramite'=>'required'
         ]);
+
+
         if ($request->grado['id']==2){
             $request->validate([
                 'grado'=>'required',
@@ -123,11 +128,20 @@ class tramiteController extends Controller
 
             $url_plan_tesis=Storage::url($request->file('url')->store('public/planTesis'));           
             //crear el trabajo
+            
            $trabajo= Trabajo::create([
                 'modo_sustentacion'=>'PRESENCIAL',
                 'url_repositorio'=>$url_plan_tesis,
                 'nombre'=>$request->titulo,
                 'lineainv_id'=>$request->linea_inv['id'],
+            ]);
+            $user=$request->user();
+            $persona=$user->persona;
+            Involucrado::create([
+                'trabajo_id'=>$trabajo->id,
+                'persrol_id'=>(PersonaRole::where('persona_id',$persona->id)->first())->id,
+                'rol_id'=>(PersonaRole::where('persona_id',$persona->id)->first())->rol_id,
+                'estado'=>1,
             ]);
             //creamos el tramite
             $this->add_tramite($request,$trabajo->id);
@@ -167,8 +181,20 @@ class tramiteController extends Controller
      */
     public function show($id)
     {  
-        $tramites = tramite::find($id);
-        return response()->json($tramites);
+        $tramites = tramite::where('id',$id)->get()->map(function($t){
+            return[
+                'id'=>$t->id,
+                'proceso_id'=>$t->proceso_id,
+                'tipo_tramite'=>$t->tipo_tramite,
+                'fase_actual'=>$t->fase_actual,
+                'receptor_rol_notify'=>$t->receptor_rol_notify,
+                'trabajo_plan_tesis_url'=>$t->trabajo->url_repositorio,
+                'titulo_proyecto'=>$t->trabajo->nombre,
+                'integrantes'=>1,
+                'linea_investigacion'=>$t->trabajo->LineaDeInvestigacione->inveNombre,
+            ];
+        });
+        return response()->json($tramites[0],200);
     }
 
     public function obtenerfases($codigo){
@@ -537,8 +563,6 @@ class tramiteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+    public function destroy($id){
     }
 }

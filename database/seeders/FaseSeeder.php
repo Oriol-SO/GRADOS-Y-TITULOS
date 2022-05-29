@@ -371,8 +371,8 @@ class FaseSeeder extends Seeder
         //13 inicio Titulo presencial
         [
             'id' => '1301',
-            'proceso_id' => '13',  
-            'nombre' => 'solicitudes para inscripción de proyecto y designación de asesor',
+            'proceso_id' => '13',  //
+            'nombre' => 'presentacion de requisitos y solicitud para inscripción de proyecto y designación de asesor',
             'numero' => '1',
             'fase_id' => '1301',
             'encargado_revisar'=>'5',

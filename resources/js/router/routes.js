@@ -103,6 +103,16 @@ export default [
       
     ]
   },
+  {
+    path: '/asesor',
+    component: page('asesor/index.vue'),
+    children: [
+      { path: '', redirect: { name: 'asesor.dashboard' } },
+      { path: 'dashboard', name: 'asesor.dashboard', component: page('asesor/dashboard.vue') },
+      
+      
+    ]
+  },
 
   { path: '/prueva', name: 'prueva', component: page('prueva.vue') },
 

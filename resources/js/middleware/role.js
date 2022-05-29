@@ -9,7 +9,7 @@ import store from '~/store'
 export default (to, from, next, roles) => {
   // Grab the user
   const user = store.getters['auth/user']
-
+ 
   // Split roles into an array
   roles = roles.split(',')
   console.log(user.role,roles)

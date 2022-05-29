@@ -20,6 +20,7 @@ use App\Http\Controllers\BachillerFinalController;
 use App\Http\Controllers\BachillerIniController;
 use App\Http\Controllers\FacultadEscuelaController;
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\AsesorController;
 use App\Http\Controllers\SecretariaController;
 use App\Http\Controllers\EditorController;
 use App\Http\Controllers\PdfController;
@@ -125,6 +126,9 @@ Route::get('sf-archivorequisito/{tramite}/{fasereq}',[SecretariaController::clas
 Route::post('sf-revisarrequisito',[SecretariaController::class,'sf_revisarrequisito']);
 Route::post('sf-subirfilerequisito',[SecretariaController::class,'sf_subirrequisito']);
 Route::get('sf-fasecheck/{tramite}/{fase}',[SecretariaController::class,'sf_fasecheck']);
+Route::get('sf-asesores',[SecretariaController::class,'lista_asesor']);
+Route::post('sf-asignar-asesor/{tramite}',[SecretariaController::class,'sf_asignar_asesor']);
+
 
 //rutas vicerrectorado
 
@@ -159,3 +163,8 @@ Route::get('sg2-get-programar/{id}',[SecretariaGeneral2Controller::class,'sg2_ge
 Route::post('imprimir',[SecretariaGeneral2Controller::class,'sg2_post_imprimir']);
 Route::post('sg2-add-fecha-entrega',[SecretariaGeneral2Controller::class,'sg2_add_fecha_entrega']);
 Route::get('sg2-get-programados/{id}',[SecretariaGeneral2Controller::class,'sg2_get_programados']);
+
+
+//asesor
+
+Route::get('asesor-expediente',[AsesorController::class,'asesor_expedientes']);

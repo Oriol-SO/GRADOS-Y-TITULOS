@@ -17,7 +17,7 @@ class PersonaSeeder extends Seeder
         DB::table('personas')->insert([
             [
                 'id' => '1',
-                'nom' => 'nombre rector undac',
+                'nom' => 'administrador general',
                 'apePat' => 'apellido1',
                 'apeMat' => 'apellido2',
                 'gen' => '1',
@@ -125,7 +125,7 @@ class PersonaSeeder extends Seeder
             
             [
                 'id' => '105',
-                'nom' => 'administrador1',
+                'nom' => 'asesor1',
                 'apePat' => 'apellido1',
                 'apeMat' => 'apellido2',
                 'gen' => '1',
