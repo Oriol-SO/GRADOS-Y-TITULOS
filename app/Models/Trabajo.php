@@ -9,7 +9,11 @@ class Trabajo extends Model
 {
     use HasFactory;
     protected $fillable=[
-
+        'modo_sustentacion',
+        'url_repositorio',
+        'nombre',
+        'lineainv_id',
+        'fecha_sustentacion',
 
     ];
 
@@ -18,9 +22,9 @@ class Trabajo extends Model
         return $this->hasMany(Involucrado::class,'trabajo_id','id');
     }
 
-    public function LineaInvestigacion()
+    public function LineaDeInvestigacione()
     {
-        return $this->belongsTo(LineaInvestigacion::class,'lineainv_id','id');
+        return $this->belongsTo(LineaDeInvestigacione::class,'lineainv_id','id');
     }
 
     public function Tramite()

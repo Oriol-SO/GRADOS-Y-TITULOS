@@ -8,8 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Involucrado extends Model
 {
     use HasFactory;
-    protected $fillables=[
-
+    protected $fillable=[
+        'trabajo_id',
+        'persrol_id',
+        'rol_id',
+        'estado'
 
     ];
     
@@ -18,8 +21,8 @@ class Involucrado extends Model
         return $this->belongsTo(Trabajo::class,'trabajo_id','id');
     }
 
-    public function PersonaRol()
+    public function PersonaRole()
     {
-        return $this->belongsTo(PersonaRol::class,'persrol_id','id');
+        return $this->belongsTo(PersonaRole::class,'persrol_id','id');
     }
 }

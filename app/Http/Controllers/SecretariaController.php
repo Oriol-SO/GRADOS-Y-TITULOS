@@ -8,8 +8,11 @@ use App\Models\Estado;
 use App\Models\FaseRolRequisito;
 use App\Models\Fase;
 use App\Models\File;
+use App\Models\Involucrado;
 use App\Models\Observacione;
 use App\Models\Revisione;
+use App\Models\PersonaRole;
+use App\Models\Trabajo;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -25,7 +28,48 @@ class SecretariaController extends Controller
     {
         //
     }
+    protected function lista_asesor(){
+        $facu=1;
+        
+        $asesores=PersonaRole::where('rol_id',9)->get()->map(function($p){
+            return[
+                'nombre'=>$p->persona->nom.' '.$p->persona->apePat.''.$p->persona->apeMat,
+                'id'=>$p->id,
+                'persrol_id'=>(PersonaRole::where('persona_id',$p->id)->first())->id,
+                'rol_id'=>(PersonaRole::where('persona_id',$p->id)->first())->rol_id,
+            ];
+        });
+        return $asesores;
+    }
 
+    protected function sf_asignar_asesor($tramite, Request $request){
+        $request->validate([
+            'asesor'=>'required',
+            'tramite'=>'required',
+        ]);
+
+        if($tramite==$request->tramite){
+            $asesor=$request->asesor;
+            
+            $tram=(Tramite::where('id',$request->tramite)->first());
+            
+            $asesor_tram=Involucrado::where('trabajo_id',$tram->trabajo_id)->where('rol_id',9)->count();
+
+             if($asesor_tram>0){
+                return false;
+             } else{
+                Involucrado::create([
+                    'trabajo_id'=>$tram->trabajo_id,
+                    'persrol_id'=>$asesor['persrol_id'],
+                    'rol_id'=>$asesor['rol_id'],
+                    'estado'=>1,   
+                ]); 
+                return true;  
+
+             }
+        
+        }
+    }
     //secretaria general tramites 
     public function sf_expedientes(){
         $rol=5;
@@ -56,8 +100,22 @@ class SecretariaController extends Controller
 
     }
     public function sf_obtenertramite($id){
-        $tramites = tramite::find($id);
-        return response()->json($tramites);
+
+        $tramites = tramite::where('id',$id)->get()->map(function($t){
+            return[
+                'id'=>$t->id,
+                'proceso_id'=>$t->proceso_id,
+                'tipo_tramite'=>$t->tipo_tramite,
+                'fase_actual'=>$t->fase_actual,
+                'receptor_rol_notify'=>$t->receptor_rol_notify,
+                'trabajo_plan_tesis_url'=>$t->trabajo->url_repositorio,
+                'titulo_proyecto'=>$t->trabajo->nombre,
+                'integrantes'=>1,
+                'grado'=>$t->proceso->grado_id,
+                'linea_investigacion'=>$t->trabajo->LineaDeInvestigacione->inveNombre,
+            ];
+        });
+        return response()->json($tramites[0],200);
     }
     public function sf_obtenerfasestramite($id){
         
@@ -314,6 +372,8 @@ class SecretariaController extends Controller
             return $e;
         }
     }
+
+
     /**
      * Show the form for creating a new resource.
      *

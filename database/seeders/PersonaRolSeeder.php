@@ -64,7 +64,7 @@ class PersonaRolSeeder extends Seeder
                 'estado' => '1',
             ], [ //Secretaria vicerrector de undac
                 'id' => '13',
-                'rol_Id' => '11',
+                'rol_Id' => '9',
                 'persona_id' => '105',
                 'facId' => null,
                 'escId' => null,

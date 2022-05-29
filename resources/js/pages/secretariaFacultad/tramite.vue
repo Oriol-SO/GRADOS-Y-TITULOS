@@ -65,6 +65,9 @@
                                     Aprovar Fase
                                 </v-btn>
                                 </v-row>
+                                <v-card v-if="tipo_tramite==2 && fase.numero==2" elevation="0">
+                                    <designarAsesor :tramite="nomtramite.id"/>
+                                </v-card>
                                 <v-divider></v-divider>
                                 <v-list>
                                     <v-subheader class="font-weight-medium text-md-body-1 d-flex" style=" height: auto;"  v-if="requisitos.length" >
@@ -289,6 +292,7 @@
                                         >notificar Cambios
                                         <v-icon right>mdi-bell</v-icon>
                                     </v-btn>
+
                                     <small v-if="requisitosPropios.length>0">*Es importante que notifiques los cambios para que tus documentos sean revisados lo mas antes posible</small>
                                     
 
@@ -328,6 +332,7 @@
         </v-col>
     </v-row>
     </div>
+
     <template>
           <v-row justify="center">
             <v-dialog
@@ -658,7 +663,7 @@
             </template>
             </v-snackbar>
         </div>
-      </template>
+    </template>
     
   </div>    
 </template>
@@ -667,8 +672,11 @@
 <script>
 import axios from 'axios';
 import Form from "vform";
+import designarAsesor from '../../components/designacion_asesor.vue';
 export default {
-
+  components:{
+    designarAsesor,    
+  },
     data(){
         return{
           alert_fase_notify:false,
@@ -736,6 +744,7 @@ export default {
           requisitos_observadosPropios:'',
           requisitos_subidosPropios:'',
           id_fasereq:'',
+          tipo_tramite:'',
         }
     },mounted(){
         this.fetchtramite();
@@ -779,8 +788,9 @@ export default {
          const { data } = await axios.get(`/api/sf-tramite/${this.$route.params.id}`);   
          this.nomtramite = data;
          this.fase_actualy=data.fase_actual;
+         this.tipo_tramite=data.grado;
         // this.codigoproc=this.nomtramite.proceso_id;
-         //console.log(this.codigoproc)
+          console.log(data)
           this.fetchfase(this.nomtramite.proceso_id)
       },async fetchfase($id){
          const { data } =await axios.get(`/api/sf-fasestramite/${$id}`);   

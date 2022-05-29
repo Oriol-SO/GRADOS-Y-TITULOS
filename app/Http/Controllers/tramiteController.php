@@ -19,6 +19,11 @@ use App\Models\Proceso;
 use App\Models\Revisione;
 use App\Models\Consejo;
 use App\Models\Grado;
+use App\Models\Involucrado;
+use App\Models\LineaDeInvestigacione;
+use App\Models\LineaInvestigacione;
+use App\Models\LineaInvestigacionEscuela;
+use App\Models\Trabajo;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Contracts\Service\Attribute\Required;
 
@@ -61,6 +66,11 @@ class tramiteController extends Controller
         });
         return $grados;
     }
+
+    protected function lineas_inv(){
+            return response()->json(LineaDeInvestigacione::all(),200);
+    }
+
    protected function alu_procesos($grado){
 
     $tramites['tramites'] = Proceso::where('grado_id',$grado)->where('estado',1)->get()->map(function($t){
@@ -93,22 +103,48 @@ class tramiteController extends Controller
      */
     public function store(Request $request)
     {
+       
         //$this->validar($request);
+        
 
         $request->validate([
             'grado'=>'required',
             'tipotramite'=>'required'
         ]);
+
+
         if ($request->grado['id']==2){
             $request->validate([
                 'grado'=>'required',
                 'tipotramite'=>'required',
                 'titulo'=>'required',
                 'integrantes'=>'required',
+                'linea_inv'=>'required',
+                'url'=>'required',
             ]);
-            
-            return 'proximamente';
 
+             
+            //guardar el plan
+
+            $url_plan_tesis=Storage::url($request->file('url')->store('public/planTesis'));           
+            //crear el trabajo
+            
+           $trabajo= Trabajo::create([
+                'modo_sustentacion'=>'PRESENCIAL',
+                'url_repositorio'=>$url_plan_tesis,
+                'nombre'=>$request->titulo,
+                'lineainv_id'=>$request->linea_inv['id'],
+            ]);
+            $user=$request->user();
+            $persona=$user->persona;
+            Involucrado::create([
+                'trabajo_id'=>$trabajo->id,
+                'persrol_id'=>(PersonaRole::where('persona_id',$persona->id)->first())->id,
+                'rol_id'=>(PersonaRole::where('persona_id',$persona->id)->first())->rol_id,
+                'estado'=>1,
+            ]);
+            //creamos el tramite
+            $this->add_tramite($request,$trabajo->id);
 
         }else if($request->grado['id']==1){                      
             $this->add_tramite($request,null);
@@ -145,8 +181,20 @@ class tramiteController extends Controller
      */
     public function show($id)
     {  
-        $tramites = tramite::find($id);
-        return response()->json($tramites);
+        $tramites = tramite::where('id',$id)->get()->map(function($t){
+            return[
+                'id'=>$t->id,
+                'proceso_id'=>$t->proceso_id,
+                'tipo_tramite'=>$t->tipo_tramite,
+                'fase_actual'=>$t->fase_actual,
+                'receptor_rol_notify'=>$t->receptor_rol_notify,
+                'trabajo_plan_tesis_url'=>$t->trabajo->url_repositorio,
+                'titulo_proyecto'=>$t->trabajo->nombre,
+                'integrantes'=>1,
+                'linea_investigacion'=>$t->trabajo->LineaDeInvestigacione->inveNombre,
+            ];
+        });
+        return response()->json($tramites[0],200);
     }
 
     public function obtenerfases($codigo){
@@ -308,7 +356,9 @@ class tramiteController extends Controller
            }else if($numeroFase==10){
             if($numeroFase<$fase_actual){
                 //consejo
+                //fecha de entrega para el dia tal
                 return 'tu tramite ya tiene una fecha para ser entregado';
+                
                 /*
                 return $consejo=Tramite::where('id',$tramite)->get()->map(function($t){
                     return[
@@ -513,8 +563,6 @@ class tramiteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+    public function destroy($id){
     }
 }

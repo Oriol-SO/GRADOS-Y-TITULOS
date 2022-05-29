@@ -1,7 +1,8 @@
 <template>
     <div class="mt-5">
         <v-card elevation="0" >
-        <v-card-text class="py-2 text-h5" elevation="0">{{procesos.nombre}}</v-card-text>
+       
+         <v-card-text class="py-2 text-h5" elevation="0">{{procesos.nombre}}</v-card-text>
         </v-card>     
         <template>
             <v-card class="mt-1" elevation="0">
@@ -177,7 +178,7 @@
             </v-card>
         </template>
             
-            <template >
+        <template >
                 <v-row flex   >
                     <v-col  cols="12" xl="8" lg="8" sm="12" xs="12">
               

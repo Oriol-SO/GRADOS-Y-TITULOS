@@ -162,26 +162,4 @@ class FaseController extends Controller
             'rol_revisar'=>'required',
         ]);
     }
-    protected function roles($fase){
-        //$fase=id de la fase
-        $Fase= Fase::where('proceso_id',$fase)->get()->map(function($f){
-            return[
-                'encargado_ejecutar'=>$f->encargado_ejecutar,
-                'encargado_revisar'=>$f->encargado_revisar,
-            ];
-        });
-
-        $Rol_eje=Role::where('rol_id',$Fase[0]['encargado_ejecutar'])->get()->map(function($r){
-            return[
-                'encargado_ejecutar'=>$r->rolNombre,
-            ];
-        });
-        $Rol_revi=Role::where('rol_id',$Fase[0]['encargado_revisar'])->get()->map(function($r){
-            return[
-                'encargado_revisar'=>$r->rolNombre,
-            ];
-        });
-        return ['encargado_ejecutar'=>$Rol_eje[0]['encargado_ejecutar'],'encargado_revisar'=>$Rol_revi[0]['encargado_revisar']];
-    
-    }
 }

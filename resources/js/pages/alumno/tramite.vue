@@ -1,6 +1,7 @@
 <template>
   <div class="mx-4 mt-5">
     <v-card elevation="0" flat class="mb-2 d-flex" >
+      <v-btn color="primary" class="text-capitalize" small @click="open_details()">Detalles</v-btn>
       <v-card-text class="px-0 py-1 ml-3 text-h6">{{nomtramite.tipo_tramite}}</v-card-text>
     </v-card>
     <v-stepper v-model="e1" >
@@ -83,87 +84,87 @@
                         </v-chip>                   
                     </div>
                 </v-subheader>
-                
-                <v-list-item
-                  v-for="(requisito, i) in requisitos"
-                  :key="i"
-                  class="mb-1"
-                  color="black"
-                  v-bind:style="requisito.archivo_subido.length>0?'background:#82b1ff;;':'' "
-                 >
-                  <v-list-item-icon>
-                      <v-icon >mdi-check-outline</v-icon>
-                  </v-list-item-icon>
-                  <v-list-item-content>
-                      <v-list-item 
-                      class="d-flex" >
-                      <v-row>
-                      {{requisito.nombre}}  
-                            <div class="ml-auto my-2" >
-                                <v-chip
-                                  v-if="requisito.revisado_aprovado.length>0"
-                                  color="#0ce559"
-                                  text-color="#fff"
-                                  >                       
-                                      Aprovado
-                                      <v-avatar
-                                          rigth
-                                          class="green accent-3 ml-1"
-                                          text-color="#fff"
-                                      >
-                                    <v-icon>mdi-checkbox-marked-circle</v-icon>
-                                      </v-avatar>
-                                  </v-chip>
+                <div style="max-height:400px; overflow:auto;">
+                  <v-list-item
+                    v-for="(requisito, i) in requisitos"
+                    :key="i"
+                    class="mb-1"
+                    color="black"
+                    v-bind:style="requisito.archivo_subido.length>0?'background:#82b1ff;;':'' "
+                  >
+                    <v-list-item-icon>
+                        <v-icon >mdi-check-outline</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item 
+                        class="d-flex" >
+                        <v-row>
+                        {{requisito.nombre}}  
+                              <div class="ml-auto my-2" >
                                   <v-chip
-                                  v-if="requisito.revisado_observado.length>0 && requisito.modificado[0]==0 "
-                                  color="#ff9400"
-                                  text-color="#fff"
-                                  >                       
-                                      observado
-                                      <v-avatar
-                                          rigth
-                                          class="amber accent-3 ml-1"
-                                          text-color="#fff"
-                                      >
-                                    <v-icon>mdi-eye-circle</v-icon>
-                                      </v-avatar>
-                                  </v-chip>
-                                  <v-chip
-                                    v-if="requisito.modificado[0]==1"
+                                    v-if="requisito.revisado_aprovado.length>0"
+                                    color="#0ce559"
+                                    text-color="#fff"
+                                    >                       
+                                        Aprovado
+                                        <v-avatar
+                                            rigth
+                                            class="green accent-3 ml-1"
+                                            text-color="#fff"
+                                        >
+                                      <v-icon>mdi-checkbox-marked-circle</v-icon>
+                                        </v-avatar>
+                                    </v-chip>
+                                    <v-chip
+                                    v-if="requisito.revisado_observado.length>0 && requisito.modificado[0]==0 "
                                     color="#ff9400"
                                     text-color="#fff"
                                     >                       
-                                      levantado
-                                      <v-avatar
-                                          rigth
-                                          class="amber accent-3 ml-1"
-                                          text-color="#fff"
-                                      >
-                                        <v-icon>mdi-cog-clockwise</v-icon>
-                                      </v-avatar>
-                                  </v-chip>    
-                                <v-btn 
-                                  class=" text-capitalize" 
-                                  color="indigo" 
-                                  dark 
-                                  small
-                                  @click="openmodal(requisito)">
-                                    <v-icon dark v-if="requisito.archivo_subido.length>0">
-                                    mdi-eye
-                                    </v-icon>
-                                    <v-icon v-else-if="requisito.revisado_observado.length>0 && requisito.modificado[0]==0" dark> mdi-file-edit</v-icon>
-                                    <!--v-icon v-else-if="requisito.revisado_observado.length>0 && requisito.modificado[0]==1" dark> mdi-eye</v-icon-->
+                                        observado
+                                        <v-avatar
+                                            rigth
+                                            class="amber accent-3 ml-1"
+                                            text-color="#fff"
+                                        >
+                                      <v-icon>mdi-eye-circle</v-icon>
+                                        </v-avatar>
+                                    </v-chip>
+                                    <v-chip
+                                      v-if="requisito.modificado[0]==1"
+                                      color="#ff9400"
+                                      text-color="#fff"
+                                      >                       
+                                        levantado
+                                        <v-avatar
+                                            rigth
+                                            class="amber accent-3 ml-1"
+                                            text-color="#fff"
+                                        >
+                                          <v-icon>mdi-cog-clockwise</v-icon>
+                                        </v-avatar>
+                                    </v-chip>    
+                                  <v-btn 
+                                    class=" text-capitalize" 
+                                    color="indigo" 
+                                    dark 
+                                    small
+                                    @click="openmodal(requisito)">
+                                      <v-icon dark v-if="requisito.archivo_subido.length>0">
+                                      mdi-eye
+                                      </v-icon>
+                                      <v-icon v-else-if="requisito.revisado_observado.length>0 && requisito.modificado[0]==0" dark> mdi-file-edit</v-icon>
+                                      <!--v-icon v-else-if="requisito.revisado_observado.length>0 && requisito.modificado[0]==1" dark> mdi-eye</v-icon-->
 
-                                    <v-icon v-else dark> mdi-cloud-upload</v-icon>
+                                      <v-icon v-else dark> mdi-cloud-upload</v-icon>
 
-                                </v-btn>
-                            </div> 
-                            </v-row> 
-                      </v-list-item> 
+                                  </v-btn>
+                              </div> 
+                              </v-row> 
+                        </v-list-item> 
 
-                  </v-list-item-content>
-                </v-list-item>
-
+                    </v-list-item-content>
+                  </v-list-item>
+                </div>
                 <v-btn v-if="requisitos.length" 
                 @click="notificarCambios(fase.id)" 
                 color="primary" 
@@ -236,129 +237,129 @@
       </v-stepper-items>
     </v-stepper>
     
-        <template>
-          <v-row justify="center">
-              <v-dialog
-              v-model="dialog"
-              fullscreen
-              transition="dialog-bottom-transition"
-              >
+      <template>
+        <v-row justify="center">
+            <v-dialog
+            v-model="dialog"
+            fullscreen
+            transition="dialog-bottom-transition"
+            >
+              <v-card elevation="0">
+                <v-card-title class="text-h6 d-flex" style="background:#2cdd9b; color:#fff;">
+                  {{msg_file}}
+                  <v-btn
+                  class="ml-auto"
+                    color="error"     
+                    rounded 
+                    @click="cerrar_modal()"
+                  >
+                    Cerrar
+                    <v-icon dark >mdi-close</v-icon>
+                  </v-btn>
+                </v-card-title>
                 <v-card elevation="0">
-                  <v-card-title class="text-h6 d-flex" style="background:#2cdd9b; color:#fff;">
-                    {{msg_file}}
-                    <v-btn
-                    class="ml-auto"
-                      color="error"     
-                      rounded 
-                      @click="cerrar_modal()"
-                    >
-                      Cerrar
-                      <v-icon dark >mdi-close</v-icon>
-                    </v-btn>
-                  </v-card-title>
-                  <v-card elevation="0">
-                    <v-row no-gutters>
-                      <v-col cols="12" md="4">
-                        <v-card-text>
-                          <strong>Requisito: </strong>{{nom_requisito }} <br/>
-                          <strong>Documento: </strong>{{documento }} <br/>
-                          <strong>Tipo de archivo: </strong>{{extension}}
-                          <v-file-input
-                              v-if="subir==true"
-                              v-model="daterequisito.archivo"
-                              label="selecciona un archivo"                           
-                              prepend-icon="mdi-file"
-                              class="mt-2 mr-2"
-                              @change="vistaprevia"
-                            ></v-file-input>
-                        </v-card-text>
-                        <v-card-actions>
-                          <v-spacer></v-spacer>
-                          <v-btn
+                  <v-row no-gutters>
+                    <v-col cols="12" md="4">
+                      <v-card-text>
+                        <strong>Requisito: </strong>{{nom_requisito }} <br/>
+                        <strong>Documento: </strong>{{documento }} <br/>
+                        <strong>Tipo de archivo: </strong>{{extension}}
+                        <v-file-input
                             v-if="subir==true"
-                            color="#2cdd9b"      
-                            rounded 
-                            chip     
-                            v-bind:disabled="subir==false?true:false"
-                            style="color:#fff;"
-                            @click="guardar()"
+                            v-model="daterequisito.archivo"
+                            label="selecciona un archivo"                           
+                            prepend-icon="mdi-file"
+                            class="mt-2 mr-2"
+                            @change="vistaprevia"
+                          ></v-file-input>
+                      </v-card-text>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                          v-if="subir==true"
+                          color="#2cdd9b"      
+                          rounded 
+                          chip     
+                          v-bind:disabled="subir==false?true:false"
+                          style="color:#fff;"
+                          @click="guardar()"
+                        >
+                          <v-icon dark left>mdi-upload</v-icon>
+                          {{nom_btn}}
+                        </v-btn>
+                          <v-btn 
+                          class="text-capitalize" 
+                          color="#FFD93D"  
+                          style="color:#fff;"                           
+                          rounded
+                          @click="verformato(requisito)"
                           >
-                            <v-icon dark left>mdi-upload</v-icon>
-                            {{nom_btn}}
-                          </v-btn>
-                           <v-btn 
-                            class="text-capitalize" 
-                            color="#FFD93D"  
-                            style="color:#fff;"                           
-                            rounded
-                            @click="verformato(requisito)"
-                           >
-                              <v-icon dark>
-                                 mdi-eye
-                              </v-icon>
-                              ver formato
-                          </v-btn>
+                            <v-icon dark>
+                                mdi-eye
+                            </v-icon>
+                            ver formato
+                        </v-btn>
 
-                        </v-card-actions>
-                          <div v-if="observacion">
-                             <v-subheader class="font-weight-medium text-md-body-1 d-flex">{{nom_obser}}:</v-subheader>
-                              <v-alert 
-                                border="left"
-                                colored-border
-                                type="warning"
-                                elevation="2"
-                                class="mx-2"
-                              >
-                              {{observacion}}
-                            </v-alert>                                                        
-                          </div>
-                      </v-col>
-                      <v-col cols="12"  md="8" style="height:100ch;" >   
-                        <v-card height="95%" width="95%" class="my-2 mx-2 d-flex" >
+                      </v-card-actions>
+                        <div v-if="observacion">
+                            <v-subheader class="font-weight-medium text-md-body-1 d-flex">{{nom_obser}}:</v-subheader>
+                            <v-alert 
+                              border="left"
+                              colored-border
+                              type="warning"
+                              elevation="2"
+                              class="mx-2"
+                            >
+                            {{observacion}}
+                          </v-alert>                                                        
+                        </div>
+                    </v-col>
+                    <v-col cols="12"  md="8" style="height:100ch;" >   
+                      <v-card height="95%" width="95%" class="my-2 mx-2 d-flex" >
+                      
+                      <embed v-if="url_document_titulo" :src="url_document_titulo" type="application/pdf" width="100%" height="100%"/> 
+                        <v-card v-else class="d-flex mx-auto my-auto"  width="300px" height="150px"  elevation="0"
+                          style=" justify-content:center; align-items: center; text-align: center;">
+                          <div >
+                            <v-icon color="#2cdd9b" class="text-h1">mdi-eye</v-icon>
+                            <v-card-title>Vista previa</v-card-title>
+                          </div>                          
+                        </v-card>
                         
-                        <embed v-if="daterequisito.archivo" :src="url_document" type="application/pdf" width="100%" height="100%"/> 
-                          <v-card v-else class="d-flex mx-auto my-auto"  width="300px" height="150px"  elevation="0"
-                           style=" justify-content:center; align-items: center; text-align: center;">
-                            <div >
-                              <v-icon color="#2cdd9b" class="text-h1">mdi-eye</v-icon>
-                              <v-card-title>Vista previa</v-card-title>
-                            </div>                          
-                          </v-card>
-                         
-                        </v-card>                 
-                                          
-                      </v-col>
-                    </v-row>                                    
-                  </v-card>
+                      </v-card>                 
+                                        
+                    </v-col>
+                  </v-row>                                    
                 </v-card>
-              </v-dialog>
-                <template>
-                  <div class="text-center ma-2">
+              </v-card>
+            </v-dialog>
+              <template>
+                <div class="text-center ma-2">
 
-                      <v-snackbar
-                          v-model="boxerror"
-                          tile
-                          color="red accent-2"
-                          top
-                      >
-                      {{ subir_file_error }}
+                    <v-snackbar
+                        v-model="boxerror"
+                        tile
+                        color="red accent-2"
+                        top
+                    >
+                    {{ subir_file_error }}
 
-                      <template v-slot:action="{ attrs }">
-                          <v-btn
-                          color="white"
-                          text
-                          v-bind="attrs"
-                          @click="boxerror = false"
-                          >
-                          Close
-                          </v-btn>
-                      </template>
-                      </v-snackbar>
-                  </div>
-                </template>
-          </v-row>
+                    <template v-slot:action="{ attrs }">
+                        <v-btn
+                        color="white"
+                        text
+                        v-bind="attrs"
+                        @click="boxerror = false"
+                        >
+                        Close
+                        </v-btn>
+                    </template>
+                    </v-snackbar>
+                </div>
+              </template>
+        </v-row>
 
-        </template>
+      </template>
 
       <template>
         <div class="text-center">
@@ -454,6 +455,109 @@
             </v-snackbar>
         </div>
       </template>
+
+      <template>
+          <v-row justify="center">
+            <v-dialog
+              v-model="dialog_details"
+              persistent
+              max-width="600px"
+            >
+              <v-card>
+                <v-card-title>
+                  <span class="text-h5">Detalles de tu tramite</span>
+                </v-card-title>
+                <v-card-text>
+                  <v-container>
+                    <v-row>
+                      <v-col
+                        cols="12"
+                      >
+                        <v-card elevation="0">
+                            <p><strong>Titulo de proyecto:</strong> {{titulo_proyecto}}</p>
+                            <p><strong>Linea de investigación:</strong> {{linea_investigacion}}</p>
+                            <p><strong>Integrantes:</strong> {{integrantes}}</p>
+
+                            
+                            <v-row>
+                              <v-file-input
+                              truncate-length="50"
+                              label="Actualiza tu plan"
+                            ></v-file-input>
+                            <v-btn small color="warning" class="text-capitalize" @click="modal_documents_titulo()">Ver plan<v-icon right>mdi-eye</v-icon></v-btn>
+                            </v-row>
+                            
+                        </v-card>
+
+                      </v-col>
+                              
+                     
+                    </v-row>
+                  </v-container>
+                  <small>*Toda la información es importante</small>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn
+                    color="blue darken-1"
+                    text
+                    @click="dialog_details = false"
+                  >
+                    Close
+                  </v-btn>
+                  <v-btn
+                    color="blue darken-1"
+                    text
+                    @click="dialog_details = false"
+                  >
+                    Save
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </v-row>
+      </template>
+
+      <template>
+        <v-row justify="center">
+          <v-dialog
+            v-model="dialog_view_doc"
+            width="650px"
+            height="800px"
+          >
+            <v-card>
+              <v-card-title>
+                <span class="text-h6">{{nom_document}}</span>
+              </v-card-title>
+             
+                  <v-card  width="95%" class="my-2 mx-2 d-flex" >
+                  
+                  <embed v-if="url_document_titulo" :src="url_document_titulo" type="application/pdf" width="100%" height="100%"/> 
+                    <v-card v-else class="d-flex mx-auto my-auto"  width="300px" height="150px"  elevation="0"
+                      style=" justify-content:center; align-items: center; text-align: center;">
+                      <div >
+                        <v-icon color="#2cdd9b" class="text-h1">mdi-eye</v-icon>
+                        <v-card-title>No hay documento</v-card-title>
+                      </div>                          
+                    </v-card>
+                    
+                  </v-card> 
+            
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="green darken-1"
+                  text
+                  @click="dialog_view_doc = false"
+                >
+                  Cerrar
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-row>
+      </template>
+
   </div>    
 </template>
 
@@ -462,12 +566,14 @@
 
 import axios from 'axios';
 import Form from "vform";
+
 //
 export default {
 
 
     data(){
         return{
+          dialog_details:false,
           alert_notify:false,
           msg_notify:'',
           color_notify:'',
@@ -512,6 +618,15 @@ export default {
           //p sf
           boxerror2:false,
           msg_autorized:'',
+
+          //
+
+          titulo_proyecto:'',
+          integrantes:'',
+          linea_investigacion:'',
+          nom_document:'Plan de tesis',
+          url_document_titulo:'',
+          dialog_view_doc:false,
         }
     },mounted(){
         this.fetchtramite();
@@ -550,13 +665,19 @@ export default {
               this.otros_detalles='';
         }
       },
+
       async fetchtramite(){
-         const { data } = await axios.get(`/api/tramite/${this.$route.params.id}`);   
-         this.nomtramite = data;
-         this.e1=data.fase_actual;
-        // this.codigoproc=this.nomtramite.proceso_id;
-         //console.log(this.codigoproc)
-          this.fetchfase(this.nomtramite.proceso_id)
+        await axios.get(`/api/tramite/${this.$route.params.id}`).then(response=>{
+            this.nomtramite = response.data;
+            this.e1=response.data.fase_actual;
+            this.titulo_proyecto=response.data.titulo_proyecto;
+            this.integrantes=response.data.integrantes;
+            this.linea_investigacion=response.data.linea_investigacion;
+            this.url_document_titulo=response.data.trabajo_plan_tesis_url;
+            console.log(response.data)
+            this.fetchfase(this.nomtramite.proceso_id)
+        });   
+
       },async fetchfase($id){
          const { data } =await axios.get(`/api/fasestramite/${$id}`);   
          this.fases = data.fases;
@@ -664,6 +785,12 @@ export default {
   
           })
       },
+      open_details(){
+        this.dialog_details=true;
+      },
+      modal_documents_titulo(){
+        this.dialog_view_doc=true;
+      }
     }
 }
 
