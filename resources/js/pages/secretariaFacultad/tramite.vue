@@ -212,7 +212,7 @@
                                         color="black"
                                         v-bind:style="requisitoP.archivo_subido.length>0?'background:#82b1ff;':'' "
 
-                                    >
+                                    > 
                                         <v-list-item-icon>
                                             <v-icon >mdi-check-outline</v-icon>
                                         </v-list-item-icon>
@@ -281,6 +281,16 @@
 
                                         </v-list-item-content>
                                     </v-list-item>
+                                     <v-btn v-if="requisitosPropios.length>0" 
+                                        @click="notificarCambios(fase.id)" 
+                                        color="primary" 
+                                        elevation="0" 
+                                        class="mx-auto" 
+                                        >notificar Cambios
+                                        <v-icon right>mdi-bell</v-icon>
+                                    </v-btn>
+                                    <small v-if="requisitosPropios.length>0">*Es importante que notifiques los cambios para que tus documentos sean revisados lo mas antes posible</small>
+                                    
 
                                 </v-list>
 
@@ -625,7 +635,7 @@
 
     </template>
 
-      <template>
+    <template>
         <div class="text-center ma-2">
 
             <v-snackbar
@@ -832,33 +842,33 @@ export default {
         this.url_document=URL.createObjectURL(this.daterequisito.archivo)
       },
         async guardar(){
-       // console.log(this.daterequisito);  
-       if(this.subir===true){
-        await this.daterequisito.post(`/api/sf-subirfilerequisito/`).then(response=>{
-            console.log(response.data);
-            if(response.data===1){
-               this.subir_file_error='ya no se admiten mas archivos'
-               this.boxerror=true;
+            // console.log(this.daterequisito);  
+            if(this.subir===true){
+                await this.daterequisito.post(`/api/sf-subirfilerequisito/`).then(response=>{
+                    console.log(response.data);
+                    if(response.data===1){
+                    this.subir_file_error='ya no se admiten mas archivos'
+                    this.boxerror=true;
+                    }else{
+                    this.daterequisito.archivo='',
+                    this.mostrarrequisito(this.id_fase);
+                    this.dialog=false;
+                    }
+            
+                }).catch(error=>{
+                if(error.response.status === 422){
+                        const errores_R=error.response.data.errors;
+                    //  console.log(errores_R),                      
+                        this.subir_file_error=errores_R.archivo[0];
+                        //console.log(this.subir_file_error)
+                        
+                        this.boxerror=true;
+                    }
+                });
             }else{
-            this.daterequisito.archivo='',
-            this.mostrarrequisito(this.id_fase);
-            this.dialog=false;
-            }
-      
-        }).catch(error=>{
-          if(error.response.status === 422){
-                const errores_R=error.response.data.errors;
-              //  console.log(errores_R),                      
-                this.subir_file_error=errores_R.archivo[0];
-                //console.log(this.subir_file_error)
-                
+                this.subir_file_error='tu archivo ya esta subido'
                 this.boxerror=true;
-              }
-          });
-       }else{
-          this.subir_file_error='tu archivo ya esta subido'
-           this.boxerror=true;
-       }
+            }
 
 
       },
@@ -922,10 +932,23 @@ export default {
                       this.revisar_errores='indica la observacion si quieres guardar cambios';
                        this.boxerror=true;
                     }
-              }); 
+              });          
           
+      },
+      async notificarCambios(id){
+          await axios.get(`/api/notificarcambio-tramite/${id}/${this.$route.params.id}`).then(response=>{
+           if(response.data==1){                  
+                this.alert_fase_notify=true;
+                this.msg_notify='Cambios notificados correctamente';
+                this.color_alert_fase_notify='cyan darken-2';
+            }else{
+               this.alert_fase_notify=true;
+               this.msg_notify='este tramite esta en una fase superior'
+               this.color_alert_fase_notify='orange darken-2'
+            }
           
-      }
+          })
+      },
     }
 }
 </script>

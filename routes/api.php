@@ -79,6 +79,7 @@ Route::resource('requisito',RequisitoController::class);
 Route::resource('persona',PersonaController::class);
 Route::resource('tipoarchivo',TipoArchivoController::class);
 Route::resource('rol',RolController::class);
+Route::get('roles/{fase}',[FaseController::class,'roles']);
 
 Route::resource('bachillerIni',BachillerIniController::class);
 Route::resource('bachillerFinal',BachillerFinalController::class);
@@ -104,10 +105,12 @@ Route::get('fasestramite/{codigo}',[tramiteController::class,'obtenerfases']);
 Route::get('alu-faserequisito/{id}/{tramite}',[tramiteController::class,'obtenerfaserequisito']);
 Route::post('alu-filerequisito/',[tramiteController::class,'subirarchivorequisito']);
 Route::get('alu_autorized/{fase}/{tramite}',[tramiteController::class,'alu_autorized']);
-Route::get('alu-notificarcambio/{fase}/{tramite}',[tramiteController::class,'alu_notificarCambio']);
-Route::get('alu-proceso',[tramiteController::class,'alu_procesos']);
+Route::get('alu-proceso/{id}',[tramiteController::class,'alu_procesos']);
+Route::get('alu-grados',[tramiteController::class,'alu_grados']);
 
 
+//notificar cambios del tramite
+Route::get('notificarcambio-tramite/{fase}/{tramite}',[tramiteController::class,'notificarCambio']);
 
 //rutas secretaria facultad 
 
@@ -145,9 +148,11 @@ Route::get('expd_con_resolu/{id}',[SecretariaGeneral1Controller::class,'sg1_expe
 Route::get('get_60_campos/{id}',[SecretariaGeneral1Controller::class,'sg_get_60_campos']);
 Route::get('sg1-expe-impresos/{id}',[SecretariaGeneral1Controller::class,'sg1_expe_impresos']);
 Route::post('sg1-add-sticker',[SecretariaGeneral1Controller::class,'sg1_add_sticker']);
+Route::get('sg1-get-sunedu',[SecretariaGeneral1Controller::class,'sg1_get_sunedu']);
 
 Route::get('sg2_expd_aprobados/{id}',[SecretariaGeneral2Controller::class,'sg2_expedientes_aprobados']);
 Route::get('sg2_datos_internos_imprimir/{id}',[SecretariaGeneral2Controller::class,'sg2_get_imprimir']);
 Route::get('sg2-get-programar/{id}',[SecretariaGeneral2Controller::class,'sg2_get_programar']);
 Route::post('imprimir',[SecretariaGeneral2Controller::class,'sg2_post_imprimir']);
 Route::post('sg2-add-fecha-entrega',[SecretariaGeneral2Controller::class,'sg2_add_fecha_entrega']);
+Route::get('sg2-get-programados/{id}',[SecretariaGeneral2Controller::class,'sg2_get_programados']);

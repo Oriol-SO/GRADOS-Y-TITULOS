@@ -47,13 +47,13 @@
                 </template>
                 <template v-slot:item.avance="{ item }">
                     <div style="min-width:120px;">
-                        <v-slider
-                        :value="Math. round(item.requisitos_aprovados*100/item.total_requisitos)"                        
-                        color="#3bfb60"
-                        readonly
-                        :label="Math. round(item.requisitos_aprovados*100/item.total_requisitos )+'%'"
-                        ></v-slider>
-                    </div>
+                            <v-slider
+                            :value="Math. round(item.fase_actual*100/item.total_fases)"                        
+                            color="#3bfb60"
+                            readonly
+                            :label="Math. round(item.fase_actual*100/item.total_fases)+'%'"
+                            ></v-slider>
+                        </div>
                 </template>
                 <template v-slot:item.actions="{ item }">
                 <v-btn

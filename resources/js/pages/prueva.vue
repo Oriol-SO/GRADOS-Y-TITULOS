@@ -1,31 +1,37 @@
 <template>
-  <v-container class="grey lighten-5">
-    <v-row no-gutters>
-      <v-col
-        cols="12"
-        sm="6"
-        md="8"
+  <div>
+    <v-subheader>Lights out (light)</v-subheader>
+    <v-card
+      img="https://cdn.vuetifyjs.com/images/home/vuetify_layout2.svg"
+      height="200px"
+    >
+      <v-system-bar
+        color="primary"
+        lights-out
       >
-        <v-card
-          class="pa-2"
-          outlined
-          tile
-        >
-          .col-12 .col-sm-6 .col-md-8
-        </v-card>
-      </v-col>
-      <v-col
-        cols="6"
-        md="4"
+        <v-spacer></v-spacer>
+        <v-icon>mdi-wifi-strength-4</v-icon>
+        <v-icon>mdi-signal-cellular-outline</v-icon>
+        <v-icon>mdi-battery</v-icon>
+        <span>12:30</span>
+      </v-system-bar>
+    </v-card>
+    <v-subheader>Lights out (dark)</v-subheader>
+    <v-card
+      img="https://cdn.vuetifyjs.com/images/home/vuetify_layout2.svg"
+      height="200px"
+    >
+      <v-system-bar
+        color="primary"
+        lights-out
+        dark
       >
-        <v-card
-          class="pa-2"
-          outlined
-          tile
-        >
-          .col-6 .col-md-4
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+        <v-spacer></v-spacer>
+        <v-icon>mdi-wifi-strength-4</v-icon>
+        <v-icon>mdi-signal-cellular-outline</v-icon>
+        <v-icon>mdi-battery</v-icon>
+        <span>12:30</span>
+      </v-system-bar>
+    </v-card>
+  </div>
 </template>

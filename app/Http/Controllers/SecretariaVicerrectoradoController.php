@@ -46,12 +46,10 @@ class SecretariaVicerrectoradoController extends Controller
                     'fec_inicio'=>$e-> fec_inicio,
                     'estado'=>$e->estado,
                     'tramite'=>$e->tipo_tramite,
-                    'total_requisitos'=>FaseRolRequisito::whereIn('fase_id',(Fase::where('proceso_id',$e->proceso_id)->get('id')))->count(), 
-                    'requisitos_aprovados'=>$e->file->map(function($f){
-                        return $f->Revisione->count();
-                    })->sum(),
+                    'total_fases'=>Fase::where('proceso_id',$e->proceso_id)->count(), 
+                    'fase_actual'=>$e->fase_actual,
 
-                    'notificacion'=>$e->receptor_rol_notify==5? true:false,
+                    'notificacion'=>$e->receptor_rol_notify==11? true:false,
                 ];
             });
 
@@ -243,24 +241,17 @@ class SecretariaVicerrectoradoController extends Controller
             if($file_req>0){                
                 //actualizar
                 $file=File::where('tramite_id',$request->tramite)->where('faserolreq_id',$request->idfaserequi)->first();
-                //buscar observaciones
-                $obser=Observacione::where('file_id',$file->id)->count();
-                if($obser>0 && $file->num_modifi==0){
+                                
                     //borramos el archivo de la carpeta
-                    $url_borrar=str_replace('storage','public',$file->path);
+                      $url_borrar=str_replace('storage','public',$file->path);
                        Storage::delete($url_borrar);
-                    //subimos la nueva ruta 
-                   
+                    //subimos la nueva ruta                    
                         $new_url=Storage::url($request->file('archivo')->store('public/requisitos'));
-
                         //remplazamos en la base de datos
                         $requisito=File::where('id', $file->id)->update(['path' => $new_url ,'num_modifi'=>1]);
                          
                         return 'actualizado';
-                   
-                }else{
-                    return 1;
-                }
+               
             }else{
                 $url=Storage::url($request->file('archivo')->store('public/requisitos'));
                 $requisito=File::create([
@@ -285,7 +276,7 @@ class SecretariaVicerrectoradoController extends Controller
 
             $fase=Fase::where('id',$id_fase)->first();
             //obtener rol del revisador
-            if($fase->encargado_revisar==11){
+            if($fase->encargado_revisar==11 ||$fase->encargado_ejecutar==11 ){
                 $fase_actual=$fase->numero;
                 if($fase_actual==$fase_tramite){
                     $tramite_fase=Tramite::where('id',$id_tram)->update(['fase_actual'=>($fase_actual+1)]);

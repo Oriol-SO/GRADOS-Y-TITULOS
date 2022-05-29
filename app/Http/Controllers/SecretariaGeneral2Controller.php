@@ -16,6 +16,7 @@ use App\Models\Denominacion;
 use App\Models\Diploma;
 use App\Models\User;
 use Exception;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class SecretariaGeneral2Controller extends Controller
@@ -69,6 +70,14 @@ class SecretariaGeneral2Controller extends Controller
         return response()->json($apro);
         }
     }
+    protected function aprobar_fase_one($tramite_id){        
+
+        $tramite=Tramite::where('id',$tramite_id)->first();
+        $fase_actual=$tramite->fase_actual;                                   
+            //actualizar la fase
+            Tramite::where('id',$tramite_id)->update(['fase_actual'=>$fase_actual+1]);     
+
+    }
 
     protected function sg2_post_imprimir(Request $request){
         $request->validate([
@@ -76,8 +85,8 @@ class SecretariaGeneral2Controller extends Controller
             'diploma_id'=>'required',
         ]);
         try{
-
         $tram_diplo=Diploma::where('id',$request->diploma_id)->where('tramite_id',$request->tramite_id)->update(['est_impreso'=>1]);
+        $this->aprobar_fase_one($request->tramite_id);
 
         }catch(Exception $e){
             return $e;
@@ -100,6 +109,7 @@ class SecretariaGeneral2Controller extends Controller
                 'consejo_id'=>$e->consejo->id,
                 'diploma'=>$e->diploma->id,
                 'estado_impri'=>$e->diploma->est_impreso,
+                'fecha_entrega'=>$e->diploma->fec_hor_entre,
             ];
         });
         return response()->json($apro);
@@ -113,7 +123,39 @@ class SecretariaGeneral2Controller extends Controller
         ]);
             $fech_hora=Diploma::where('tramite_id',$request->tramite_id)->where('id',$request->diploma_id)
             ->update(['fec_hor_entre'=>$request->fecha]);
-
+            $this->aprobar_fase_one($request->tramite_id);
             return 'actualizado';
     }
+    protected function sg2_get_programados($id){
+        if($id==0){
+            $fecha_entrega=Diploma::where('num_sticker','<>',null)->get()->map(function($e){
+                return ['fecha'=>date("Y-m-d",strtotime($e->fec_hor_entre))];
+            });
+            $today = date("Y-m-d",strtotime(Carbon::now()));
+            if($today==$fecha_entrega[0]['fecha']){
+                return "hola";
+            }
+            //$fecha_hoy= date("Y-m-d",strtotime($fecha_entrega[0]));
+            $tramite_diplomas=Diploma::where('num_sticker','<>',null)->get()->map(function($e){
+                return [$e->tramite_id];
+            });
+            $apro=Tramite::where('resolucion_id','<>',null)->whereIn('id',$tramite_diplomas)->get()->map(function($e){
+                return[
+                'per_nom'=>$e->persona->nom.' '.$e->persona->apePat.' '.$e->persona->apeMat,           
+                'id'=> $e->id,
+                'tramite'=>$e->tipo_tramite,
+                'fec_inicio'=>$e-> fec_inicio,
+                'estado'=>$e->estado,
+                'consejo_numero'=>$e->consejo->numero,
+                'consejo_id'=>$e->consejo->id,
+                'diploma'=>$e->diploma->id,
+                'estado_impri'=>$e->diploma->est_impreso,
+                'fecha_entrega'=>$e->diploma->fec_hor_entre,
+            ];
+        });
+        return response()->json($apro);
+        }
+    }
+    
 }
+

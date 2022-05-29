@@ -162,32 +162,7 @@
                                                     {{requisitos_subidosPropios}}
                                                     </v-avatar>
                                                 </v-chip>
-                                                <v-chip
-                                                class="ma-2"
-                                                color="#b3ffce"
-                                                text-color="black"
-                                                >                       
-                                                    Aprovados
-                                                    <v-avatar
-                                                        rigth
-                                                        class="green accent-3 ml-1"
-                                                    >
-                                                    {{requisitos_aprovadosPropios}}
-                                                    </v-avatar>
-                                                </v-chip>  
-                                                <v-chip
-                                                class="ma-2"
-                                                color="#fbef9f"
-                                                text-color="black"
-                                                >                       
-                                                    observados
-                                                    <v-avatar
-                                                        rigth
-                                                        class="amber accent-3 ml-1"
-                                                    >
-                                                    {{requisitos_observadosPropios}}
-                                                    </v-avatar>
-                                                </v-chip>                   
+                                                                 
                                         </div>
                                     </v-subheader>
                                     <v-list-item
@@ -204,48 +179,8 @@
                                         <v-list-item-content>
                                             <v-list-item-title class="d-flex" >{{requisitoP.nombre}}  
                                                 <div class="ml-auto">
-                                                    <v-chip
-                                                        v-if="requisitoP.revisado_aprovado.length>0"
-                                                        color="#0ce559"
-                                                        text-color="#fff"
-                                                    >                       
-                                                        Aprovado
-                                                        <v-avatar
-                                                            rigth
-                                                            class="green accent-3 ml-1"
-                                                            text-color="#fff"
-                                                        >
-                                                            <v-icon>mdi-checkbox-marked-circle</v-icon>
-                                                        </v-avatar>
-                                                    </v-chip>
-                                                    <v-chip
-                                                    v-if="requisitoP.revisado_observado.length>0 && requisito.modificado[0]==0 "
-                                                    color="#ff9400"
-                                                    text-color="#fff"
-                                                    >                       
-                                                        observado
-                                                        <v-avatar
-                                                            rigth
-                                                            class="amber accent-3 ml-1"
-                                                            text-color="#fff"
-                                                        >
-                                                        <v-icon>mdi-eye-circle</v-icon>
-                                                        </v-avatar>
-                                                    </v-chip>
-                                                    <v-chip
-                                                    v-if="requisitoP.modificado[0]==1"
-                                                    color="#ff9400"
-                                                    text-color="#fff"
-                                                    >                       
-                                                        levantado
-                                                        <v-avatar
-                                                            rigth
-                                                            class="amber accent-3 ml-1"
-                                                            text-color="#fff"
-                                                        >
-                                                        <v-icon>mdi-cog-clockwise</v-icon>
-                                                        </v-avatar>
-                                                    </v-chip>    
+                                                                                                       
+                                                       
                                                     <v-btn 
                                                         class=" text-capitalize" 
                                                         color="indigo" 
@@ -266,6 +201,16 @@
 
                                         </v-list-item-content>
                                     </v-list-item>
+                                    <v-btn v-if="requisitosPropios.length>0" 
+                                        @click="notificarCambios(fase.id)" 
+                                        color="primary" 
+                                        elevation="0" 
+                                        class="mx-auto" 
+                                        >notificar Cambios
+                                        <v-icon right>mdi-bell</v-icon>
+                                    </v-btn>
+                                    <small v-if="requisitosPropios.length>0">*Es importante que notifiques los cambios para que el tramite siga su curso</small>
+                                    
 
                                 </v-list>
 
@@ -784,31 +729,15 @@ export default {
           this.nom_requisito=requisito.nombre;
           this.nom_obser='';
 
-        this.observacion='';
-        this.subir=true;
-        this.nom_btn='Cargar';
-        this.msg_file='Subir archivo';
+            this.observacion='';
+            this.subir=true;
+            this.nom_btn='Cargar';
+            this.msg_file='Subir archivo';
         if(requisito.archivo_subido.length>0 ){
-            this.subir=false;
-            this.msg_file='En espera de revision';
+            this.subir=true;
+            this.msg_file='Tu Documento';
             this.daterequisito.archivo='--'
             this.url_document=requisito.archivo_subido[0].path;
-           // console.log(this.url_document)
-            if(requisito.modificado[0]==1){
-              this.subir=false;
-              this.msg_file='En espera de otra revision';
-              this.nom_obser='Observaciones corregidas';
-              this.observacion=requisito.revisado_observado[0].texto;
-            }
-            else if(requisito.revisado_aprovado.length>0){
-              this.msg_file='Este requisito esta aprobado';
-            }else if(requisito.revisado_observado.length>0){
-                   this.msg_file='Levantar observaciones';
-                   this.subir=true;
-                   this.nom_btn='Actualizar';
-                   this.nom_obser='Observaciones'
-                   this.observacion=requisito.revisado_observado[0].texto;
-            }
         }        
           this.dialog=true;
         
@@ -911,7 +840,23 @@ export default {
               }); 
           
           
-      }
+      },
+    async notificarCambios(id){
+          await axios.get(`/api/notificarcambio-tramite/${id}/${this.$route.params.id}`).then(response=>{
+           if(response.data==1){                  
+                this.alert_fase_notify=true;
+                this.msg_notify='Cambios notificados correctamente';
+                this.color_alert_fase_notify='cyan darken-2';
+                this.aprobarfase(id);
+                //console.log(id)
+            }else{
+               this.alert_fase_notify=true;
+               this.msg_notify='este tramite esta en una fase superior'
+               this.color_alert_fase_notify='orange darken-2'
+            }
+          
+          })
+      },
     }
 }
 </script>

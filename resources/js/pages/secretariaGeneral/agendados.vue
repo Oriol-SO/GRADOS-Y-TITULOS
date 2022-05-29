@@ -170,10 +170,3 @@ export default {
     }
 }
 </script>
-<style>
- #color_table .v-data-table-header th[role=columnheader] {
-  font-size: 14px !important;
-  color:white;
-  background-color:#499BC3 !important;
-}
-</style>

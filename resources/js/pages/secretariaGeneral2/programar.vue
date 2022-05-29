@@ -27,23 +27,28 @@
                 
                   <v-data-table
                     :headers="headers"
-                    :items="conresolucion" 
+                    :items="for_entregar" 
                     :items-per-page="10"
                     class="elevation-1"
                     group-by="consejo_numero"
                   >
                     <template v-slot:item.actions="{ item }">
                         <v-btn
+                        v-if="item.fecha_entrega==null"
                         small
-                        rounded
                         color="black"
                         elevation="0"
                         style="color:#fff;"
-
                         @click="enviar_fecha(item)" 
-                        icon   
-
                         >  <v-icon  left class="ml-1">mdi-calendar-month</v-icon> Programar</v-btn>
+                        <v-btn
+                        v-else
+                        small                 
+                        color="#19ef6e"
+                        elevation="0"
+                        style="color:#fff;"
+                        @click="reprogramar(item)" 
+                        >  <v-icon  left class="ml-1">mdi-calendar-month</v-icon> Re-programar</v-btn>
 
                     </template>
                   </v-data-table>
@@ -118,7 +123,7 @@ export default {
             { text: 'Estado', value: 'estado' },
             { text: 'Acciones', value: 'actions', sortable: false },
             ],
-            conresolucion:[],
+            for_entregar:[],
             items:[],
             form: new Form({
                 fecha:'',
@@ -147,15 +152,22 @@ export default {
         },async fetchExpedientes(id){
             await axios.get('/api/sg2-get-programar/'+id).then(response=>{
                 console.log(response.data);
-                this.conresolucion=response.data;
+                this.for_entregar=response.data;
             });
 
         },async enviar_fecha(item){
             this.form.tramite_id=item.id;
-            this.form.diploma_id=item.diploma;
+            this.form.diploma_id=item.diploma;           
             this.dialogenviar=true;
             
-        },async AddEntrega(){
+        },
+        async reprogramar(item){
+            this.form.tramite_id=item.id;
+            this.form.diploma_id=item.diploma;
+            this.form.fecha=item.fecha_entrega;
+            this.dialogenviar=true;          
+        },
+        async AddEntrega(){
             //console.log(this.form);
             await this.form.post(`/api/sg2-add-fecha-entrega/`).then(response=>{
                 console.log(response.data);  

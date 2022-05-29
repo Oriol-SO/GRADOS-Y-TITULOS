@@ -32,11 +32,13 @@
                     :items="conresolucion" 
                     :items-per-page="10"
                     class="elevation-1"
+                    show-group-by="consejo_numero"
                     group-by="consejo_numero"
                     id="color_table"
                   >
                     <template v-slot:item.actions="{ item }">
                         <v-btn
+                        v-if="item.estado_impri==0"
                         small
                         rounded
                         color="primary"
@@ -45,6 +47,29 @@
                         class="text-capitalize"
                         @click="enviar_imprimir(item)"    
                         >  <v-icon left class="ml-1">mdi-printer</v-icon> Imprimir</v-btn>
+                      <div class="d-flex" style="align-items: center;">
+                           <v-btn
+                        v-if="item.estado_impri==1"
+                        small
+                        rounded
+                        color="#19ef6e"
+                        elevation="0"
+                        style="color:#fff;"
+                        class="text-capitalize"
+                        @click="enviar_imprimir(item)"    
+                        > <v-icon left>mdi-check</v-icon> Imprimido</v-btn>
+ 
+                        <v-btn
+                        v-if="item.estado_impri==1"
+                        x-small
+                        class="ml-2"
+                        fab
+                        color="primary"
+                        elevation="0"      
+                        @click="enviar_imprimir(item)"    
+                        > <v-icon dark>mdi-backup-restore</v-icon></v-btn>
+                      </div>
+                       
 
                     </template>
                   </v-data-table>
@@ -114,7 +139,7 @@ export default {
             //{text: 'Facultad',align: 'start', value: '',},
             { text: 'Tramite', value: 'tramite' },           
             { text: 'Fecha de inicio', value: 'fec_inicio' },
-            { text: 'Consejo', value:'consejo_numero',sortable: false},            
+            { text: 'Consejo', value:'consejo_numero'},            
             { text: 'Estado', value: 'estado' },
             { text: 'Acciones', value: 'actions', sortable: false },
             ],

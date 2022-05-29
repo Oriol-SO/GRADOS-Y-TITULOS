@@ -17,7 +17,10 @@ use App\Models\File;
 use App\Models\Observacione;
 use App\Models\Proceso;
 use App\Models\Revisione;
+use App\Models\Consejo;
+use App\Models\Grado;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Contracts\Service\Attribute\Required;
 
 class tramiteController extends Controller
 {
@@ -42,18 +45,25 @@ class tramiteController extends Controller
                  'estado'=>$e->estado,
                  'numero_fase'=>$e->numero,
                  'tramite'=>$e->tipo_tramite,
-                 'total_requisitos'=>FaseRolRequisito::whereIn('fase_id',(Fase::where('proceso_id',$e->proceso_id)->get('id')))->count(), 
-                 'requisitos_aprovados'=>$e->file->map(function($f){
-                     return $f->Revisione->count();
-                 })->sum(),
+                 'total_fases'=>Fase::where('proceso_id',$e->proceso_id)->count(), 
+                 'fase_actual'=>$e->fase_actual,
             ];
         });
         return response()->json($tramites);
     }
 
+    protected function alu_grados(){
+        $grados=Grado::all()->map(function($g){
+            return[
+                'id'=>$g->id,
+                'graNom'=>$g->graNom
+             ];
+        });
+        return $grados;
+    }
+   protected function alu_procesos($grado){
 
-   protected function alu_procesos(){
-    $tramites['tramites'] = Proceso::where('estado',1)->get()->map(function($t){
+    $tramites['tramites'] = Proceso::where('grado_id',$grado)->where('estado',1)->get()->map(function($t){
         return [
             'id' => $t->id,
             'nombre' => $t->procNom,
@@ -83,11 +93,33 @@ class tramiteController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validar($request);
+        //$this->validar($request);
+
+        $request->validate([
+            'grado'=>'required',
+            'tipotramite'=>'required'
+        ]);
+        if ($request->grado['id']==2){
+            $request->validate([
+                'grado'=>'required',
+                'tipotramite'=>'required',
+                'titulo'=>'required',
+                'integrantes'=>'required',
+            ]);
+            
+            return 'proximamente';
+
+
+        }else if($request->grado['id']==1){                      
+            $this->add_tramite($request,null);
+        }else{
+            return 'no esta disponible';
+        }
+     
+    }
+    public function add_tramite($request,$trabajo){
         $user=$request->user();
         $persona=$user->persona;
-        //$modalidad=Modalidade::find($request->tipotramite['modalidad_id']);
-        //$fase=Fase::where('proceso_id','')->limit(1)->get();
         $tramite=Tramite::create([
             'fec_inicio'=> Carbon::now(),
             'fecha_vencimiento'=>null,
@@ -95,20 +127,14 @@ class tramiteController extends Controller
             'tipo_tramite'=>$request->tipotramite['nombre'],
             'fase_actual'=>'1',
             'estado'=>0,
-            'trabajo_id'=>null,
+            'trabajo_id'=>$trabajo,
             'persona_id'=>$persona->id,
             'proceso_id'=>$request->tipotramite['id'],
             'consejo_id'=>null,
             'resolucion_id'=>null,         
         ]);
 
-        return response()->json($tramite);
-
-    }
-    public function validar($request=null){
-       return  $request->validate([
-            'tipotramite' => 'required',
-        ]);
+        return 'agregado';        
     }
 
     /**
@@ -190,7 +216,8 @@ class tramiteController extends Controller
                 'rol' =>$o->rol->rolNombre,
                ];
            });
-           
+
+            $requisitos['otros_detalles']=$this->otros_detalles_de_fase($id,$tramite);     
 
             return response()->json($requisitos);
         }else{
@@ -198,6 +225,171 @@ class tramiteController extends Controller
         }
  
     }
+
+    protected function otros_detalles_de_fase($id,$tramite){
+           $numeroFase=(Fase::where('id',$id)->first())->numero;
+           $fase_actual=(Tramite::where('id',$tramite)->first())->fase_actual;
+
+           if($numeroFase==4){
+               if($numeroFase<$fase_actual){
+                  //consejo
+                  return [['NOMBRE'=>'','VALOR'=> 'tu tramite ya esta agendado'],['NOMBRE'=>'CONSEJO','VALOR'=>'1']];
+                }else{
+                  return 'tu tramite esta en espera de ser agendado';                
+                }
+                   
+            }else if($numeroFase==5){
+                
+                if($numeroFase<$fase_actual){
+                    //resolucion
+                    return $consejo=Tramite::where('id',$tramite)->get()->map(function($t){
+                        return[
+                            ['NOMBRE'=>'Consejo','VALOR'=>$t->consejo->numero],
+                            ['NOMBRE'=>'Fecha de consejo','VALOR'=>$t->consejo->fecha],
+                        ];
+                    });
+                }else{
+                    return 'tu tramite esta en espera de pasos anteriores';                
+                }
+                
+            }
+           else if($numeroFase==6){
+                if($numeroFase<$fase_actual){
+                    return $consejo=Tramite::where('id',$tramite)->get()->map(function($t){
+                        return[
+                            ['NOMBRE'=>'Consejo','VALOR'=>$t->consejo->numero],
+                            ['NOMBRE'=>'Fecha de consejo','VALOR'=>$t->consejo->fecha],
+                            ['NOMBRE'=>'Número de oficio','VALOR'=>$t->consejo->num_oficio],
+                        ];
+                    });
+                }else{
+                    return 'tu tramite esta en espera de pasos anteriores';                
+                }
+           }else if($numeroFase==7){ 
+                if($numeroFase<$fase_actual){
+                    return $consejo=Tramite::where('id',$tramite)->get()->map(function($t){
+                        return[
+                            ['NOMBRE'=>'Resolucion','VALOR'=>$t->resolucione->numero],
+                            ['NOMBRE'=>'Fecha de resolucion','VALOR'=>$t->resolucione->fecha],
+                        ];
+                    });
+                }else{ 
+                    return 'tu tramite esta en espera de pasos anteriores';                
+                }
+           }
+           else if($numeroFase==8){ 
+                if($numeroFase<$fase_actual){
+                    return $consejo=Tramite::where('id',$tramite)->get()->map(function($t){
+                        return[
+                            ['NOMBRE'=>'Libro','VALOR'=>$t->diploma->num_lib],
+                            ['NOMBRE'=>'Folio','VALOR'=>$t->diploma->lib_foli],
+                            ['NOMBRE'=>'Registro','VALOR'=>$t->diploma->num_lib_regis],
+                        ];
+                    });
+                }else{
+                    return 'tu tramite esta en espera de pasos anteriores';                
+                }
+           }
+           else if($numeroFase==9){ 
+                if($numeroFase<$fase_actual){
+                //consejo
+                    return $consejo=Tramite::where('id',$tramite)->get()->map(function($t){
+                        return[
+                            ['NOMBRE'=>'Estado','VALOR'=>'ya esta impreso'],
+                            ['NOMBRE'=>'Libro','VALOR'=>$t->diploma->num_lib],
+                            ['NOMBRE'=>'Folio','VALOR'=>$t->diploma->lib_foli],
+                            ['NOMBRE'=>'Registro','VALOR'=>$t->diploma->num_lib_regis],
+                            ['NOMBRE'=>'Sticker','VALOR'=>$t->diploma->num_sticker],
+                        ];
+                    });
+                }else{
+                    return 'tu tramite esta en espera de obtener un numero de sticker';                
+                }
+           }else if($numeroFase==10){
+            if($numeroFase<$fase_actual){
+                //consejo
+                return 'tu tramite ya tiene una fecha para ser entregado';
+                /*
+                return $consejo=Tramite::where('id',$tramite)->get()->map(function($t){
+                    return[
+                        'estado'=>'programado',
+                        'libro'=>$t->diploma->num_lib,
+                        'Folio'=>$t->diploma->lib_foli,
+                        'registro'=>$t->diploma->num_lib_regis,
+                        'sticker'=>$t->diploma->num_sticker,
+                        
+                    ];
+                });*/
+              }else{
+                return 'tu tramite esta en espera de ser programado para entrega';                
+              }
+           }else if($numeroFase==11){          
+                //consejo
+                if($numeroFase<$fase_actual){
+                    //consejo
+                    return $consejo=Tramite::where('id',$tramite)->get()->map(function($t){
+                        return[
+                            ['NOMBRE'=>'Estado','VALOR'=>'programado'],
+                            ['NOMBRE'=>'Libro','VALOR'=>$t->diploma->num_lib],
+                            ['NOMBRE'=>'Folio','VALOR'=>$t->diploma->lib_foli],
+                            ['NOMBRE'=>'Registro','VALOR'=>$t->diploma->num_lib_regis],
+                            ['NOMBRE'=>'Sticker','VALOR'=>$t->diploma->num_sticker],
+                            ['NOMBRE'=>'Fecha de entrega','VALOR'=>$t->diploma->fec_hor_entre],
+                        ];
+                    });
+                }else{
+                    return 'tu tramite esta en espera de ser programado';                
+                }           
+           }
+           if($numeroFase==12){
+            if($numeroFase<$fase_actual){
+               //consejo
+               return 'felicidades ya tienes tu bachiller';
+             }else{
+               return 'tu tramite aun no se ha finalizado ';                
+             }
+                
+         }
+           else{
+               return null;
+           }
+           /*$otros_detalles=Tramite::where('fase_actual','>',)->where('id',$this->tram)->get()->map(function($e){
+               return[
+                'tipo_tramite'=>$e->tipo_tramite,
+                'modo_obtencion'=>$e->modo_obtencion,
+                'fec_inicio'=>$e-> fec_inicio,
+                'estado'=>$e->estado,
+                'numero_fase'=>$e->numero,
+                'tramite'=>$e->tipo_tramite,
+                'c'=>$e->consejo->numero,
+                'consejo'=>$e->consejo->map(function($c){
+                    return[
+                        'numero de consejo'=>$c->numero,
+                        'numero de oficio'=>$c->num_oficio,
+                        'fecha de consejo'=>$c->fecha,
+                    ];
+                }),
+                'resolucion'=>$e->resolucione->map(function($r){
+                    return[
+                        'numero de resolucion'=>$r->numero, 
+                        'fecha de resolucion'=>$r->fecha,                       
+                    ];
+                }),
+                'diploma'=>$e->diploma->map(function($d){
+                    return[
+                        'Libro'=>$d->num_lib,
+                        'Registro'=>$d->num_lib_regis,
+                        'Folio'=>$d->lib_foli,
+                        'sticker'=>$d->num_sticker,
+                        'fecha y hora de entrega'=>$d->fec_hor_entre,
+                     ];
+                }),
+            ];
+           });  */
+    }
+
+
+
     public $tramfase;
     protected function alu_autorized($fase,$tramite){
          $this->tramfase=$tramite;          
@@ -278,9 +470,19 @@ class tramiteController extends Controller
     }
 
 
-    protected function alu_notificarCambio($fase_id,$tramite){
-        $receptor_notify=(Fase::where('id',$fase_id)->first())->encargado_revisar;
-        Tramite::where('id',$tramite)->update(['receptor_rol_notify'=>$receptor_notify]);
+    protected function notificarCambio($fase_id,$tramite){
+        $numero_fase_actual=(Tramite::where('id',$tramite)->first())->fase_actual;
+        $fase=(Fase::where('id',$fase_id)->first());
+        $fase_num_a_notificar=$fase->numero;
+        
+        if($fase_num_a_notificar<$numero_fase_actual){
+            return '0';
+        }else{
+            $receptor_notify=$fase->encargado_revisar;
+            Tramite::where('id',$tramite)->update(['receptor_rol_notify'=>$receptor_notify]);
+            return '1';
+        }
+       
     }   
     /**
      * Show the form for editing the specified resource.

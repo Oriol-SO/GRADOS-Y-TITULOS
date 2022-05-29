@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mt-3 mx-4" style="min-height:600px;" >
+  <v-card class="mt-3 mx-4 card-shadow" style="min-height:660px;" >
     <v-toolbar
       flat
       color="#2B5683"
@@ -7,16 +7,17 @@
     >
       <v-toolbar-title > Mi Perfil</v-toolbar-title>
     </v-toolbar>
-    <v-tabs orizontal >
+     <v-divider></v-divider>
+    <v-tabs orizontal centered>
       <v-tab>
         <v-icon left>
           mdi-account
         </v-icon>
-        Datos Generales
+        Tu información
       </v-tab>
       <v-tab >
         <v-icon left>
-          mdi-account
+          mdi-pencil
         </v-icon>
         Editar Perfil
       </v-tab>
@@ -324,3 +325,8 @@ linksVerified: function () {
   },
 };
 </script>
+<style>
+.card-shadow{
+    box-shadow: 0 2px 12px -1px rgb(85 85 85 / 8%), 0 4px 12px 0 rgb(85 85 85 / 6%), 0 1px 12px 0 rgb(85 85 85 / 3%) !important;
+}
+</style>

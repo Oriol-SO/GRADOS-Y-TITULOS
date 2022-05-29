@@ -4,12 +4,11 @@ function page(path) {
 
 export default [
   
-  { path: '/', redirect: { name: 'login' } },
-
-  { path: '/login', name: 'login', component: page('auth/login.vue') },
+  { path: '/', redirect: { name: 'home' } },
 
   { path: '/home', name: 'home', component: page('home.vue') },
-  { path: '/pdf', name: 'pdf', component: page('app/Http/Controllers/PdfController.php') },
+  { path: '/login', name: 'login', component: page('auth/login.vue') },
+  //{ path: '/pdf', name: 'pdf', component: page('app/Http/Controllers/PdfController.php') },
 
   { path: '/register', name: 'register', component: page('auth/register.vue') },
   { path: '/password/reset', name: 'password.request', component: page('auth/password/email.vue') },

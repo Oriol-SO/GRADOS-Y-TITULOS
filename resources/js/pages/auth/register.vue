@@ -1,5 +1,5 @@
 <template >
-<v-container fluid class="fill-height main" style="justify-content:center;">
+<v-container fluid class="fill-height main" style="justify-content:center; padding-top: 85px;">
   <div class="d-flex ml-4 mr-4 " style="height:100%; ">
       <v-card class=" my-auto mx-auto">
         <v-card-title class="d-flex">
@@ -238,7 +238,7 @@ import { resolve } from 'url';
 //import { response } from 'express';
 
 export default {
-  layout: "basic",
+  layout: "home_layout",
 
   data(){
     return{
@@ -315,7 +315,8 @@ export default {
 </script>
 <style scoped>
 .main {
-  background-image: url("/img/bg-login.jpg");
+ /* background-image: url("/img/bg-login.jpg");*/
+  background-image:linear-gradient(rgba(11, 28, 61, 0.9), rgba(0, 0, 0, 0.4)), url("/img/fondo_grados.jpg");
   background-size: cover;
 }
 

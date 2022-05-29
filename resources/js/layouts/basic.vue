@@ -1,6 +1,7 @@
 <template>
-  <v-app id="inspire" >
-    <v-main style="background:rgb(242, 243, 248);">
+  <v-app id="inspire" style="background:#f8f9fe;">
+   <navbar />
+    <v-main>
       <child />
      
     </v-main>
@@ -9,11 +10,11 @@
 </template>
 
 <script>
-//import Piepage from "~/components/footer.vue";
+import Navbar from "~/components/Navbarhome";
 export default {
   name: "BasicLayout",
   components:{
-    // Piepage,
+    Navbar,
   }
 };
 </script>
