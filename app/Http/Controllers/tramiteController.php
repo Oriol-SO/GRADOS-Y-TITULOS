@@ -181,6 +181,7 @@ class tramiteController extends Controller
      */
     public function show($id)
     {  
+        
         $tramites = tramite::where('id',$id)->get()->map(function($t){
             return[
                 'id'=>$t->id,
@@ -188,10 +189,11 @@ class tramiteController extends Controller
                 'tipo_tramite'=>$t->tipo_tramite,
                 'fase_actual'=>$t->fase_actual,
                 'receptor_rol_notify'=>$t->receptor_rol_notify,
-                'trabajo_plan_tesis_url'=>$t->trabajo->url_repositorio,
-                'titulo_proyecto'=>$t->trabajo->nombre,
+                'trabajo_plan_tesis_url'=>$t->trabajo?$t->trabajo->url_repositorio:null ,
+                'titulo_proyecto'=>$t->trabajo?$t->trabajo->nombre:null,
                 'integrantes'=>1,
-                'linea_investigacion'=>$t->trabajo->LineaDeInvestigacione->inveNombre,
+                'grado'=>$t->proceso->grado_id,
+                'linea_investigacion'=>$t->trabajo?$t->trabajo->LineaDeInvestigacione->inveNombre:null,
             ];
         });
         return response()->json($tramites[0],200);

@@ -1,7 +1,7 @@
 <template>
   <div class="mx-4 mt-5">
     <v-card elevation="0" flat class="mb-2 d-flex" >
-      <v-btn color="primary" class="text-capitalize" small @click="open_details()">Detalles</v-btn>
+      <v-btn v-if="nomtramite.grado==2" color="primary" class="text-capitalize" small @click="open_details()">Detalles</v-btn>
       <v-card-text class="px-0 py-1 ml-3 text-h6">{{nomtramite.tipo_tramite}}</v-card-text>
     </v-card>
     <v-stepper v-model="e1" >
@@ -317,7 +317,7 @@
                     <v-col cols="12"  md="8" style="height:100ch;" >   
                       <v-card height="95%" width="95%" class="my-2 mx-2 d-flex" >
                       
-                      <embed v-if="url_document_titulo" :src="url_document_titulo" type="application/pdf" width="100%" height="100%"/> 
+                      <embed v-if="url_document" :src="url_document" type="application/pdf" width="100%" height="100%"/> 
                         <v-card v-else class="d-flex mx-auto my-auto"  width="300px" height="150px"  elevation="0"
                           style=" justify-content:center; align-items: center; text-align: center;">
                           <div >

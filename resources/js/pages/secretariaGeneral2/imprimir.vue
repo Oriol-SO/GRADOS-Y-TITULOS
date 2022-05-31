@@ -59,7 +59,7 @@
                         @click="enviar_imprimir(item)"    
                         > <v-icon left>mdi-check</v-icon> Imprimido</v-btn>
  
-                        <v-btn
+                        <!--v-btn
                         v-if="item.estado_impri==1"
                         x-small
                         class="ml-2"
@@ -67,7 +67,7 @@
                         color="primary"
                         elevation="0"      
                         @click="enviar_imprimir(item)"    
-                        > <v-icon dark>mdi-backup-restore</v-icon></v-btn>
+                        > <v-icon dark>mdi-backup-restore</v-icon></v-btn-->
                       </div>
                        
 

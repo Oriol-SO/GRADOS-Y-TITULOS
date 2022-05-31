@@ -108,11 +108,11 @@ class SecretariaController extends Controller
                 'tipo_tramite'=>$t->tipo_tramite,
                 'fase_actual'=>$t->fase_actual,
                 'receptor_rol_notify'=>$t->receptor_rol_notify,
-                'trabajo_plan_tesis_url'=>$t->trabajo->url_repositorio,
-                'titulo_proyecto'=>$t->trabajo->nombre,
+                'trabajo_plan_tesis_url'=>$t->trabajo?$t->trabajo->url_repositorio:null ,
+                'titulo_proyecto'=>$t->trabajo?$t->trabajo->nombre:null,
                 'integrantes'=>1,
                 'grado'=>$t->proceso->grado_id,
-                'linea_investigacion'=>$t->trabajo->LineaDeInvestigacione->inveNombre,
+                'linea_investigacion'=>$t->trabajo?$t->trabajo->LineaDeInvestigacione->inveNombre:null,
             ];
         });
         return response()->json($tramites[0],200);

@@ -26,8 +26,10 @@ class SecretariaGeneral1Controller extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        $expedientes=Tramite::where('consejo_id',null)/*->where('receptor_rol_notify',3)*/->get()->map(function($e){
+
+    {      
+
+        $expedientes=Tramite::where('consejo_id',null)->where('receptor_rol_notify',3)->get()->map(function($e){
                 return[
                     'per_nom'=>$e->persona->nom.' '.$e->persona->apePat.' '.$e->persona->apeMat,
                     'id'=> $e->id,

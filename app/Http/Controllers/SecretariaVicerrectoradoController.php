@@ -9,6 +9,7 @@ use App\Models\FaseRolRequisito;
 use App\Models\Fase;
 use App\Models\File;
 use App\Models\Observacione;
+use App\Models\Proceso;
 use App\Models\Revisione;
 use Exception;
 use Illuminate\Http\Request;
@@ -60,15 +61,24 @@ class SecretariaVicerrectoradoController extends Controller
         }
     }
     protected function sv_obtenerfasestramite($id){
-        $fase['fases']=Fase::where('proceso_id', $id)->where(function($query) {
-            $query->where('encargado_ejecutar', 11)
-                  ->orWhere('encargado_revisar', 11);
-        })->orderBy('numero', 'asc')->get();
-      //  $fase['fases_ejecutar']=Fase::where('proceso_id', $id)->where('encargado_ejecutar',5)->orderBy('numero', 'asc')->oldest()->get();
-        $fase['cantidad']=Fase::where('proceso_id', $id)->where(function($query) {
-            $query->where('encargado_ejecutar', 11)
-                  ->orWhere('encargado_revisar', 11);
-        })->get()->count();
+
+        $tipo_tram=(Proceso::where('id',$id)->first())->grado_id;
+
+        if($tipo_tram==1){
+            $fase['fases']=Fase::where('proceso_id', $id)->where('numero','<=',3)->get();
+            /*Fase::where('proceso_id', $id)->where(function($query) {
+                $query->where('encargado_ejecutar', 11)
+                      ->orWhere('encargado_revisar', 11);
+            })->orderBy('numero', 'asc')->get();*/
+          //  $fase['fases_ejecutar']=Fase::where('proceso_id', $id)->where('encargado_ejecutar',5)->orderBy('numero', 'asc')->oldest()->get();
+            $fase['cantidad']=3;
+            
+            /*Fase::where('proceso_id', $id)->where(function($query) {
+                $query->where('encargado_ejecutar', 11)
+                      ->orWhere('encargado_revisar', 11);
+            })->get()->count();*/
+        }
+
         //$fase['cantidadCorrespondiente']=Fase::where('proceso_id', $id)->where('encargado_ejecutar',5)->get()->count();
         $fase['fases_tramite']=Fase::where('proceso_id',$id)->orderBy('numero', 'asc')->get();
         //$fase=Fase::all();
@@ -81,6 +91,25 @@ class SecretariaVicerrectoradoController extends Controller
 
         $rol_sf=11;
         if($rol_sf===11){
+
+            $requisitos['otros_requisitos']=FaseRolRequisito::where('fase_id',$id)->where('rol_id',10)->get()->map(function ($r) {
+                return [
+                    'id' => $r->id,       
+                    'requisito_id' => $r->requisito_id ,
+                    'nombre' => $r->requisito ->nombre ,
+                    'rol'=> $r->rol->id,
+                    'documento'=>$r->requisito->TipoArchivo->tipoNombre,
+                    'extension'=>$r->requisito ->tipo_documento,
+                    'archivo'=>File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get(),
+                    'conforme'=>Revisione::whereIn('file_id',(File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('id')))->get(),
+                    'observacion'=>Observacione::whereIn('file_id',(File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('id')))->get(),
+                    'modificado'=>File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('num_modifi')->map(function($mod){
+                        return $mod->num_modifi;
+                    }),   
+                  //  'aprovados'=>Revisione::whereIn('file_id',(File::where('tramite_id',$this->tram)->get('id')))->count(),
+                    //'observados'=>Observacione::whereIn('file_id',(File::where('tramite_id',$this->tram)->get('id')))->count(),
+                ];
+            });
                 //desabilitar notificacion 
                  //obtener rol revisador 
                  //$fase_revision=Fase::where('id',$id)->first();
