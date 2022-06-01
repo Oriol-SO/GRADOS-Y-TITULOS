@@ -2,11 +2,10 @@
   <v-card class="mt-3 mx-4 card-shadow" style="min-height:660px;" >
     <v-toolbar
       flat
-      color="#fff"
+      color="#2B5683"
       dark
     >
-      <v-toolbar-title  style="color:#32325d; font-weight:500;  "> Editar Perfil</v-toolbar-title>
-     
+      <v-toolbar-title > Mi Perfil</v-toolbar-title>
     </v-toolbar>
      <v-divider></v-divider>
     <v-tabs orizontal centered>

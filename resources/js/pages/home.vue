@@ -1,11 +1,10 @@
 
 <template>
   <v-container class="main px-0 py-0"  fluid grid-list-md>
-
-    
       <section id="hero">
         <v-img
-          :min-height="minHeight"
+        style="  height: 100vh ; magin:0"
+       
           src="/img/fondo_grados.jpg"
           class="white--text"
           gradient="to bottom, rgba(11, 28, 61, .9), rgba(0,0,0,.4)"
@@ -35,21 +34,24 @@
                 class="d-flex flex-wrap"
               >
                 <v-btn
-                color="primary" dark class="font-weight-bold " elevation="0" x-large to="/register">
+                
+                style="margin:3px ; text-align:center "
+                color="primary" 
+                dark class="font-weight-bold " 
+                elevation="0" 
+                x-large to="/register">
                   Comienza ahora
                 </v-btn>
 
                 <!--span class="font-weight-bold ml-6 mr-4 my-4">or</span-->
 
                 <v-btn
-                  :ripple="false"
-                  class="pa-1 font-weight-bold ml-2"
-                  height="auto"
-                  color="#42a5f6"
-                  text
-                  x-large
-                >
-                  Inicia Session
+                style="margin:3px"
+                color="primary" 
+                dark class="font-weight-bold " 
+                elevation="0" 
+                x-large to="/login">
+                  Iniciar Session
                 </v-btn>
               </div>
             </v-responsive>
@@ -58,27 +60,31 @@
       </section>
       <v-sheet class="mt-16 mb-16"  >
         <v-card elevation="0">
-            <h1 class="text-h5 font-weight-bold mb-2 text-center" style="letter-spacing: .1875rem!important;">   NUESTRAS AUTORIDADES </h1>
+            <h1 class="text-h5 font-weight-bold mb-2 text-center" 
+            style="letter-spacing: .1875rem!important;">   
+            NUESTRAS AUTORIDADES </h1>
             <v-responsive class="mx-auto mb-6"  style="max-width: 28px; background:#42a5f6;">
               <v-divider orizontal style="border-width: 3px 0 0 0"></v-divider>
             </v-responsive>
         </v-card>
         <v-row class="mt-5">
-          <v-col cols="12" md="4">
-              <v-card elevation="0" class="text-center"
+          <v-col cols="11" md="4" style="padding-right:0">
+              <v-card elevation="0" class="text-center " style="padding-right:0"
               >
                 <v-avatar size="200px">
                   <img
                     src="http://incubaeco.org/wp-content/uploads/2013/01/RauldelPozo.jpg"
                     alt="John"
+                    
                   >
                 </v-avatar>  
-                <h3 class="text-h6 font-weight-bold mb-0 text-center" style="letter-spacing: .1875rem!important;"> JUAN CASPIEDRA GOMEZ </h3>
+                <h3 class="text-h6 font-weight-bold mb-0 text-center" 
+                    style="letter-spacing: .1875rem!important;"> JUAN CASPIEDRA GOMEZ </h3>
                 <div class="text-body-2 font-weight-regular mb-0 text-center grey--text"> SECRETARIO GENERAL UNO </div>
               </v-card>
           </v-col>
-          <v-col cols="12" md="4">
-              <v-card elevation="0" class="text-center"
+          <v-col cols="11" md="4" style="padding-right:0">
+              <v-card elevation="0" class="text-center" style="padding-right:0"
               >
                 <v-avatar size="200px">
                   <img
@@ -91,8 +97,8 @@
                 <div class="text-body-2 font-weight-regular mb-0 text-center grey--text"> SECRETARIA GENERAL DOS </div>
               </v-card>
           </v-col>
-          <v-col cols="12" md="4">
-              <v-card elevation="0" class="text-center"
+          <v-col cols="11" md="4" style="padding-right:0">
+              <v-card elevation="0" class="text-center" style="padding-right:0"
               >
                 <v-avatar size="200px">
                   <img
@@ -159,7 +165,7 @@
                           <div class="ml-6">
                               <h4 class="text-uppercase  font-weight-bold mb-3 text-left white--text"> Email </h4>
                               <div class="base-body text-body-1 mx-auto grey--text text--lighten-1 text-left mb-0" style="max-width: 700px;">
-                                <p>soporte1@postgradoundac.edu.pe<br> admin@postrgradoundac.edu.pe
+                                 <p>soporte1@postgradoundac.edu.pe<br> admin@postrgradoundac.edu.pe
                                 </p>
                               </div>
                           </div>

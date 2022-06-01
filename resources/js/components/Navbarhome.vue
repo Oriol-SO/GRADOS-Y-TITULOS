@@ -1,5 +1,6 @@
 <template>
-<v-app-bar id="home-app-bar" app style=" background-color: transparent; position: absolute;" elevation="0" elevate-on-escroll height="80">
+<v-system-bar          lights-out
+        dark id="home-app-bar" app style=" background-color: transparent; position: absolute;" elevation="0" elevate-on-escroll height="80">
 
     <v-toolbar dense elevation="0" style=" background-color: transparent;  ">
      <v-img class="ml-1" max-height="68" max-width="68" src="/img/u.png" />
@@ -33,7 +34,7 @@
      
     </v-toolbar>
 
-  </v-app-bar>
+  </v-system-bar>
 </template>
 
 <script>

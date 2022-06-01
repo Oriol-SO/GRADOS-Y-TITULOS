@@ -1,30 +1,37 @@
-
 <template>
-  <v-container class="main"  fluid grid-list-md>
-    <v-layout row wrap align-space-between justify-space-between fill-height>
-      <v-flex style="text-align:center;">
-        <v-layout align-center justify-center fill-height  >
-          <div   >      
-            <p class=" text-center text-justify"
-               style="font-size:70px; font-family: 'Vollkorn', serif; display: contents; ">
-                Grados y Títulos <br>
-            </p> 
-                 <hr>Universidad Nacional Daniel Alcides Carrion <hr>
-          </div>  
-        </v-layout> 
-      </v-flex>
-      <v-flex class=" d-flex align-center">    
-        <v-img max-height="800" width="800"
-              class=" darken-1" src="/img/home.png" />
-      </v-flex >
-    </v-layout>
-  </v-container>
+  <div>
+    <v-subheader>Lights out (light)</v-subheader>
+    <v-card
+      img="https://cdn.vuetifyjs.com/images/home/vuetify_layout2.svg"
+      height="200px"
+    >
+      <v-system-bar
+        color="primary"
+        lights-out
+      >
+        <v-spacer></v-spacer>
+        <v-icon>mdi-wifi-strength-4</v-icon>
+        <v-icon>mdi-signal-cellular-outline</v-icon>
+        <v-icon>mdi-battery</v-icon>
+        <span>12:30</span>
+      </v-system-bar>
+    </v-card>
+    <v-subheader>Lights out (dark)</v-subheader>
+    <v-card
+      img="https://cdn.vuetifyjs.com/images/home/vuetify_layout2.svg"
+      height="200px"
+    >
+      <v-system-bar
+        color="primary"
+        lights-out
+        dark
+      >
+        <v-spacer></v-spacer>
+        <v-icon>mdi-wifi-strength-4</v-icon>
+        <v-icon>mdi-signal-cellular-outline</v-icon>
+        <v-icon>mdi-battery</v-icon>
+        <span>12:30</span>
+      </v-system-bar>
+    </v-card>
+  </div>
 </template>
-
-<style scoped>
-.main {
-  background-size: cover;
-  height: 100%;
-  background:#051733;
-}
-</style>

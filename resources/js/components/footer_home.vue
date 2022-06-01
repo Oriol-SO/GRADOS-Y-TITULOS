@@ -1,6 +1,6 @@
 <template>
-  <v-footer padless style="background:#000; color:#fff; min-height:60px;">
-  <v-row>
+  <v-footer  style="background:#000; color:#fff;  ">
+  
     <v-col
       cols="12"
       md="6"
@@ -23,14 +23,16 @@
     </v-col>
 
     <v-col
-      class="text-right pr-5"
+      class="text-right pr-5 pb-0 mb-0"
       cols="12"
       md="6"
       
     >
+    <div>
     Copyright ©  {{ new Date().getFullYear() }}  Grados y Titulos 
+    </div>
     </v-col>  
-  </v-row>
+
 
   </v-footer>
 </template>

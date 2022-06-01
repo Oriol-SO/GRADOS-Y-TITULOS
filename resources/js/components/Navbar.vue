@@ -6,7 +6,7 @@
       <v-toolbar-title >{{ appName }}</v-toolbar-title>
       <v-spacer></v-spacer>
 
-      <v-btn v-for="(link, i) in linksVerified" :key="i"  plain :to="link.path" color="#fff"  >
+      <v-btn v-for="(link, i) in linksVerified" :key="i"  plain :to="{name:link.path}" color="#fff"  >
         {{ link.name }}
       </v-btn>
 
@@ -20,26 +20,26 @@
           </template> 
           <v-card>
             <v-list-item-content >
-              <div style="flex-direction:column;">
+              <div >
                   <div class="text-center">
                       <h4 class="text-wrap">{{ user.nombre }}</h4>
                       <p class="text-caption mt-1">
                         {{ user.email }}
                       </p>
                   </div>     
-                  <v-divider class="my-1"></v-divider>   
-                    <div style="    display: table-caption;">
-                      <v-btn depressed rounded text to="/admin">
+                  <v-divider class="my-1" ></v-divider>   
+                    <div style="display:flex; flex-direction:column; " >
+                      <v-btn width="200" depressed rounded text   style="justify-content: flex-start ; margin:3px"  :to="{name:firstRoute}">
                       <v-icon left>mdi-view-dashboard</v-icon>
                         Dashboard
                       </v-btn>
                 
-                      <v-btn depressed rounded text to="/settings">
+                      <v-btn  width="200" depressed rounded text   style=" justify-content: flex-start ; margin:3px" to="/settings">
                       <v-icon left>mdi-account-box-outline</v-icon>
                         Perfil
                       </v-btn>
                     
-                      <v-btn depressed rounded text @click="logout">
+                      <v-btn  width="200" depressed rounded text   style="  justify-content: flex-start; margin:3px" @click="logout">
                       <v-icon left>mdi-logout</v-icon>
                         Salir
                       </v-btn>
@@ -68,16 +68,19 @@ export default {
     bgNavbar: "#fff",
     letra_color:"#fff",
   }),
-    props: {
+   /* props: {
       dashboard:'/admin',
-    },
+    },*/
 
   computed: {
     ...mapGetters({
       user: "auth/user",
+      firstRoute :"auth/firstRoute",
+        //this.$router.push({ name: "admin.dashboard" });
+       // this.$router.push({name: firstRoute}),
     }),
     linksVerified: function () {
-      return [{ name: "Dashboard", path: "/admin" }];
+      return [{ name: "Dashboard", path:this.firstRoute }];
       //return this.links.filter((link) => !(link.notUser && this.user));
     },
   },

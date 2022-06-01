@@ -1,17 +1,28 @@
 <template>
   <v-container fluid>
+
+    <template >
+     <v-toolbar
+       class="mb-2 rounded"
+       flat
+       color="#2B5683"
+     >
+       <v-toolbar-title class="white--text " > Control de Sticker </v-toolbar-title>
+    </v-toolbar>
+  </template>
+
+
+
     <v-card elevation="0">
+
         <v-toolbar class="mt-3" color="#0df0d6" dark style="color:#000;" elevation="0">
-          <v-toolbar-title class="d-flex" style="width:100%;" > Control de Sticker
-   
-          </v-toolbar-title>
               <v-tabs v-model="tab">
               <v-tabs-slider color="#000"></v-tabs-slider>
                 <v-tab
                   style="color:#000;"
                   v-for="item in items"
                   :key="item.id"
-               
+                
                 >
                   {{ item.graNom }}
                 </v-tab>
@@ -31,6 +42,7 @@
                     :items-per-page="10"
                     class="elevation-1"
                     group-by="consejo_numero"
+                    id="color_table"
                   >
                     <template v-slot:item.actions="{ item }">
                         <v-btn
@@ -72,7 +84,8 @@
                 v-model="form.sticker"
                 label="Número de sticker">
                 </v-text-field>                
-                <v-btn class="mt-3 " 
+                <v-btn 
+                class="mt-3 text-capitalize" 
                 style="color:#fff;" 
                 elevation="0" 
                 color="#42C2FF" 

@@ -29,7 +29,7 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
-                    color="#2dce89"
+                    color="primary"
                     v-bind="attrs"
                     v-on="on"
                     style="color:#fff; font-weight: 600;"

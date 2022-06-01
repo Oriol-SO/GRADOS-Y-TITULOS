@@ -1,10 +1,6 @@
-
-
 <template>
-
 <div>
-  <div> 
-          
+  <div>        
       <v-col cols="auto">
       <v-dialog
         transition="dialog-top-transition"
@@ -13,7 +9,8 @@
       >
         <template v-slot:activator="{ on, attrs }">
           <v-btn
-            color="#2cdd9b" class="ml-10 mt-5"
+            color="#2cdd9b" 
+            class="ml-10 mt-5"
             style="color:#fff;"
             v-bind="attrs"
             v-on="on"

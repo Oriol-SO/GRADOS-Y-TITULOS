@@ -60,7 +60,6 @@
             </v-bottom-sheet>
          </v-card-text>
         </v-card>     
-
         <template>
             <v-card class="mt-1" elevation="0">
             
@@ -135,60 +134,77 @@
                                         item-text='rolNombre'
                                         item-value='id'                                                       
                                     
-                                        return-object
-                                        
-                                        label="encargado de revisar"
-                                    >                                    
-                                    </v-select>  
-                                    <div v-if="errores.rol_revisar">
-                                        <v-alert   dense outlined type="error" >
-                                        el rol del encargado de revisar o evaluar es obligatorio
-                                        </v-alert>
-                                    </div>                     
-                                                                                    
-                                        <v-btn
-                                        class="mr-4 text-capitalize"
-                                        color="#2cdd9b"
-                                        style="color:#fff;"
-                                            @click="enviarfase()"                                            
-                                        >
-                                        Enviar
-                                        </v-btn>
-                                        <v-btn  @click="clear" color="#000"  style="color:#fff;" class="text-capitalize">
-                                        Limpiar
-                                        </v-btn>
-                                </form>                     
-                            </v-card-text>
-                            <v-card-actions class="justify-end">
-                            <v-btn
-                                text
-                                @click="dialog=false,clear()"
-                                class="text-capitalize"
-                            >Close</v-btn>
-                            </v-card-actions>
-                        </v-card>
-                    </template>    
+                                    return-object
+                                    
+                                    label="encargado de subir o ejecutar"
+
+                                >                                    
+                                </v-select>  
+                                <div v-if="errores.rol_ejecutor">
+                                    <v-alert   dense outlined type="error" >
+                                     el rol del encargado de subir o ejecutar es obligatorio
+                                    </v-alert>
+                                </div>   
+                                <v-select
+                                    v-model="formfase.rol_revisar"
+                                    :items="roles"
+                                    item-text='rolNombre'
+                                    item-value='id'                                                       
+                                   
+                                    return-object
+                                    
+                                    label="encargado de revisar"
+                                >                                    
+                                </v-select>  
+                                <div v-if="errores.rol_revisar">
+                                    <v-alert   dense outlined type="error" >
+                                     el rol del encargado de revisar o evaluar es obligatorio
+                                    </v-alert>
+                                </div>                     
+                                                                                  
+                                    <v-btn
+                                    class="mr-4 text-capitalize"
+                                    color="#2cdd9b"
+                                    style="color:#fff;"
+                                        @click="enviarfase()"                                            
+                                    >
+                                    Enviar
+                                    </v-btn>
+                                    <v-btn  @click="clear" color="#000"  style="color:#fff;" class="text-capitalize">
+                                    Limpiar
+                                    </v-btn>
+                            </form>                     
+                        </v-card-text>
+                        <v-card-actions class="justify-end">
+                        <v-btn
+                            text
+                            @click="dialog=false,clear()"
+                            class="text-capitalize"
+                        >Cerrar</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </template>    
                 </v-dialog>
                
                 <v-tabs
                 v-model="tab"
-                background-color="blue lighten-1"
+                background-color="#337ab7 "
                 dark
                 next-icon="mdi-arrow-right-bold-box-outline"
                 prev-icon="mdi-arrow-left-bold-box-outline"
 
             
                 >
-                    <v-tab
-                        v-for="(fase,i) in fases"
-                        :key="i"
-                        style="color:#fff;"
-                        class="text-h7"
-                        active-class="blue darken-4 "
-                    @click="mostrarid(fase,i)"
-                    >
-                        {{ fase.numero }}
-                    </v-tab>
+                <v-tab
+                    v-for="(fase,i) in fases"
+                    :key="i"
+                    style="color:#fff;"
+                    class="text-h7"
+                    active-class="light-blue darken-4 "
+                   @click="mostrarid(fase,i)"
+                >
+                    {{ fase.numero }}
+                </v-tab>
                 </v-tabs>
 
                 <v-tabs-items v-model="tab">

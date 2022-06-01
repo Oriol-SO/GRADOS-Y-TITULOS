@@ -1,8 +1,9 @@
 <template>
   <div class="mx-4 mt-5">
     <v-card elevation="0" flat class="mb-2 d-flex" >
-      <v-btn v-if="nomtramite.grado==2" color="primary" class="text-capitalize" small @click="open_details()">Detalles</v-btn>
+      
       <v-card-text class="px-0 py-1 ml-3 text-h6">{{nomtramite.tipo_tramite}}</v-card-text>
+      <v-btn color="primary" class="text-capitalize" large @click="open_details()">Detalles</v-btn>
     </v-card>
     <v-stepper v-model="e1" >
       <v-stepper-header class="overflow-y-auto " style=" flex-wrap: nowrap">
@@ -464,9 +465,9 @@
               max-width="600px"
             >
               <v-card>
-                <v-card-title>
-                  <span class="text-h5">Detalles de tu tramite</span>
-                </v-card-title>
+                <v-toolbar color="primary"  dark>
+                  Detalles de tu tramite
+                </v-toolbar>
                 <v-card-text>
                   <v-container>
                     <v-row>
@@ -474,18 +475,20 @@
                         cols="12"
                       >
                         <v-card elevation="0">
-                            <p><strong>Titulo de proyecto:</strong> {{titulo_proyecto}}</p>
-                            <p><strong>Linea de investigación:</strong> {{linea_investigacion}}</p>
-                            <p><strong>Integrantes:</strong> {{integrantes}}</p>
-
+                           
+                            <v-row style="justify-content: space-around; margin-top:10px">
+                            <p><strong>TITULO DE PROYECTO:</strong><br>  {{titulo_proyecto}}<br><br> 
+                            <strong>NUMERO DE INTEGRANTES:</strong><br> {{integrantes}}</p>
+                            <p><strong>LINEA DE INVESTIGACION:</strong><br>{{linea_investigacion}}</p>
+                            </v-row>                       
                             
-                            <v-row>
+                            
                               <v-file-input
                               truncate-length="50"
                               label="Actualiza tu plan"
-                            ></v-file-input>
-                            <v-btn small color="warning" class="text-capitalize" @click="modal_documents_titulo()">Ver plan<v-icon right>mdi-eye</v-icon></v-btn>
-                            </v-row>
+                              ></v-file-input> 
+                               <v-btn small color="warning" class="text-capitalize" @click="modal_documents_titulo()">Ver plan<v-icon right>mdi-eye</v-icon></v-btn>
+                            
                             
                         </v-card>
 
@@ -503,14 +506,14 @@
                     text
                     @click="dialog_details = false"
                   >
-                    Close
+                    Cerrar
                   </v-btn>
                   <v-btn
                     color="blue darken-1"
                     text
                     @click="dialog_details = false"
                   >
-                    Save
+                    guardar
                   </v-btn>
                 </v-card-actions>
               </v-card>

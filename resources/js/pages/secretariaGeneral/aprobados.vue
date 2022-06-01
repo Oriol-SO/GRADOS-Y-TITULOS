@@ -1,32 +1,39 @@
 <template>
   <v-container fluid>
+      <template >
+        <v-toolbar
+          class="mb-2 rounded"
+          flat
+          color="#2B5683"
+        >
+          <v-toolbar-title class="white--text " >EXPEDIENTES APROBADOS</v-toolbar-title>
+          <v-spacer></v-spacer> 
+            <v-btn class="text-capitalize" color="primary" @click="abrirReso()">Nro Resolución</v-btn>
+       </v-toolbar>
+     </template>
     <v-card elevation="0">
-        <v-toolbar class="mt-3" color="#0df0d6" dark style="color:#000;" elevation="0">
-          <v-toolbar-title class="d-flex" style="width:100%;" > EXPEDIENTES APROBADOS
-              <v-spacer></v-spacer>
-              <v-btn class="text-capitalize" color="primary" @click="abrirReso()">Nro Resolución</v-btn>
-          </v-toolbar-title>
-            <template v-slot:extension>
+        <v-toolbar float class="mt-3" color=" blue lighten-3" elevation="0">
+            
               <v-tabs v-model="tab">
-              <v-tabs-slider color="#000"></v-tabs-slider>
+              <v-tabs-slider color="primary"></v-tabs-slider>
                 <v-tab
                   style="color:#000;"
                   v-for="item in items"
                   :key="item.id"
-               
+               active-class="#E3F2FD"
                 >
                   {{ item.graNom }}
                 </v-tab>
               </v-tabs>        
-            </template>
+            
         </v-toolbar>         
-            <v-divider class="mt-2"></v-divider>
+
             <v-tabs-items v-model="tab" >
               <v-tab-item
                 v-for="item in items"
                 :key="item.id"
               >
-                <v-card elevation="0" style="background:rgb(242 243 248);" >
+                <v-card elevation="0" color="red" >
                 
                   <v-data-table
                     :headers="headers"
@@ -36,6 +43,7 @@
                      v-model="form.selected"
                     show-select
                     class="elevation-1"
+                    id="color_table"
                   >
                      <template v-slot:top>
                         <v-switch

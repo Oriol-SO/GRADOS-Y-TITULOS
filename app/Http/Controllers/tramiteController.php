@@ -393,12 +393,21 @@ class tramiteController extends Controller
                     return 'tu tramite esta en espera de ser programado';                
                 }           
            }
-           if($numeroFase==12){
-            if($numeroFase<$fase_actual){
-               //consejo
-               return 'felicidades ya tienes tu bachiller';
-             }else{
-               return 'tu tramite aun no se ha finalizado ';                
+           if($numeroFase>=12){
+            if($numeroFase=$fase_actual){
+                if((Tramite::where('id',$tramite)->first())->estado==0){
+                    return Tramite::where('id',$tramite)->get()->map(function($t){
+                        return[
+                            ['NOMBRE'=>'finalizado','VALOR'=>''],
+                            ['NOMBRE'=>'felicidades tu tramite ya finalizo','VALOR'=>''],
+                            ['NOMBRE'=>'fecha de entrega','VALOR'=>$t->diploma->fec_hor_entre],
+                        ];});
+                }else{
+                    return 'Tu tramite ya finalizó';
+                }
+                
+             }else{   
+                 return 'tu tramite no se ha finalizado aún '         ;
              }
                 
          }

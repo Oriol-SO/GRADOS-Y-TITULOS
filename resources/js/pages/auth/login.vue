@@ -2,7 +2,7 @@
   <v-container fluid class="fill-height main" style="padding-top: 85px;">
     <v-flex>
       <v-card
-        class="mx-auto my-auto h-100  py-6"
+        class="mx-auto my-auto h-100  transparente  py-6"
         rounded="lg"
         elevation="2"
         width="380"
@@ -131,9 +131,9 @@ export default {
         Cookies.remove("intended_url");
         this.$router.push({ path: intendedUrl });
       } else {
-        //const firstRoute = this.$store.getters["auth/firstRoute"];
-        this.$router.push({ name: "admin.dashboard" });
-        //this.$router.push(firstRoute);
+        const firstRoute = this.$store.getters["auth/firstRoute"];
+        //this.$router.push({ name: "admin.dashboard" });
+        this.$router.push({name: firstRoute});
       }
     },
   },
