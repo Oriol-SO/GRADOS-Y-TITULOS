@@ -420,7 +420,16 @@ class tramiteController extends Controller
                         ];
                     });
                 }else if($numeroFase==$fase_actual){
-                    return [[['NOMBRE'=>'Tu trámite aun no tiene resultados en esta fase']]];                 
+                    return $consejo=Tramite::where('id',$tramite)->get()->map(function($t){
+                        return[
+                            ['NOMBRE'=>'Estado: ','VALOR'=>'programado'],
+                            ['NOMBRE'=>'Libro: ','VALOR'=>$t->diploma->num_lib],
+                            ['NOMBRE'=>'Folio: ','VALOR'=>$t->diploma->lib_foli],
+                            ['NOMBRE'=>'Registro: ','VALOR'=>$t->diploma->num_lib_regis],
+                            ['NOMBRE'=>'Sticker: ','VALOR'=>$t->diploma->num_sticker],
+                            ['NOMBRE'=>'Fecha de entrega: ','VALOR'=>$t->diploma->fec_hor_entre],
+                        ];
+                    });                 
                 }else{
                     return [[['NOMBRE'=>'Tu trámite aun no llega a a esta fase']]]; 
                 }           
@@ -435,7 +444,7 @@ class tramiteController extends Controller
                         ];});
                 }else{
               
-                    return [[['NOMBRE'=>'¡Tu tramite ya finalizó!']]];  
+                    return [[['NOMBRE'=>'¡Felicidades tu trámite ya finalizó!', 'VALOR'=>'GAME_OVER_BACHILLER']]];  
                 }
                 
              }else{   

@@ -178,7 +178,7 @@ class SecretariaGeneral2Controller extends Controller
         ]);
         if($id==$request->tramite_id){
            //entrgar tramite y cambiar estado de 0 a 1
-           Tramite::where('id',$id)->update(['estado'=>1]);
+           Tramite::where('id',$id)->update(['estado'=>1 , 'fase_actual'=>12]);
            return 'OK';
         }
     }

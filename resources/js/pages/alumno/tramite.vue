@@ -226,9 +226,18 @@
                   <v-subheader class="font-weight-medium text-md-body-1 d-flex"  >Otros Detalles</v-subheader>   
                   <v-card v-if="otros_detalles.length" elevation="0">
                        
-                      <p v-for="(detail,i) in otros_detalles[0]" :key="i">
-                          <strong>{{detail.NOMBRE}}</strong> {{detail.VALOR}}
-                      </p>
+                         <v-card v-if="otros_detalles[0][0].VALOR=='GAME_OVER_BACHILLER'" elevation=0>
+                             <v-card style="background:blue;"> game over</v-card>
+                         </v-card>
+                      
+                      <div v-else >
+                          <p v-for="(detail,i) in otros_detalles[0]" :key="i">
+                            <strong>{{detail.NOMBRE}}</strong> {{detail.VALOR}}
+                          </p>
+                      </div>
+               
+                      
+                       
                   </v-card>              
                 </v-list>
        
