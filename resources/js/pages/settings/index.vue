@@ -2,7 +2,7 @@
   <v-card class="mt-3 mx-4 card-shadow" style="min-height:660px;" >
     <v-toolbar
       flat
-      color="#2B5683"
+      color="#073c72"
       dark
     >
       <v-toolbar-title > Mi Perfil</v-toolbar-title>

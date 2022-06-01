@@ -262,8 +262,11 @@ class tramiteController extends Controller
            //otros requisitos 
            $requisitos['otros']=FaseRolRequisito::where('fase_id',$id)->where('rol_id','<>',10)->get()->map(function($o){
                return[
-                'nombre' => $o->requisito ->nombre ,
+                'nombre' => $o->requisito ->nombre,
                 'rol' =>$o->rol->rolNombre,
+                'documento'=>$o->requisito->TipoArchivo->tipoNombre,
+                'extension'=>$o->requisito ->tipo_documento, 
+                'archivo_subido'=>File::where('tramite_id',$this->tram)->where('faserolreq_id',$o->id)->get(),
                ];
            });
 

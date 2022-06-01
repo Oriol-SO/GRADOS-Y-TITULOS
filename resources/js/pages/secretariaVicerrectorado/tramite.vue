@@ -7,7 +7,7 @@
     <v-row no-gutters>       
         <v-col ms="12" md="9">
             <v-card>
-                <v-card-title class="px-0 py-1 ml-3 text-h6">Fases que te corresponden</v-card-title>
+               <v-card-title  class="px-0 py-2 ml-0 pl-3 text-subtitle-1  white--text" style="background-color: #073c72">Fases que te corresponden</v-card-title>
                 <v-stepper v-model="e1" >
                     <v-stepper-header non-linear>
                         <v-stepper-step
@@ -315,7 +315,7 @@
         </v-col>
         <v-col ms="12" md="3">
             <v-card class="ml-2" elevation="0" >
-               <v-subheader>
+               <v-subheader  style="background-color: #073c72 " class=" white--text px-0 py-2 ml-0 pl-3 text-subtitle-1">
                     Fases del tramite
                 </v-subheader>
 
