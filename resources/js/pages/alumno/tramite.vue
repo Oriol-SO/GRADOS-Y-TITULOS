@@ -3,7 +3,8 @@
     <v-card elevation="0" flat class="mb-2 d-flex" >
       
       <v-card-text class="px-0 py-1 ml-3 text-h6">{{nomtramite.tipo_tramite}}</v-card-text>
-      <v-btn color="primary" class="text-capitalize" large @click="open_details()">Detalles</v-btn>
+       <v-btn v-if="nomtramite.grado==2" color="primary" class="text-capitalize" small @click="open_details()">Detalles</v-btn>
+      <!--v-btn color="primary" class="text-capitalize" large @click="open_details()">Detalles</v-btn-->
     </v-card>
     <v-stepper v-model="e1" >
       <v-stepper-header class="overflow-y-auto " style=" flex-wrap: nowrap">

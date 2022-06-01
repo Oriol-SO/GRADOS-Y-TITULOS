@@ -270,26 +270,41 @@ class tramiteController extends Controller
                ];
            });
 
-            $requisitos['otros_detalles']=$this->otros_detalles_de_fase($id,$tramite);     
+           $proceso_id=(Tramite::where('id',$tramite)->first())->proceso_id;
+           $grado=(Proceso::where('id',$proceso_id)->first())->grado_id;
+            if($grado==1){
+                $requisitos['otros_detalles']=$this->otros_detalles_de_fase_bachiller($id,$tramite);   
+            }else{
+                //otros detalles del titulo
+                $requisitos['otros_detalles']=null;   
+            }
+            
 
             return response()->json($requisitos);
         }else{
             return 'user no autorizado';
         }
  
-    }
+    } 
 
-    protected function otros_detalles_de_fase($id,$tramite){
+    protected function otros_detalles_de_fase_bachiller($id,$tramite){
            $numeroFase=(Fase::where('id',$id)->first())->numero;
            $fase_actual=(Tramite::where('id',$tramite)->first())->fase_actual;
 
            if($numeroFase==4){
-               if($numeroFase<$fase_actual){
+                if($numeroFase<$fase_actual){
                   //consejo
-                  return $consejo=[[['NOMBRE'=>'','VALOR'=> 'tu tramite ya esta agendado'],['NOMBRE'=>'CONSEJO','VALOR'=>'1']]];
+                  return $consejo=Tramite::where('id',$tramite)->get()->map(function($t){
+                    return[            
+                       ['NOMBRE'=>'','VALOR'=> 'Tu tramite ya esta agendado'],['NOMBRE'=>'Con consejo número::','VALOR'=>$t->consejo->numero],
+                    ];
+                });
+                
+                }else if($numeroFase==$fase_actual){
+                    return [[['NOMBRE'=>'Tu tramite aun no tiene resultados en esta fase']]];                 
                 }else{
-                  return 'tu tramite esta en espera de ser agendado';                
-                }
+                    return [[['NOMBRE'=>'Tu tramite aun no llega a a esta fase']]]; 
+                }   
                    
             }else if($numeroFase==5){
                 
@@ -297,72 +312,82 @@ class tramiteController extends Controller
                     //resolucion
                     return $consejo=Tramite::where('id',$tramite)->get()->map(function($t){
                         return[
-                            ['NOMBRE'=>'Consejo','VALOR'=>$t->consejo->numero],
-                            ['NOMBRE'=>'Fecha de consejo','VALOR'=>$t->consejo->fecha],
+                            ['NOMBRE'=>'Consejo número:','VALOR'=>$t->consejo->numero],
+                            ['NOMBRE'=>'Fecha de consejo:','VALOR'=>$t->consejo->fecha],
                         ];
                     });
+                }else if($numeroFase==$fase_actual){
+                    return [[['NOMBRE'=>'Tu trámite aun no tiene resultados en esta fase']]];                 
                 }else{
-                    return 'tu tramite esta en espera de pasos anteriores';                
-                }
+                    return [[['NOMBRE'=>'Tu trámite aun no llega a a esta fase']]]; 
+                }   
                 
             }
            else if($numeroFase==6){
                 if($numeroFase<$fase_actual){
                     return $consejo=Tramite::where('id',$tramite)->get()->map(function($t){
                         return[
-                            ['NOMBRE'=>'Consejo','VALOR'=>$t->consejo->numero],
-                            ['NOMBRE'=>'Fecha de consejo','VALOR'=>$t->consejo->fecha],
-                            ['NOMBRE'=>'Número de oficio','VALOR'=>$t->consejo->num_oficio],
+                            ['NOMBRE'=>'Consejo número: ','VALOR'=>$t->consejo->numero],
+                            ['NOMBRE'=>'Fecha de consejo :','VALOR'=>$t->consejo->fecha],
+                            ['NOMBRE'=>'Número de oficio  :','VALOR'=>$t->consejo->num_oficio],
                         ];
                     });
+                }else if($numeroFase==$fase_actual){
+                    return [[['NOMBRE'=>'Tu trámite aun no tiene resultados en esta fase']]];                 
                 }else{
-                    return 'tu tramite esta en espera de pasos anteriores';                
-                }
+                    return [[['NOMBRE'=>'Tu trámite aun no llega a a esta fase']]]; 
+                }   
            }else if($numeroFase==7){ 
                 if($numeroFase<$fase_actual){
                     return $consejo=Tramite::where('id',$tramite)->get()->map(function($t){
                         return[
-                            ['NOMBRE'=>'Resolucion','VALOR'=>$t->resolucione->numero],
-                            ['NOMBRE'=>'Fecha de resolucion','VALOR'=>$t->resolucione->fecha],
+                            ['NOMBRE'=>'Número de Resolución: ','VALOR'=>$t->resolucione->numero],
+                            ['NOMBRE'=>'Fecha de resolución: ','VALOR'=>$t->resolucione->fecha],
                         ];
                     });
-                }else{ 
-                    return 'tu tramite esta en espera de pasos anteriores';                
-                }
+                }else if($numeroFase==$fase_actual){
+                    return [[['NOMBRE'=>'Tu trámite aun no tiene resultados en esta fase']]];                 
+                }else{
+                    return [[['NOMBRE'=>'Tu trámite aun no llega a a esta fase']]]; 
+                }   
            }
            else if($numeroFase==8){ 
                 if($numeroFase<$fase_actual){
                     return $consejo=Tramite::where('id',$tramite)->get()->map(function($t){
                         return[
-                            ['NOMBRE'=>'Libro','VALOR'=>$t->diploma->num_lib],
-                            ['NOMBRE'=>'Folio','VALOR'=>$t->diploma->lib_foli],
-                            ['NOMBRE'=>'Registro','VALOR'=>$t->diploma->num_lib_regis],
+                            ['NOMBRE'=>'Libro: ','VALOR'=>$t->diploma->num_lib],
+                            ['NOMBRE'=>'Folio: ','VALOR'=>$t->diploma->lib_foli],
+                            ['NOMBRE'=>'Registro: ','VALOR'=>$t->diploma->num_lib_regis],
                         ];
                     });
+                }else if($numeroFase==$fase_actual){
+                    return [[['NOMBRE'=>'Tu trámite aun no tiene resultados en esta fase']]];                 
                 }else{
-                    return 'tu tramite esta en espera de pasos anteriores';                
-                }
+                    return [[['NOMBRE'=>'Tu trámite aun no llega a a esta fase']]]; 
+                }   
            }
            else if($numeroFase==9){ 
                 if($numeroFase<$fase_actual){
                 //consejo
                     return $consejo=Tramite::where('id',$tramite)->get()->map(function($t){
                         return[
-                            ['NOMBRE'=>'Estado','VALOR'=>'ya esta impreso'],
-                            ['NOMBRE'=>'Libro','VALOR'=>$t->diploma->num_lib],
-                            ['NOMBRE'=>'Folio','VALOR'=>$t->diploma->lib_foli],
-                            ['NOMBRE'=>'Registro','VALOR'=>$t->diploma->num_lib_regis],
-                            ['NOMBRE'=>'Sticker','VALOR'=>$t->diploma->num_sticker],
+                            ['NOMBRE'=>'Estado: ','VALOR'=>'ya esta impreso'],
+                            ['NOMBRE'=>'Libro :','VALOR'=>$t->diploma->num_lib],
+                            ['NOMBRE'=>'Folio: ','VALOR'=>$t->diploma->lib_foli],
+                            ['NOMBRE'=>'Registro: ','VALOR'=>$t->diploma->num_lib_regis],
+                            ['NOMBRE'=>'Sticker: ','VALOR'=>$t->diploma->num_sticker],
                         ];
                     });
+                }else if($numeroFase==$fase_actual){
+                    return [[['NOMBRE'=>'Tu trámite aun no tiene resultados en esta fase']]];                   
                 }else{
-                    return 'tu tramite esta en espera de obtener un numero de sticker';                
-                }
+                    return [[['NOMBRE'=>'Tu trámite aun no llega a a esta fase']]]; 
+                }   
            }else if($numeroFase==10){
             if($numeroFase<$fase_actual){
                 //consejo
                 //fecha de entrega para el dia tal
-                return 'tu tramite ya tiene una fecha para ser entregado';
+                return [[['NOMBRE'=>'Tu trámite ya tiene una fecha para ser entregado']]];  
                 
                 /*
                 return $consejo=Tramite::where('id',$tramite)->get()->map(function($t){
@@ -375,46 +400,49 @@ class tramiteController extends Controller
                         
                     ];
                 });*/
-              }else{
-                return [[['NOMBRE'=>'tu tramite esta en espera de ser programado para entrega']]];  
-                           
-              }
+              }else if($numeroFase==$fase_actual){
+                return [[['NOMBRE'=>'Tu trámite aun no tiene resultados en esta fase']]];                 
+                }else{
+                    return [[['NOMBRE'=>'Tu trámite aun no llega a a esta fase']]]; 
+                }   
            }else if($numeroFase==11){          
                 //consejo
                 if($numeroFase<$fase_actual){
                     //consejo
                     return $consejo=Tramite::where('id',$tramite)->get()->map(function($t){
                         return[
-                            ['NOMBRE'=>'Estado','VALOR'=>'programado'],
-                            ['NOMBRE'=>'Libro','VALOR'=>$t->diploma->num_lib],
-                            ['NOMBRE'=>'Folio','VALOR'=>$t->diploma->lib_foli],
-                            ['NOMBRE'=>'Registro','VALOR'=>$t->diploma->num_lib_regis],
-                            ['NOMBRE'=>'Sticker','VALOR'=>$t->diploma->num_sticker],
-                            ['NOMBRE'=>'Fecha de entrega','VALOR'=>$t->diploma->fec_hor_entre],
+                            ['NOMBRE'=>'Estado: ','VALOR'=>'programado'],
+                            ['NOMBRE'=>'Libro: ','VALOR'=>$t->diploma->num_lib],
+                            ['NOMBRE'=>'Folio: ','VALOR'=>$t->diploma->lib_foli],
+                            ['NOMBRE'=>'Registro: ','VALOR'=>$t->diploma->num_lib_regis],
+                            ['NOMBRE'=>'Sticker: ','VALOR'=>$t->diploma->num_sticker],
+                            ['NOMBRE'=>'Fecha de entrega: ','VALOR'=>$t->diploma->fec_hor_entre],
                         ];
                     });
+                }else if($numeroFase==$fase_actual){
+                    return [[['NOMBRE'=>'Tu trámite aun no tiene resultados en esta fase']]];                 
                 }else{
-                    return [[['NOMBRE'=>'tu tramite esta en espera de ser programado']]];                
+                    return [[['NOMBRE'=>'Tu trámite aun no llega a a esta fase']]]; 
                 }           
-           }
-           if($numeroFase>=12){
+           }else if($numeroFase>=12){
             if($numeroFase==$fase_actual){
                 if((Tramite::where('id',$tramite)->first())->estado==0){
                     return Tramite::where('id',$tramite)->get()->map(function($t){
                         return[
                             ['NOMBRE'=>'finalizado','VALOR'=>''],
                             ['NOMBRE'=>'felicidades tu tramite ya finalizo','VALOR'=>''],
-                            ['NOMBRE'=>'fecha de entrega','VALOR'=>$t->diploma->fec_hor_entre],
+                            ['NOMBRE'=>'fecha y hora de entrega: ','VALOR'=>$t->diploma->fec_hor_entre],
                         ];});
                 }else{
-                    return 'Tu tramite ya finalizó';
+              
+                    return [[['NOMBRE'=>'¡Tu tramite ya finalizó!']]];  
                 }
                 
              }else{   
-                 return 'tu tramite no se ha finalizado aún '         ;
-             }
                 
-         }
+                 return [[['NOMBRE'=>'Tu trámite no se ha finalizado aún. ']]];  
+                }
+           }         
            else{
                return null;
            }

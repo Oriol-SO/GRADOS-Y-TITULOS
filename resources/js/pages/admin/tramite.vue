@@ -136,31 +136,15 @@
                                     
                                     return-object
                                     
-                                    label="encargado de subir o ejecutar"
+                                    label="encargado de Revisar"
 
                                 >                                    
                                 </v-select>  
                                 <div v-if="errores.rol_ejecutor">
                                     <v-alert   dense outlined type="error" >
-                                     el rol del encargado de subir o ejecutar es obligatorio
+                                     el rol del encargado de revisar es obligatorio
                                     </v-alert>
-                                </div>   
-                                <v-select
-                                    v-model="formfase.rol_revisar"
-                                    :items="roles"
-                                    item-text='rolNombre'
-                                    item-value='id'                                                       
-                                   
-                                    return-object
-                                    
-                                    label="encargado de revisar"
-                                >                                    
-                                </v-select>  
-                                <div v-if="errores.rol_revisar">
-                                    <v-alert   dense outlined type="error" >
-                                     el rol del encargado de revisar o evaluar es obligatorio
-                                    </v-alert>
-                                </div>                     
+                                </div>                  
                                                                                   
                                     <v-btn
                                     class="mr-4 text-capitalize"

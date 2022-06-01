@@ -51,16 +51,18 @@
             <div>
             <p class="mb-0"><Strong>E-mail: </Strong></p>
             <p class="mb-2">{{form.email}}</p>            
-            <p class="mb-0"><Strong>Ingreso: </Strong></p>
-            <p class="mb-2">{{form.matricula}}</p>
+            <p v-if="form.matricula" class="mb-0"><Strong>Ingreso: </Strong></p>
+            <p v-if="form.matricula" class="mb-2">{{form.matricula}}</p>
             <p class="mb-0"><Strong>Fec Nacimiento: </Strong></p>
             <p class="mb-2">{{form.Nacimiento}}</p>
+             <p class="mb-0"><Strong>Documento: </Strong></p>
+            <p class="mb-2">{{form.Documento}}</p>
             </div>
             <div>
             <p class="mb-0"><Strong>Dirección: </Strong></p>
             <p class="mb-2">{{form.Direccion}}</p>
-            <p class="mb-0"><Strong>Curricula:</Strong></p>
-            <p class="mb-2">{{form.curricula}}</p>
+            <p v-if="form.curricula" class="mb-0"><Strong>Curricula:</Strong></p>
+            <p v-if="form.curricula" class="mb-2">{{form.curricula}}</p>
             <p class="mb-0"><Strong>Celular: </Strong></p>
             <p class="mb-2">{{form.Ncelular}}</p>          
             </div>
@@ -110,7 +112,7 @@
                   label="Numero Celular"
                   :rules="[v => !!v || 'El campo es requerido']"
                   required
-                  filled
+                 
                 ></v-text-field>
               </v-col>
               <!-- DIRECCION -->
@@ -126,7 +128,7 @@
                   label="Direccion"
                   :rules="[v => !!v || 'El campo es requerido']"
                   required
-                  filled
+                  
                 ></v-text-field>
               </v-col>
                   <!-- Año de egreso-->
@@ -142,7 +144,7 @@
                   label="Año de Egreso"
                   :rules="[v => !!v || 'El campo es requerido']"
                   required
-                  filled
+                  
                 ></v-text-field>
               </v-col>  
                   <!-- fec nacimiento -->
@@ -190,7 +192,7 @@
                   label="Grado De estudios"
                   :rules="[v => !!v || 'El campo es requerido']"
                   required
-                  filled
+                  
                 ></v-text-field>
               </v-col>
                   <!-- ABREVIATURA GRADO -->
@@ -206,7 +208,7 @@
                   label="Abreviatura De Grado"
                   :rules="[v => !!v || 'El campo es requerido']"
                   required
-                  filled
+                  
                 ></v-text-field>
               </v-col>
                  <!-- documento -->
@@ -214,7 +216,19 @@
                 cols="12"
                 sm="6"
                 md="5"
+                class="d-flex"
                >
+                <v-select
+                  v-model="form.tipo_documento"
+                  :items="tipodocs"
+                  label='tipo de documento'
+                  item-text="nombre"
+                  item-value="num"
+                  solo                                  
+                  return-object
+                  elevation="0"
+                  style="height:55px; width:150px;"
+                  ></v-select>
                 <v-text-field
                   v-model="form.Documento"
                   type="numeric"
@@ -223,7 +237,8 @@
                   :rules="[v => !!v || 'El campo es requerido']"
                   hint="DNI o PASAPORTE"
                   required
-                  filled
+                  class="ml-2"
+                  
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -287,8 +302,10 @@ export default {
       Abreviatura:"",
       Egreso:"",
       Documento:"",
+      tipo_documento:{nombre:'DNI', num:1},
 
     }),
+    tipodocs:[{nombre:'DNI',num:1},{nombre:'PASAPORTE',num:2}],
 
   }),
 computed: {
