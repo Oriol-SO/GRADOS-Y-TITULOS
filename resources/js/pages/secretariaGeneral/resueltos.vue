@@ -50,12 +50,12 @@
   <template>
       <v-dialog
         transition="dialog-top-transition"
-        width="650"
-       
+        width="600"
+        
         v-model="dialogenviar"
       >                      
         <template>
-            <v-card>
+            <v-card min-height="50vh">
               <v-toolbar
                 class="text-h6"
                 color="#0df0d6"
@@ -63,9 +63,10 @@
                 elevation="0"
               >Detalles de Expediente</v-toolbar>
               
-                <form style="margin:0; justify-content:center;" >
-                <v-row no-gutters >
-                <v-col cols="7"  >
+                <form style="margin:12px; justify-content:center;" >
+                <v-row    >
+                 <div >
+                 <v-col   >
                   <v-card-actions>
                     <v-btn
                       color="orange lighten-2"
@@ -91,9 +92,12 @@
                     </div>
                   </v-card-text> 
                   </v-col>
+                  </div>
 
-                  <v-col cols="5" >
-                  <v-card style=" position: fixed ;    width: max-content;" > 
+                  <div style="margin-left:30px; width: max-content;">
+                  <v-col >
+                  <v-card elevation="0" style=" width: max-content;" > 
+                   
                     <v-text-field
                       v-model="form.folio"
                       label="Número de Folio">
@@ -106,6 +110,7 @@
                       v-model="form.registro"
                       label="Número de Registro">
                     </v-text-field>
+                    
                     <v-btn class="mt-3 " 
                       style="color:#fff;" 
                       elevation="0" 
@@ -113,8 +118,10 @@
                       @click="Addresolucion()">
                       Aceptar
                     </v-btn>
+                   
                   </v-card> 
-                  </v-col>   
+                  </v-col> 
+                  </div>  
                 </v-row>                                                          
                 </form>
                
