@@ -9,7 +9,7 @@
      >
       <v-flex>
           <div class="img rounded-circle mx-auto">
-            <v-img src="/img/u.png" />
+            <v-img src="/img/u.png" /> 
           </div>
         </v-flex>
 
@@ -85,9 +85,7 @@ export default {
   layout: "basic",
   middleware: "guest",
 
-  metaInfo() {
-    return { title: this.$t("verify_email") };
-  },
+ 
 
   data: () => ({
     error: "",
@@ -98,7 +96,7 @@ export default {
 </script>
 <style scoped>
 .main {
-  background-image: url("/img/bg-login.jpg");
+  background-image:linear-gradient(rgba(11, 28, 61, 0.9), rgba(0, 0, 0, 0.4)), url("/img/fondo_grados.jpg");
   background-size: cover;
 }
 
