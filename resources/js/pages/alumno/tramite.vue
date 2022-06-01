@@ -223,8 +223,11 @@
            
                  <v-list v-else-if="otros_detalles.length ">
                   <v-subheader class="font-weight-medium text-md-body-1 d-flex"  >Otros Detalles</v-subheader>   
-                  <v-card v-if="otros_detalles.length">
-                      {{otros_detalles}}
+                  <v-card v-if="otros_detalles.length" elevation="0">
+                       
+                      <p v-for="(detail,i) in otros_detalles[0]" :key="i">
+                          <strong>{{detail.NOMBRE}}</strong> {{detail.VALOR}}
+                      </p>
                   </v-card>              
                 </v-list>
        

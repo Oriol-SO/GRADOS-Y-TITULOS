@@ -286,7 +286,7 @@ class tramiteController extends Controller
            if($numeroFase==4){
                if($numeroFase<$fase_actual){
                   //consejo
-                  return [['NOMBRE'=>'','VALOR'=> 'tu tramite ya esta agendado'],['NOMBRE'=>'CONSEJO','VALOR'=>'1']];
+                  return $consejo=[[['NOMBRE'=>'','VALOR'=> 'tu tramite ya esta agendado'],['NOMBRE'=>'CONSEJO','VALOR'=>'1']]];
                 }else{
                   return 'tu tramite esta en espera de ser agendado';                
                 }
@@ -376,7 +376,8 @@ class tramiteController extends Controller
                     ];
                 });*/
               }else{
-                return 'tu tramite esta en espera de ser programado para entrega';                
+                return [[['NOMBRE'=>'tu tramite esta en espera de ser programado para entrega']]];  
+                           
               }
            }else if($numeroFase==11){          
                 //consejo
@@ -393,11 +394,11 @@ class tramiteController extends Controller
                         ];
                     });
                 }else{
-                    return 'tu tramite esta en espera de ser programado';                
+                    return [[['NOMBRE'=>'tu tramite esta en espera de ser programado']]];                
                 }           
            }
            if($numeroFase>=12){
-            if($numeroFase=$fase_actual){
+            if($numeroFase==$fase_actual){
                 if((Tramite::where('id',$tramite)->first())->estado==0){
                     return Tramite::where('id',$tramite)->get()->map(function($t){
                         return[

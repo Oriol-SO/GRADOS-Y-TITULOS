@@ -47,15 +47,15 @@
               </v-tab-item>
             </v-tabs-items>
       </v-card>
-  <template>
+    <template>
       <v-dialog
         transition="dialog-top-transition"
-        width="600"
-        
+        max-width="780"     
+        max-height="350px"   
         v-model="dialogenviar"
       >                      
         <template>
-            <v-card min-height="50vh">
+            <v-card >
               <v-toolbar
                 class="text-h6"
                 color="#0df0d6"
@@ -64,65 +64,64 @@
               >Detalles de Expediente</v-toolbar>
               
                 <form style="margin:12px; justify-content:center;" >
-                <v-row    >
-                 <div >
-                 <v-col   >
-                  <v-card-actions>
-                    <v-btn
-                      color="orange lighten-2"
-                      text
-                     >
-                      ver detalles de expedientes
-                    </v-btn>
-                     <v-spacer></v-spacer>
-                    <v-btn
-                      icon
-                      @click="show = !show"
-                     >
-                      <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
-                    </v-btn>
-                  </v-card-actions>
-                  <v-card-text>
-                    <div v-show="show">
-                        <v-divider></v-divider>
-                      <v-card-text >
-                        <p v-for="(dato,i) in datos.data" :key="i"
-                        >"{{dato.Nombre}}":"{{dato.Valor}}"</p>
-                      </v-card-text>
-                    </div>
-                  </v-card-text> 
-                  </v-col>
-                  </div>
+                  <v-row    >
+                 
+                      <v-col  cols="12" sm="8" >
+                      <v-card-actions>
+                        <v-card-title
+                          color="orange lighten-2"
+                          text
+                          class="text-subtitle-1"
+                        >
+                           detalles de expedientes
+                        </v-card-title>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                          icon
+                          @click="show = !show"
+                        >
+                          <v-icon>{{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+                        </v-btn>
+                      </v-card-actions>
+                      <v-card-text>
+                        <div v-show="show">
+                            <v-divider></v-divider>
+                          <v-card-text style="overflow:auto; max-height:300px;" >
+                            <p v-for="(dato,i) in datos.data" :key="i"
+                            >"{{dato.Nombre}}":"{{dato.Valor}}"</p>
+                          </v-card-text>
+                        </div>
+                      </v-card-text> 
+                      </v-col>                 
 
-                  <div style="margin-left:30px; width: max-content;">
-                  <v-col >
-                  <v-card elevation="0" style=" width: max-content;" > 
                    
-                    <v-text-field
-                      v-model="form.folio"
-                      label="Número de Folio">
-                    </v-text-field>                
-                    <v-text-field
-                      v-model="form.libro"
-                      label="Número de Libro">
-                    </v-text-field>
-                    <v-text-field
-                      v-model="form.registro"
-                      label="Número de Registro">
-                    </v-text-field>
-                    
-                    <v-btn class="mt-3 " 
-                      style="color:#fff;" 
-                      elevation="0" 
-                      color="#42C2FF" 
-                      @click="Addresolucion()">
-                      Aceptar
-                    </v-btn>
+                    <v-col cols="12" sm="4" >
+                        <v-card elevation="0"  > 
+                        
+                          <v-text-field
+                            v-model="form.folio"
+                            label="Número de Folio">
+                          </v-text-field>                
+                          <v-text-field
+                            v-model="form.libro"
+                            label="Número de Libro">
+                          </v-text-field>
+                          <v-text-field
+                            v-model="form.registro"
+                            label="Número de Registro">
+                          </v-text-field>
+                          
+                          <v-btn class="mt-3 " 
+                            style="color:#fff;" 
+                            elevation="0" 
+                            color="#42C2FF" 
+                            @click="Addresolucion()">
+                            Aceptar
+                          </v-btn>                        
+                        </v-card> 
+                      </v-col> 
                    
-                  </v-card> 
-                  </v-col> 
-                  </div>  
-                </v-row>                                                          
+                  </v-row>                                                          
                 </form>
                
                 <v-card-actions>
@@ -135,17 +134,47 @@
         </template>
       </v-dialog>
     </template>
+
+
+   
+    <template>
+            <v-snackbar
+                v-model="visible"
+                tile
+                :color="color_msg"
+                top
+            >
+            {{ msg }} 
+
+            <template v-slot:action="{ attrs }">
+                <v-btn
+                color="white"
+                text
+                v-bind="attrs"
+                @click="visible = false"
+                >
+                Close
+                </v-btn>
+            </template>
+            </v-snackbar>
+    </template>
+  
   </v-container>
+
 </template>
 
 <script>
 import axios from 'axios';
 import Form from "vform";
+
 export default {
- 
+
     data(){
       
         return{
+          visible:false,
+          msg:'',
+          color_msg:'',
           show: false,
           //singleSelect: true,
           dialogenviar:false,
@@ -208,7 +237,14 @@ export default {
                 console.log(response.data);  
                 this.close();
                 this.fetchExpedientes(this.primerTab); 
-            });
+            }).catch(error=>{
+              if(error.response.status === 422){
+                    const errores_R=error.response.data.errors;
+                        this.visible=true;
+                        this.msg='Hay campos vacíos';
+                        this.color_msg='deep-orange darken-1';
+                  }
+          });
         }
        
     }
