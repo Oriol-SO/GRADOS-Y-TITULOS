@@ -540,24 +540,29 @@
             v-model="dialog_view_doc"
             width="650px"
             height="800px"
-          >
-            <v-card>
-              <v-card-title>
-                <span class="text-h6">{{nom_document}}</span>
-              </v-card-title>
+           >
+
+
+
+
+
+            <v-card width="100vh" height="90vh" >
+          <v-toolbar color="primary"  dark>
+                  <span class="text-h6">{{nom_document}}</span>
+                </v-toolbar>
              
-                  <v-card  width="95%" class="my-2 mx-2 d-flex" >
+              <v-card  width="95%" height="80%" class="my-2 mx-2 d-flex" >
                   
-                  <embed v-if="url_document_titulo" :src="url_document_titulo" type="application/pdf" width="100%" height="100%"/> 
-                    <v-card v-else class="d-flex mx-auto my-auto"  width="300px" height="150px"  elevation="0"
-                      style=" justify-content:center; align-items: center; text-align: center;">
-                      <div >
-                        <v-icon color="#2cdd9b" class="text-h1">mdi-eye</v-icon>
-                        <v-card-title>No hay documento</v-card-title>
-                      </div>                          
-                    </v-card>
+                <embed v-if="url_document_titulo" :src="url_document_titulo" type="application/pdf" width="100%" height="100%"/> 
+                  <v-card v-else class="d-flex mx-auto my-auto"  width="300px" height="150px"  elevation="0"
+                     style=" justify-content:center; align-items: center; text-align: center;">
+                    <div >
+                      <v-icon color="#2cdd9b" class="text-h1">mdi-eye</v-icon>
+                      <v-card-title>No hay documento</v-card-title>
+                    </div>                          
+                  </v-card>
                     
-                  </v-card> 
+              </v-card> 
             
               <v-card-actions>
                 <v-spacer></v-spacer>
