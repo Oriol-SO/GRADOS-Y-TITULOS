@@ -85,7 +85,9 @@ export default {
   layout: "basic",
   middleware: "guest",
 
- 
+  metaInfo() {
+    return { title: this.$t("verify_email") };
+  },
 
   data: () => ({
     error: "",
