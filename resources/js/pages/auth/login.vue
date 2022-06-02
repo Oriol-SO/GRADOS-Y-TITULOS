@@ -86,7 +86,7 @@ export default {
 
   layout: "home_layout",
 
-  
+  middleware: "guest",
 
   metaInfo() {
     return { title: this.$t("login") };
@@ -131,9 +131,9 @@ export default {
         Cookies.remove("intended_url");
         this.$router.push({ path: intendedUrl });
       } else {
-        //const firstRoute = this.$store.getters["auth/firstRoute"];
-        this.$router.push({ name: "admin.dashboard" });
-        //this.$router.push(firstRoute);
+        const firstRoute = this.$store.getters["auth/firstRoute"];
+        //this.$router.push({ name: "admin.dashboard" });
+        this.$router.push({name: firstRoute});
       }
     },
   },

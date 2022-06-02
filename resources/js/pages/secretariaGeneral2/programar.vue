@@ -65,35 +65,38 @@
       >                      
         <template>
             <v-card>
-            <v-toolbar
-                class="text-h6"
-                color="#0df0d6"
-                dark
-                elevation="0"
-            >Fecha y hora de entrega</v-toolbar>
-            <form>
-                <v-card-text>
-                <v-text-field
-                v-model="form.fecha"
-                type="datetime-local"
-                label="Fecha y Hora">
-                </v-text-field>                  
-                <v-btn class="mt-3 " 
-                style="color:#fff;" 
-                elevation="0" 
-                color="#42C2FF" 
-                @click="AddEntrega()">
-                Aceptar</v-btn>
+              <v-toolbar
+                  class="text-h6"
+                  color="#0df0d6"
+                  dark
+                  elevation="0"
+              >Fecha y hora de entrega</v-toolbar>
+              <v-card elevation="0" v-if="fecha_programada">
+                <p><strong class="ml-2">programado para:</strong>{{fecha_programada}}</p>
+              </v-card>
+              <form>
+                  <v-card-text>
+                  <v-text-field
+                  v-model="form.fecha"
+                  type="datetime-local"
+                  label="Fecha y Hora">
+                  </v-text-field>                  
+                  <v-btn class="mt-3 " 
+                  style="color:#fff;" 
+                  elevation="0" 
+                  color="#42C2FF" 
+                  @click="AddEntrega()">
+                  Aceptar</v-btn>
 
-                </v-card-text>                                                              
-            </form>
+                  </v-card-text>                                                              
+              </form>
 
-            <v-card-actions>
-                <v-btn class="ml-auto"
-                    text
-                    @click  ="close()"
-                >Cancelar</v-btn>
-            </v-card-actions>
+              <v-card-actions>
+                  <v-btn class="ml-auto"
+                      text
+                      @click  ="close()"
+                  >Cancelar</v-btn>
+              </v-card-actions>
             </v-card>
         </template>
       </v-dialog>
@@ -133,6 +136,7 @@ export default {
             
             primerTab:0,
             datos:[],
+            fecha_programada:'',
         }
     },mounted(){
             this.fetchExpedientes(this.primerTab);
@@ -165,6 +169,7 @@ export default {
             this.form.tramite_id=item.id;
             this.form.diploma_id=item.diploma;
             this.form.fecha=item.fecha_entrega;
+            this.fecha_programada=item.fecha_entrega;
             this.dialogenviar=true;          
         },
         async AddEntrega(){

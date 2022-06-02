@@ -1,18 +1,34 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import { EventDispatcher } from 'tinymce'
 import * as types from '../mutation-types'
 
 // state
 export const state = {
   user: null,
-  token: Cookies.get('token')
+  token: Cookies.get('token'),
+  currentRolid: null,
 }
-
+function getFirstRoute(rol_id) {
+  let path = 'secretaria_general.dashboard';
+  switch (rol_id) {
+    case 10:
+      path = 'alumno.dashboard'
+      break;
+    case 13:
+      path = 'admin.dashboard'
+      break;
+  }
+  console.log(rol_id)
+  return path
+}
 // getters
 export const getters = {
   user: state => state.user,
   token: state => state.token,
-  check: state => state.user !== null
+  check: state => state.user !== null,
+  firstRoute: state=>getFirstRoute(state.currentRolid),
+  currentRolid:state=>state.currentRolid,
 }
 
 // mutations
@@ -24,11 +40,20 @@ export const mutations = {
 
   [types.FETCH_USER_SUCCESS] (state, { user }) {
     state.user = user
-  },
+   // if(!Cookies.get('currentRolid')){
+      state.currentRolid=user.role
+      console.log(user.role)
+      Cookies.set('currentRolid', user.role)  //lioos
+    //}//si es que existen current rol id
+
+    //state.firsRoute=getFirstRoute(user.role)
+
+    },
 
   [types.FETCH_USER_FAILURE] (state) {
     state.token = null
     Cookies.remove('token')
+    Cookies.remove('currentRolid')
   },
 
   [types.LOGOUT] (state) {

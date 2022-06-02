@@ -108,11 +108,11 @@ class SecretariaController extends Controller
                 'tipo_tramite'=>$t->tipo_tramite,
                 'fase_actual'=>$t->fase_actual,
                 'receptor_rol_notify'=>$t->receptor_rol_notify,
-                'trabajo_plan_tesis_url'=>$t->trabajo->url_repositorio,
-                'titulo_proyecto'=>$t->trabajo->nombre,
+                'trabajo_plan_tesis_url'=>$t->trabajo?$t->trabajo->url_repositorio:null ,
+                'titulo_proyecto'=>$t->trabajo?$t->trabajo->nombre:null,
                 'integrantes'=>1,
                 'grado'=>$t->proceso->grado_id,
-                'linea_investigacion'=>$t->trabajo->LineaDeInvestigacione->inveNombre,
+                'linea_investigacion'=>$t->trabajo?$t->trabajo->LineaDeInvestigacione->inveNombre:null,
             ];
         });
         return response()->json($tramites[0],200);
@@ -290,9 +290,6 @@ class SecretariaController extends Controller
                 'archivo'=>'required'
             ]);
 
-            //actualizar
-
-            //subir nuevo
             //verificar que no haya archivos de este requisito
             $file_req=File::where('tramite_id',$request->tramite)->where('faserolreq_id',$request->idfaserequi)->count();
             if($file_req>0){                
@@ -300,7 +297,7 @@ class SecretariaController extends Controller
                 $file=File::where('tramite_id',$request->tramite)->where('faserolreq_id',$request->idfaserequi)->first();
                 //buscar observaciones
                 $obser=Observacione::where('file_id',$file->id)->count();
-                if($obser>0 && $file->num_modifi==0){
+                if($obser>=0 && $file->num_modifi==0){
                     //borramos el archivo de la carpeta
                     $url_borrar=str_replace('storage','public',$file->path);
                        Storage::delete($url_borrar);
@@ -309,7 +306,7 @@ class SecretariaController extends Controller
                         $new_url=Storage::url($request->file('archivo')->store('public/requisitos'));
 
                         //remplazamos en la base de datos
-                        $requisito=File::where('id', $file->id)->update(['path' => $new_url ,'num_modifi'=>1]);
+                        $requisito=File::where('id', $file->id)->update(['path' => $new_url ,'num_modifi'=>0]);
                          
                         return 'actualizado';
                    

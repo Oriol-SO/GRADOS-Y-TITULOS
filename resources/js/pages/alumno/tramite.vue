@@ -3,7 +3,8 @@
     <v-card elevation="0" flat class="mb-2 d-flex" >
       
       <v-card-text class="px-0 py-1 ml-3 text-h6">{{nomtramite.tipo_tramite}}</v-card-text>
-      <v-btn color="primary" class="text-capitalize" large @click="open_details()">Detalles</v-btn>
+       <v-btn v-if="nomtramite.grado==2" color="primary" class="text-capitalize" small @click="open_details()">Detalles</v-btn>
+      <!--v-btn color="primary" class="text-capitalize" large @click="open_details()">Detalles</v-btn-->
     </v-card>
     <v-stepper v-model="e1" >
       <v-stepper-header class="overflow-y-auto " style=" flex-wrap: nowrap">
@@ -100,67 +101,67 @@
                         <v-list-item 
                         class="d-flex" >
                         <v-row>
-                        {{requisito.nombre}}  
-                              <div class="ml-auto my-2" >
-                                  <v-chip
-                                    v-if="requisito.revisado_aprovado.length>0"
-                                    color="#0ce559"
-                                    text-color="#fff"
-                                    >                       
-                                        Aprovado
-                                        <v-avatar
-                                            rigth
-                                            class="green accent-3 ml-1"
-                                            text-color="#fff"
-                                        >
-                                      <v-icon>mdi-checkbox-marked-circle</v-icon>
-                                        </v-avatar>
-                                    </v-chip>
-                                    <v-chip
-                                    v-if="requisito.revisado_observado.length>0 && requisito.modificado[0]==0 "
-                                    color="#ff9400"
-                                    text-color="#fff"
-                                    >                       
-                                        observado
-                                        <v-avatar
-                                            rigth
-                                            class="amber accent-3 ml-1"
-                                            text-color="#fff"
-                                        >
-                                      <v-icon>mdi-eye-circle</v-icon>
-                                        </v-avatar>
-                                    </v-chip>
-                                    <v-chip
-                                      v-if="requisito.modificado[0]==1"
-                                      color="#ff9400"
-                                      text-color="#fff"
-                                      >                       
-                                        levantado
-                                        <v-avatar
-                                            rigth
-                                            class="amber accent-3 ml-1"
-                                            text-color="#fff"
-                                        >
-                                          <v-icon>mdi-cog-clockwise</v-icon>
-                                        </v-avatar>
-                                    </v-chip>    
-                                  <v-btn 
-                                    class=" text-capitalize" 
-                                    color="indigo" 
-                                    dark 
-                                    small
-                                    @click="openmodal(requisito)">
-                                      <v-icon dark v-if="requisito.archivo_subido.length>0">
-                                      mdi-eye
-                                      </v-icon>
-                                      <v-icon v-else-if="requisito.revisado_observado.length>0 && requisito.modificado[0]==0" dark> mdi-file-edit</v-icon>
-                                      <!--v-icon v-else-if="requisito.revisado_observado.length>0 && requisito.modificado[0]==1" dark> mdi-eye</v-icon-->
+                          {{requisito.nombre}}  
+                          <div class="ml-auto my-2" >
+                              <v-chip
+                                v-if="requisito.revisado_aprovado.length>0"
+                                color="#0ce559"
+                                text-color="#fff"
+                                >                       
+                                    Aprovado
+                                    <v-avatar
+                                        rigth
+                                        class="green accent-3 ml-1"
+                                        text-color="#fff"
+                                    >
+                                  <v-icon>mdi-checkbox-marked-circle</v-icon>
+                                    </v-avatar>
+                                </v-chip>
+                                <v-chip
+                                v-if="requisito.revisado_observado.length>0 && requisito.modificado[0]==0 "
+                                color="#ff9400"
+                                text-color="#fff"
+                                >                       
+                                    observado
+                                    <v-avatar
+                                        rigth
+                                        class="amber accent-3 ml-1"
+                                        text-color="#fff"
+                                    >
+                                  <v-icon>mdi-eye-circle</v-icon>
+                                    </v-avatar>
+                                </v-chip>
+                                <v-chip
+                                  v-if="requisito.modificado[0]==1"
+                                  color="#ff9400"
+                                  text-color="#fff"
+                                  >                       
+                                    levantado
+                                    <v-avatar
+                                        rigth
+                                        class="amber accent-3 ml-1"
+                                        text-color="#fff"
+                                    >
+                                      <v-icon>mdi-cog-clockwise</v-icon>
+                                    </v-avatar>
+                                </v-chip>    
+                              <v-btn 
+                                class=" text-capitalize" 
+                                color="indigo" 
+                                dark 
+                                small
+                                @click="openmodal(requisito)">
+                                  <v-icon dark v-if="requisito.archivo_subido.length>0">
+                                  mdi-eye
+                                  </v-icon>
+                                  <v-icon v-else-if="requisito.revisado_observado.length>0 && requisito.modificado[0]==0" dark> mdi-file-edit</v-icon>
+                                  <!--v-icon v-else-if="requisito.revisado_observado.length>0 && requisito.modificado[0]==1" dark> mdi-eye</v-icon-->
 
-                                      <v-icon v-else dark> mdi-cloud-upload</v-icon>
+                                  <v-icon v-else dark> mdi-cloud-upload</v-icon>
 
-                                  </v-btn>
-                              </div> 
-                              </v-row> 
+                              </v-btn>
+                          </div> 
+                        </v-row> 
                         </v-list-item> 
 
                     </v-list-item-content>
@@ -188,11 +189,24 @@
                   <v-list-item-content>
                     <v-list-item-title class="d-flex" >{{requisito_otro.nombre}}  
                         <div class="ml-auto">
+                                <v-btn 
+                                  v-if="requisito_otro.archivo_subido.length>0"
+                                  class=" text-capitalize" 
+                                  color="indigo" 
+                                  dark 
+                                  small
+                                  @click="open_modal_other(requisito_otro)">
+                                    <v-icon dark>
+                                    mdi-eye
+                                    </v-icon>
+                                </v-btn>
                                 <v-chip
                                   color="deep-purple accent-1"
                                   text-color="#fff"
                                   >                       
                                     {{requisito_otro.rol}}
+                                    
+                                  
                                     <v-avatar
                                         rigth
                                         class="deep-purple accent-3 ml-1"
@@ -210,8 +224,20 @@
            
                  <v-list v-else-if="otros_detalles.length ">
                   <v-subheader class="font-weight-medium text-md-body-1 d-flex"  >Otros Detalles</v-subheader>   
-                  <v-card v-if="otros_detalles.length">
-                      {{otros_detalles}}
+                  <v-card v-if="otros_detalles.length" elevation="0">
+                       
+                         <v-card v-if="otros_detalles[0][0].VALOR=='GAME_OVER_BACHILLER'" elevation=0>
+                             <v-card style="background:blue;"> game over</v-card>
+                         </v-card>
+                      
+                      <div v-else >
+                          <p v-for="(detail,i) in otros_detalles[0]" :key="i">
+                            <strong>{{detail.NOMBRE}}</strong> {{detail.VALOR}}
+                          </p>
+                      </div>
+               
+                      
+                       
                   </v-card>              
                 </v-list>
        
@@ -288,7 +314,7 @@
                           <v-icon dark left>mdi-upload</v-icon>
                           {{nom_btn}}
                         </v-btn>
-                          <v-btn 
+                          <!--v-btn 
                           class="text-capitalize" 
                           color="#FFD93D"  
                           style="color:#fff;"                           
@@ -299,7 +325,7 @@
                                 mdi-eye
                             </v-icon>
                             ver formato
-                        </v-btn>
+                        </v-btn-->
 
                       </v-card-actions>
                         <div v-if="observacion">
@@ -318,7 +344,7 @@
                     <v-col cols="12"  md="8" style="height:100ch;" >   
                       <v-card height="95%" width="95%" class="my-2 mx-2 d-flex" >
                       
-                      <embed v-if="url_document_titulo" :src="url_document_titulo" type="application/pdf" width="100%" height="100%"/> 
+                      <embed v-if="url_document" :src="url_document" type="application/pdf" width="100%" height="100%"/> 
                         <v-card v-else class="d-flex mx-auto my-auto"  width="300px" height="150px"  elevation="0"
                           style=" justify-content:center; align-items: center; text-align: center;">
                           <div >
@@ -798,6 +824,17 @@ export default {
       },
       modal_documents_titulo(){
         this.dialog_view_doc=true;
+      },
+      open_modal_other(requisito){
+         this.documento=requisito.documento;
+          this.extension=requisito.extension;
+          this.nom_requisito=requisito.nombre;
+          this.msg_file='Visualizacion de documento';
+          this.subir=false;
+          if(requisito.archivo_subido.length>0 ){
+            this.url_document=requisito.archivo_subido[0].path;
+          }          
+          this.dialog=true;
       }
     }
 }

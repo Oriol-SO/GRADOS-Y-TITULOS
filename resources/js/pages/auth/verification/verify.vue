@@ -82,7 +82,7 @@ export default {
       });
     }
   },
-  layout: "basic",
+  //layout: "basic",
   middleware: "guest",
 
   metaInfo() {

@@ -59,7 +59,7 @@
                         @click="enviar_imprimir(item)"    
                         > <v-icon left>mdi-check</v-icon> Imprimido</v-btn>
  
-                        <v-btn
+                        <!--v-btn
                         v-if="item.estado_impri==1"
                         x-small
                         class="ml-2"
@@ -67,7 +67,7 @@
                         color="primary"
                         elevation="0"      
                         @click="enviar_imprimir(item)"    
-                        > <v-icon dark>mdi-backup-restore</v-icon></v-btn>
+                        > <v-icon dark>mdi-backup-restore</v-icon></v-btn-->
                       </div>
                        
 
@@ -92,24 +92,26 @@
                 dark
                 elevation="0"
             >Detalles de Expediente</v-toolbar>
-            <form>
-                <v-card-text>
-                <div class="text-overline mb-4">
-                <p v-for="(dato,i) in datos.data" :key="i"
-                >"{{dato.Nombre}}":"{{dato.Valor}}"</p>
-                </div>
-                <v-btn class="mt-3 " 
+            <div style="overflow:auto; max-height:430px;">
+              <form>
+                  <v-card-text >
+                  <div class="text-overline mb-2" >
+                  <p v-for="(dato,i) in datos.data" :key="i" class="mb-0"
+                  >"{{dato.Nombre}}":"{{dato.Valor}}"</p>
+                  </div>            
+                  </v-card-text>                                                              
+              </form>
+            </div>
+
+
+            <v-card-actions>
+              <v-btn class="ml-auto" 
                 style="color:#fff;" 
                 elevation="0" 
                 color="#42C2FF" 
                 @click="postImprimir()">
                 Aceptar</v-btn>
-
-                </v-card-text>                                                              
-            </form>
-
-            <v-card-actions>
-                <v-btn class="ml-auto"
+                <v-btn class="ml-2"
                     text
                     @click  ="close()"
                 >Cancelar</v-btn>

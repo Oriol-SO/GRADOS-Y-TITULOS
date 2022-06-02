@@ -9,7 +9,6 @@
 <script>
 
 export default {
-middleware: "auth",
+middleware: ["auth", "role:10"],
 };
 </script>
-

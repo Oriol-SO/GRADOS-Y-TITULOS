@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Fase;
 use Illuminate\Http\Request;
 use App\Models\FaseRolRequisito;
 use App\Models\Requisito;
@@ -46,6 +47,8 @@ class FaseRequisitoController extends Controller
     {
         
             $this->validarrequisitoSelect($request);
+
+            $rol_ejecutor=Fase::where('id',$request->fase_id)->first();
             $faserolrequi = FaseRolRequisito::create([
                 'rol_id' => $request->rol['id'],
                 'requisito_id' => $request->requisito['id'],
@@ -125,7 +128,7 @@ class FaseRequisitoController extends Controller
     public function validarrequisitoSelect($request=null){
         return $request->validate([
             'requisito'=>'required',
-            'rol'=>'required'
+           // 'rol'=>'required'
         ]);
     }
 }

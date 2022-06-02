@@ -163,7 +163,7 @@ Route::get('sg2-get-programar/{id}',[SecretariaGeneral2Controller::class,'sg2_ge
 Route::post('imprimir',[SecretariaGeneral2Controller::class,'sg2_post_imprimir']);
 Route::post('sg2-add-fecha-entrega',[SecretariaGeneral2Controller::class,'sg2_add_fecha_entrega']);
 Route::get('sg2-get-programados/{id}',[SecretariaGeneral2Controller::class,'sg2_get_programados']);
-
+Route::post('sg2-entregar/{id}',[SecretariaGeneral2Controller::class,'sg2_entregar']);
 
 //asesor
 

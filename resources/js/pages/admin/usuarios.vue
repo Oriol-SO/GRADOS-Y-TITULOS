@@ -318,7 +318,7 @@
 
       </template>
     </v-data-table>
-                <v-dialog
+                <v-dialog 
                 transition="dialog-top-transition"
                 max-width="800"
                 v-model="dialogedit"
@@ -356,7 +356,7 @@
                                         class="my-auto mr-3"                 
                                         >
                                         </v-text-field>
-                                        <v-btn color="primary" small class="my-auto text-capitalize" style="color:#fff;" elevation="0" @click="buscardni()" >Buscar</v-btn>                              
+                                        <!--v-btn color="primary" small class="my-auto text-capitalize" style="color:#fff;" elevation="0" @click="buscardni()" >Buscar</v-btn-->                              
                                   </div>
                                   <v-text-field
                                     v-model="formusE.apePat"
