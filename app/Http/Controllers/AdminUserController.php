@@ -62,15 +62,56 @@ class AdminUserController extends Controller
           escuela:'',
           roles:[],
     */
-    public function store(Request $request)
-    {
 
-    
+    public function validar_roles($roles){
+        $r_cont=0;
+        $r_alum=null;
+        $r_facu=null;
+        $r_escu=null;
+        foreach($roles as $rol){
+            $r=$rol['roles']['id'];
+            if($r==10){
+                $r_alum=$r;
+                $r_facu=$rol['facultad']?$rol['facultad']['FACULTAD_ID']:null;
+                $r_escu=$rol['escuela']?$rol['escuela']['ID_ESC'] :null;
+            }
+           $r_cont++; 
+        }
+
+        if($r_cont>1 && $r_alum==10){
+            return ['NOT_ROL_ALUMN'];
+        }else{
+            if($r_alum==10){
+                return ['ACEP_ALUMN',$r_facu,$r_escu];
+            }
+            else{
+                return ['ACEPT_ADMIN'];
+            }
+        }
+        
+    }
+    public function store(Request $request)
+    {    
         $this->validaruser($request);
         if((Persona::where('email',$request->correo)->count())>0){
             return '1';
         }else{
             try{
+                //validar rol si es alumno o administrativo 
+                $alum_facu=null;
+                $alum_escu=null;
+
+                $check_rol=$this->validar_roles($request->roles);
+                if($check_rol[0]=='NOT_ROL_ALUMN'){
+                    return 5;
+                }else{
+                    if($check_rol[0]=='ACEP_ALUMN'){
+                        $alum_facu=$check_rol[1];
+                        $alum_escu=$check_rol[2];
+                    }
+                }
+
+            
                 $persona=Persona::create([
                     'nom'=>$request->nombresuser,
                     'apePat'=>$request->apePat,
@@ -82,9 +123,12 @@ class AdminUserController extends Controller
                     'numDoc'=>$request->userdoc,
                     //'fecNac'=>$request->nacimiento,
                     //'numcel'=>$request->celular,
-                    'grad_estud'=>$request->gradoestu,
-                    'abre_grad'=>$request->gradoabr,
-                    'espe'=>$request->escuela? $request->escuela['ID_ESC']:null,
+                    //'grad_estud'=>$request->gradoestu,
+                    //'abre_grad'=>$request->gradoabr,
+                    'curri'=>$request->curricula,
+                    'fec_matri'=>$request->ano_ingreso,
+                    'espe'=>$alum_escu,
+                    'facu'=>$alum_facu,
                     'cod_alum'=>$request->codalum? $request->codalum:null,
                 ]);
                 
@@ -95,13 +139,13 @@ class AdminUserController extends Controller
                     'roles'=>$rolesuser,
                     'user'=>$user,
                 ]);
-            }catch(Exception){
+            }catch(Exception $e){
                
-                try{ Persona::where('id',$persona->id)->delete();}catch(Exception){
-                    return '2';
+                try{ Persona::where('id',$persona->id)->delete();}catch(Exception $e){
+                    return 2;
 
                 }
-                return '2';
+                return 2;
             }
         }
    
@@ -118,11 +162,13 @@ class AdminUserController extends Controller
             //'nacimiento' => 'required|date',
             'correo' => 'required|email',
             //'celular' => 'required|max:9',
-            'gradoestu' => 'required',
-            'gradoabr' => 'required',
+            //'gradoestu' => 'required',
+            //'gradoabr' => 'required',
             //'password' => 'required|confirmed',
             //'password_confirmation'=>'required',
             'roles' => 'required',
+            'codalum'=>'max:10',
+            'tipodoc'=>'required',
         ]);
     }
 
@@ -209,11 +255,12 @@ class AdminUserController extends Controller
             //'nacimiento' => 'required|date',
             'correo' => 'required|email',
             //'celular' => 'required|max:9',
-            'gradoestu' => 'required',
-            'gradoabr' => 'required',
+            //'gradoestu' => 'required',
+            //'gradoabr' => 'required',
             //'password' => 'required|confirmed',
             //'password_confirmation'=>'required',
            // 'roles' => 'required',
+            'codalum' => 'max:10',
         ]);
     }
 
@@ -243,11 +290,10 @@ class AdminUserController extends Controller
             $persona->gen = $request->genero;
             //$persona->dom = $request->direccion;
             $persona->email = $request->correo;
-           // $persona->tipDoc = $request->tipoDoc;
             $persona->numDoc = $request->userdoc;
             //$persona->fecNac = $request->nacimiento;
-            $persona->grad_estud = $request->gradoestu;
-            $persona->abre_grad = $request->gradoabr;
+            //$persona->grad_estud = $request->gradoestu;
+            //$persona->abre_grad = $request->gradoabr;
             //$persona->numCel = $request->celular;
            // $persona->espe=$request->escuela['ID_ESC'];
             $persona->cod_alum=$request->codalum;
@@ -263,7 +309,7 @@ class AdminUserController extends Controller
             $usuario->save();
            
             return response()->json('actualizado');
-        }catch(Exception){
+        }catch(Exception $e){
             return '2';
         }
 

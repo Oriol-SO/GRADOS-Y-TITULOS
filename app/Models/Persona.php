@@ -23,6 +23,7 @@ class Persona extends Model
         'grad_estud',
         'abre_grad',
         'espe',
+        'facu',
         'cod_alum',
         'curri',
         'fec_matri',

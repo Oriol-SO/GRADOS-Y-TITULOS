@@ -25,10 +25,11 @@ class CreatePersonasTable extends Migration
             $table->string('numDoc');
             $table->date('fecNac')->nullable();
             $table->string('numcel')->nullable();
-            $table->string('grad_estud');
-            $table->string('abre_grad');
+            $table->string('grad_estud')->nullable();
+            $table->string('abre_grad')->nullable();
             $table->string('cod_alum',10)->nullable();
             $table->string('curri')->nullable();
+            $table->string('facu')->nullable();
             $table->string('espe')->nullable();
             $table->string('fec_matri')->nullable();
             $table->string('fec_egre')->nullable();

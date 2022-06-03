@@ -68,7 +68,7 @@
                                         class="my-auto mr-3"                 
                                         >
                                         </v-text-field>
-                                        <v-btn color="primary" small class="my-auto text-capitalize" style="color:#fff;" elevation="0" @click="buscardni()" >Buscar</v-btn>                              
+                                        <v-btn v-if="formus.tipodoc.num==1" color="primary" small class="my-auto text-capitalize" style="color:#fff;" elevation="0" @click="buscardni()" >Buscar</v-btn>                              
                                   </div>
                                   <v-text-field
                                     v-model="formus.apePat"
@@ -144,7 +144,7 @@
                                     label="Celular"
                                     autocomplete="new-text"
                                   ></v-text-field-->
-                                  <v-text-field
+                                  <!--v-text-field
                                     v-model="formus.gradoestu"
                                     label="Grado de estudios"
                                     autocomplete="new-text"
@@ -153,7 +153,7 @@
                                     v-model="formus.gradoabr"
                                     label="Abrebiatura"
                                     autocomplete="new-text"
-                                  ></v-text-field>
+                                  ></v-text-field-->
                                   <!--v-text-field
                                     v-model="formus.password"
                                     label="Contraseña"
@@ -166,11 +166,34 @@
                                     type="password"
                                     autocomplete="new-password"
                                   ></v-text-field-->
-                                 <v-text-field
+                                  <v-text-field
                                     v-model="formus.codalum"
                                     label="Codigo"
                                     autocomplete="new-text"
                                   ></v-text-field>
+
+                                  <v-expansion-panels
+                                    v-model="panel_alumno"
+                                    
+                                  >
+                                     <v-expansion-panel>
+                                        <v-expansion-panel-header>Datos de Alumno</v-expansion-panel-header>
+                                        <v-expansion-panel-content>
+                                          <v-text-field
+                                            v-model="formus.curricula"
+                                            label="Currícula"
+                                            autocomplete="new-text"
+                                          ></v-text-field>
+                                          <v-text-field
+                                            v-model="formus.ano_ingreso"
+                                            label="Año de ingreso"
+                                            autocomplete="new-text"
+                                          ></v-text-field>
+                                        </v-expansion-panel-content>
+                                     </v-expansion-panel>
+
+                                  </v-expansion-panels>
+                             
                                 </v-col>
                                 </div>
                               </v-card-text>   
@@ -284,6 +307,13 @@
       :search="search"
       id="usuario"
     >
+    <template v-slot:item.rol="{ item }">
+         <div>
+            <v-chip v-for="(rol,i) in item.roles" :key="i" class="ml-1" v-bind:color="rol.rol_id==10?'orange':'primary'" small  text-color="white">
+              {{rol.roles}}
+            </v-chip>
+         </div>   
+    </template>
     <template v-slot:item.avatar="{ item }">
       <v-avatar
         size="26px"
@@ -318,226 +348,248 @@
 
       </template>
     </v-data-table>
-                <v-dialog 
-                transition="dialog-top-transition"
-                max-width="800"
-                v-model="dialogedit"
-                persistent
 
-              >
-                <template >
-                  <v-card>
-                    <v-toolbar
-                      color="primary"
-                      dark
-                    >Editar este usuario</v-toolbar>
-                    
-                    <form >
-                      <v-card-text>
-                            <v-expand-transition>
-                              <v-card-text class="mt-3" v-model="paginaform1" v-show="paginaform1">
-                                <div class=" d-flex" style="flex-wrap:wrap;">
-                                <v-col cols="12" md="6" >
-                                  <v-select
-                                  v-model="formusE.tipodoc"
-                                  :items="tipodocs"
-                                  label='tipo de documento'
-                                  item-text="nombre"
-                                  item-value="num"
-                                  solo                                  
-                                  return-object
-                                  height="35"
-                                  style="height:55px;"
-                                 ></v-select>
-                                  <div class="d-flex" >
-                                      <v-text-field
-                                        v-model="formusE.userdoc" 
-                                        label="DNI"   
-                                        class="my-auto mr-3"                 
-                                        >
-                                        </v-text-field>
-                                        <!--v-btn color="primary" small class="my-auto text-capitalize" style="color:#fff;" elevation="0" @click="buscardni()" >Buscar</v-btn-->                              
-                                  </div>
+    <v-dialog 
+      transition="dialog-top-transition"
+      max-width="800"
+      v-model="dialogedit"
+      persistent
+
+    >
+      <template >
+        <v-card>
+          <v-toolbar
+            color="primary"
+            dark
+          >Editar este usuario</v-toolbar>
+          
+          <form >
+            <v-card-text>
+                  <v-expand-transition>
+                    <v-card-text class="mt-3" v-model="paginaform1" v-show="paginaform1">
+                      <div class=" d-flex" style="flex-wrap:wrap;">
+                      <v-col cols="12" md="6" >
+                        <v-select
+                        v-model="formusE.tipodoc"
+                        :items="tipodocs"
+                        label='tipo de documento'
+                        item-text="nombre"
+                        item-value="num"
+                        solo                                  
+                        return-object
+                        height="35"
+                        style="height:55px;"
+                        ></v-select>
+                        <div class="d-flex" >
+                            <v-text-field
+                              v-model="formusE.userdoc" 
+                              label="DNI"   
+                              class="my-auto mr-3"                 
+                              >
+                              </v-text-field>
+                              <!--v-btn color="primary" small class="my-auto text-capitalize" style="color:#fff;" elevation="0" @click="buscardni()" >Buscar</v-btn-->                              
+                        </div>
+                        <v-text-field
+                          v-model="formusE.apePat"
+                          label="Apellido Paterno"
+                          autocomplete="new-text"
+                        ></v-text-field>
+                        <v-text-field
+                          v-model="formusE.apeMat"
+                          label="Apellido Materno"
+                          autocomplete="new-text"
+                        ></v-text-field>
+                        <v-text-field
+                          v-model="formusE.nombresuser"
+                          label="Nombres"
+                          autocomplete="new-text"
+                        ></v-text-field>
+                        <v-radio-group v-model="formusE.genero" row >
+                            <v-radio
+                              label="Masculino"
+                              :value="1"
+                            ></v-radio>
+                            <v-radio
+                              label="Femenino"
+                              :value="0"
+                            ></v-radio>
+                        </v-radio-group>
+                        <!--v-text-field
+                          v-model="formusE.direccion"
+                          label="Dirección"
+                          autocomplete="new-text"
+                          
+                        ></v-text-field-->
+                          
+                      </v-col>
+                      <v-col cols="12" md="6"  >
+
+                        <v-text-field
+                          v-model="formusE.correo"
+                          label="Correo"
+                          autocomplete="new-text"                          
+                        ></v-text-field> 
+
+                        <!--v-text-field
+                          v-model="formusE.gradoestu"
+                          label="Grado de estudios"
+                          autocomplete="new-text"
+                        ></v-text-field>
+                        <v-text-field
+                          v-model="formusE.gradoabr"
+                          label="Abrebiatura"
+                          autocomplete="new-text"
+                        ></v-text-field-->
+                          <v-text-field
+                          v-model="formusE.codalum"
+                          label="Codigo"
+                          autocomplete="new-text"
+                        ></v-text-field>
+                          <v-expansion-panels
+                            v-model="panel_alumno"
+                            
+                          >
+                              <v-expansion-panel>
+                                <v-expansion-panel-header>Datos de Alumno</v-expansion-panel-header>
+                                <v-expansion-panel-content>
                                   <v-text-field
-                                    v-model="formusE.apePat"
-                                    label="Apellido Paterno"
+                                    v-model="formusE.curricula"
+                                    label="Currícula"
                                     autocomplete="new-text"
                                   ></v-text-field>
                                   <v-text-field
-                                    v-model="formusE.apeMat"
-                                    label="Apellido Materno"
+                                    v-model="formusE.ano_ingreso"
+                                    label="Año de ingreso"
                                     autocomplete="new-text"
                                   ></v-text-field>
-                                  <v-text-field
-                                    v-model="formusE.nombresuser"
-                                    label="Nombres"
-                                    autocomplete="new-text"
-                                  ></v-text-field>
-                                  <v-radio-group v-model="formusE.genero" row >
-                                      <v-radio
-                                        label="Masculino"
-                                        :value="1"
-                                      ></v-radio>
-                                      <v-radio
-                                        label="Femenino"
-                                        :value="0"
-                                      ></v-radio>
-                                  </v-radio-group>
-                                  <!--v-text-field
-                                    v-model="formusE.direccion"
-                                    label="Dirección"
-                                    autocomplete="new-text"
-                                    
-                                  ></v-text-field-->
-                                   
-                                </v-col>
-                                <v-col cols="12" md="6"  >
+                                </v-expansion-panel-content>
+                              </v-expansion-panel>
 
-                                <v-text-field
-                                    v-model="formusE.correo"
-                                    label="Correo"
-                                    autocomplete="new-text"
-                                    
-                                  ></v-text-field> 
+                          </v-expansion-panels>
 
-                                  <v-text-field
-                                    v-model="formusE.gradoestu"
-                                    label="Grado de estudios"
-                                    autocomplete="new-text"
-                                  ></v-text-field>
-                                  <v-text-field
-                                    v-model="formusE.gradoabr"
-                                    label="Abrebiatura"
-                                    autocomplete="new-text"
-                                  ></v-text-field>
-                                    <v-text-field
-                                    v-model="formusE.codalum"
-                                    label="Codigo"
-                                    autocomplete="new-text"
-                                  ></v-text-field>
-                                </v-col>
-                                </div>
-                              </v-card-text>   
-                            </v-expand-transition>                        
-                         
-                            <v-expand-transition>
-                            <v-card-text class="mt-3"  v-model="paginaform2" v-show="paginaform2">
-                              <div class="d-flex" style="flex-wrap:wrap;">
-                                <v-col  cols="12" md="6"  >
-                                    <v-select                                   
-                                    v-model="formusE.facultad"
-                                    :items="facultades"
-                                    item-text='FACULTAD'
-                                    item-value='FACULTAD_ID'
-                                    return-object
-                                    label="Facultad"
-                                    @change="mostrarescuelasedit"
-                                    ></v-select>
-                                    <v-select 
-                                    v-model="formusE.escuela"
-                                    :items="escuelas"
-                                    item-text='ESCUELA_ESPECIALIDAD'
-                                    item-value='ID_ESC'
-                                    return-object
-                                    label="Escuela"
-                                     @change="mostrarrolesedit"
-                                    
-                                    ></v-select>
-                                    <v-select
-                                    v-model="formusE.rol"
-                                    :items="roles"
-                                    label="roles"
-                                    item-text="rolNombre"
-                                    item-value="id"                                    
-                                    chips
-                                    hint="roles disponibles"                                 
-                                    return-object                                    
-                                  ></v-select>
-                                  <v-btn elevation="3"  color="green" small  @click="addRolEdit()">añadir Rol</v-btn>
-                                  
-                                </v-col>
-                                  <v-col cols="12" md="6" >
-                                    <v-list >
-                                    <v-subheader style="height: 20px;">ROLES ACTUALES</v-subheader>
-                                      <v-list-item v-for="(role,i) in formusE.oldroles" :key="i" class="mb-1" style="background: #ededed; height: 25px; text-align: justify;">
-                                            <v-list-item-content>
-                                              <v-list-item-title>{{role.roles}}</v-list-item-title>
-                                              <v-list-item-subtitle v-if="role.escuela">{{role.escuela}}</v-list-item-subtitle>
-                                              <v-list-item-subtitle v-else-if="role.facultad">{{role.facultad}}</v-list-item-subtitle>                                              
-                                              <v-list-item-subtitle v-else>UNDAC</v-list-item-subtitle>                                              
-                                            </v-list-item-content>                                     
-
-                                              <v-list-item-action>
-                                                <v-switch
-                                                  color="green"
-                                                  v-model="role.estado"
-                                                  :value="role.estado"  
-                                                  @click="disableRol(role.id)"                                        
-                                                ></v-switch>
-                                              </v-list-item-action>     
-                                        </v-list-item>
-                                    </v-list> 
-
-                                    <v-list >
-                                      <v-list-item v-for="(roleE,i) in formusE.roles" :key="i" class="mb-1" style="background: #dddddd; height: 25px; border-radius: 20px; text-align: justify;">
-                                            <v-list-item-content>
-                                              <v-list-item-title>{{roleE.roles.rolNombre}}</v-list-item-title>
-                                              <v-list-item-subtitle v-if="roleE.escuela.ESCUELA_ESPECIALIDAD">{{roleE.escuela.ESCUELA_ESPECIALIDAD}}</v-list-item-subtitle>
-                                              <v-list-item-subtitle v-else-if="roleE.facultad.FACULTAD">{{roleE.facultad.FACULTAD}}</v-list-item-subtitle>                                              
-                                              <v-list-item-subtitle v-else>UNDAC</v-list-item-subtitle>                                              
-                                            </v-list-item-content>                                     
-
-                                              <v-list-item-action>
-                                                <v-btn icon>
-                                                  <v-icon color="red lighten-1" @click="deleteRolEdit(roleE)">mdi-delete</v-icon>
-                                                </v-btn>
-                                              </v-list-item-action>     
-                                        </v-list-item>
-                                    </v-list>                                    
-                                  </v-col>
-                                                                 
-                                      <v-alert  v-if="erroresuseredit"   text prominent color="red"  class="px-0 py-0" >
-                                              <p v-for="(error,i ) in erroresuseredit" :key="i" class="my-1">{{error}}</p>
-                                      </v-alert> 
-                                      <v-alert v-if="errorexistedit" text outlined color="deep-orange" icon="mdi-cloud-alert">
-                                                {{errorexistedit}}
-                                      </v-alert>                              
-                               
-                              </div>
-                              <div style="text-align: center">
-                              <v-btn color="primary" elevation="0" @click="actualizaruser()">Actualizar </v-btn>
-                              </div> 
-                            </v-card-text>  
-                            </v-expand-transition>                        
-                    
-                       </v-card-text>                      
-                    </form>                
-  
-                    <v-card-actions class="justify-end">
-                      <div v-if="btnnext">
-                        <v-btn 
-                          text
-                          color="success"
-                          @click="siguiente(),fecthfacultad()"                        
-                        >Siguiente</v-btn>                        
+                      </v-col>
                       </div>
-                      <div v-if="btnback">
-                        <v-btn
-                        text
-                        color="warning"
-                        @click="anteriore()"                        
-                        >Anterior</v-btn>  
-                      </div>
-     
+                    </v-card-text>   
+                  </v-expand-transition>                        
+                
+                  <v-expand-transition>
+                  <v-card-text class="mt-3"  v-model="paginaform2" v-show="paginaform2">
+                    <div class="d-flex" style="flex-wrap:wrap;">
+                      <v-col  cols="12" md="6"  >
+                          <v-select                                   
+                          v-model="formusE.facultad"
+                          :items="facultades"
+                          item-text='FACULTAD'
+                          item-value='FACULTAD_ID'
+                          return-object
+                          label="Facultad"
+                          @change="mostrarescuelasedit"
+                          ></v-select>
+                          <v-select 
+                          v-model="formusE.escuela"
+                          :items="escuelas"
+                          item-text='ESCUELA_ESPECIALIDAD'
+                          item-value='ID_ESC'
+                          return-object
+                          label="Escuela"
+                            @change="mostrarrolesedit"
+                          
+                          ></v-select>
+                          <v-select
+                          v-model="formusE.rol"
+                          :items="roles"
+                          label="roles"
+                          item-text="rolNombre"
+                          item-value="id"                                    
+                          chips
+                          hint="roles disponibles"                                 
+                          return-object                                    
+                        ></v-select>
+                        <v-btn elevation="3"  color="green" small  @click="addRolEdit()">añadir Rol</v-btn>
+                        
+                      </v-col>
+                        <v-col cols="12" md="6" >
+                          <v-list >
+                          <v-subheader style="height: 20px;">ROLES ACTUALES</v-subheader>
+                            <v-list-item v-for="(role,i) in formusE.oldroles" :key="i" class="mb-1" style="background: #ededed; height: 25px; text-align: justify;">
+                                  <v-list-item-content>
+                                    <v-list-item-title>{{role.roles}}</v-list-item-title>
+                                    <v-list-item-subtitle v-if="role.escuela">{{role.escuela}}</v-list-item-subtitle>
+                                    <v-list-item-subtitle v-else-if="role.facultad">{{role.facultad}}</v-list-item-subtitle>                                              
+                                    <v-list-item-subtitle v-else>UNDAC</v-list-item-subtitle>                                              
+                                  </v-list-item-content>                                     
 
-                      <v-btn 
-                        text
-                        @click="closedialogedit(),clear()"
-                      >Close</v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </template>
-              </v-dialog>
+                                    <v-list-item-action>
+                                      <v-switch
+                                        color="green"
+                                        v-model="role.estado"
+                                        :value="role.estado"  
+                                        @click="disableRol(role.id)"                                        
+                                      ></v-switch>
+                                    </v-list-item-action>     
+                              </v-list-item>
+                          </v-list> 
+
+                          <v-list >
+                            <v-list-item v-for="(roleE,i) in formusE.roles" :key="i" class="mb-1" style="background: #dddddd; height: 25px; border-radius: 20px; text-align: justify;">
+                                  <v-list-item-content>
+                                    <v-list-item-title>{{roleE.roles.rolNombre}}</v-list-item-title>
+                                    <v-list-item-subtitle v-if="roleE.escuela.ESCUELA_ESPECIALIDAD">{{roleE.escuela.ESCUELA_ESPECIALIDAD}}</v-list-item-subtitle>
+                                    <v-list-item-subtitle v-else-if="roleE.facultad.FACULTAD">{{roleE.facultad.FACULTAD}}</v-list-item-subtitle>                                              
+                                    <v-list-item-subtitle v-else>UNDAC</v-list-item-subtitle>                                              
+                                  </v-list-item-content>                                     
+
+                                    <v-list-item-action>
+                                      <v-btn icon>
+                                        <v-icon color="red lighten-1" @click="deleteRolEdit(roleE)">mdi-delete</v-icon>
+                                      </v-btn>
+                                    </v-list-item-action>     
+                              </v-list-item>
+                          </v-list>                                    
+                        </v-col>
+                                                        
+                            <v-alert  v-if="erroresuseredit"   text prominent color="red"  class="px-0 py-0" >
+                                    <p v-for="(error,i ) in erroresuseredit" :key="i" class="my-1">{{error}}</p>
+                            </v-alert> 
+                            <v-alert v-if="errorexistedit" text outlined color="deep-orange" icon="mdi-cloud-alert">
+                                      {{errorexistedit}}
+                            </v-alert>                              
+                      
+                    </div>
+                    <div style="text-align: center">
+                    <v-btn color="primary" elevation="0" @click="actualizaruser()">Actualizar </v-btn>
+                    </div> 
+                  </v-card-text>  
+                  </v-expand-transition>                        
+          
+              </v-card-text>                      
+          </form>                
+
+          <v-card-actions class="justify-end">
+            <div v-if="btnnext">
+              <v-btn 
+                text
+                color="success"
+                @click="siguiente(),fecthfacultad()"                        
+              >Siguiente</v-btn>                        
+            </div>
+            <div v-if="btnback">
+              <v-btn
+              text
+              color="warning"
+              @click="anteriore()"                        
+              >Anterior</v-btn>  
+            </div>
+
+
+            <v-btn 
+              text
+              @click="closedialogedit(),clear()"
+            >Close</v-btn>
+          </v-card-actions>
+        </v-card>
+      </template>
+    </v-dialog>
   </v-card>
 
   <template>
@@ -572,15 +624,16 @@ import Form from "vform";
   export default {
     data () {
       return {
+        panel_alumno:false,
         search:'',
         headers: [
           {text: '',value: 'avatar', sortable: false, width:'20px' },
-          {text: 'Usuarios', value: 'nom', },
+          {text: 'Usuarios', value: 'nombre_user', },
           { text: 'documento', value: 'numDoc', sortable: false },
           { text: 'Email', value: 'email', sortable: false },
           //{ text: 'telefono', value: 'numcel' },
-          { text: 'Escuela', value: 'espe' },
-          { text: 'Actions', value: 'actions', sortable: false },
+          { text: 'Roles', value: 'rol' },
+          { text: '', value: 'actions', sortable: false },
         ],
         personas:[],
         dialog:false,
@@ -603,8 +656,8 @@ import Form from "vform";
           correo:'',
           //direccion:'',
           //celular:'',
-          gradoestu:'',
-          gradoabr:'',
+         // gradoestu:'',
+         // gradoabr:'',
           //password:'',
           //password_confirmation:'',
           facultad:'',
@@ -612,6 +665,8 @@ import Form from "vform";
           roles:[],
           rol:[],
           codalum:'',
+          curricula:'',
+          ano_ingreso:'',
 
           //roles2:[],
         }),
@@ -637,6 +692,8 @@ import Form from "vform";
           oldroles:[],
           rol:'',
           codalum:'',
+          curricula:'',
+          ano_ingreso:'',
         }),
 
         //activePicker: null,
@@ -710,7 +767,7 @@ import Form from "vform";
       async FetchPersonas() {
         const { data } = await axios.get("/api/persona");
         this.personas = data;
-        //console.log(data);
+        console.log(data);
 
       },async buscardni(){    
            await axios.get(`/api/buscardni/${this.formus.userdoc}`)
@@ -780,6 +837,8 @@ import Form from "vform";
             }else{
                 if(response.data==1){
                 this.errorexist='ya existe un usuario con este correo';
+                }else if(response.data==5){
+                this.errorexist='El alumno no puede tener varios roles';
                 }else{
                   this.FetchPersonas();
                   this.clear();
@@ -852,8 +911,10 @@ import Form from "vform";
           this.formus.escuela='';
           this.formus.roles=[];
           //this.formus.rol=[];
-
+          this.formus.tipodoc={nombre:'DNI',num:1};
           this.formus.codalum='';
+          this.formus.curricula='';
+          this.formus.ano_ingreso='';
 
 
           this.erroresuser='';
@@ -862,6 +923,7 @@ import Form from "vform";
           this.errorexistedit='';
           this.roles1=[];
           this.escuelas=[];
+          this.panel_alumno=false;
           this.anteriore();
          
       },close(){
@@ -884,16 +946,18 @@ import Form from "vform";
           this.formusE.correo=item.email;
           //this.formusE.direccion=item.dom;
           //this.formusE.celular=item.numcel;
-          this.formusE.gradoestu=item.grad_estud;
-          this.formusE.gradoabr=item.abre_grad;
+         // this.formusE.gradoestu=item.grad_estud;
+         // this.formusE.gradoabr=item.abre_grad;
           //this.formusE.password='';
           //this.formusE.password_confirmation='';
+          this.formusE.ano_ingreso=item.fec_matri,
+          this.formusE.curricula=item.curri;
           this.formusE.facultad='',
           this.formusE.escuela='';
           this.formusE.roles=[];
           this.formusE.oldroles=item.roles;          
           this.formusE.codalum=item.cod_alum;
-
+          this.formusE.tipodoc={nombre:'',num:item.tipDoc}
           this.mostrarrolesedit();
          
       },async actualizaruser(){
@@ -938,13 +1002,18 @@ import Form from "vform";
  #usuario .v-data-table-header th[role=columnheader] {
   font-size: 16px !important;
   color:#304156;
-  background:#f2f3f8 !important;
+  background:#efeff0 !important;
 }
 
  #usuario, .card-shadow  {
     box-shadow: 0 0 2rem 0 rgba(136,152,170,.15)!important;
 }
-.btn-shadow{
+#usuario .btn-shadow{
   box-shadow: 0 7px 14px rgba(50,50,93,.1),0 3px 6px rgba(0,0,0,.08)!important;
+}
+#usuario  table tbody tr:not(.v-data-table__selected):hover {
+   /* box-shadow: 0 3px 15px -2px rgb(0 0 0 / 12%) !important;*/
+    transform: translateY(-4px) !important;
+    background: #f1f1f1 !important;
 }
 </style>

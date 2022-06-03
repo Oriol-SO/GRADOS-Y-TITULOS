@@ -5,7 +5,10 @@ use App\Models\Persona;
 use App\Models\PersonaRole;
 use GuzzleHttp\Client;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\Http;
+use PhpParser\Node\Stmt\Catch_;
+
 class PersonaController extends Controller
 {
     /**
@@ -19,18 +22,21 @@ class PersonaController extends Controller
         $personas=Persona::all()->map(function($p){
             return [
                 'id'=>$p->id,
+                'nombre_user'=>$p->nom.' '.$p->apePat.' '.$p->apeMat,
                 'nom'=>$p->nom,
                 'apePat'=>$p->apePat,
                 'apeMat'=>$p->apeMat,
                 'gen'=>$p->gen,
-                'dom'=>$p->dom,
+                //'dom'=>$p->dom,
                 'email'=>$p->email,
                 'tipDoc'=>$p->tipDoc,
                 'numDoc'=>$p->numDoc,
-                'fecNac'=>$p->fecNac,
-                'numcel'=>$p->numcel,
-                'grad_estud'=>$p->grad_estud,
-                'abre_grad'=>$p->abre_grad,
+                //'fecNac'=>$p->fecNac,
+                //'numcel'=>$p->numcel,
+                //'grad_estud'=>$p->grad_estud,
+                //'abre_grad'=>$p->abre_grad,
+                'curri'=>$p->curri,
+                'fec_matri'=>$p->fec_matri,
                 'espe'=>$p->espe,
                 'cod_alum'=>$p->cod_alum,
                 'facu'=>$p->PersonaRole->map(function($r){
@@ -44,7 +50,8 @@ class PersonaController extends Controller
                         'id'=>$r->id,
                         'escuela'=>$r->escId,
                         'facultad'=>$r->facId,
-                        'roles'=>$r->rol->rolNombre,                   
+                        'roles'=>$r->rol->rolNombre,
+                        'rol_id'=>$r->rol_id,                   
                     ];
                 }),
                // 'user'=>$p->user,
@@ -86,8 +93,12 @@ class PersonaController extends Controller
 
 
     public function buscardniuser($codigo){
+        try{
         $response=Http::get('https://dniruc.apisperu.com/api/v1/dni/'.$codigo.'?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImpjbGF1cmVhbm96QGdtYWlsLmNvbSJ9.xfmGDbSyPq016GIiuDHiyevun8bb2Avl2EBjYqXAQZA');
         return $response;
+        }catch(Exception){
+            return 'ERROR';
+        }
     }
     /**
      * Show the form for editing the specified resource.
