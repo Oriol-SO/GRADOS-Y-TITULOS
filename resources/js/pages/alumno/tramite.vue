@@ -227,7 +227,15 @@
                   <v-card v-if="otros_detalles.length" elevation="0">
                        
                          <v-card v-if="otros_detalles[0][0].VALOR=='GAME_OVER_BACHILLER'" elevation=0>
-                             <v-card style="background:blue;"> game over</v-card>
+                             <v-card  height="370" style=" padding:5px; background-image:url(/img/graduacion.jpg);text-align:center; display:flex; justify-content: flex-end; flex-wrap: wrap;">
+                             <v-col  ><p style="color:#fff; font-size:8vh; ">¡Lo lograste!!!...</p></v-col>
+                              
+                              <v-col class="hidden-sm-and-down" md="5" style="  padding-top:100px "> <p style="font-size: x-large; color:#fff; font-family: emoji;">Si lograste tus metas de estudio,<br> puedes alcanzar lo que sea .<br> ¡Feliz nuevo camino, graduado!</p></v-col>
+                            <div class="hidden-md-and-down" style="width:350px; padding:50px; padding-right:90px" ><v-img style="text-align: end;"contain max-width="200" src="/img/graduation.png"   ></v-img>     </div>           
+                                          
+                                                          
+                             </v-card>
+                             
                          </v-card>
                       
                       <div v-else >
@@ -838,6 +846,4 @@ export default {
       }
     }
 }
-
-//hitler es gil
 </script>

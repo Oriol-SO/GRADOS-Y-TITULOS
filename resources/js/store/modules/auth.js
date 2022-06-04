@@ -1,6 +1,6 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import { EventDispatcher } from 'tinymce'
+// import { EventDispatcher } from 'tinymce'
 import * as types from '../mutation-types'
 
 // state
