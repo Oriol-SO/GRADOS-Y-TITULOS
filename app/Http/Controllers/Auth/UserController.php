@@ -19,7 +19,10 @@ class UserController extends Controller
         $persona=$user->persona;
 
         $datosUser=array(
-            'role'=>(PersonaRole::where('persona_id',$persona->id)->first())->rol_id,
+            //'role'=>(PersonaRole::where('persona_id',$persona->id)->first())->rol_id,
+            'role'=>PersonaRole::where('persona_id',$persona->id)->where('estado',1)->where('uso',1)->get()->map(function($r){
+               return $r->rol_id;
+            }),
             'email'=>$user->email,
             'nombre'=>$persona->nom,
             'apellido1'=>$persona->apePat,
@@ -35,6 +38,13 @@ class UserController extends Controller
             'Abreviatura'=>$persona->abre_grad,
             'Egreso'=>$persona->fec_egre,
             'Documento'=>$persona->numDoc,
+            'Roles'=>PersonaRole::where('persona_id',$persona->id)->get()->map(function($r){
+                return[
+                    'id'=>$r->id,
+                    'rol_id'=>$r->rol_id,
+                    'nombre'=>$r->rol->rolNombre,
+                ] ;
+             }),
 
         );
         return response()->json($datosUser);

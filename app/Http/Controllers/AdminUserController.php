@@ -172,17 +172,28 @@ class AdminUserController extends Controller
         ]);
     }
 
-    public function agregarroles($idper,$roles){
-        foreach ($roles as $rol ) {
-            $roles=PersonaRole::create([              
-                'estado'=>1,
-                'persona_id'=>$idper,
-                'facId'=>$rol['facultad']? $rol['facultad']['FACULTAD_ID']:null,
-                'escId'=> $rol['escuela'] ?$rol['escuela']['ID_ESC'] :null,
-                'rol_id'=>$rol['roles']['id'],
-            ]); 
+    public function agregarroles($idper,$roles){    
+        try{       
+            foreach ($roles as $rol ) {
+                $roles=PersonaRole::create([              
+                    'estado'=>1,
+                    'persona_id'=>$idper,
+                    'facId'=>$rol['facultad']? $rol['facultad']['FACULTAD_ID']:null,
+                    'escId'=> $rol['escuela'] ?$rol['escuela']['ID_ESC'] :null,
+                    'rol_id'=>$rol['roles']['id'],
+                    'uso'=>0
+                ]); 
+
+            }
+            //agregar un rol en uso  
+
+            $id_per_rol=(PersonaRole::where('persona_id',$idper)->first())->id;
+            //actualizamos el primer rol persona
+            PersonaRole::where('id',$id_per_rol)->update(['uso'=>1]);        
+            return $roles;
+        }catch(Exception $e){
+            return $e;
         }
-        return $roles;
     }
     public function agregaruser($idper,$pass,$name,$email){
 
@@ -230,21 +241,6 @@ class AdminUserController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-     /* 
-          'nom'=>$request->nombresuser,
-                'apePat'=>$request->apePat,
-                'apeMat'=>$request->apeMat,
-                'gen'=>$request->genero,
-                'dom'=>$request->direccion,
-                'email'=>$request->correo,
-                'tipDoc'=>1,
-                'numDoc'=>$request->userdni,
-                'fecNac'=>$request->nacimiento,
-                'numcel'=>$request->celular,
-                'grad_estud'=>$request->gradoestu,
-                'abre_grad'=>$request->gradoabr,
-                'espe'=>$request->escuela? $request->escuela['ID_ESC']:null,
-     */
     public function validaruserUpdate($request = null)
     {
         return $request->validate([
@@ -299,7 +295,7 @@ class AdminUserController extends Controller
             $persona->cod_alum=$request->codalum;
             $persona->save();
             if( count($request->roles)>0){
-                $rolesupdate=$this->agregarroles($persona->id,  $request->roles); 
+                $rolesupdate=$this->agregarroles_edit($persona->id,  $request->roles); 
             }                          
             
             $usuario = User::where('persona_id', $persona->id)->first();
@@ -315,29 +311,58 @@ class AdminUserController extends Controller
 
     }
 
+    public function agregarroles_edit($idper,$roles){    
+        try{       
+            foreach ($roles as $rol ) {
+                $roles=PersonaRole::create([              
+                    'estado'=>1,
+                    'persona_id'=>$idper,
+                    'facId'=>$rol['facultad']? $rol['facultad']['FACULTAD_ID']:null,
+                    'escId'=> $rol['escuela'] ?$rol['escuela']['ID_ESC'] :null,
+                    'rol_id'=>$rol['roles']['id'],
+                    'uso'=>0
+                ]); 
 
-     /*public function actualizarroles($id_per, $roles,$facu,$escu){
-        $personarol=PersonaRole::where('persona_id',$id_per)->delete();
-            if($personarol){
-                foreach ($roles as $rol ) {
-                    $roles=PersonaRole::create([              
-                        'estado'=>1,
-                        'persona_id'=>$id_per,
-                        'facId'=>$facu ? $facu['FACULTAD_ID']:null,
-                        'escId'=> $escu ? $escu['ID_ESC']:null,
-                        'rol_id'=>$rol['id'],
-                    ]); 
-                }
-                return $roles;
-     
-            }
+            }        
+        }catch(Exception $e){
+            return $e;
+        }
+    }
 
-     }*/
+
     protected function disablerol($id){
         $rol=13;
         if($rol==13){
-            PersonaRole::where('id',$id)->update(['estado'=>0]);
-            return 1;
+
+            try{
+                $persona_role=PersonaRole::where('id',$id)->first();
+                if($persona_role->estado == 1){
+                    PersonaRole::where('id',$id)->update(['estado'=>0]);
+                
+                    //obtenemios el rol de la persona
+                    $persona_id=$persona_role->persona_id;
+                    PersonaRole::where('persona_id',$persona_id)->update(['uso'=>0]);
+
+                    $primer_per_rol=(PersonaRole::where('persona_id',$persona_id)->where('estado',1)->first())->id;
+                    //actulizamos el uso
+                    PersonaRole::where('id',$primer_per_rol)->update(['uso'=>1]);
+                    return 1;
+                }else{
+                    PersonaRole::where('id',$id)->update(['estado'=>1]);
+                
+                    //obtenemios el rol de la persona
+                    $persona_id=$persona_role->persona_id;
+                    PersonaRole::where('persona_id',$persona_id)->update(['uso'=>0]);
+
+                    $primer_per_rol=(PersonaRole::where('persona_id',$persona_id)->where('estado',1)->first())->id;
+                    //actulizamos el uso
+                    PersonaRole::where('id',$primer_per_rol)->update(['uso'=>1]);
+                    return 1;
+                }          
+                
+            }catch(Exception $e){
+                return $e;
+            }
         }else{
             return 'user no autorizado';
         }

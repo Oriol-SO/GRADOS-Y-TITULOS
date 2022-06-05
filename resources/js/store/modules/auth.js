@@ -27,7 +27,7 @@ export const getters = {
   user: state => state.user,
   token: state => state.token,
   check: state => state.user !== null,
-  firstRoute: state=>getFirstRoute(state.currentRolid),
+  firstRoute: state=>getFirstRoute(state.currentRolid.id),
   currentRolid:state=>state.currentRolid,
 }
 
@@ -38,11 +38,11 @@ export const mutations = {
     Cookies.set('token', token, { expires: remember ? 365 : null })
   },
 
-  [types.FETCH_USER_SUCCESS] (state, { user }) {
-    state.user = user
+  [types.FETCH_USER_SUCCESS] (state, { user,currentRolid }) {
+     state.user = user
    // if(!Cookies.get('currentRolid')){
-      state.currentRolid=user.role
-      console.log(user.role)
+      state.currentRolid=currentRolid
+      console.log(currentRolid)
       Cookies.set('currentRolid', user.role)  //lioos
     //}//si es que existen current rol id
 
@@ -78,7 +78,7 @@ export const actions = {
     try {
       const { data } = await axios.get('/api/user')
 
-      commit(types.FETCH_USER_SUCCESS, { user: data })
+      commit(types.FETCH_USER_SUCCESS, { user: data  ,currentRolid:{id:data.role[0]}})
     } catch (e) {
       commit(types.FETCH_USER_FAILURE)
     }

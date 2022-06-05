@@ -9,8 +9,12 @@
       <v-btn v-for="(link, i) in linksVerified" :key="i"  plain :to="{name:link.path}" color="#fff"  >
         {{ link.name }}
       </v-btn>
+     
 
-        <v-menu v-if="user" bottom min-width="220px" rounded offset-y>
+
+     <!--v-btn small depresed > {{rol.nombre}}</v-btn-->
+
+        <v-menu v-if="user" bottom min-width="220px" rounded offset-y :close-on-content-click="false" v-model="menu_user">
           <template v-slot:activator="{ on }">
             <v-btn  icon elevation="0" :color="letra_color" dense x-large v-on="on">
               <v-avatar  size="42" >
@@ -29,12 +33,24 @@
                   </div>     
                   <v-divider class="my-1" ></v-divider>   
                     <div style="display:flex; flex-direction:column; " >
-                      <v-btn width="200" depressed rounded text   style="justify-content: flex-start ; margin:3px"  :to="{name:firstRoute}">
+                      <v-list>
+                        <v-list-group >
+                          <template v-slot:activator>
+                            <v-list-item-content >
+                                <v-list-item-title> Cambiar de rol</v-list-item-title>
+                            </v-list-item-content>
+                          </template>
+                          <v-list-item v-for="(rol,i) in user.Roles" :key="i" link >
+                            <v-list-item-title  @click="cambiar_rol(rol.id)"> {{rol.nombre}} </v-list-item-title>
+                          </v-list-item>
+                        </v-list-group>
+                      </v-list>                    
+                      <v-btn width="200" depressed rounded text  style="justify-content: flex-start ; margin:3px"  :to="{name:firstRoute}" @click="menu_user=false">
                       <v-icon left>mdi-view-dashboard</v-icon>
                         Dashboard
                       </v-btn>
                 
-                      <v-btn  width="200" depressed rounded text   style=" justify-content: flex-start ; margin:3px" to="/settings">
+                      <v-btn  width="200" depressed rounded text   style=" justify-content: flex-start ; margin:3px" to="/settings" @click="menu_user=false">
                       <v-icon left>mdi-account-box-outline</v-icon>
                         Perfil
                       </v-btn>
@@ -65,8 +81,10 @@ export default {
     // { name: "Iniciar sesión", path: "/login", notUser: true },
     // { name: "Registrarme", path: "/registro", notUser: true },
     //],
+    //roles:[],
     bgNavbar: "#fff",
     letra_color:"#fff",
+    menu_user:false,
   }),
    /* props: {
       dashboard:'/admin',
@@ -98,7 +116,9 @@ export default {
       await this.$store.dispatch("admin/dashboard");
       // Redirect to login.
       this.$router.push({ name: "home" });
-    },
+    },cambiar_rol(id){
+    console.log(id)
+    }
     
   },
 };

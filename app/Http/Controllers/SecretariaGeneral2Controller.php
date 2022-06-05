@@ -85,16 +85,20 @@ class SecretariaGeneral2Controller extends Controller
             'diploma_id'=>'required',
         ]);
         try{
-        $tram_diplo=Diploma::where('id',$request->diploma_id)->where('tramite_id',$request->tramite_id)->update(['est_impreso'=>1]);
-        $this->aprobar_fase_one($request->tramite_id);
-
+            //verificar que no tenga impresiones 
+        $impresion=(Diploma::where('id',$request->diploma_id)->where('tramite_id',$request->tramite_id)->first())->est_impreso;
+        if($impresion!=1){
+            Diploma::where('id',$request->diploma_id)->where('tramite_id',$request->tramite_id)->update(['est_impreso'=>1]);
+            $this->aprobar_fase_one($request->tramite_id);
+        }else{
+            return 'ya esta impreso';
+        }   
         }catch(Exception $e){
             return $e;
         }        
     }
     protected function sg2_get_programar($id){
         if($id==0){
-
             $tramite_diplomas=Diploma::where('num_sticker','<>',null)->get()->map(function($e){
                 return [$e->tramite_id];
             });
@@ -124,17 +128,20 @@ class SecretariaGeneral2Controller extends Controller
 
              //actualizar
             //verificar que no haya fecha y hora
-            $fec_hor_entre=(Diploma::where('tramite_id',$request->tramite_id)->first())->fec_or_entre;
-            if($fec_hor_entre=='' || $fec_hor_entre ==null){
+            $fec_hor_entre=(Diploma::where('id',$request->diploma_id)->where('tramite_id',$request->tramite_id)->first())->fec_hor_entre;
+            if($fec_hor_entre=='' || $fec_hor_entre==null){
                 $fech_hora=Diploma::where('tramite_id',$request->tramite_id)->where('id',$request->diploma_id)
                 ->update(['fec_hor_entre'=>$request->fecha]);
                 $this->aprobar_fase_one($request->tramite_id);
+                return $fech_hora;
+                
             }else{
                 $fech_hora=Diploma::where('tramite_id',$request->tramite_id)->where('id',$request->diploma_id)
                 ->update(['fec_hor_entre'=>$request->fecha]);
+                return $fech_hora;
             }
             //
-            return 'actualizado';
+           
     }
     protected function sg2_get_programados($id){
         if($id==0){

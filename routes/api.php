@@ -69,9 +69,9 @@ Route::group(['middleware' => 'guest:api'], function () {
     Route::get('oauth/{driver}/callback', [OAuthController::class, 'handleCallback'])->name('oauth.callback');
     
 });
-
-Route::resource('proceso', ProcesoController::class);
-
+Route::group(['middleware'=>'admin:api'],function(){
+    Route::resource('proceso', ProcesoController::class);
+});
 Route::resource('grado', GradoController::class);
 Route::resource('modalidades', ModalidadController::class);
 Route::resource('fase',FaseController::class);

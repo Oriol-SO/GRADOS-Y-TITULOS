@@ -12,11 +12,11 @@ export default (to, from, next, roles) => {
  
   // Split roles into an array
   roles = roles.split(',')
-  console.log(user.role,roles)
+  console.log(roles)
   const currentrol=store.getters['auth/currentRolid']
   // Check if the user has one of the required roles...
-   console.log(currentrol)
-  if (!roles.includes(currentrol.toString())) {
+   console.log(currentrol.id)
+  if (!roles.includes(currentrol.id.toString())) {
     next('/unauthorized')
   }
   next()

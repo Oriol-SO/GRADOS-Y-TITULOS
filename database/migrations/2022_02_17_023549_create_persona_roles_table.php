@@ -18,6 +18,7 @@ class CreatePersonaRolesTable extends Migration
             $table->date('fecIni')->nullable();
             $table->date('fecFin')->nullable();
             $table->boolean('estado');
+            $table->boolean('uso')->nullable();
             $table->BigInteger('persona_id')->unsigned(); 
             $table->string('facId')->nullable(); //se obtendra de la api
             $table->string('escId')->nullable();//se obtendra de la api

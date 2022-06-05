@@ -17,6 +17,7 @@ class PersonaRole extends Model
         'facId',
         'escId',
         'rol_id', 
+        'uso',
     ];
 
     public function Rol()
