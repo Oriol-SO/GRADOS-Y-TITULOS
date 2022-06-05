@@ -199,7 +199,7 @@
                 >
                     <div class="d-flex"  >
                         <v-card-text class="text-md-body-1 font-weight-medium" >
-                        {{ fase.nombre }} <br> <strong>   Encargado Ejecutar :</strong> {{fase.ejecutar.rolNombre}} <strong>Encargado Revisar :</strong>  {{fase.revisar.rolNombre}}
+                        {{ fase.nombre }} <br> <strong>Encargado Ejecutar :</strong> {{fase.ejecutar.rolNombre}} <strong>Encargado Revisar :</strong>  {{fase.revisar.rolNombre}}
                         </v-card-text>
                         
                         <v-btn
