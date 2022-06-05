@@ -15,7 +15,7 @@
                 Ops un error! <b>--error.404</b>
             </p>
             <p >
-                La pagina que ha solicitado no existe o no tienes permiso de acceso
+                La pagina que ha solicitado no existe o no tienes permiso de acceso 
             </p>
                <v-btn
                  color="accent"
