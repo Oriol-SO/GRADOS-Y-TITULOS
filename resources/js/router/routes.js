@@ -116,6 +116,7 @@ export default [
 
   { path: '/prueva', name: 'prueva', component: page('prueva.vue') },
 
-  { path: '*', component: page('errors/404.vue') },
+  { path: '*',name:'error', component: page('errors/404.vue') },
+  { path: '/usuario-no-autorizado',name:'unautorized', component: page('errors/unautorized.vue') },
 
 ]

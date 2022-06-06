@@ -17,7 +17,7 @@ export default {
 
   components: {
     Navbar,
-   Piepage,
+    Piepage,
   },
 };
 //style="background:rgb(242, 243, 248);"

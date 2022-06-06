@@ -31,6 +31,7 @@
                         {{ user.email }}
                       </p>
                   </div>     
+                 
                   <v-divider class="my-1" ></v-divider>   
                     <div style="display:flex; flex-direction:column; " >
                       <v-list>
@@ -40,9 +41,17 @@
                                 <v-list-item-title> Cambiar de rol</v-list-item-title>
                             </v-list-item-content>
                           </template>
-                          <v-list-item v-for="(rol,i) in user.Roles" :key="i" link >
-                            <v-list-item-title  @click="cambiar_rol(rol.id)"> {{rol.nombre}} </v-list-item-title>
+                          <v-list-item v-for="(rol,i) in user.Roles" :key="i" link @click="cambiar_rol(rol.id)" >
+                            <v-list-item-title  class="d-flex"> 
+                            {{rol.nombre}}
+                             
+                             <v-btn class="ml-auto" v-if="rol.rol_id==rolseleccion" v-for="(link, i) in linksVerified" :key="i" small :to="{name:link.path}" color="primary" @click="menu_user=false"  >
+                                  Ir
+                             </v-btn> 
+                          </v-list-item-title>
+                          <img src="" alt="">
                           </v-list-item>
+                          
                         </v-list-group>
                       </v-list>                    
                       <v-btn width="200" depressed rounded text  style="justify-content: flex-start ; margin:3px"  :to="{name:firstRoute}" @click="menu_user=false">
@@ -72,7 +81,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-
+import Form from "vform";
 export default {
   data: () => ({
     appName: window.config.appName,
@@ -85,6 +94,11 @@ export default {
     bgNavbar: "#fff",
     letra_color:"#fff",
     menu_user:false,
+    form: new Form({
+      id_role:'',
+    }),
+    rolseleccion:0
+  
   }),
    /* props: {
       dashboard:'/admin',
@@ -94,12 +108,16 @@ export default {
     ...mapGetters({
       user: "auth/user",
       firstRoute :"auth/firstRoute",
-        //this.$router.push({ name: "admin.dashboard" });
+      //Ruta:"auth/Ruta",
+          //this.$router.push({ name: "admin.dashboard" });
        // this.$router.push({name: firstRoute}),
     }),
     linksVerified: function () {
       return [{ name: "Dashboard", path:this.firstRoute }];
       //return this.links.filter((link) => !(link.notUser && this.user));
+    },
+    RutaRedireccion: function(){
+      return this.firstRoute
     },
   },
 
@@ -113,12 +131,20 @@ export default {
     async logout() {
       // Log out the user.
       await this.$store.dispatch("auth/logout");
-      await this.$store.dispatch("admin/dashboard");
+     // await this.$store.dispatch("admin/dashboard");
       // Redirect to login.
-      this.$router.push({ name: "home" });
+        this.$router.push({ name: "home" });
     },cambiar_rol(id){
-    console.log(id)
-    }
+        this.form.id_role=id;
+        this.form.post('/api/cambiar-rol/'+id).then(response=>{
+          this.rolseleccion=response.data
+          this.$store.dispatch("auth/fetchUser");     
+          //this.$router.push({ name: 'login'}).catch(() => {})
+          //console.log(this.linksVerified)
+        });
+        
+        
+    },
     
   },
 };

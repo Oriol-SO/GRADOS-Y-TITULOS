@@ -51,4 +51,28 @@ class UserController extends Controller
         
 
     }
+
+    public function cambiar_rol($id, Request $request){
+        $request->validate([
+            'id_role'=>'required',
+        ]);
+        if($request->id_role==$id){
+            //actualizar uso de roles
+            $per_role=PersonaRole::where('id',$id)->where('estado',1)->count();
+            if($per_role>0){
+                //ponemos en primer lugar tods en desuso
+                 PersonaRole::where('persona_id',$request->user()->persona_id)->update(['uso'=>0]);
+                 //actualizamos solo el rol seleccionado
+                 $personaRole=PersonaRole::where('id',$id)->first();
+                 $personaRole->uso=1;
+                 $personaRole->save();
+                 //$new_rol=PersonaRole::where('id',)
+                 return $personaRole->rol_id;
+            }else{
+                return 'ROL_DESACTIVADO'; 
+            }
+        }else{
+            return 'ERROR_ROL';
+        }
+    }
 }

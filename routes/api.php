@@ -52,6 +52,8 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::patch('settings/profile', [ProfileController::class, 'update']);
     Route::patch('settings/password', [PasswordController::class, 'update']);
+      //para cambiar rol
+    Route::post('cambiar-rol/{id}',[UserController::class,'cambiar_rol']);
 });
 
 Route::group(['middleware' => 'guest:api'], function () {
@@ -69,6 +71,9 @@ Route::group(['middleware' => 'guest:api'], function () {
     Route::get('oauth/{driver}/callback', [OAuthController::class, 'handleCallback'])->name('oauth.callback');
     
 });
+
+
+
 Route::group(['middleware'=>'admin:api'],function(){
     Route::resource('proceso', ProcesoController::class);
 });
