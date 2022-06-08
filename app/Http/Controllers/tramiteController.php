@@ -107,8 +107,8 @@ class tramiteController extends Controller
             'grado'=>'required',
             'tipotramite'=>'required'
         ]);
-        return $request->grado['id'];
-        /*
+       
+        
         if ($request->grado['id']==2){
             $request->validate([
                 'grado'=>'required',
@@ -147,9 +147,11 @@ class tramiteController extends Controller
             return 'tramite agregado';
         }else{
             return 'no esta disponible';
-        }*/
+        }
      
     }
+
+
     public function add_tramite($request,$trabajo){
         $user=$request->user();
         $persona=$user->persona;
