@@ -111,7 +111,7 @@ Route::get('/editor',[EditorController::class,'editor']);
 
 //alumno
 Route::resource('tramite',tramiteController::class);
-Route::post('agregartramite',[tramiteController::class,'agregar_tramite']);
+Route::post('add_tramite',[tramiteController::class,'agregar_tramite']);
 Route::get('fasestramite/{codigo}',[tramiteController::class,'obtenerfases']);
 Route::get('alu-faserequisito/{id}/{tramite}',[tramiteController::class,'obtenerfaserequisito']);
 Route::post('alu-filerequisito/',[tramiteController::class,'subirarchivorequisito']);

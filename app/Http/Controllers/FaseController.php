@@ -39,8 +39,7 @@ class FaseController extends Controller
      */
     public function store(Request $request)
     {
-        return 'hola a todos';
-        /*
+      
         $this->validarfase($request);
        // $numero=Fase::where('proceso_id',$request->procesoid)->count();
         //buscar numero en el registro
@@ -73,7 +72,7 @@ class FaseController extends Controller
 
 
 
-        }        */
+        }        
 
     }
 
