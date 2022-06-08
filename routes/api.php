@@ -85,6 +85,17 @@ Route::group(['middleware'=>'admin:api'],function(){
     Route::resource('tipoarchivo',TipoArchivoController::class);
     Route::resource('rol',RolController::class);
     Route::get('roles/{fase}',[FaseController::class,'roles']);
+
+    Route::get('buscardni/{codigo}', [PersonaController::class, 'buscardniuser']);
+    Route::get('facuescuela',[FacultadEscuelaController::class,'facultad']);
+    Route::get('ver/{id}',[FaseRequisitoController::class,'ver']);
+
+    Route::get('mostrarescuela/{codigo}',[FacultadEscuelaController::class,'escuelas']);
+    Route::get('rolesgenerales/{codigo}',[FacultadEscuelaController::class,'rolesgenerales']);
+    Route::resource('adminuser',AdminUserController::class);
+    Route::get('disableRol/{id}',[AdminUserController::class,'disablerol']);
+    Route::get('cambiarEstado/{id}', [ProcesoController::class, 'cambiarEstado']);
+    Route::get('cambiarGuardado/{id}', [ProcesoController::class, 'cambiarGuardado']);
 });
 
 Route::group(['middleware' => 'auth:api'], function () {
@@ -92,16 +103,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 Route::resource('bachillerIni',BachillerIniController::class);
 Route::resource('bachillerFinal',BachillerFinalController::class);
 
-Route::get('buscardni/{codigo}', [PersonaController::class, 'buscardniuser']);
-Route::get('facuescuela',[FacultadEscuelaController::class,'facultad']);
-Route::get('ver/{id}',[FaseRequisitoController::class,'ver']);
 
-Route::get('mostrarescuela/{codigo}',[FacultadEscuelaController::class,'escuelas']);
-Route::get('rolesgenerales/{codigo}',[FacultadEscuelaController::class,'rolesgenerales']);
-Route::resource('adminuser',AdminUserController::class);
-Route::get('disableRol/{id}',[AdminUserController::class,'disablerol']);
-Route::get('cambiarEstado/{id}', [ProcesoController::class, 'cambiarEstado']);
-Route::get('cambiarGuardado/{id}', [ProcesoController::class, 'cambiarGuardado']);
 
 //pdf
 Route::post('/generatePDF', [PdfController::class,'Addtopdf']);
