@@ -122,7 +122,6 @@ class tramiteController extends Controller
                 'linea_inv'=>'required',
                 'url'=>'required',
             ]);
-
              
             //guardar el plan
 
@@ -148,6 +147,8 @@ class tramiteController extends Controller
 
         }else if($request->grado['id']==1){                      
             $this->add_tramite($request,null);
+
+            return 'tramite agregado';
         }else{
             return 'no esta disponible';
         }

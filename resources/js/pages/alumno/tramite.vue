@@ -231,7 +231,7 @@
                              <v-col  ><p style="color:#fff; font-size:8vh; ">¡Lo lograste!!!...</p></v-col>
                               
                               <v-col class="hidden-sm-and-down" md="5" style="  padding-top:100px "> <p style="font-size: x-large; color:#fff; font-family: emoji;">Si lograste tus metas de estudio,<br> puedes alcanzar lo que sea .<br> ¡Feliz nuevo camino, graduado!</p></v-col>
-                            <div class="hidden-md-and-down" style="width:350px; padding:50px; padding-right:90px" ><v-img style="text-align: end;"contain max-width="200" src="/img/graduation.png"   ></v-img>     </div>           
+                            <div class="hidden-md-and-down" style="width:350px; padding:50px; padding-right:90px" ><v-img style="text-align: end;" contain max-width="200" src="/img/graduation.png"   ></v-img>     </div>           
                                           
                                                           
                              </v-card>

@@ -217,7 +217,7 @@ export default {
         this.proceso = data.tramites;
 
       },async addtramite(){
-         // console.log(this.form);
+         console.log(this.form);
           await this.form.post('/api/tramite/').then(response=>{
               console.log(response.data);
                 this.fecthtramitesper();
@@ -230,9 +230,6 @@ export default {
 
                 //console.log(this.tramitesuser[0].tipo_tramite);
              });
-
-
-
       },
       async fetchlineas(){
           await axios.get('/api/lineas-inv').then(response=>{
