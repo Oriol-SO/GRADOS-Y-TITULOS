@@ -556,7 +556,8 @@ export default{
         roles:[],
         rol:[],
      } 
-  },mounted(){
+  },
+  mounted(){
       this.FetchTramites();
       this.FetchFases();
       this.Roles();
@@ -649,7 +650,7 @@ export default{
           }).catch(error=>{
             if(error.response.status === 422){
               this.errores=error.response.data.errors;
-            //  console.log(this.errores);
+              console.log(this.errores);
             }
           });
       },async eliminarfase(id){
