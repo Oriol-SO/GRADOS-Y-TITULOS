@@ -8,8 +8,8 @@ export const state = {
   user: null,
   token: Cookies.get('token'),
   currentRolid: null,
-  Ruta:null,
-}
+  //Ruta:null,
+} 
 function getFirstRoute(rol_id) {
   let path = 'unautorized';
   switch (rol_id) {
@@ -28,7 +28,7 @@ export const getters = {
   user: state => state.user,
   token: state => state.token,
   check: state => state.user !== null,
-  firstRoute: state=>state.Ruta,//getFirstRoute(state.currentRolid.id),
+  firstRoute: state=>getFirstRoute(state.currentRolid.id),
   currentRolid:state=>state.currentRolid,
  // Ruta:state=>state.Ruta,
 }
@@ -44,7 +44,7 @@ export const mutations = {
       state.user = user
     // if(!Cookies.get('currentRolid')){
       state.currentRolid=currentRolid
-      state.Ruta=getFirstRoute(currentRolid.id);
+      //state.Ruta=getFirstRoute(currentRolid.id);
       console.log(currentRolid)
       //console.log(Ruta)
       Cookies.set('currentRolid', user.role)  //lioos

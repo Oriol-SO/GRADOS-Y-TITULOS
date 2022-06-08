@@ -113,6 +113,7 @@ class RegisterController extends Controller
                     'facId'=>$school[0]->FACULTAD_ID,
                     'escId'=>$school[0]->ID_ESC,
                     'rol_id'=>'10',
+                    'uso'=>1,
                 ]); 
                 $user=User::create([
                     'name'=>$date['Nombres'],
