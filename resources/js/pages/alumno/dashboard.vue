@@ -198,6 +198,7 @@ export default {
                 linea_inv:'',
                 url:'',
             }),
+            erroresuseredit:'',
         }
     },mounted(){
         this.fecthtramitesper();
@@ -218,16 +219,20 @@ export default {
 
       },async addtramite(){
          console.log(this.form);
-          await this.form.post('/api/tramite/').then(response=>{
-              console.log(response.data);
+          await this.form.post('/api/agregartramite/').then(response=>{
+                console.log(response.data);
                 this.fecthtramitesper();
                 this.close();
-          })
+          }).catch(error=>{
+            if(error.response.status === 422){
+                    this.errorestramite=error.response.data.errors;                      
+                    console.log(this.erroresuseredit);
+                }
+          }); 
       }, async fecthtramitesper(){
          await axios.get("/api/tramite/").then(
              response=>{
                 this.tramitesuser = response.data;
-
                 //console.log(this.tramitesuser[0].tipo_tramite);
              });
       },

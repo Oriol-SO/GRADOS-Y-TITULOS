@@ -101,12 +101,8 @@ class tramiteController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function agregar_tramite(Request $request)
     {
-       
-        //$this->validar($request);
-        
-
         $request->validate([
             'grado'=>'required',
             'tipotramite'=>'required'
