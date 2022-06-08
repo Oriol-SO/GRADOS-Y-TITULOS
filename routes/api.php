@@ -75,6 +75,7 @@ Route::group(['middleware' => 'guest:api'], function () {
 
 
 Route::group(['middleware'=>'admin:api'],function(){
+    Route::post('agregar_proceso',[ProcesoController::class,'agregar_proceso']);
     Route::resource('proceso', ProcesoController::class);
     Route::resource('fase',FaseController::class);    
     Route::resource('grado', GradoController::class);
@@ -85,7 +86,6 @@ Route::group(['middleware'=>'admin:api'],function(){
     Route::resource('tipoarchivo',TipoArchivoController::class);
     Route::resource('rol',RolController::class);
     Route::get('roles/{fase}',[FaseController::class,'roles']);
-
     Route::get('buscardni/{codigo}', [PersonaController::class, 'buscardniuser']);
     Route::get('facuescuela',[FacultadEscuelaController::class,'facultad']);
     Route::get('ver/{id}',[FaseRequisitoController::class,'ver']);

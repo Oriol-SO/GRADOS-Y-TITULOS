@@ -60,14 +60,29 @@ class ProcesoController extends Controller
      */
     public function store(Request $request){
 
-            $this->validar($request);    
+        $this->validar($request);    
             $proceso = Proceso::create([
             'procNom' => $request->nombre,
             'grado_id' => $request->grado['id'],
             'moda_id' => $request->modalidad['id'],
             'tipo' => $request->tipo,
             'estado'=>0,
+            ]);
+        return response()->json([
+            'tramite'=>$proceso
         ]);
+    }
+
+    public function agregar_proceso(Request $request){
+
+        $this->validar($request);    
+            $proceso = Proceso::create([
+            'procNom' => $request->nombre,
+            'grado_id' => $request->grado['id'],
+            'moda_id' => $request->modalidad['id'],
+            'tipo' => $request->tipo,
+            'estado'=>0,
+            ]);
         return response()->json([
             'tramite'=>$proceso
         ]);
