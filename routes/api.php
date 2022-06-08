@@ -72,10 +72,10 @@ Route::group(['middleware' => 'guest:api'], function () {
     
 });
 
-Route::resource('proceso', ProcesoController::class);
+
 
 Route::group(['middleware'=>'admin:api'],function(){
-
+    Route::resource('proceso', ProcesoController::class);
     Route::resource('fase',FaseController::class);    
     Route::resource('grado', GradoController::class);
     Route::resource('modalidades', ModalidadController::class);
