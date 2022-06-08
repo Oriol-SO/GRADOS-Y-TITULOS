@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\models\Persona;
 use App\Models\PersonaRole;
+use Exception;
 use Illuminate\Support\Arr;
 
 class UserController extends Controller
@@ -15,6 +16,9 @@ class UserController extends Controller
      */
     public function current(Request $request)
     {
+        try{
+
+      
         $user=$request->user();
         $persona=$user->persona;
 
@@ -37,6 +41,7 @@ class UserController extends Controller
             'GradoEstudios'=>$persona->grad_estud,
             'Abreviatura'=>$persona->abre_grad,
             'Egreso'=>$persona->fec_egre,
+            'tipoDocumento'=>['nombre'=>'','num'=>$persona->tipDoc],
             'Documento'=>$persona->numDoc,
             'Roles'=>PersonaRole::where('persona_id',$persona->id)->get()->map(function($r){
                 return[
@@ -49,30 +54,37 @@ class UserController extends Controller
         );
         return response()->json($datosUser);
         
-
+        }catch(Exception $e){
+            return $e;
+        }
     }
 
     public function cambiar_rol($id, Request $request){
-        $request->validate([
-            'id_role'=>'required',
-        ]);
-        if($request->id_role==$id){
-            //actualizar uso de roles
-            $per_role=PersonaRole::where('id',$id)->where('estado',1)->count();
-            if($per_role>0){
-                //ponemos en primer lugar tods en desuso
-                 PersonaRole::where('persona_id',$request->user()->persona_id)->update(['uso'=>0]);
-                 //actualizamos solo el rol seleccionado
-                 $personaRole=PersonaRole::where('id',$id)->first();
-                 $personaRole->uso=1;
-                 $personaRole->save();
-                 //$new_rol=PersonaRole::where('id',)
-                 return $personaRole->rol_id;
+        try{
+            $request->validate([
+                'id_role'=>'required',
+            ]);
+            if($request->id_role==$id){
+                //actualizar uso de roles
+                $per_role=PersonaRole::where('id',$id)->where('estado',1)->count();
+                if($per_role>0){
+                    //ponemos en primer lugar tods en desuso
+                    PersonaRole::where('persona_id',$request->user()->persona_id)->update(['uso'=>0]);
+                    //actualizamos solo el rol seleccionado
+                    $personaRole=PersonaRole::where('id',$id)->first();
+                    $personaRole->uso=1;
+                    $personaRole->save();
+                    //$new_rol=PersonaRole::where('id',)
+                    return $personaRole->rol_id;
+                }else{
+                    return 'ROL_DESACTIVADO'; 
+                }
             }else{
-                return 'ROL_DESACTIVADO'; 
+                return 'ERROR_ROL';
             }
-        }else{
-            return 'ERROR_ROL';
+        }catch(Exception $e){
+            return $e;
         }
     }
+
 }

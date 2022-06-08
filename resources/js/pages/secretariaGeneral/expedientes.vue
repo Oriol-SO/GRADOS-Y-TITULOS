@@ -164,7 +164,7 @@ export default {
         },
         async agendar(){
             console.log(this.form)
-            await this.form.post(`/api/agendarExpediente/`).then(response=>{
+            await this.form.post(`/api/agendarExpediente`).then(response=>{
                 console.log(response.data)
                 this.fetchexpedientes();
                 this.close();

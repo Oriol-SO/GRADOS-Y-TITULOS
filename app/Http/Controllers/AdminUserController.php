@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\QueryException;
 use phpDocumentor\Reflection\Types\Null_;
+use PhpParser\Node\Stmt\Catch_;
 
 class AdminUserController extends Controller
 {
@@ -64,6 +65,7 @@ class AdminUserController extends Controller
     */
 
     public function validar_roles($roles){
+        try{
         $r_cont=0;
         $r_alum=null;
         $r_facu=null;
@@ -88,68 +90,75 @@ class AdminUserController extends Controller
                 return ['ACEPT_ADMIN'];
             }
         }
+    }catch(Exception $e){
+        return $e;
+    }
         
     }
     public function store(Request $request)
     {    
-        $this->validaruser($request);
-        if((Persona::where('email',$request->correo)->count())>0){
-            return '1';
-        }else{
-            try{
-                //validar rol si es alumno o administrativo 
-                $alum_facu=null;
-                $alum_escu=null;
+        try{
 
-                $check_rol=$this->validar_roles($request->roles);
-                if($check_rol[0]=='NOT_ROL_ALUMN'){
-                    return 5;
-                }else{
-                    if($check_rol[0]=='ACEP_ALUMN'){
-                        $alum_facu=$check_rol[1];
-                        $alum_escu=$check_rol[2];
+    
+            $this->validaruser($request);
+            if((Persona::where('email',$request->correo)->count())>0){
+                return '1';
+            }else{
+                try{
+                    //validar rol si es alumno o administrativo 
+                    $alum_facu=null;
+                    $alum_escu=null;
+
+                    $check_rol=$this->validar_roles($request->roles);
+                    if($check_rol[0]=='NOT_ROL_ALUMN'){
+                        return 5;
+                    }else{
+                        if($check_rol[0]=='ACEP_ALUMN'){
+                            $alum_facu=$check_rol[1];
+                            $alum_escu=$check_rol[2];
+                        }
                     }
-                }
 
-            
-                $persona=Persona::create([
-                    'nom'=>$request->nombresuser,
-                    'apePat'=>$request->apePat,
-                    'apeMat'=>$request->apeMat,
-                    'gen'=>$request->genero,
-                    //'dom'=>$request->direccion,
-                    'email'=>$request->correo,
-                    'tipDoc'=>$request->tipodoc['num'],
-                    'numDoc'=>$request->userdoc,
-                    //'fecNac'=>$request->nacimiento,
-                    //'numcel'=>$request->celular,
-                    //'grad_estud'=>$request->gradoestu,
-                    //'abre_grad'=>$request->gradoabr,
-                    'curri'=>$request->curricula,
-                    'fec_matri'=>$request->ano_ingreso,
-                    'espe'=>$alum_escu,
-                    'facu'=>$alum_facu,
-                    'cod_alum'=>$request->codalum? $request->codalum:null,
-                ]);
                 
-                $rolesuser=$this->agregarroles($persona->id,  $request->roles);    
-                $user=$this->agregaruser($persona->id, $request->userdoc,$request->nombresuser,$request->correo);    
-                return response()->json([
-                    'persona'=>$persona,
-                    'roles'=>$rolesuser,
-                    'user'=>$user,
-                ]);
-            }catch(Exception $e){
-               
-                try{ Persona::where('id',$persona->id)->delete();}catch(Exception $e){
-                    return 2;
+                    $persona=Persona::create([
+                        'nom'=>$request->nombresuser,
+                        'apePat'=>$request->apePat,
+                        'apeMat'=>$request->apeMat,
+                        'gen'=>$request->genero,
+                        //'dom'=>$request->direccion,
+                        'email'=>$request->correo,
+                        'tipDoc'=>$request->tipodoc['num'],
+                        'numDoc'=>$request->userdoc,
+                        //'fecNac'=>$request->nacimiento,
+                        //'numcel'=>$request->celular,
+                        //'grad_estud'=>$request->gradoestu,
+                        //'abre_grad'=>$request->gradoabr,
+                        'curri'=>$request->curricula,
+                        'fec_matri'=>$request->ano_ingreso,
+                        'espe'=>$alum_escu,
+                        'facu'=>$alum_facu,
+                        'cod_alum'=>$request->codalum? $request->codalum:null,
+                    ]);
+                    
+                    $rolesuser=$this->agregarroles($persona->id,  $request->roles);    
+                    $user=$this->agregaruser($persona->id, $request->userdoc,$request->nombresuser,$request->correo);    
+                    return response()->json([
+                        'persona'=>$persona,
+                        'roles'=>$rolesuser,
+                        'user'=>$user,
+                    ]);
+                }catch(Exception $e){
+                
+                    try{ Persona::where('id',$persona->id)->delete();}catch(Exception $e){
+                        return 2;
 
+                    }
+                    return 2;
                 }
-                return 2;
             }
-        }
-   
-     
+        }catch(Exception $e){
+            return $e;
+        }        
         
     }
     public function validaruser($request = null)
@@ -196,7 +205,9 @@ class AdminUserController extends Controller
         }
     }
     public function agregaruser($idper,$pass,$name,$email){
+        try{
 
+    
         $fecha=now();
         $user=User::create([
             'name'=>$name,
@@ -206,6 +217,9 @@ class AdminUserController extends Controller
             'persona_id'=>$idper,
         ]);
         return $user;
+        }catch(Exception $e){
+            return $e;
+        }
     }
     /**
      * Display the specified resource.
@@ -262,18 +276,22 @@ class AdminUserController extends Controller
 
     public function update(Request $request, $id)
     { 
-        $this->validaruserUpdate($request);
-        if((Persona::where('email',$request->correo)->where('id',$id)->count())>0){
-            $updatepersona=$this->updatepersona( $request, $id);
-            return response()->json($updatepersona);
-        }else{
-            if((Persona::where('email',$request->correo)->count())>0){
-                return '1';
-            }else{
+        try{
+            $this->validaruserUpdate($request);
+            if((Persona::where('email',$request->correo)->where('id',$id)->count())>0){
                 $updatepersona=$this->updatepersona( $request, $id);
                 return response()->json($updatepersona);
-            }   
-         }  
+            }else{
+                if((Persona::where('email',$request->correo)->count())>0){
+                    return '1';
+                }else{
+                    $updatepersona=$this->updatepersona( $request, $id);
+                    return response()->json($updatepersona);
+                }   
+            }  
+        }catch(Exception $e){
+            return $e;
+        }
     }
 
     public function updatepersona(Request $request, $id){
@@ -301,7 +319,9 @@ class AdminUserController extends Controller
             $usuario = User::where('persona_id', $persona->id)->first();
             $usuario->email = $request->correo;
             $usuario->email_verified_at=now();
-            $usuario->password = Hash::make($request->userdoc);
+            if($request->updatepass==true){
+                $usuario->password = Hash::make($request->userdoc);
+            }           
             $usuario->save();
            
             return response()->json('actualizado');

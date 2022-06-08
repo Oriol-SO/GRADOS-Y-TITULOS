@@ -30,11 +30,12 @@ class ProfileController extends Controller
         $persona->email=$request->email;
         $persona->numcel=$request->Ncelular;
         $persona->dom=$request->Direccion;
-        $persona->nom=$request->Egreso;
+        $persona->fec_egre=$request->Egreso;
         $persona->fecNac=$request->Nacimiento;
         $persona->grad_estud=$request->GradoEstudios;
         $persona->abre_grad=$request->Abreviatura;
         $persona->numDoc=$request->Documento;
+        $persona->tipDoc=$request->tipoDocumento['num'];
         
         $persona->save();
 

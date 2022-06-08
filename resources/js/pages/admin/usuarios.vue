@@ -269,11 +269,12 @@
                               <v-btn color="primary" elevation="0" @click="enviaruser()">Registrar Usuario</v-btn>
                             </v-card-text>  
                             </v-expand-transition>                        
-                      
+                      <small>*La contraseña del usuario sera su numero de documento</small>
                        </v-card-text>                      
                     </form>                
-  
+                      
                     <v-card-actions class="justify-end">
+               
                       <div v-if="btnnext">
                         <v-btn 
                           text
@@ -467,6 +468,8 @@
 
                           </v-expansion-panels>
 
+                          <v-switch v-model="formusE.updatepass" label="Actualizar contraseña"></v-switch>
+
                       </v-col>
                       </div>
                     </v-card-text>   
@@ -561,8 +564,9 @@
                     </div> 
                   </v-card-text>  
                   </v-expand-transition>                        
-          
-              </v-card-text>                      
+                <small>* Si actualizas la contraseña por defecto sera el numero de documento</small>     
+              </v-card-text>  
+                             
           </form>                
 
           <v-card-actions class="justify-end">
@@ -694,6 +698,7 @@ import Form from "vform";
           codalum:'',
           curricula:'',
           ano_ingreso:'',
+          updatepass:false,
         }),
 
         //activePicker: null,
@@ -830,7 +835,7 @@ import Form from "vform";
         this.btnback=false;    
       },async enviaruser(){
         console.log(this.formus);
-        await this.formus.post('/api/adminuser/').then(response=>{
+        await this.formus.post('/api/adminuser').then(response=>{
               //console.log(response.data);
             if(response.data==2){
                 this.errorexist='¡UPS! algo salió mal, comunicate con el soporte técnico'
@@ -961,7 +966,7 @@ import Form from "vform";
           this.mostrarrolesedit();
          
       },async actualizaruser(){
-        //  console.log(this.formusE)
+            //console.log(this.formusE)
             await this.formusE.put(`/api/adminuser/${this.formusE.iduser}`).then(response=>{
             //console.log(response.data);
             if(response.data==2){

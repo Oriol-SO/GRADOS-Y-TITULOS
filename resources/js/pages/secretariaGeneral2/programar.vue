@@ -174,7 +174,7 @@ export default {
         },
         async AddEntrega(){
             //console.log(this.form);
-            await this.form.post(`/api/sg2-add-fecha-entrega/`).then(response=>{
+            await this.form.post(`/api/sg2-add-fecha-entrega`).then(response=>{
                 console.log(response.data);  
                 this.close();
                 this.fetchExpedientes(this.primerTab); 

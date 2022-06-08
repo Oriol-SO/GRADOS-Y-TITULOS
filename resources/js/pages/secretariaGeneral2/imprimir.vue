@@ -182,7 +182,7 @@ export default {
             
         },async postImprimir(){
             console.log(this.form);
-            await this.form.post(`/api/imprimir/`).then(response=>{
+            await this.form.post(`/api/imprimir`).then(response=>{
                 console.log(response.data);  
                 this.close();
                 this.fetchExpedientes(this.primerTab); 

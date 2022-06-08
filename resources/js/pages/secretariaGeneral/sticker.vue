@@ -169,7 +169,7 @@ export default {
             
         },async AddSticker(){
             //console.log(this.form);
-            await this.form.post(`/api/sg1-add-sticker/`).then(response=>{
+            await this.form.post(`/api/sg1-add-sticker`).then(response=>{
                 console.log(response.data);  
                 this.close();
                 this.fetchExpedientes(this.primerTab); 

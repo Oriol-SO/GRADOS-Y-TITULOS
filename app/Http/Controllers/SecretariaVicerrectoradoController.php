@@ -26,6 +26,24 @@ class SecretariaVicerrectoradoController extends Controller
     {
         //
     }
+    public function sv_obtenertramite($id){
+
+        $tramites = tramite::where('id',$id)->get()->map(function($t){
+            return[
+                'id'=>$t->id,
+                'proceso_id'=>$t->proceso_id,
+                'tipo_tramite'=>$t->tipo_tramite,
+                'fase_actual'=>$t->fase_actual,
+                'receptor_rol_notify'=>$t->receptor_rol_notify,
+                'trabajo_plan_tesis_url'=>$t->trabajo?$t->trabajo->url_repositorio:null ,
+                'titulo_proyecto'=>$t->trabajo?$t->trabajo->nombre:null,
+                'integrantes'=>1,
+                'grado'=>$t->proceso->grado_id,
+                'linea_investigacion'=>$t->trabajo?$t->trabajo->LineaDeInvestigacione->inveNombre:null,
+            ];
+        });
+        return response()->json($tramites[0],200);
+    }
 
     /**
      * Show the form for creating a new resource.

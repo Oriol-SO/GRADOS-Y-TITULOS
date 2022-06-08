@@ -447,7 +447,7 @@
                         
                         </v-card>
                     </v-col>
-                    
+                
                     <v-col  cols="12"  sm="4" >
                     <v-card class="mt-2" elevation="0">
                         <v-subheader class="font-weight-medium text-md-body-1">DETALLE REQUISITO </v-subheader>
@@ -495,9 +495,7 @@
                                 </template>
                             </v-list>       
                         </v-card>
-                    </v-col> 
-
-                    
+                    </v-col>                    
                 </v-row>
         </template>              
 
@@ -640,7 +638,7 @@ export default{
          this.formfase.rol_revisar='';
          this.errores={};         
       },async enviarfase(){
-          const {data}= await this.formfase.post(`/api/fase/`)
+          const {data}= await this.formfase.post(`/api/fase`)
            .then(response =>{
             this.FetchFases();
             this.clear();
@@ -694,7 +692,7 @@ export default{
           this.limpiarselect();          
       },async submitrequisito(){ 
           console.log("requisito",this.formrequi1);                 
-          const {data}= await this.formrequi1.post('/api/faserequisito/')
+          const {data}= await this.formrequi1.post('/api/faserequisito')
            .then(response =>{
             this.mostrarrequisito(this.formrequi1.fase_id);
             this.clearall();
@@ -707,7 +705,7 @@ export default{
           });
           
       },async submitrequisitonuevo(){                 
-          const {data}= await this.formrequi2.post('/api/requisito/')
+          const {data}= await this.formrequi2.post('/api/requisito')
            .then(response =>{
             this.mostrarrequisito(this.formrequi2.fase_id);
             this.clearall();

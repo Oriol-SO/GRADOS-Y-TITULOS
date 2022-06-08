@@ -99,57 +99,74 @@ Route::group(['middleware'=>'admin:api'],function(){
 });
 
 Route::group(['middleware' => 'auth:api'], function () {
-
-Route::resource('bachillerIni',BachillerIniController::class);
-Route::resource('bachillerFinal',BachillerFinalController::class);
-
+    //lineas de investigacion
+    Route::get('lineas-inv',[tramiteController::class,'lineas_inv']);
 
 
-//pdf
-Route::post('/generatePDF', [PdfController::class,'Addtopdf']);
-Route::get('/editor',[EditorController::class,'editor']);
+    //notificar cambios del tramite
+    Route::get('notificarcambio-tramite/{fase}/{tramite}',[tramiteController::class,'notificarCambio']);
+
+    Route::resource('bachillerIni',BachillerIniController::class);
+    Route::resource('bachillerFinal',BachillerFinalController::class);
+
+    
+    //pdf
+    Route::post('/generatePDF', [PdfController::class,'Addtopdf']);
+    Route::get('/editor',[EditorController::class,'editor']);
+
+});
+
+
+
+
 
 //alumno
-Route::resource('tramite',tramiteController::class);
-Route::post('add_tramite',[tramiteController::class,'agregar_tramite']);
-Route::get('fasestramite/{codigo}',[tramiteController::class,'obtenerfases']);
-Route::get('alu-faserequisito/{id}/{tramite}',[tramiteController::class,'obtenerfaserequisito']);
-Route::post('alu-filerequisito/',[tramiteController::class,'subirarchivorequisito']);
-Route::get('alu_autorized/{fase}/{tramite}',[tramiteController::class,'alu_autorized']);
-Route::get('alu-proceso/{id}',[tramiteController::class,'alu_procesos']);
-Route::get('alu-grados',[tramiteController::class,'alu_grados']);
+Route::group(['middleware'=>'alumno:api'],function(){
+    Route::resource('tramite',tramiteController::class);
+    Route::post('add_tramite',[tramiteController::class,'agregar_tramite']);
+    Route::get('fasestramite/{codigo}',[tramiteController::class,'obtenerfases']);
+    Route::get('alu-faserequisito/{id}/{tramite}',[tramiteController::class,'obtenerfaserequisito']);
+    Route::post('alu-filerequisito/',[tramiteController::class,'subirarchivorequisito']);
+    Route::get('alu_autorized/{fase}/{tramite}',[tramiteController::class,'alu_autorized']);
+    Route::get('alu-proceso/{id}',[tramiteController::class,'alu_procesos']);
+    Route::get('alu-grados',[tramiteController::class,'alu_grados']);
+});
 
-//lineas de investigacion
-Route::get('lineas-inv',[tramiteController::class,'lineas_inv']);
 
 
-//notificar cambios del tramite
-Route::get('notificarcambio-tramite/{fase}/{tramite}',[tramiteController::class,'notificarCambio']);
+
 
 //rutas secretaria facultad 
+Route::group(['middleware'=>'secrefacu:api'],function(){
 
-Route::get('sf-expedientes',[SecretariaController::class,'sf_expedientes']);
-Route::get('sf-tramite/{id}',[SecretariaController::class,'sf_obtenertramite']);
-Route::get('sf-fasestramite/{id}',[SecretariaController::class,'sf_obtenerfasestramite']);
-Route::get('sf-faserequisito/{id}/{tramite}',[SecretariaController::class,'sf_requisitosfase']);
-Route::get('sf-archivorequisito/{tramite}/{fasereq}',[SecretariaController::class,'sf_archivorequisito']);
-Route::post('sf-revisarrequisito',[SecretariaController::class,'sf_revisarrequisito']);
-Route::post('sf-subirfilerequisito',[SecretariaController::class,'sf_subirrequisito']);
-Route::get('sf-fasecheck/{tramite}/{fase}',[SecretariaController::class,'sf_fasecheck']);
-Route::get('sf-asesores',[SecretariaController::class,'lista_asesor']);
-Route::post('sf-asignar-asesor/{tramite}',[SecretariaController::class,'sf_asignar_asesor']);
+    Route::get('sf-expedientes',[SecretariaController::class,'sf_expedientes']);
+    Route::get('sf-tramite/{id}',[SecretariaController::class,'sf_obtenertramite']);
+    Route::get('sf-fasestramite/{id}',[SecretariaController::class,'sf_obtenerfasestramite']);
+    Route::get('sf-faserequisito/{id}/{tramite}',[SecretariaController::class,'sf_requisitosfase']);
+    Route::get('sf-archivorequisito/{tramite}/{fasereq}',[SecretariaController::class,'sf_archivorequisito']);
+    Route::post('sf-revisarrequisito',[SecretariaController::class,'sf_revisarrequisito']);
+    Route::post('sf-subirfilerequisito',[SecretariaController::class,'sf_subirrequisito']);
+    Route::get('sf-fasecheck/{tramite}/{fase}',[SecretariaController::class,'sf_fasecheck']);
+    Route::get('sf-asesores',[SecretariaController::class,'lista_asesor']);
+    Route::post('sf-asignar-asesor/{tramite}',[SecretariaController::class,'sf_asignar_asesor']);
+    
+});
 
 
 //rutas vicerrectorado
+Route::group(['middleware'=>'secrevice:api'],function(){
+    Route::get('sv-expedientes',[SecretariaVicerrectoradoController::class,'sv_expedientes']);
+    Route::get('sv-tramite/{id}',[SecretariaVicerrectoradoController::class,'sv_obtenertramite']);
+    //Route::get('sf-tramite/{id}',[SecretariaController::class,'sf_obtenertramite']);
+    Route::get('sv-fasestramite/{id}',[SecretariaVicerrectoradoController::class,'sv_obtenerfasestramite']);
+    Route::get('sv-faserequisito/{id}/{tramite}',[SecretariaVicerrectoradoController::class,'sv_requisitosfase']);
+    Route::post('sv-revisarrequisito',[SecretariaVicerrectoradoController::class,'sv_revisarrequisito']);
+    Route::post('sv-subirfilerequisito',[SecretariaVicerrectoradoController::class,'sv_subirrequisito']);
+    Route::get('sv-fasecheck/{tramite}/{fase}',[SecretariaVicerrectoradoController::class,'sv_fasecheck']);
 
-Route::get('sv-expedientes',[SecretariaVicerrectoradoController::class,'sv_expedientes']);
-//Route::get('sf-tramite/{id}',[SecretariaController::class,'sf_obtenertramite']);
-Route::get('sv-fasestramite/{id}',[SecretariaVicerrectoradoController::class,'sv_obtenerfasestramite']);
-Route::get('sv-faserequisito/{id}/{tramite}',[SecretariaVicerrectoradoController::class,'sv_requisitosfase']);
-Route::post('sv-revisarrequisito',[SecretariaVicerrectoradoController::class,'sv_revisarrequisito']);
-Route::post('sv-subirfilerequisito',[SecretariaVicerrectoradoController::class,'sv_subirrequisito']);
-Route::get('sv-fasecheck/{tramite}/{fase}',[SecretariaVicerrectoradoController::class,'sv_fasecheck']);
+});
 
+Route::group(['middleware'=>'secregene:api'],function(){
 //rutas scretaria general 1
 Route::get('sg1-expedientes',[SecretariaGeneral1Controller::class,'index']);
 Route::post('agendarExpediente',[SecretariaGeneral1Controller::class,'sg1_agendar_expediente']);
@@ -167,6 +184,7 @@ Route::get('sg1-expe-impresos/{id}',[SecretariaGeneral1Controller::class,'sg1_ex
 Route::post('sg1-add-sticker',[SecretariaGeneral1Controller::class,'sg1_add_sticker']);
 Route::get('sg1-get-sunedu',[SecretariaGeneral1Controller::class,'sg1_get_sunedu']);
 
+
 Route::get('sg2_expd_aprobados/{id}',[SecretariaGeneral2Controller::class,'sg2_expedientes_aprobados']);
 Route::get('sg2_datos_internos_imprimir/{id}',[SecretariaGeneral2Controller::class,'sg2_get_imprimir']);
 Route::get('sg2-get-programar/{id}',[SecretariaGeneral2Controller::class,'sg2_get_programar']);
@@ -175,8 +193,8 @@ Route::post('sg2-add-fecha-entrega',[SecretariaGeneral2Controller::class,'sg2_ad
 Route::get('sg2-get-programados/{id}',[SecretariaGeneral2Controller::class,'sg2_get_programados']);
 Route::post('sg2-entregar/{id}',[SecretariaGeneral2Controller::class,'sg2_entregar']);
 
+
+});
 //asesor
 
 Route::get('asesor-expediente',[AsesorController::class,'asesor_expedientes']);
-
-});

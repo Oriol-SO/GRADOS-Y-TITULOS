@@ -26,8 +26,8 @@ class UserSeeder extends Seeder
         ],
         [
             'id' => '2',
-            'name' => 'Alumno',
-            'email' => 'alum@gmail.com',
+            'name' => 'Secretaria',
+            'email' => 'secretarias@gmail.com',
             'password' => Hash::make('password'),
             'email_verified_at' => now(),
             'persona_id' => '2'

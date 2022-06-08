@@ -25,10 +25,45 @@ class PersonaRolSeeder extends Seeder
                 'estado' => '1',
                 'uso'=>1
             ],
-            [ //administrador
+
+
+            [ //secretarias facultad
                 'id' => '2',
                 'rol_Id' => '5',
-                'persona_id' => '1',
+                'persona_id' => '2',
+                'facId' => '4',
+                'escId' => null,
+                'fecIni' => null,
+                'fecFin' => null,
+                'estado' => '1',
+                'uso'=>1
+            ],
+            [ //secretarias viderrect
+                'id' => '3',
+                'rol_Id' => '11',
+                'persona_id' => '2',
+                'facId' => null,
+                'escId' => null,
+                'fecIni' => null,
+                'fecFin' => null,
+                'estado' => '1',
+                'uso'=>0
+            ],
+            [ //secretarias general1
+                'id' => '4',
+                'rol_Id' => '3',
+                'persona_id' => '2',
+                'facId' => null,
+                'escId' => null,
+                'fecIni' => null,
+                'fecFin' => null,
+                'estado' => '1',
+                'uso'=>0
+            ],
+            [ //secretarias general2
+                'id' => '5',
+                'rol_Id' => '12',
+                'persona_id' => '2',
                 'facId' => null,
                 'escId' => null,
                 'fecIni' => null,
@@ -37,18 +72,6 @@ class PersonaRolSeeder extends Seeder
                 'uso'=>0
             ],
 
-
-            [ //Alumno
-                'id' => '3',
-                'rol_Id' => '10',
-                'persona_id' => '2',
-                'facId' => '4',
-                'escId' => '4SI',
-                'fecIni' => null,
-                'fecFin' => null,
-                'estado' => '1',
-                'uso'=>1
-            ],
            
         ]);
 

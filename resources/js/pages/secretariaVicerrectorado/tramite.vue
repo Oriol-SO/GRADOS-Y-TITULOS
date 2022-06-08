@@ -791,7 +791,7 @@ export default {
           this.otros_requisitos=''
       },
       async fetchtramite(){
-         const { data } = await axios.get(`/api/sf-tramite/${this.$route.params.id}`);   
+         const { data } = await axios.get(`/api/sv-tramite/${this.$route.params.id}`);   
          this.nomtramite = data;
          this.fase_actualy=data.fase_actual;
         // this.codigoproc=this.nomtramite.proceso_id;
@@ -844,7 +844,7 @@ export default {
     async guardar(){
        // console.log(this.daterequisito);  
        if(this.subir===true){
-        await this.daterequisito.post(`/api/sv-subirfilerequisito/`).then(response=>{
+        await this.daterequisito.post(`/api/sv-subirfilerequisito`).then(response=>{
             console.log(response.data);
             if(response.data===1){
                this.subir_file_error='ya no se admiten mas archivos'

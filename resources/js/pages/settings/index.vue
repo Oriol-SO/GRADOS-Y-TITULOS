@@ -35,24 +35,24 @@
         <v-container >
         <v-card class="pa-10" elevation="0">
           <div class="d-flex flex-wrap mb-5 ">
-            <v-avatar size="70" v-if="form.genero =='0'">
+            <v-avatar size="70" v-if="user.genero =='0'">
               <img src="/img/mujeravatar.png">                
             </v-avatar>
-            <v-avatar size="70" v-if="form.genero =='1'">
+            <v-avatar size="70" v-if="user.genero =='1'">
               <img src="/img/hombreavatar.png">                       
             </v-avatar>
             <div class="ml-3"> 
-              <strong class=" text-subtitle-1 font-weight-bold">{{form.nombre+' '+ form.apellido1+' '+ form.apellido2}}</strong>
-                <p><strong>Codigo: </strong>{{form.Codigo}}</p>
+              <strong class=" text-h6 font-weight-bold">{{user.nombre+' '+ user.apellido1+' '+ user.apellido2}}</strong>
+                <p v-if="user.Codigo" ><strong>Codigo: </strong>{{user.Codigo}}</p>
             </div>                     
           </div>
           <hr>
           <div  class="my-3 mx-2" style="display:flex ;justify-content: space-around;  flex-wrap: wrap">
             <div>
             <p class="mb-0"><Strong>E-mail: </Strong></p>
-            <p class="mb-2">{{form.email}}</p>            
+            <p class="mb-2">{{user.email}}</p>
             <p v-if="form.matricula" class="mb-0"><Strong>Ingreso: </Strong></p>
-            <p v-if="form.matricula" class="mb-2">{{form.matricula}}</p>
+            <p v-if="form.matricula" class="mb-2">{{form.matricula}}</p>          
             <p class="mb-0"><Strong>Fec Nacimiento: </Strong></p>
             <p class="mb-2">{{form.Nacimiento}}</p>
              <p class="mb-0"><Strong>Documento: </Strong></p>
@@ -61,8 +61,8 @@
             <div>
             <p class="mb-0"><Strong>Dirección: </Strong></p>
             <p class="mb-2">{{form.Direccion}}</p>
-            <p v-if="form.curricula" class="mb-0"><Strong>Curricula:</Strong></p>
-            <p v-if="form.curricula" class="mb-2">{{form.curricula}}</p>
+            <p v-if="user.curricula" class="mb-0"><Strong>Curricula:</Strong></p>
+            <p v-if="user.curricula" class="mb-2">{{form.curricula}}</p>
             <p class="mb-0"><Strong>Celular: </Strong></p>
             <p class="mb-2">{{form.Ncelular}}</p>          
             </div>
@@ -70,8 +70,8 @@
             <hr>
              <div class="my-3 mx-2" style="display:flex ;justify-content: space-around;  flex-wrap: wrap">
              <div>        
-            <p class="mb-0"><Strong>Año De Egreso: </Strong></p>
-            <p class="mb-2">{{form.Egreso}}</p>
+            <p class="mb-0" v-if="user.Egreso"><Strong>Año De Egreso: </Strong></p>
+            <p class="mb-2" v-if="user.Egreso">{{form.Egreso}}</p>
             <p class="mb-0"><Strong>Abreviatura De Grado: </Strong></p>
             <p class="mb-2">{{form.Abreviatura}}</p>
             </div> 
@@ -136,6 +136,7 @@
                 cols="12"
                 sm="6"
                 md="5"
+                v-if="user.role[0]==10"
                >
                 <v-text-field
                  v-model="form.Egreso"
@@ -219,12 +220,11 @@
                 class="d-flex"
                >
                 <v-select
-                  v-model="form.tipo_documento"
+                  v-model="form.tipoDocumento"
                   :items="tipodocs"
                   label='tipo de documento'
                   item-text="nombre"
-                  item-value="num"
-                  solo                                  
+                  item-value="num"                                
                   return-object
                   elevation="0"
                   style="height:55px; width:150px;"
@@ -282,31 +282,26 @@ export default {
  
   data: () => ({
       menufec: false,
-    emailRules: [
+      emailRules: [
         v => !!v || 'E-mail is required',
         v => /.+@.+\..+/.test(v) || 'E-mail no es valido',
       ],
     form: new Form({
-      nombre: "",
       email: "",
-      apellido1:"",
-      apellido2:"",
-      genero:"",
       curricula:"",
       matricula:"",
       Direccion:"",
-      Codigo:"",
       Ncelular:"",
       Nacimiento:"",
       GradoEstudios:"",
       Abreviatura:"",
       Egreso:"",
       Documento:"",
-      tipo_documento:{nombre:'DNI', num:1},
-
+      tipoDocumento:'',
     }),
     tipodocs:[{nombre:'DNI',num:1},{nombre:'PASAPORTE',num:2}],
 
+    
   }),
 computed: {
     ...mapGetters({
@@ -316,12 +311,10 @@ computed: {
       return [{ name: "Inicio", path: "/home" }];
       //return this.links.filter((link) => !(link.notUser && this.user));
     },
+     mostrarRol:function(){
+       return this.user;
+     }
   },
-
-
-  computed: mapGetters({
-    user: "auth/user",
-  }),
 linksVerified: function () {
       return [{ name: "Inicio", path: "/home" }];
       //return this.links.filter((link) => !(link.notUser && this.user));

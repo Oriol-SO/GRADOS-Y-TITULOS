@@ -19,6 +19,18 @@ function getFirstRoute(rol_id) {
     case 13:
       path = 'admin.dashboard'
       break;
+    case 5:
+      path = 'sf.dashboard'
+      break;
+    case 11:
+      path = 'dashboardvice'
+      break;
+    case 3:
+      path = 'secretaria_general.dashboard'
+      break;
+    case 12:
+      path = 'sg2.dashboard'
+      break;
   }
   console.log(rol_id)
   return path

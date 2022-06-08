@@ -10,7 +10,7 @@
 <script>
 import Sidevar from '../../components/sidevar.vue';
 export default {
-  // middleware: ["auth",'role:13'],
+   middleware: ["auth",'role:12'],
   components:{
     Sidevar,
    

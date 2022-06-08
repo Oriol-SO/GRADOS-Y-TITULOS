@@ -176,7 +176,7 @@ export default {
         },
         async Addresolucion(){
             //console.log(this.form)
-            await this.form.post(`/api/aprobar-resolucion/`).then(response=>{
+            await this.form.post(`/api/aprobar-resolucion`).then(response=>{
                 console.log(response.data)  
                 this.close();
                 this.fetchExpedientes(this.primerTab); 

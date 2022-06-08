@@ -781,7 +781,7 @@ export default {
       async guardar(){
        // console.log(this.daterequisito);  
        if(this.subir===true){
-        await this.daterequisito.post(`/api/alu-filerequisito/`).then(response=>{
+        await this.daterequisito.post(`/api/alu-filerequisito`).then(response=>{
             console.log(response.data);
             if(response.data===1){
                this.subir_file_error='ya no se admiten mas archivos'
