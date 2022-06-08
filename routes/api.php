@@ -76,17 +76,19 @@ Route::group(['middleware' => 'guest:api'], function () {
 
 Route::group(['middleware'=>'admin:api'],function(){
     Route::resource('proceso', ProcesoController::class);
+    Route::resource('fase',FaseController::class);    
+    Route::resource('grado', GradoController::class);
+    Route::resource('modalidades', ModalidadController::class);
+    Route::resource('faserequisito',FaseRequisitoController::class);
+    Route::resource('requisito',RequisitoController::class);
+    Route::resource('persona',PersonaController::class);
+    Route::resource('tipoarchivo',TipoArchivoController::class);
+    Route::resource('rol',RolController::class);
+    Route::get('roles/{fase}',[FaseController::class,'roles']);
 });
-Route::resource('grado', GradoController::class);
-Route::resource('modalidades', ModalidadController::class);
-Route::resource('fase',FaseController::class);
-Route::resource('faserequisito',FaseRequisitoController::class);
-Route::resource('requisito',RequisitoController::class);
-Route::resource('persona',PersonaController::class);
-Route::resource('tipoarchivo',TipoArchivoController::class);
-Route::resource('rol',RolController::class);
-Route::get('roles/{fase}',[FaseController::class,'roles']);
 
+Route::group(['middleware' => 'auth:api'], function () {
+    
 Route::resource('bachillerIni',BachillerIniController::class);
 Route::resource('bachillerFinal',BachillerFinalController::class);
 
@@ -107,7 +109,7 @@ Route::get('/editor',[EditorController::class,'editor']);
 
 //alumno
 Route::resource('tramite',tramiteController::class);
-Route::post('agregartramite',[tramiteController::class],'agregar_tramite');
+Route::post('agregartramite',[tramiteController::class,'agregar_tramite']);
 Route::get('fasestramite/{codigo}',[tramiteController::class,'obtenerfases']);
 Route::get('alu-faserequisito/{id}/{tramite}',[tramiteController::class,'obtenerfaserequisito']);
 Route::post('alu-filerequisito/',[tramiteController::class,'subirarchivorequisito']);
@@ -174,3 +176,5 @@ Route::post('sg2-entregar/{id}',[SecretariaGeneral2Controller::class,'sg2_entreg
 //asesor
 
 Route::get('asesor-expediente',[AsesorController::class,'asesor_expedientes']);
+
+});

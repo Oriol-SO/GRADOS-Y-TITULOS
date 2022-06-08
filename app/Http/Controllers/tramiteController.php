@@ -107,8 +107,7 @@ class tramiteController extends Controller
             'grado'=>'required',
             'tipotramite'=>'required'
         ]);
-       
-        
+               
         if ($request->grado['id']==2){
             $request->validate([
                 'grado'=>'required',
