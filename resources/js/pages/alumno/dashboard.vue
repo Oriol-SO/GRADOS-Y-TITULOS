@@ -218,6 +218,7 @@ export default {
         this.proceso = data.tramites;
 
       },async addtramite(){
+          console.log(this.form.grado)
          console.log(this.form);
           await this.form.post('/api/agregartramite/').then(response=>{
                 console.log(response.data);
