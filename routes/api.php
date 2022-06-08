@@ -75,9 +75,9 @@ Route::group(['middleware' => 'guest:api'], function () {
 
 
 Route::group(['middleware'=>'admin:api'],function(){
+    Route::resource('fase',FaseController::class);   
     Route::post('agregar_proceso',[ProcesoController::class,'agregar_proceso']);
-    Route::resource('proceso', ProcesoController::class);
-    Route::resource('fase',FaseController::class);    
+    Route::resource('proceso', ProcesoController::class);     
     Route::resource('grado', GradoController::class);
     Route::resource('modalidades', ModalidadController::class);
     Route::resource('faserequisito',FaseRequisitoController::class);

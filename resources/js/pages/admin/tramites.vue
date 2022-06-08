@@ -197,10 +197,9 @@ import Form from "vform";
       },async FetchModalidad(){
         const { data } = await axios.get("/api/modalidades");
         this.modalidades = data;
-      }, async enviar(){
-             
+      }, async enviar(){             
         //  console.log(this.form);
-          const { data } =await this.form.post("/api/proceso")
+          const { data } =await this.form.post("/api/agregar_proceso")
           .then(response =>{
             this.FetchProceso();
             this.clear();
