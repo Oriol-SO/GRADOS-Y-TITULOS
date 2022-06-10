@@ -57,7 +57,27 @@
                    :items="gruposexpediente.tramite"
                    hide-default-footer
                    id="color_table"
-                 ></v-data-table>
+                 >
+                    <template v-slot:item.estado="{ item }">                     
+                        <v-btn
+                        v-if="item.estado==1"
+                        small
+                        rounded
+                        color="green accent-3"
+                        elevation="0"
+                        style="color:#fff;"                      
+                        >Entregado  </v-btn> 
+                        <v-btn
+                        v-else
+                        small
+                        rounded
+                        color="orange accent-3"
+                        elevation="0"
+                        style="color:#fff;"                      
+                        >Inconcluso  </v-btn> 
+                                          
+                    </template>
+                 </v-data-table>
               </v-card>
             </v-card>
           </v-spacer>

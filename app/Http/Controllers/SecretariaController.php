@@ -71,10 +71,19 @@ class SecretariaController extends Controller
         }
     }
     //secretaria general tramites 
-    public function sf_expedientes(){
+    public function sf_expedientes(Request $request){
         $rol=5;
+        $user=$request->user();
+        $persona=$user->persona_id;
+
+        //obtener facultad del rol en uso
+
+        $facu=(PersonaRole::where('persona_id',$persona)->where('estado',1)->where('uso',1)->first())->facId;
+
         if($rol==5){
-            $expedientes=Tramite::all()->map(function($e){
+            $personas=Persona::where('facu',$facu)->get('id');
+
+            $expedientes=Tramite::whereIn('persona_id',$personas)->get()->map(function($e){
                 return[
                     'per_nom'=>$e->persona->nom.' '.$e->persona->apePat.' '.$e->persona->apeMat,
                    // 'per_apepat'=>$e->persona->apePat,

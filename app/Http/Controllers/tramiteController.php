@@ -101,13 +101,23 @@ class tramiteController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    public $grado;
     public function agregar_tramite(Request $request)
     {
         $request->validate([
             'grado'=>'required',
             'tipotramite'=>'required'
         ]);
-               
+       $usuario=$request->user();       
+       $this->grado=0;
+       Tramite::where('persona_id',$usuario->persona_id)->get()->map(function($t){
+            if($t->proceso->grado_id){
+                $this->grado=$t->proceso->grado_id;
+            }
+        }) ;
+  
+
+
         if ($request->grado['id']==2){
             $request->validate([
                 'grado'=>'required',
@@ -118,17 +128,24 @@ class tramiteController extends Controller
                 'url'=>'required',
             ]);
              
-            //guardar el plan
+            //comprobamos si el usuario tiene trmites de titulo
+            //el proces
+            
 
+            //guardar el plan
+            if($this->grado==2){
+                return 'ERROR_EXIST';
+            }  
             $url_plan_tesis=Storage::url($request->file('url')->store('public/planTesis'));           
             //crear el trabajo
             
-           $trabajo= Trabajo::create([
+            $trabajo= Trabajo::create([
                 'modo_sustentacion'=>'PRESENCIAL',
                 'url_repositorio'=>$url_plan_tesis,
                 'nombre'=>$request->titulo,
                 'lineainv_id'=>$request->linea_inv['id'],
             ]);
+
             $user=$request->user();
             $persona=$user->persona;
             Involucrado::create([
@@ -140,9 +157,11 @@ class tramiteController extends Controller
             //creamos el tramite
             $this->add_tramite($request,$trabajo->id);
 
-        }else if($request->grado['id']==1){                      
+        }else if($request->grado['id']==1){      
+            if($this->grado==1){
+                return 'ERROR_EXIST';
+            }                
             $this->add_tramite($request,null);
-
             return 'tramite agregado';
         }else{
             return 'no esta disponible';

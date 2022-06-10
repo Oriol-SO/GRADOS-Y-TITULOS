@@ -280,7 +280,7 @@
             transition="dialog-bottom-transition"
             >
               <v-card elevation="0">
-                <v-card-title class="text-h6 d-flex" style="background:#2cdd9b; color:#fff;">
+                <v-card-title class="text-h6 d-flex" style="background:#009df9; color:#fff;">
                   {{msg_file}}
                   <v-btn
                   class="ml-auto"

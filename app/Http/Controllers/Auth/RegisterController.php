@@ -100,6 +100,7 @@ class RegisterController extends Controller
                     'numDoc' =>  $date['Dni'],
                     'fecNac' =>  $date['Fecha de nacimiento'],            
                     'numCel' => '99999999',
+                    'facu'=>$school[0]->FACULTAD_ID,
                     'espe' => $school[0]->ID_ESC,
                     'cod_alum'=>  $codigo,  
                     'curri'=> $curricula, 

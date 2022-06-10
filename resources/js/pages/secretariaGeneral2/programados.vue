@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-card elevation="0">
         <v-toolbar class="mt-3" color="#0df0d6" dark style="color:#000;" elevation="0">
-          <v-toolbar-title class="d-flex" style="width:100%;" > Programdos para Hoy
+          <v-toolbar-title class="d-flex" style="width:100%;" > Programados para Hoy
    
           </v-toolbar-title>
               <v-tabs v-model="tab">
@@ -37,13 +37,22 @@
                      
                           <v-avatar  v-if="item.estado"                          
                           size="25">
-                            <v-icon color="teal">mdi-checkbox-marked-circle</v-icon>
+                            <v-icon color="green accent-3">mdi-checkbox-marked-circle</v-icon>
                           </v-avatar>
                        
 
                       </template>
                     <template v-slot:item.actions="{ item }">
                         <v-btn
+                        v-if="item.estado==1"
+                        small
+                        rounded
+                        color="green accent-3"
+                        elevation="0"
+                        style="color:#fff;"                      
+                        >Entregado  </v-btn>
+                        <v-btn
+                        v-else
                         small
                         rounded
                         color="primary"
@@ -51,7 +60,7 @@
                         style="color:#fff;"                      
                         @click="entregar(item)" 
 
-                        >{{item.estado?'entregado':'entregar'}}  </v-btn>
+                        >entregar </v-btn>
 
                     </template>
                   </v-data-table>
@@ -122,7 +131,7 @@ export default {
             //{text: 'Facultad',align: 'start', value: '',},
             { text: 'Tramite', value: 'tramite' },           
             { text: 'Fecha de inicio', value: 'fec_inicio' },
-            { text: 'Consejo', value:'consejo_numero',sortable: false},            
+            { text: 'Consejo', value:'consejo_numero'},            
             //{ text: 'Estado', value: 'estado' },
             { text: 'hora', value: 'hora' },
             { text: 'Acciones', value: 'actions', sortable: false },

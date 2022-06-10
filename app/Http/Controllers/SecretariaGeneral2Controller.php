@@ -114,6 +114,7 @@ class SecretariaGeneral2Controller extends Controller
                 'diploma'=>$e->diploma->id,
                 'estado_impri'=>$e->diploma->est_impreso,
                 'fecha_entrega'=>$e->diploma->fec_hor_entre,
+        
             ];
         });
         return response()->json($apro);
@@ -128,6 +129,12 @@ class SecretariaGeneral2Controller extends Controller
 
              //actualizar
             //verificar que no haya fecha y hora
+            $tramite_estado=(Tramite::where('id',$request->tramite_id)->first())->estado;
+
+            if( $tramite_estado==1){
+                return 'tramite ya esta entregado';
+            }
+
             $fec_hor_entre=(Diploma::where('id',$request->diploma_id)->where('tramite_id',$request->tramite_id)->first())->fec_hor_entre;
             if($fec_hor_entre=='' || $fec_hor_entre==null){
                 $fech_hora=Diploma::where('tramite_id',$request->tramite_id)->where('id',$request->diploma_id)
@@ -151,7 +158,7 @@ class SecretariaGeneral2Controller extends Controller
             $mfecha = $fecha->month;
             $dfecha = $fecha->day;
             $afecha = $fecha->year;
-           // return $afecha.'/'.$mfecha.'/'.$dfecha;
+           //return $afecha.'/'.$mfecha.'/'.$dfecha;
             //$fecha_hoy= date("Y-m-d",strtotime($fecha_entrega[0]));
             $tramite_diplomas=Diploma::where('num_sticker','<>',null)
             ->whereYear('fec_hor_entre', $afecha)
@@ -160,6 +167,8 @@ class SecretariaGeneral2Controller extends Controller
             ->get()->map(function($e){
                 return [$e->tramite_id];
             });
+
+           //return $tramite_diplomas;
             $apro=Tramite::where('resolucion_id','<>',null)->whereIn('id',$tramite_diplomas)->get()->map(function($e){
                 return[
                 'per_nom'=>$e->persona->nom.' '.$e->persona->apePat.' '.$e->persona->apeMat,           
@@ -174,8 +183,8 @@ class SecretariaGeneral2Controller extends Controller
                 'hora'=>date("H:i A",strtotime($e->diploma->fec_hor_entre)),
 
             ];
-        });
-        return response()->json($apro);
+            });
+            return response()->json($apro);
         }
     }
     protected function sg2_entregar($id, Request $request){

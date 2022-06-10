@@ -4,6 +4,7 @@
                 tile
                 :color="color"
                 top
+                timeout="1500"
             >
             {{ msg }} 
 

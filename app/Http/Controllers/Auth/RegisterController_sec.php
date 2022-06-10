@@ -56,6 +56,7 @@ class RegisterController extends Controller
                     'numcel'=>$request->celular,
                     'grad_estud'=>$request->gradoestu,
                     'abre_grad'=>$request->gradoabr,
+                    'facu'=>$request->facultad,
                     'espe'=>$request->escuela? $request->escuela['ID_ESC']:null,
                     'cod_alum'=>$request->codigo,
                     'curri'=>$request->curricula?$request->curricula:null,

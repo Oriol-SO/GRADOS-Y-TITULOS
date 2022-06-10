@@ -137,6 +137,15 @@
                
                 id="alumno"
                 >
+                    <template v-slot:item.estado="{ item }">
+                     
+                          <v-avatar  v-if="item.estado"                          
+                          size="25">
+                            <v-icon color="green accent-3">mdi-checkbox-marked-circle</v-icon>
+                          </v-avatar>
+                       
+
+                      </template>
                     <template v-slot:item.avance="{ item }">
                         <div style="min-width:120px;">
                             <v-slider
@@ -161,14 +170,44 @@
                     </template>                
 
             </v-data-table>
+         <template>
+            <v-snackbar
+                v-model="modal_msg"
+                tile
+                :color="color_msg"
+                top
+                timeout="1500"
+            >
+            {{ msg_snackvar }} 
+
+            <template v-slot:action="{ attrs }">
+                <v-btn
+                color="white"
+                text
+                v-bind="attrs"
+                @click="modal_msg = false"
+                >
+                Close
+                </v-btn>
+            </template>
+            </v-snackbar>
+</template>
     </div>
+    
+
 </template>
 <script>
 import axios from 'axios';
 import Form from "vform";
+
 export default {
+
     data(){
-        return{            
+        return{   
+            modal_msg:false,
+            msg_snackvar:'',
+            color_msg:'',
+
             search:'',
             dialog:false,
             proceso:[],
@@ -176,6 +215,7 @@ export default {
             grados:[],
             lineas_inv:[],
             headers: [
+                { text: '', value: 'estado' },
             {
                 text: 'Tramite',
                 align: 'start',
@@ -207,7 +247,7 @@ export default {
     },methods:{
         close(){
         this.dialog=false;
-        this.form.grado='';
+        this.form.reset();
       },
         async FetchGrados(){
             const { data } = await axios.get("/api/alu-grados");
@@ -221,9 +261,16 @@ export default {
           console.log(this.form.grado)
            console.log(this.form);
           await this.form.post('/api/add_tramite').then(response=>{
-                console.log(response.data);
-                this.fecthtramitesper();
-                this.close();
+                //console.log(response.data);
+                 if(response.data=='ERROR_EXIST'){
+                    this.modal_msg=true;
+                    this.color_msg='red acent-2'
+                    this.msg_snackvar='ya tienes uin tramite igual'
+                 }else{
+                    this.fecthtramitesper();
+                    this.close();                
+                 }  
+
           }).catch(error=>{
             if(error.response.status === 422){
                     this.errorestramite=error.response.data.errors;                      

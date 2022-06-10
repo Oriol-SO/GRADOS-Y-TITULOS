@@ -32,9 +32,24 @@
                     class="elevation-1"
                     group-by="consejo_numero"
                   >
+                    
+                    <template v-slot:item.estado="{ item }">                     
+                          <v-avatar  v-if="item.estado"                          
+                          size="25">
+                            <v-icon color="green accent-3">mdi-checkbox-marked-circle</v-icon>
+                          </v-avatar>                     
+                    </template>
                     <template v-slot:item.actions="{ item }">
                         <v-btn
-                        v-if="item.fecha_entrega==null"
+                        v-if="item.estado==1"
+                        small
+                        color="green accent-3"
+                        elevation="0"
+                        
+                        style="color:#fff;"
+                        >  <v-icon  left class="ml-1">mdi-check</v-icon> Entregado</v-btn>
+                        <v-btn
+                        v-else-if="item.fecha_entrega==null"
                         small
                         color="black"
                         elevation="0"
@@ -44,7 +59,7 @@
                         <v-btn
                         v-else
                         small                 
-                        color="#19ef6e"
+                        color="primary"
                         elevation="0"
                         style="color:#fff;"
                         @click="reprogramar(item)" 
@@ -118,12 +133,13 @@ export default {
             singleSelect: true,
             tab: null,
             headers: [
+             { text: '', value: 'estado' },
             { text: 'Nombres y apellidos', value: 'per_nom' },
             //{text: 'Facultad',align: 'start', value: '',},
             { text: 'Tramite', value: 'tramite' },           
             { text: 'Fecha de inicio', value: 'fec_inicio' },
             { text: 'Consejo', value:'consejo_numero',sortable: false},            
-            { text: 'Estado', value: 'estado' },
+            { text: 'Entrega', value: 'fecha_entrega' },
             { text: 'Acciones', value: 'actions', sortable: false },
             ],
             for_entregar:[],
