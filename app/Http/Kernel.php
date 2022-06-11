@@ -73,5 +73,6 @@ class Kernel extends HttpKernel
         'secrefacu'=> \App\Http\Middleware\SecretariaFacultadMiddleware::class,
         'secrevice'=> \App\Http\Middleware\SecretariaVicerrectoradoMiddleware::class,
         'secregene'=> \App\Http\Middleware\SecretariaGeneralMiddleware::class,
+        'asesor'=> \App\Http\Middleware\AsesorMiddleware::class,
     ];
 }

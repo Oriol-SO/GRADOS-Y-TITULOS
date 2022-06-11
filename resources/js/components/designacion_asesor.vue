@@ -58,7 +58,7 @@ export default {
     },    
     methods:{
         fetchasesores(){
-            axios.get('/api/sf-asesores').then(response=>{
+            axios.get('/api/sf-asesores/'+this.tramite).then(response=>{
                 this.asesores=response.data;
                  console.log(response.data);
             })

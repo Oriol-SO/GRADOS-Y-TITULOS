@@ -70,8 +70,8 @@ export default {
             { text: 'Tramite', value: 'tramite' },           
             { text: 'fecha de inicio', value: 'fec_inicio' },
             { text: 'avance', value:'avance',sortable: false},            
-            { text: 'estado', value: 'estado' },
-             { text: '', value:'notify',sortable: false},
+           // { text: 'estado', value: 'estado' },
+            //{ text: '', value:'notify',sortable: false},
             { text: 'Actions', value: 'actions', sortable: false },
             ],
             expedientes:[],
@@ -81,9 +81,11 @@ export default {
             this.fetchexpedientes();
     },methods:{
         async fetchexpedientes(){
-            const {data}= await axios.get('/api/asesor-expedientes/');
-            this.expedientes=data;
-            console.log(this.expedientes);
+             await axios.get('/api/asesor-expediente').then(response=>{
+                this.expedientes=response.data;
+                console.log(response.data);
+             });
+            
         }
     }
 }

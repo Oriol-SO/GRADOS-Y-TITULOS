@@ -28,15 +28,18 @@ class SecretariaController extends Controller
     {
         //
     }
-    protected function lista_asesor(){
-        $facu=1;
-        
-        $asesores=PersonaRole::where('rol_id',9)->get()->map(function($p){
+    protected function lista_asesor($id){
+     
+        $tramite_escuela=Tramite::where('id',$id)->get()->map(function($t){
+            return[$t->persona->espe];
+        });
+        $escu=$tramite_escuela[0];
+        $asesores=PersonaRole::where('rol_id',9)->where('escId',$escu)->get()->map(function($p){
             return[
-                'nombre'=>$p->persona->nom.' '.$p->persona->apePat.''.$p->persona->apeMat,
+                'nombre'=>$p->persona->nom.' '.$p->persona->apePat.' '.$p->persona->apeMat,
                 'id'=>$p->id,
-                'persrol_id'=>(PersonaRole::where('persona_id',$p->id)->first())->id,
-                'rol_id'=>(PersonaRole::where('persona_id',$p->id)->first())->rol_id,
+                'persrol_id'=>(PersonaRole::where('persona_id',$p->persona_id)->first())->id,
+                'rol_id'=>(PersonaRole::where('persona_id',$p->persona_id)->first())->rol_id,
             ];
         });
         return $asesores;

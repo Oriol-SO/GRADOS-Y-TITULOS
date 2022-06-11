@@ -147,7 +147,7 @@ Route::group(['middleware'=>'secrefacu:api'],function(){
     Route::post('sf-revisarrequisito',[SecretariaController::class,'sf_revisarrequisito']);
     Route::post('sf-subirfilerequisito',[SecretariaController::class,'sf_subirrequisito']);
     Route::get('sf-fasecheck/{tramite}/{fase}',[SecretariaController::class,'sf_fasecheck']);
-    Route::get('sf-asesores',[SecretariaController::class,'lista_asesor']);
+    Route::get('sf-asesores/{id}',[SecretariaController::class,'lista_asesor']);
     Route::post('sf-asignar-asesor/{tramite}',[SecretariaController::class,'sf_asignar_asesor']);
     
 });
@@ -196,5 +196,6 @@ Route::post('sg2-entregar/{id}',[SecretariaGeneral2Controller::class,'sg2_entreg
 
 });
 //asesor
-
-Route::get('asesor-expediente',[AsesorController::class,'asesor_expedientes']);
+Route::group(['middleware'=>'asesor:api'],function(){
+    Route::get('asesor-expediente',[AsesorController::class,'asesor_expedientes']);
+});
