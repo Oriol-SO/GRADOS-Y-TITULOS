@@ -19,7 +19,7 @@ class CreateRequisitosTable extends Migration
             $table->string('tipo_documento');
             $table->text('html_formato')->nullable();
             $table->BigInteger('tipoarchi_id')->unsigned();
-
+            $table->integer('tipo_requisito')->nullable();
             $table->foreign('tipoarchi_id')->references('id')->on('tipo_archivos');
             $table->timestamps();
         });

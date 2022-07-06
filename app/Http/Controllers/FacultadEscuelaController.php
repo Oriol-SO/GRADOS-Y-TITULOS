@@ -41,7 +41,7 @@ class FacultadEscuelaController extends Controller
     public function rolesgenerales($codigo){
         if($codigo==1){
             //rolesgenerales
-            $roles=Role::whereIn('id', [1, 2, 3,11,12,13])->get()->map(function($r){
+            $roles=Role::whereIn('id', [1, 2, 3,11,12,13,15])->get()->map(function($r){
                 return[
                     'id'=>$r->id,
                     'rolNombre'=>$r->rolNombre,

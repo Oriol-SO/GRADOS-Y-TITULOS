@@ -9,6 +9,7 @@ use App\Models\FaseRolRequisito;
 use App\Models\Fase;
 use App\Models\File;
 use App\Models\Observacione;
+use App\Models\PersonaRole;
 use App\Models\Proceso;
 use App\Models\Revisione;
 use Exception;
@@ -275,7 +276,7 @@ class SecretariaVicerrectoradoController extends Controller
                        
             $user=$request->user();
             // $persona=$user->persona_id;
-            $personarol=$user->persona->personarole[0]->id;
+            $personarol=(PersonaRole::where('persona_id',$user->persona_id)->where('uso',1)->where('estado',1)->first())->id;
             $request->validate([
                 'archivo'=>'required'
             ]);

@@ -95,7 +95,7 @@
                     v-bind:style="requisito.archivo_subido.length>0?'background:#82b1ff;;':'' "
                   >
                     <v-list-item-icon>
-                        <v-icon >mdi-check-outline</v-icon>
+                        <v-icon v-bind:style="requisito.tipo_req==1?'color:#0b4bff':''" >mdi-check-outline</v-icon>
                     </v-list-item-icon>
                     <v-list-item-content>
                         <v-list-item 
@@ -789,7 +789,8 @@ export default {
             }else{
             this.daterequisito.archivo='',
             this.mostrarrequisito(this.id_fasereq);
-            this.dialog=false;
+            this.fetchtramite();
+            this.cerrar_modal();
             }
       
         }).catch(error=>{

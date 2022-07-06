@@ -21,7 +21,7 @@
                     <v-spacer></v-spacer>
                     <v-dialog
                         transition="dialog-top-transition"
-                        max-width="550"
+                        max-width="650"
                         v-model="dialog"
                         persistent
                      >
@@ -60,14 +60,14 @@
                                      label="Titulo de Investigación"
                                     ></v-text-field>
                                     <v-row no-gutters>
-                                        <v-col cols="12" sm="4" class="pr-2">
+                                        <v-col cols="12" sm="2" class="pr-2">
                                             <v-select
                                             v-model="form.integrantes"
-                                            label="numero de integrantes"
+                                            label="Integrantes"
                                             :items="[1,2]"
                                             ></v-select>
                                         </v-col>
-                                        <v-col cols="12" sm="8"  >
+                                        <v-col cols="12" sm="5"  >
                                             <v-select
                                             v-model="form.linea_inv"
                                             label="linea de investigacion"
@@ -77,9 +77,19 @@
                                             return-object
                                             ></v-select>
                                         </v-col>
+                                        <v-col cols="12" sm="5"  >
+                                            <v-select
+                                            v-model="form.sublinea"
+                                            label="Sub linea de investigacion"
+                                            :items="lineas_inv"
+                                            item-text="inveNombre"
+                                            item-value="id"
+                                            return-object
+                                            ></v-select>
+                                        </v-col>
                                     </v-row>
 
-                                    <v-row>
+                                    <!--v-row>
                                         <v-col cols="12" sm="10">
                                             <v-file-input
                                                 v-model="form.url"
@@ -95,7 +105,7 @@
                                                  @click="view_file()"
                                                 >mdi-eye</v-icon>
                                         </v-col>
-                                    </v-row>                            
+                                    </v-row-->                            
                                     
                               
 
@@ -237,6 +247,7 @@ export default {
                 integrantes:'',
                 linea_inv:'',
                 url:'',
+                sublinea:'',
             }),
             erroresuseredit:'',
         }

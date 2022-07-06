@@ -108,11 +108,19 @@ class RolSeeder extends Seeder
             ],
             [
                 'id' => 14,
-                'rolNombre' => 'Jefe de Registros Academicos',
+                'rolNombre' => 'jefe de registros académicos',
                 'rolDep' => null,
                 'rolMod' => true,
                 'rol_id'=>14,
             ],
+            [
+                'id' => 15,
+                'rolNombre' => 'Unidad de investigación',
+                'rolDep' => null,
+                'rolMod' => true,
+                'rol_id'=>15,
+            ],
+
         ]);
     }
 }

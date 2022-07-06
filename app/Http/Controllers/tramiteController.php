@@ -23,7 +23,9 @@ use App\Models\Involucrado;
 use App\Models\LineaDeInvestigacione;
 use App\Models\LineaInvestigacione;
 use App\Models\LineaInvestigacionEscuela;
+use App\Models\Requisito;
 use App\Models\Trabajo;
+use Exception;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Contracts\Service\Attribute\Required;
 
@@ -120,12 +122,13 @@ class tramiteController extends Controller
 
         if ($request->grado['id']==2){
             $request->validate([
-                'grado'=>'required',
-                'tipotramite'=>'required',
+                'grado'=>'required',                
                 'titulo'=>'required',
                 'integrantes'=>'required',
                 'linea_inv'=>'required',
-                'url'=>'required',
+                'sublinea'=>'required',
+                //'url'=>'required',
+                'tipotramite'=>'required',
             ]);
              
             //comprobamos si el usuario tiene trmites de titulo
@@ -133,19 +136,18 @@ class tramiteController extends Controller
             
 
             //guardar el plan
-            if($this->grado==2){
+            /*if($this->grado==2){
                 return 'ERROR_EXIST';
             }  
             $url_plan_tesis=Storage::url($request->file('url')->store('public/planTesis'));           
             //crear el trabajo
-            
+            */
             $trabajo= Trabajo::create([
                 'modo_sustentacion'=>'PRESENCIAL',
-                'url_repositorio'=>$url_plan_tesis,
+                //'url_repositorio'=>$url_plan_tesis,
                 'nombre'=>$request->titulo,
                 'lineainv_id'=>$request->linea_inv['id'],
             ]);
-
             $user=$request->user();
             $persona=$user->persona;
             Involucrado::create([
@@ -206,10 +208,10 @@ class tramiteController extends Controller
                 'tipo_tramite'=>$t->tipo_tramite,
                 'fase_actual'=>$t->fase_actual,
                 'receptor_rol_notify'=>$t->receptor_rol_notify,
-                'trabajo_plan_tesis_url'=>$t->trabajo?$t->trabajo->url_repositorio:null ,
+                'trabajo_plan_tesis_url'=>$t->trabajo?$t->trabajo->url_repositorio:null,
                 'titulo_proyecto'=>$t->trabajo?$t->trabajo->nombre:null,
                 'integrantes'=>1,
-                'grado'=>$t->proceso->grado_id,
+                'grado'=>$t->proceso->grado_id, 
                 'linea_investigacion'=>$t->trabajo?$t->trabajo->LineaDeInvestigacione->inveNombre:null,
             ];
         });
@@ -226,82 +228,87 @@ class tramiteController extends Controller
     protected function obtenerfaserequisito($id,$tramite){
         $this->tram=$tramite;
         $rol=10;
-        if($rol===10){
-                //obtener id fase anterior 
 
-              /*  $numero_actual=(Fase::where('id',$id)->first())->numero;
-                if($numero_actual>1){
-                    $num_anterior=$numero_actual-1;
-                    //obtener el proceso id
-                    $proc_id=(Tramite::where('id',$tramite)->first())->proceso_id;
-                    //obtener fase anterior
-                    $fase=(Fase::where('proceso_id',$proc_id)->where('numero',$num_anterior)->first())->id;
+        try{
+            if($rol===10){
+                    //obtener id fase anterior 
 
-                    $autorized=$this->alu_autorized($fase,$tramite);
-                    $requisitos['autorized']=$autorized;
-                }*/
-               
+                /*  $numero_actual=(Fase::where('id',$id)->first())->numero;
+                    if($numero_actual>1){
+                        $num_anterior=$numero_actual-1;
+                        //obtener el proceso id
+                        $proc_id=(Tramite::where('id',$tramite)->first())->proceso_id;
+                        //obtener fase anterior
+                        $fase=(Fase::where('proceso_id',$proc_id)->where('numero',$num_anterior)->first())->id;
 
-       
-            $requisitos['alumno'] = FaseRolRequisito::where('fase_id',$id)->where('rol_id',10)->get()->map(function ($r) {
-                return [
-                    'id' => $r->id,       
-                    'requisito_id' => $r->requisito_id ,
-                    'nombre' => $r->requisito ->nombre ,
-                    'rol'=> $r->rol->id,
-                    'documento'=>$r->requisito->TipoArchivo->tipoNombre,
-                    'extension'=>   $r->requisito ->tipo_documento, 
-                    'archivo_subido'=>File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get(),
-                    'revisado_aprovado'=>Revisione::whereIn('file_id',(File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('id')))->get(),
-                    'revisado_observado'=>Observacione::whereIn('file_id',(File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('id')))->get(), 
-                    'modificado'=>File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('num_modifi')->map(function($mod){
-                        return $mod->num_modifi;
-                    }),      
+                        $autorized=$this->alu_autorized($fase,$tramite);
+                        $requisitos['autorized']=$autorized;
+                    }*/
+                
+
+        
+                $requisitos['alumno'] = FaseRolRequisito::where('fase_id',$id)->where('rol_id',10)->get()->map(function ($r) {
+                    return [
+                        'id' => $r->id,       
+                        'requisito_id' => $r->requisito_id ,
+                        'nombre' => $r->requisito ->nombre ,
+                        'rol'=> $r->rol->id,
+                        'documento'=>$r->requisito->TipoArchivo->tipoNombre,
+                        'extension'=>   $r->requisito ->tipo_documento, 
+                        'archivo_subido'=>File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get(),
+                        'revisado_aprovado'=>Revisione::whereIn('file_id',(File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('id')))->get(),
+                        'revisado_observado'=>Observacione::whereIn('file_id',(File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('id')))->get(), 
+                        'modificado'=>File::where('tramite_id',$this->tram)->where('faserolreq_id',$r->id)->get('num_modifi')->map(function($mod){
+                            return $mod->num_modifi;
+                        }),   
+                        'tipo_req'=>$r->requisito->tipo_requisito,   
+                    ];
+                });
+                $requisitos['subidos']=0;
+                $requisitos['aprovados']=0;
+                $requisitos['observados']=0;   
+            
+                //$requisitos['num_fase_ant']=$num_req;  
+                //$requisitos['total_req']=FaseRolRequisito::where('fase_id',$id)->count();       
+            foreach ($requisitos['alumno'] as $req) {
+                if(count($req['revisado_aprovado'])>0){
+                    $requisitos['aprovados']++;
+                }elseif(count($req['revisado_observado'])>0){
+                    $requisitos['observados']++;
+                }
+                if(count($req['archivo_subido'])>0){
+                    $requisitos['subidos']++;
+                }
+            } 
+                
+            //otros requisitos 
+            $requisitos['otros']=FaseRolRequisito::where('fase_id',$id)->where('rol_id','<>',10)->get()->map(function($o){
+                return[
+                    'nombre' => $o->requisito ->nombre,
+                    'rol' =>$o->rol->rolNombre,
+                    'documento'=>$o->requisito->TipoArchivo->tipoNombre,
+                    'extension'=>$o->requisito ->tipo_documento, 
+                    'archivo_subido'=>File::where('tramite_id',$this->tram)->where('faserolreq_id',$o->id)->get(),
                 ];
             });
-            $requisitos['subidos']=0;
-            $requisitos['aprovados']=0;
-            $requisitos['observados']=0;   
-           
-            //$requisitos['num_fase_ant']=$num_req;  
-            //$requisitos['total_req']=FaseRolRequisito::where('fase_id',$id)->count();       
-           foreach ($requisitos['alumno'] as $req) {
-               if(count($req['revisado_aprovado'])>0){
-                $requisitos['aprovados']++;
-               }elseif(count($req['revisado_observado'])>0){
-                $requisitos['observados']++;
-               }
-               if(count($req['archivo_subido'])>0){
-                $requisitos['subidos']++;
-               }
-           } 
-            
-           //otros requisitos 
-           $requisitos['otros']=FaseRolRequisito::where('fase_id',$id)->where('rol_id','<>',10)->get()->map(function($o){
-               return[
-                'nombre' => $o->requisito ->nombre,
-                'rol' =>$o->rol->rolNombre,
-                'documento'=>$o->requisito->TipoArchivo->tipoNombre,
-                'extension'=>$o->requisito ->tipo_documento, 
-                'archivo_subido'=>File::where('tramite_id',$this->tram)->where('faserolreq_id',$o->id)->get(),
-               ];
-           });
 
-           $proceso_id=(Tramite::where('id',$tramite)->first())->proceso_id;
-           $grado=(Proceso::where('id',$proceso_id)->first())->grado_id;
-            if($grado==1){
-                $requisitos['otros_detalles']=$this->otros_detalles_de_fase_bachiller($id,$tramite);   
+            $proceso_id=(Tramite::where('id',$tramite)->first())->proceso_id;
+            $grado=(Proceso::where('id',$proceso_id)->first())->grado_id;
+                if($grado==1){
+                    $requisitos['otros_detalles']=$this->otros_detalles_de_fase_bachiller($id,$tramite);   
+                }else{
+                    //otros detalles del titulo
+                    $requisitos['otros_detalles']=null;   
+                }
+                
+
+                return response()->json($requisitos);
             }else{
-                //otros detalles del titulo
-                $requisitos['otros_detalles']=null;   
+                return 'user no autorizado';
             }
-            
-
-            return response()->json($requisitos);
-        }else{
-            return 'user no autorizado';
+        }catch(Exception $e){
+            return $e;
         }
- 
     } 
 
     protected function otros_detalles_de_fase_bachiller($id,$tramite){
@@ -545,49 +552,103 @@ class tramiteController extends Controller
                 'archivo'=>'required'
             ]);
 
-            //actualizar
-
+            $requisito_file=FaseRolRequisito::where('id',$request->idfaserequi)->first();
+            $tipo_req=(Requisito::where('id',$requisito_file->requisito_id)->first())->tipo_requisito;              
+             
             //subir nuevo
             //verificar que no haya archivos de este requisito
             $file_req=File::where('tramite_id',$request->tramite)->where('faserolreq_id',$request->idfaserequi)->count();
             if($file_req>0){                
                 //actualizar
                 $file=File::where('tramite_id',$request->tramite)->where('faserolreq_id',$request->idfaserequi)->first();
-                //buscar observaciones
-                $obser=Observacione::where('file_id',$file->id)->count();
-                if($obser>0 && $file->num_modifi==0){
-                    //borramos el archivo de la carpeta
-                    $url_borrar=str_replace('storage','public',$file->path);
-                       Storage::delete($url_borrar);
-                    //subimos la nueva ruta 
-                   
-                        $new_url=Storage::url($request->file('archivo')->store('public/requisitos'));
 
-                        //remplazamos en la base de datos
-                        $requisito=File::where('id', $file->id)->update(['path' => $new_url ,'num_modifi'=>1]);
-                         
-                        return 'actualizado';
-                   
-                }else{
-                    return 1;
+               
+                if($tipo_req==0){                
+                    //buscar observaciones
+                    $obser=Observacione::where('file_id',$file->id)->count();
+                    if($obser>0 && $file->num_modifi==0){
+                        //borramos el archivo de la carpeta
+                        $url_borrar=str_replace('storage','public',$file->path);
+                        Storage::delete($url_borrar);
+                        //subimos la nueva ruta 
+                    
+                            $new_url=Storage::url($request->file('archivo')->store('public/requisitos'));
+
+                            //remplazamos en la base de datos
+                            $requisito=File::where('id', $file->id)->update(['path' => $new_url ,'num_modifi'=>1]);
+                            //$this->subir_documento_tesis($request->tramite,$new_url,$request->idfaserequi);
+                            return 'actualizado';
+                    
+                    }else{
+                        return 1;
+                    }
+                }else if($tipo_req==1){
+                    //plan de tesis
+                    $obser=Observacione::where('file_id',$file->id)->count();
+                    if($obser>0 && $file->num_modifi==0){
+                        //borramos el archivo de la carpeta
+                        $url_borrar=str_replace('storage','public',$file->path);
+                        Storage::delete($url_borrar);
+                        //subimos la nueva ruta 
+                    
+                            $new_url=Storage::url($request->file('archivo')->store('public/plan_tesis'));
+
+                            //remplazamos en la base de datos
+                            $requisito=File::where('id', $file->id)->update(['path' => $new_url ,'num_modifi'=>1]);
+                            $this->subir_documento_tesis($request->tramite,$new_url,$request->idfaserequi);
+                            return 'actualizado';
+                    
+                    }else{
+                        return 1;
+                    }
                 }
             }else{
-                $url=Storage::url($request->file('archivo')->store('public/requisitos'));
-                $requisito=File::create([
-                    'path'=>$url,
-                    'tramite_id'=>$request->tramite,
-                    'persrol_id'=>$personarol,
-                    'faserolreq_id'=>$request->idfaserequi,
-                    'num_modifi'=>0,
-                ]);
-
-                return $requisito;
+                if($tipo_req==0){  
+                    $url=Storage::url($request->file('archivo')->store('public/requisitos'));
+                    $requisito=File::create([
+                        'path'=>$url,
+                        'tramite_id'=>$request->tramite,
+                        'persrol_id'=>$personarol,
+                        'faserolreq_id'=>$request->idfaserequi,
+                        'num_modifi'=>0,
+                    ]);
+                    //$this->subir_documento_tesis($request->tramite,$url,$request->idfaserequi);
+                    return $requisito;
+                }
+                if($tipo_req==1){  
+                    $url=Storage::url($request->file('archivo')->store('public/plan_tesis'));
+                    $requisito=File::create([
+                        'path'=>$url,
+                        'tramite_id'=>$request->tramite,
+                        'persrol_id'=>$personarol,
+                        'faserolreq_id'=>$request->idfaserequi,
+                        'num_modifi'=>0,
+                    ]);
+                    $this->subir_documento_tesis($request->tramite,$url,$request->idfaserequi);
+                    return $requisito;
+                }
             }
-      }else{
-          return 'user no autorizado';
-      }
+        }else{
+            return 'user no autorizado';
+        }
     }
 
+    protected function subir_documento_tesis($tramite_id, $url,$fase_req){
+
+        $tramite=Tramite::where('id',$tramite_id)->first();
+        $proceso=$tramite->proceso_id;
+        $grado=(Proceso::where('id',$proceso)->first())->grado_id;
+        $requisito=(FaseRolRequisito::where('id',$fase_req)->first())->requisito_id;
+        $tipo_req=(Requisito::where('id',$requisito)->first())->tipo_requisito;
+
+        if($tipo_req==1){
+             //es plan de tesis
+            if($grado==2){
+                //es titulo
+                Trabajo::where('id',$tramite->trabajo_id)->update(['url_repositorio'=>$url]);
+            }
+        }
+    }
 
     protected function notificarCambio($fase_id,$tramite){
         $numero_fase_actual=(Tramite::where('id',$tramite)->first())->fase_actual;

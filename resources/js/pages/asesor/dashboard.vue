@@ -49,7 +49,7 @@
                 elevation="0"
                 style="color:#fff;"
                 class="text-capitalize"
-                @click=" $router.push({ path: `/secretaria-facultad/tramite/${item.id}`, }) "    
+                @click=" $router.push({ path: `/asesor/tramite/${item.id}`, }) "    
                 > Ir</v-btn>
 
                 </template>

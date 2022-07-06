@@ -43,7 +43,7 @@ class UserController extends Controller
             'Egreso'=>$persona->fec_egre,
             'tipoDocumento'=>['nombre'=>'','num'=>$persona->tipDoc],
             'Documento'=>$persona->numDoc,
-            'Roles'=>PersonaRole::where('persona_id',$persona->id)->get()->map(function($r){
+            'Roles'=>PersonaRole::where('persona_id',$persona->id)->where('estado',1)->get()->map(function($r){
                 return[
                     'id'=>$r->id,
                     'rol_id'=>$r->rol_id,

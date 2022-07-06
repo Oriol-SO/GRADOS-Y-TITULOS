@@ -198,4 +198,8 @@ Route::post('sg2-entregar/{id}',[SecretariaGeneral2Controller::class,'sg2_entreg
 //asesor
 Route::group(['middleware'=>'asesor:api'],function(){
     Route::get('asesor-expediente',[AsesorController::class,'asesor_expedientes']);
+    Route::get('asesor-tramite/{id}',[AsesorController::class,'tramite_asesor']);
+    Route::get('asesor-fases/{id}',[AsesorController::class,'asesor_fases_tramite']);
+    Route::get('asesor-faserequisito/{id}/{tramite}',[AsesorController::class,'asesor_requisito']);
+    Route::post('asesor-subirfilerequisito',[AsesorController::class,'asesor_subirequisito']);
 });

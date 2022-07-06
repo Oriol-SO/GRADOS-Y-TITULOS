@@ -5,7 +5,7 @@
 
                 <v-row  >
                 
-                    <h4 >EXPEDIENTES </h4><h4 class="ml-2 " > DE</h4><h4  class="ml-2 "> GRADUADOD </h4><h4  class="ml-2 ">POR</h4><h4  class="ml-1 "> FACULTADES</h4>
+                    <h4 >EXPEDIENTES </h4><h4 class="ml-2 " > DE</h4><h4  class="ml-2 "> GRADUADOS </h4><h4  class="ml-2 ">POR</h4><h4  class="ml-1 "> FACULTADES</h4>
 
                     <v-divider
                     class="mx-4"

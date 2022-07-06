@@ -71,7 +71,39 @@ class PersonaRolSeeder extends Seeder
                 'estado' => '1',
                 'uso'=>0
             ],
-
+            [ //asesor
+                'id' => '6',
+                'rol_Id' => '9',
+                'persona_id' => '3',
+                'facId' => '4',
+                'escId' => '4SI',
+                'fecIni' => null,
+                'fecFin' => null,
+                'estado' => '1',
+                'uso'=>1
+            ],
+            [ //alumno
+                'id' => '7',
+                'rol_Id' => '10',
+                'persona_id' => '4',
+                'facId' => '4',
+                'escId' => '4SI',
+                'fecIni' => null,
+                'fecFin' => null,
+                'estado' => '1',
+                'uso'=>1
+            ],
+            [ //Unidad de investigacion
+                'id' => '8',
+                'rol_Id' => '15',
+                'persona_id' => '5',
+                'facId' => '',
+                'escId' => '',
+                'fecIni' => null,
+                'fecFin' => null,
+                'estado' => '1',
+                'uso'=>1
+            ],
            
         ]);
 

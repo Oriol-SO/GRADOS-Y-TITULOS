@@ -32,6 +32,30 @@ class UserSeeder extends Seeder
             'email_verified_at' => now(),
             'persona_id' => '2'
         ],
+        [
+            'id' => '3',
+            'name' => 'Asesor',
+            'email' => 'asesor@gmail.com',
+            'password' => Hash::make('password'),
+            'email_verified_at' => now(),
+            'persona_id' => '3'
+        ],
+        [
+            'id' => '4',
+            'name' => 'Alumno',
+            'email' => 'alumno@gmail.com',
+            'password' => Hash::make('password'),
+            'email_verified_at' => now(),
+            'persona_id' => '4'
+        ],
+        [
+            'id' => '5',
+            'name' => 'Unidad de Investigacion',
+            'email' => 'unidad@gmail.com',
+            'password' => Hash::make('password'),
+            'email_verified_at' => now(),
+            'persona_id' => '5'
+        ],
     ]);
     }
 }

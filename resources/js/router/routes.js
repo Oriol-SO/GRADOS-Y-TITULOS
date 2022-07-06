@@ -109,7 +109,7 @@ export default [
     children: [
       { path: '', redirect: { name: 'asesor.dashboard' } },
       { path: 'dashboard', name: 'asesor.dashboard', component: page('asesor/dashboard.vue') },
-      
+      { path: 'tramite/:id', name: 'asesor.tramite', component: page('asesor/tramite.vue') },
       
     ]
   },

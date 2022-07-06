@@ -297,7 +297,7 @@ class SecretariaController extends Controller
                        
             $user=$request->user();
             // $persona=$user->persona_id;
-            $personarol=$user->persona->personarole[0]->id;
+            $personarol=$personarol=(PersonaRole::where('persona_id',$user->persona_id)->where('uso',1)->where('estado',1)->first())->id;
             $request->validate([
                 'archivo'=>'required'
             ]);

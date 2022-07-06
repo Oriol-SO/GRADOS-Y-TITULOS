@@ -16,7 +16,7 @@ class CreateTrabajosTable extends Migration
         Schema::create('trabajos', function (Blueprint $table) {
             $table->id();
             $table->string('modo_sustentacion'); 
-            $table->string('url_repositorio');
+            $table->string('url_repositorio')->nullable();
             $table->date('fecha_sustentacion')->nullable();
             $table->text('nombre');
             $table->BigInteger('lineainv_id')->unsigned();
