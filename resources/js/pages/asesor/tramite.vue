@@ -101,6 +101,57 @@
 
                                 </v-expansion-panel-content>
                             </v-expansion-panel>
+
+                            
+                         </v-expansion-panels>
+
+                        <v-expansion-panels class="mt-5">
+                            <v-expansion-panel @click="fetchotrosreq()">
+                                <v-expansion-panel-header class="text-h6" color="blue-grey lighten-2">Otros requisitos</v-expansion-panel-header>
+                                <v-expansion-panel-content>
+                                       <v-list style="background: transparent;">
+                                            <v-list-item
+                                            v-for="(requisito_otro, i) in requisitos_otros"
+                                            :key="i"
+                                            class="mb-1"
+                                            style="background:#e7e7e7; border-radius: 0 30px 30px 0;"                 
+                                            >
+                                                <v-list-item-content>
+                                                    <v-list-item-title class="d-flex" >{{requisito_otro.nombre}}  
+                                                        <div class="ml-auto">
+                                                                <v-btn 
+                                                                v-if="requisito_otro.archivo_subido.length>0"
+                                                                class=" text-capitalize" 
+                                                                color="indigo" 
+                                                                dark 
+                                                                small
+                                                                @click="open_modal_other(requisito_otro)">
+                                                                    <v-icon dark>
+                                                                    mdi-eye
+                                                                    </v-icon>
+                                                                </v-btn>
+                                                                <v-chip
+                                                                color="deep-purple accent-1"
+                                                                text-color="#fff"
+                                                                >                       
+                                                                    {{requisito_otro.rol}}
+                                                                    
+                                                                
+                                                                    <v-avatar
+                                                                        rigth
+                                                                        class="deep-purple accent-3 ml-1"
+                                                                        text-color="#fff"
+                                                                    >
+                                                                    <v-icon>mdi-account-tie</v-icon>
+                                                                    </v-avatar>
+                                                                </v-chip>
+                                                        </div>
+                                                    </v-list-item-title>
+                                                </v-list-item-content>
+                                            </v-list-item>
+                                        </v-list>    
+                                </v-expansion-panel-content>
+                            </v-expansion-panel>
                          </v-expansion-panels>
                        
                   </v-card>
@@ -117,7 +168,7 @@
                             vertical
                             style="display: contents;"
                             >
-                            <v-stepper-header elevation="0" style="min-height:450px; overflow:auto; flex-wrap: nowrap; flex-direction: column;">
+                            <v-stepper-header elevation="0" style="height:650px; overflow:auto; flex-wrap: nowrap; flex-direction: column;">
                                 <v-stepper-step v-for="(fase,i) in fasestramite" :key="i"
                                 :step="(i+1)"
                                 v-bind:color="(i+1)==fase_actualy?'orange':'#6df78e'"
@@ -142,7 +193,7 @@
               transition="dialog-bottom-transition"
             >
             <v-card elevation="0">
-                  <v-card-title class="text-h6 d-flex" style="background:#2cdd9b; color:#fff;">
+                  <v-card-title class="text-h6 d-flex" style="background:#058bd9; color:#fff;">
                    {{msg_file}}
                     <v-btn
                       class="ml-auto"
@@ -419,6 +470,7 @@ export default {
             requisitos_aprovadosPropios:'',
             requisitos_observadosPropios:'',
             requisitos_subidosPropios:'',
+            requisitos_otros:[],
             
             daterequisito: new Form({
              archivo:null,
@@ -456,6 +508,7 @@ export default {
         }
     },mounted(){
         this.fetchTramite();
+       
     },methods:{
         fetchTramite(){
             axios.get(`/api/asesor-tramite/${this.$route.params.id}`).then(response=>{
@@ -551,7 +604,8 @@ export default {
                 }else{
                 this.daterequisito.archivo='',
                 this.mostrarrequisito(this.id_fase);
-                this.dialog=false;
+                this.cerrar_modal();
+                this.fetchTramite();
                 }
         
             }).catch(error=>{
@@ -579,6 +633,27 @@ export default {
         modal_documents_titulo(){
         this.dialog_view_doc=true;
         },
+
+        //otros requisitos
+        async fetchotrosreq(){
+            await axios.get(`/api/asesor-otrosrequisitos/${this.$route.params.id}`).then(response=>{
+               // console.log(response.data)
+                this.requisitos_otros=response.data.otros;              
+    
+            });
+        },
+        open_modal_other(requisito){
+          this.documento=requisito.documento;
+          this.extension=requisito.extension;
+          this.nom_requisito=requisito.nombre;
+          this.daterequisito.archivo='--';
+          this.msg_file='Visualizacion de documento';
+          this.subir=false;
+          if(requisito.archivo_subido.length>0 ){
+            this.url_document=requisito.archivo_subido[0].path;
+          }          
+          this.dialog=true;
+      },
     }
 }
 </script>

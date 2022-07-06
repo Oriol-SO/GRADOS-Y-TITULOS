@@ -514,13 +514,13 @@
                             <p><strong>TITULO DE PROYECTO:</strong><br>  {{titulo_proyecto}}<br><br> 
                             <strong>NUMERO DE INTEGRANTES:</strong><br> {{integrantes}}</p>
                             <p><strong>LINEA DE INVESTIGACION:</strong><br>{{linea_investigacion}}</p>
-                            </v-row>                       
-                            
-                            
+                            </v-row>   
                               <v-file-input
+                              v-model="formtram.archivo"
                               truncate-length="50"
                               label="Actualiza tu plan"
                               ></v-file-input> 
+                               <v-btn small color="warning" class="text-capitalize" @click="actualizar_plan()">Actualizar plan<v-icon right>mdi-upload</v-icon></v-btn>
                                <v-btn small color="warning" class="text-capitalize" @click="modal_documents_titulo()">Ver plan<v-icon right>mdi-eye</v-icon></v-btn>
                             
                             
@@ -669,6 +669,11 @@ export default {
           nom_document:'Plan de tesis',
           url_document_titulo:'',
           dialog_view_doc:false,
+
+          formtram: new Form({
+            archivo:'',
+            tramite:'',
+          })
         }
     },mounted(){
         this.fetchtramite();
@@ -718,6 +723,7 @@ export default {
             this.url_document_titulo=response.data.trabajo_plan_tesis_url;
             console.log(response.data)
             this.fetchfase(this.nomtramite.proceso_id)
+            this.formtram.tramite=response.data.id;
         });   
 
       },async fetchfase($id){
@@ -844,7 +850,23 @@ export default {
             this.url_document=requisito.archivo_subido[0].path;
           }          
           this.dialog=true;
+      },
+      actualizar_plan(){
+        this.formtram.post(`/api/alumno-actualizarplan/${this.$route.params.id}`).then(response=>{
+          if(response.data=='UPDATE_'){
+            this.fetchtramite();
+            this.alert_notify=true;
+            this.msg_notify='Tu documento ha sido actualizado correctamente'
+            this.color_notify='cyan accent-3'
+          }else{
+            this.fetchtramite();
+            this.alert_notify=true;
+            this.msg_notify='Algo salio mal'
+            this.color_notify='deep-orange darken-1'
+          }
+        })
       }
+
     }
 }
 </script>

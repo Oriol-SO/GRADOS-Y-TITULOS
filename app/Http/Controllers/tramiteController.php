@@ -127,7 +127,7 @@ class tramiteController extends Controller
                 'integrantes'=>'required',
                 'linea_inv'=>'required',
                 'sublinea'=>'required',
-                //'url'=>'required',
+                'url'=>'required',
                 'tipotramite'=>'required',
             ]);
              
@@ -136,15 +136,15 @@ class tramiteController extends Controller
             
 
             //guardar el plan
-            /*if($this->grado==2){
+            if($this->grado==2){
                 return 'ERROR_EXIST';
             }  
             $url_plan_tesis=Storage::url($request->file('url')->store('public/planTesis'));           
             //crear el trabajo
-            */
+            
             $trabajo= Trabajo::create([
                 'modo_sustentacion'=>'PRESENCIAL',
-                //'url_repositorio'=>$url_plan_tesis,
+                'url_repositorio'=>$url_plan_tesis,
                 'nombre'=>$request->titulo,
                 'lineainv_id'=>$request->linea_inv['id'],
             ]);
@@ -553,17 +553,17 @@ class tramiteController extends Controller
             ]);
 
             $requisito_file=FaseRolRequisito::where('id',$request->idfaserequi)->first();
-            $tipo_req=(Requisito::where('id',$requisito_file->requisito_id)->first())->tipo_requisito;              
-             
-            //subir nuevo
+            $tipo_req=(Requisito::where('id',$requisito_file->requisito_id)->first())->tipo_requisito;  
+
+            $direccion='requisitos';
+            if($tipo_req==1){
+                $direccion='planTesis';
+            }            //subir nuevo
             //verificar que no haya archivos de este requisito
             $file_req=File::where('tramite_id',$request->tramite)->where('faserolreq_id',$request->idfaserequi)->count();
             if($file_req>0){                
                 //actualizar
-                $file=File::where('tramite_id',$request->tramite)->where('faserolreq_id',$request->idfaserequi)->first();
-
-               
-                if($tipo_req==0){                
+                $file=File::where('tramite_id',$request->tramite)->where('faserolreq_id',$request->idfaserequi)->first();                           
                     //buscar observaciones
                     $obser=Observacione::where('file_id',$file->id)->count();
                     if($obser>0 && $file->num_modifi==0){
@@ -572,39 +572,23 @@ class tramiteController extends Controller
                         Storage::delete($url_borrar);
                         //subimos la nueva ruta 
                     
-                            $new_url=Storage::url($request->file('archivo')->store('public/requisitos'));
+                            $new_url=Storage::url($request->file('archivo')->store('public/'.$direccion));
 
                             //remplazamos en la base de datos
                             $requisito=File::where('id', $file->id)->update(['path' => $new_url ,'num_modifi'=>1]);
                             //$this->subir_documento_tesis($request->tramite,$new_url,$request->idfaserequi);
                             return 'actualizado';
+                            if($tipo_req==1){
+                                //actualizamos en trabajo
+                                   $this->Actualizar_paht_tramite($request->tramite,$new_url);
+                            }
                     
                     }else{
                         return 1;
                     }
-                }else if($tipo_req==1){
-                    //plan de tesis
-                    $obser=Observacione::where('file_id',$file->id)->count();
-                    if($obser>0 && $file->num_modifi==0){
-                        //borramos el archivo de la carpeta
-                        $url_borrar=str_replace('storage','public',$file->path);
-                        Storage::delete($url_borrar);
-                        //subimos la nueva ruta 
-                    
-                            $new_url=Storage::url($request->file('archivo')->store('public/plan_tesis'));
-
-                            //remplazamos en la base de datos
-                            $requisito=File::where('id', $file->id)->update(['path' => $new_url ,'num_modifi'=>1]);
-                            $this->subir_documento_tesis($request->tramite,$new_url,$request->idfaserequi);
-                            return 'actualizado';
-                    
-                    }else{
-                        return 1;
-                    }
-                }
+               
             }else{
-                if($tipo_req==0){  
-                    $url=Storage::url($request->file('archivo')->store('public/requisitos'));
+                    $url=Storage::url($request->file('archivo')->store('public/'.$direccion));
                     $requisito=File::create([
                         'path'=>$url,
                         'tramite_id'=>$request->tramite,
@@ -612,26 +596,24 @@ class tramiteController extends Controller
                         'faserolreq_id'=>$request->idfaserequi,
                         'num_modifi'=>0,
                     ]);
+                    if($tipo_req==1){
+                        //actualizamos en trabajo
+                           $this->Actualizar_paht_tramite($request->tramite,$url);
+                    }
                     //$this->subir_documento_tesis($request->tramite,$url,$request->idfaserequi);
                     return $requisito;
-                }
-                if($tipo_req==1){  
-                    $url=Storage::url($request->file('archivo')->store('public/plan_tesis'));
-                    $requisito=File::create([
-                        'path'=>$url,
-                        'tramite_id'=>$request->tramite,
-                        'persrol_id'=>$personarol,
-                        'faserolreq_id'=>$request->idfaserequi,
-                        'num_modifi'=>0,
-                    ]);
-                    $this->subir_documento_tesis($request->tramite,$url,$request->idfaserequi);
-                    return $requisito;
-                }
+                
+         
             }
         }else{
             return 'user no autorizado';
         }
     }
+
+    protected function Actualizar_paht_tramite($tramite,$url){
+        $trabajo=(Tramite::where('id',$tramite)->first())->trabajo_id;
+        Trabajo::where('id',$trabajo)->update(['url_repositorio'=>$url]);
+     }
 
     protected function subir_documento_tesis($tramite_id, $url,$fase_req){
 
@@ -664,35 +646,26 @@ class tramiteController extends Controller
         }
        
     }   
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+    
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+    protected function actualizar_plan($id, Request $request){
+        $request->validate([
+            'archivo'=>'required',
+            'tramite'=>'required'
+        ]);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id){
+        if($request->tramite==$id){
+            $trabajo=(Tramite::where('id',$request->tramite)->first())->trabajo_id;
+            //borramos el archivo
+            $file=(Trabajo::where('id',$trabajo)->first())->url_repositorio;
+            $url_borrar=str_replace('storage','public',$file);
+            Storage::delete($url_borrar);
+            //actualizamos con el nuevo url
+            $new_url=Storage::url($request->file('archivo')->store('public/planTesis'));
+            Trabajo::where('id',$trabajo)->update(['url_repositorio'=>$new_url]);
+            return 'UPDATE_';
+        }else{
+            return 'ERROR';
+        }
     }
 }

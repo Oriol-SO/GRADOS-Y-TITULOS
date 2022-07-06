@@ -367,12 +367,13 @@ class FaseRolRequisitoSeeder extends Seeder
                 'fase_id' => '1300',
                 'requisito_id' => '4004',
             ],
+            /*
             [
                 'id'=>'57',
                 'rol_id'=>'10',
                 'fase_id' => '1300',
                 'requisito_id' => '5209',
-            ],
+            ],*/
             //'Designación de asesor'
             [
                 'id'=>'58',

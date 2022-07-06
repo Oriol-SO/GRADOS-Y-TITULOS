@@ -130,6 +130,7 @@ Route::group(['middleware'=>'alumno:api'],function(){
     Route::get('alu_autorized/{fase}/{tramite}',[tramiteController::class,'alu_autorized']);
     Route::get('alu-proceso/{id}',[tramiteController::class,'alu_procesos']);
     Route::get('alu-grados',[tramiteController::class,'alu_grados']);
+    Route::post('alumno-actualizarplan/{id}',[tramiteController::class,'actualizar_plan']);
 });
 
 
@@ -202,4 +203,5 @@ Route::group(['middleware'=>'asesor:api'],function(){
     Route::get('asesor-fases/{id}',[AsesorController::class,'asesor_fases_tramite']);
     Route::get('asesor-faserequisito/{id}/{tramite}',[AsesorController::class,'asesor_requisito']);
     Route::post('asesor-subirfilerequisito',[AsesorController::class,'asesor_subirequisito']);
+    Route::get('asesor-otrosrequisitos/{id}',[AsesorController::class,'otros_requisitos']);
 });

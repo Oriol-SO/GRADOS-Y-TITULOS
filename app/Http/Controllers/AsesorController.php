@@ -10,7 +10,9 @@ use App\Models\Observacione;
 use App\Models\Persona;
 use App\Models\PersonaRole;
 use App\Models\Proceso;
+use App\Models\Requisito;
 use App\Models\Revisione;
+use App\Models\Trabajo;
 use App\Models\Tramite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -63,7 +65,7 @@ class AsesorController extends Controller
                 'tipo_tramite'=>$t->tipo_tramite,
                 'fase_actual'=>$t->fase_actual,
                 'receptor_rol_notify'=>$t->receptor_rol_notify,
-                'trabajo_plan_tesis_url'=>'',//$t->trabajo?$t->trabajo->url_repositorio:null ,
+                'trabajo_plan_tesis_url'=>$t->trabajo?$t->trabajo->url_repositorio:null ,
                 'titulo_proyecto'=>$t->trabajo?$t->trabajo->nombre:null,
                 'integrantes'=>1,
                 'grado'=>$t->proceso->grado_id,
@@ -134,6 +136,17 @@ class AsesorController extends Controller
                     //'observados'=>Observacione::whereIn('file_id',(File::where('tramite_id',$this->tram)->get('id')))->count(),
                 ];
             });
+
+            $requisitos['otros']=FaseRolRequisito::where('fase_id',$id)->where('rol_id','<>',$rol_sf)->get()->map(function($o){
+                return[
+                    'nombre' => $o->requisito ->nombre,
+                    'rol' =>$o->rol->rolNombre,
+                    'documento'=>$o->requisito->TipoArchivo->tipoNombre,
+                    'extension'=>$o->requisito ->tipo_documento, 
+                    'archivo_subido'=>File::where('tramite_id',$this->tram)->where('faserolreq_id',$o->id)->get(),
+                ];
+            });
+
             $requisitos['aprovados']=0;
             $requisitos['observados']=0;
            foreach ($requisitos['alumno'] as $req) {
@@ -184,6 +197,23 @@ class AsesorController extends Controller
 
      }
 
+     protected function otros_requisitos($tramite){
+        $proceso=(Tramite::where('id',$tramite)->first())->proceso_id;
+        $fases=Fase::where('proceso_id',$proceso)->get('id');
+
+        $requisitos['otros']=FaseRolRequisito::whereIn('fase_id',$fases)->where('rol_id','<>',9)->get()->map(function($o) use(&$tramite){
+            return[
+                'nombre' => $o->requisito ->nombre,
+                'rol' =>$o->rol->rolNombre,
+                'documento'=>$o->requisito->TipoArchivo->tipoNombre,
+                'extension'=>$o->requisito ->tipo_documento, 
+                'archivo_subido'=>File::where('tramite_id',$tramite)->where('faserolreq_id',$o->id)->get(),
+            ];
+        });
+
+        return response()->json($requisitos,200);
+     }
+
      public function asesor_subirequisito(Request $request){
         $rol=9;
         if($rol===9){
@@ -195,27 +225,36 @@ class AsesorController extends Controller
                 'archivo'=>'required'
             ]);
 
-            //actualizar
-
+           
+            $requisito_file=FaseRolRequisito::where('id',$request->idfaserequi)->first();
+            $tipo_req=(Requisito::where('id',$requisito_file->requisito_id)->first())->tipo_requisito;    
             //subir nuevo
+            $direccion='requisitos';
+            if($tipo_req==1){
+                $direccion='planTesis';
+            }
             //verificar que no haya archivos de este requisito
             $file_req=File::where('tramite_id',$request->tramite)->where('faserolreq_id',$request->idfaserequi)->count();
             if($file_req>0){                
                 //actualizar
                 $file=File::where('tramite_id',$request->tramite)->where('faserolreq_id',$request->idfaserequi)->first();
-                                
+
                     //borramos el archivo de la carpeta
                       $url_borrar=str_replace('storage','public',$file->path);
                        Storage::delete($url_borrar);
                     //subimos la nueva ruta                    
-                        $new_url=Storage::url($request->file('archivo')->store('public/requisitos'));
+                        $new_url=Storage::url($request->file('archivo')->store('public/'.$direccion));
                         //remplazamos en la base de datos
                         $requisito=File::where('id', $file->id)->update(['path' => $new_url ,'num_modifi'=>1]);
                          
+                        if($tipo_req==1){
+                         //actualizamos en trabajo
+                            $this->Actualizar_paht_tramite($request->tramite,$new_url);
+                        }
                         return 'actualizado';
-               
+                  
             }else{
-                $url=Storage::url($request->file('archivo')->store('public/requisitos'));
+                $url=Storage::url($request->file('archivo')->store('public/'.$direccion));
                 $requisito=File::create([
                     'path'=>$url,
                     'tramite_id'=>$request->tramite,
@@ -223,6 +262,10 @@ class AsesorController extends Controller
                     'faserolreq_id'=>$request->idfaserequi,
                     'num_modifi'=>0,
                 ]);
+                if($tipo_req==1){
+                    //actualizamos en trabajo
+                       $this->Actualizar_paht_tramite($request->tramite,$url);
+                }
 
                 return $requisito;
             }
@@ -230,6 +273,12 @@ class AsesorController extends Controller
           return 'user no autorizado';
       }
      }
+
+     protected function Actualizar_paht_tramite($tramite,$url){
+        $trabajo=(Tramite::where('id',$tramite)->first())->trabajo_id;
+        Trabajo::where('id',$trabajo)->update(['url_repositorio'=>$url]);
+     }
+
 
 
 
