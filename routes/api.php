@@ -31,8 +31,7 @@ use App\Http\Controllers\Settings\ProfileController;
 use App\Http\Controllers\tramiteController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SecretariaVicerrectoradoController;
-
-
+use App\Http\Controllers\UnidadController;
 
 /*
 |--------------------------------------------------------------------------
@@ -204,4 +203,7 @@ Route::group(['middleware'=>'asesor:api'],function(){
     Route::get('asesor-faserequisito/{id}/{tramite}',[AsesorController::class,'asesor_requisito']);
     Route::post('asesor-subirfilerequisito',[AsesorController::class,'asesor_subirequisito']);
     Route::get('asesor-otrosrequisitos/{id}',[AsesorController::class,'otros_requisitos']);
+    Route::post('asesor-vistobuenoplan/{id}',[AsesorController::class , 'visto_bueno']);
 });
+
+    Route::get('unidad-expedientes',[UnidadController::class,'expedientes']);

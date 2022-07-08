@@ -114,6 +114,17 @@ export default [
     ]
   },
 
+  {
+    path: '/unidad-investigacion',
+    component: page('unidadInvestigacion/index.vue'),
+    children: [
+      { path: '', redirect: { name: 'unidad.dashboard' } },
+      { path: 'dashboard', name: 'unidad.dashboard', component: page('unidadInvestigacion/dashboard.vue') },
+      { path: 'tramite/:id', name: 'unidad.tramite', component: page('unidadInvestigacion/tramite.vue') },
+      
+    ]
+  },
+
   { path: '/prueva', name: 'prueva', component: page('prueva.vue') },
 
   { path: '*',name:'error', component: page('errors/404.vue') },

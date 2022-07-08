@@ -70,6 +70,7 @@ class AsesorController extends Controller
                 'integrantes'=>1,
                 'grado'=>$t->proceso->grado_id,
                 'linea_investigacion'=>$t->trabajo?$t->trabajo->LineaDeInvestigacione->inveNombre:null,
+                'sub_linea'=>'default',
             ];
         });
         return response()->json($tramites[0],200);
@@ -195,9 +196,9 @@ class AsesorController extends Controller
             return 'usuario no autorizado';
         }
 
-     }
+    }
 
-     protected function otros_requisitos($tramite){
+    protected function otros_requisitos($tramite){
         $proceso=(Tramite::where('id',$tramite)->first())->proceso_id;
         $fases=Fase::where('proceso_id',$proceso)->get('id');
 
@@ -212,12 +213,12 @@ class AsesorController extends Controller
         });
 
         return response()->json($requisitos,200);
-     }
+    }
 
-     public function asesor_subirequisito(Request $request){
+    public function asesor_subirequisito(Request $request){
         $rol=9;
         if($rol===9){
-                       
+                        
             $user=$request->user();
             // $persona=$user->persona_id;
             $personarol=(PersonaRole::where('persona_id',$user->persona_id)->where('uso',1)->where('estado',1)->first())->id;
@@ -225,7 +226,7 @@ class AsesorController extends Controller
                 'archivo'=>'required'
             ]);
 
-           
+            
             $requisito_file=FaseRolRequisito::where('id',$request->idfaserequi)->first();
             $tipo_req=(Requisito::where('id',$requisito_file->requisito_id)->first())->tipo_requisito;    
             //subir nuevo
@@ -240,19 +241,19 @@ class AsesorController extends Controller
                 $file=File::where('tramite_id',$request->tramite)->where('faserolreq_id',$request->idfaserequi)->first();
 
                     //borramos el archivo de la carpeta
-                      $url_borrar=str_replace('storage','public',$file->path);
-                       Storage::delete($url_borrar);
+                        $url_borrar=str_replace('storage','public',$file->path);
+                        Storage::delete($url_borrar);
                     //subimos la nueva ruta                    
                         $new_url=Storage::url($request->file('archivo')->store('public/'.$direccion));
                         //remplazamos en la base de datos
                         $requisito=File::where('id', $file->id)->update(['path' => $new_url ,'num_modifi'=>1]);
-                         
+                            
                         if($tipo_req==1){
-                         //actualizamos en trabajo
+                            //actualizamos en trabajo
                             $this->Actualizar_paht_tramite($request->tramite,$new_url);
                         }
                         return 'actualizado';
-                  
+                    
             }else{
                 $url=Storage::url($request->file('archivo')->store('public/'.$direccion));
                 $requisito=File::create([
@@ -264,25 +265,31 @@ class AsesorController extends Controller
                 ]);
                 if($tipo_req==1){
                     //actualizamos en trabajo
-                       $this->Actualizar_paht_tramite($request->tramite,$url);
+                        $this->Actualizar_paht_tramite($request->tramite,$url);
                 }
 
                 return $requisito;
             }
-      }else{
-          return 'user no autorizado';
-      }
-     }
+        }else{
+            return 'user no autorizado';
+        }
+    }
 
-     protected function Actualizar_paht_tramite($tramite,$url){
+    protected function Actualizar_paht_tramite($tramite,$url){
         $trabajo=(Tramite::where('id',$tramite)->first())->trabajo_id;
-        Trabajo::where('id',$trabajo)->update(['url_repositorio'=>$url]);
-     }
+        Trabajo::where('id',$trabajo)->update(['url_repositorio'=>$url,'visto_bueno_plan'=>1]);
 
+    }
 
+    protected function visto_bueno($id, Request $request){
+        $request->validate([
+            'tramite'=>'required',
+        ]);
 
+        if($request->tramite==$id){
+            $trabajo=(Tramite::where('id',$id)->first())->trabajo_id;
+            Trabajo::where('id',$trabajo)->update(['visto_bueno_plan'=>1]);
+        }
+    }
 
-
-
-
-}
+    }

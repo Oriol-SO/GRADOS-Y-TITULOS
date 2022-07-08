@@ -17,6 +17,9 @@ class CreateTrabajosTable extends Migration
             $table->id();
             $table->string('modo_sustentacion'); 
             $table->string('url_repositorio')->nullable();
+            $table->integer('visto_bueno_plan')->nullable();
+            $table->string('url_repositorio_tesis')->nullable();
+            $table->integer('visto_bueno_tesis')->nullable(); // 1=asesor 2=unidad 3=jurad etc
             $table->date('fecha_sustentacion')->nullable();
             $table->text('nombre');
             $table->BigInteger('lineainv_id')->unsigned();

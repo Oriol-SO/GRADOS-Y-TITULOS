@@ -513,14 +513,15 @@
                             <v-row style="justify-content: space-around; margin-top:10px">
                             <p><strong>TITULO DE PROYECTO:</strong><br>  {{titulo_proyecto}}<br><br> 
                             <strong>NUMERO DE INTEGRANTES:</strong><br> {{integrantes}}</p>
-                            <p><strong>LINEA DE INVESTIGACION:</strong><br>{{linea_investigacion}}</p>
+                            <p><strong>LINEA DE INVESTIGACION:</strong><br>{{linea_investigacion}} <br><br>
+                            <strong>SUB LINEA DE INVESTIGACION:</strong><br>{{sub_linea_investigacion}}</p>
                             </v-row>   
                               <v-file-input
                               v-model="formtram.archivo"
                               truncate-length="50"
                               label="Actualiza tu plan"
                               ></v-file-input> 
-                               <v-btn small color="warning" class="text-capitalize" @click="actualizar_plan()">Actualizar plan<v-icon right>mdi-upload</v-icon></v-btn>
+                               <v-btn small color="primary" class="text-capitalize" @click="actualizar_plan()">Actualizar plan<v-icon right>mdi-upload</v-icon></v-btn>
                                <v-btn small color="warning" class="text-capitalize" @click="modal_documents_titulo()">Ver plan<v-icon right>mdi-eye</v-icon></v-btn>
                             
                             
@@ -562,27 +563,20 @@
             width="650px"
             height="800px"
            >
-
-
-
-
-
             <v-card width="100vh" height="90vh" >
           <v-toolbar color="primary"  dark>
                   <span class="text-h6">{{nom_document}}</span>
                 </v-toolbar>
              
-              <v-card  width="95%" height="80%" class="my-2 mx-2 d-flex" >
-                  
+              <v-card  width="95%" height="80%" class="my-2 mx-2 d-flex" >                  
                 <embed v-if="url_document_titulo" :src="url_document_titulo" type="application/pdf" width="100%" height="100%"/> 
-                  <v-card v-else class="d-flex mx-auto my-auto"  width="300px" height="150px"  elevation="0"
-                     style=" justify-content:center; align-items: center; text-align: center;">
-                    <div >
-                      <v-icon color="#2cdd9b" class="text-h1">mdi-eye</v-icon>
-                      <v-card-title>No hay documento</v-card-title>
-                    </div>                          
-                  </v-card>
-                    
+                <v-card v-else class="d-flex mx-auto my-auto"  width="300px" height="150px"  elevation="0"
+                    style=" justify-content:center; align-items: center; text-align: center;">
+                  <div >
+                    <v-icon color="#2cdd9b" class="text-h1">mdi-eye</v-icon>
+                    <v-card-title>No hay documento</v-card-title>
+                  </div>                          
+                </v-card>                    
               </v-card> 
             
               <v-card-actions>
@@ -666,6 +660,7 @@ export default {
           titulo_proyecto:'',
           integrantes:'',
           linea_investigacion:'',
+          sub_linea_investigacion:'',
           nom_document:'Plan de tesis',
           url_document_titulo:'',
           dialog_view_doc:false,
@@ -720,6 +715,7 @@ export default {
             this.titulo_proyecto=response.data.titulo_proyecto;
             this.integrantes=response.data.integrantes;
             this.linea_investigacion=response.data.linea_investigacion;
+            this.sub_linea_investigacion=response.data.sub_linea;
             this.url_document_titulo=response.data.trabajo_plan_tesis_url;
             console.log(response.data)
             this.fetchfase(this.nomtramite.proceso_id)

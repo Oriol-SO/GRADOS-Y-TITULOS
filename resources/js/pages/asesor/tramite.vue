@@ -356,14 +356,15 @@
                             <v-row style="justify-content: space-around; margin-top:10px">
                             <p><strong>TITULO DE PROYECTO:</strong><br>  {{titulo_proyecto}}<br><br> 
                             <strong>NUMERO DE INTEGRANTES:</strong><br> {{integrantes}}</p>
-                            <p><strong>LINEA DE INVESTIGACION:</strong><br>{{linea_investigacion}}</p>
+                            <p><strong>LINEA DE INVESTIGACION:</strong><br>{{linea_investigacion}}<br><br>
+                            <strong>SUB LINEA DE INVESTIGACION:</strong><br>{{sub_linea_investigacion}}</p>
                             </v-row>                       
                             
                             
-                            <v-file-input
+                            <!--v-file-input
                             truncate-length="50"
                             label="Actualiza tu plan"
-                            ></v-file-input> 
+                            ></v-file-input--> 
                             <v-btn small color="warning" class="text-capitalize" @click="modal_documents_titulo()">Ver plan<v-icon right>mdi-eye</v-icon></v-btn>
                             
                             
@@ -426,7 +427,14 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
-                  color="green darken-1"
+                  color="primary"
+                  class="text-capitalize "
+                  @click="visto_bueno()"
+                >
+                  Aprobar
+                </v-btn>
+                <v-btn
+                  color="error"
                   text
                   @click="dialog_view_doc = false"
                 >
@@ -501,8 +509,13 @@ export default {
             titulo_proyecto:'',
             integrantes:'',
             linea_investigacion:'',
+            sub_linea_investigacion:'',
             dialog_view_doc:false,
             nom_document:'Plan de tesis',
+
+            formtram : new Form({
+                tramite:'',
+            })
             
            
         }
@@ -518,8 +531,9 @@ export default {
                 this.titulo_proyecto=response.data.titulo_proyecto;
                 this.integrantes=response.data.integrantes;
                 this.linea_investigacion=response.data.linea_investigacion;
+                this.sub_linea_investigacion=response.data.sub_linea;
                 this.url_document_titulo=response.data.trabajo_plan_tesis_url;
-
+                this.formtram.tramite=response.data.id;
             });
         },
         fetchFases($id){
@@ -632,6 +646,14 @@ export default {
         },
         modal_documents_titulo(){
         this.dialog_view_doc=true;
+        },
+        visto_bueno(){
+            this.formtram.post(`/api/asesor-vistobuenoplan/${this.$route.params.id}`).then(response=>{
+                //console.log('')
+                this.alert_fase_notify=true;
+                this.msg_notify='plan de tesis aprobado';
+                this.color_alert_fase_notify='cyan';
+            })
         },
 
         //otros requisitos

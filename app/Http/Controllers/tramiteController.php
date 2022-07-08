@@ -213,6 +213,7 @@ class tramiteController extends Controller
                 'integrantes'=>1,
                 'grado'=>$t->proceso->grado_id, 
                 'linea_investigacion'=>$t->trabajo?$t->trabajo->LineaDeInvestigacione->inveNombre:null,
+                'sub_linea'=>'default',
             ];
         });
         return response()->json($tramites[0],200);
