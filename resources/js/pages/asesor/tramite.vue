@@ -117,7 +117,7 @@
                                             style="background:#e7e7e7; border-radius: 0 30px 30px 0;"                 
                                             >
                                                 <v-list-item-content>
-                                                    <v-list-item-title class="d-flex" >{{requisito_otro.nombre}}  
+                                                    <v-list-item-title>{{requisito_otro.nombre}}  
                                                         <div class="ml-auto">
                                                                 <v-btn 
                                                                 v-if="requisito_otro.archivo_subido.length>0"
@@ -152,7 +152,7 @@
                                         </v-list>    
                                 </v-expansion-panel-content>
                             </v-expansion-panel>
-                         </v-expansion-panels>
+                        </v-expansion-panels>
                        
                   </v-card>
                 </v-col>

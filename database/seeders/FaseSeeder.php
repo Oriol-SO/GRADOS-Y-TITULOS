@@ -385,7 +385,7 @@ class FaseSeeder extends Seeder
         [
             'id' => '1302',
             'proceso_id' => '13',  
-            'nombre' => 'Informe favorable',//Asesor
+            'nombre' => 'Emision de informe favorable y plan de tesis',//Asesor
             'numero' => '3',
             'fase_id' => '1303',
             'encargado_revisar'=>'15',
@@ -394,22 +394,23 @@ class FaseSeeder extends Seeder
         [
             'id' => '1303',
             'proceso_id' => '13',  
-            'nombre' => 'Informe de originalidad',//secretaria de facultad//Resoluciones
+            'nombre' => 'Emision de informe de originalidad',//secretaria de facultad//Resoluciones
             'numero' => '4',
             'fase_id' => '1304',
-            'encargado_revisar'=>'5',
+            'encargado_revisar'=>'5',//facu
             'encargado_ejecutar'=>'15'//unidad de investigacion
         ],
+
         [
             'id' => '1304',
             'proceso_id' => '13',  
-            'nombre' => 'Resolucion de inscripción de proyecto',//secretaria de facultad//Resoluciones
+            'nombre' => 'Emision de resolucion de aprobación e inscripción de proyecto',//secretaria de facultad//Resoluciones
             'numero' => '5',
             'fase_id' => '1304',
-            'encargado_revisar'=>'5',
-            'encargado_ejecutar'=>'15'//unidad de investigacion
+            'encargado_revisar'=>'5',//facu
+            'encargado_ejecutar'=>'5'//facu
         ],
-        [
+      /*  [
             'id' => '1305',
             'proceso_id' => '13',  
             'nombre' => 'Solicitud de aprobación de investigación',//Fut
@@ -616,7 +617,7 @@ class FaseSeeder extends Seeder
             'fase_id' => '1327',
             'encargado_revisar'=>'3',
             'encargado_ejecutar'=>'3'
-        ],
+        ],*/
     //13 fin Titulo presencial      
 
     

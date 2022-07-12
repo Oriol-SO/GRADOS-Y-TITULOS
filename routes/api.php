@@ -207,3 +207,6 @@ Route::group(['middleware'=>'asesor:api'],function(){
 });
 
     Route::get('unidad-expedientes',[UnidadController::class,'expedientes']);
+    Route::get('unidad-tramite/{id}',[UnidadController::class,'datos_tramite']);
+    Route::get('unidad-fases/{id}',[UnidadController::class,'unidad_fases']);
+    Route::get('unidad-faserequisito/{id}/{tramite}',[UnidadController::class,'unidad_requisitos']);
