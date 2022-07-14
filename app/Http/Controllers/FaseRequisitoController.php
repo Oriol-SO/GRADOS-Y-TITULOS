@@ -48,9 +48,10 @@ class FaseRequisitoController extends Controller
         
             $this->validarrequisitoSelect($request);
 
-            $rol_ejecutor=Fase::where('id',$request->fase_id)->first();
+            $rol_ejecutor=(Fase::where('id',$request->fase_id)->first())->encargado_ejecutar;
+
             $faserolrequi = FaseRolRequisito::create([
-                'rol_id' => $request->rol['id'],
+                'rol_id' => $rol_ejecutor,
                 'requisito_id' => $request->requisito['id'],
                 'fase_id' =>$request->fase_id,
                 ]);

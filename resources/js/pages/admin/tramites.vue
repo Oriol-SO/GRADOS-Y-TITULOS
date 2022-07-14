@@ -1,97 +1,109 @@
 <template>
 <div>
-  <div>        
+  <div>  
+  <v-row>
       <v-col cols="auto">
-      <v-dialog
-        transition="dialog-top-transition"
-        max-width="600"
-        v-model="dialog"
-      >
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            color="#2cdd9b" 
-            class="ml-10 mt-5"
-            style="color:#fff;"
-            v-bind="attrs"
-            v-on="on"
-          >Agregar Tramite</v-btn>
-        </template>
-        <template >
-          <v-card>
-            <v-toolbar
-              color="#2cdd9b"
-              dark
-            >Agregar Nuevo tramite</v-toolbar>
-            <v-card-text>
+        <v-dialog
+          transition="dialog-top-transition"
+          max-width="600"
+          v-model="dialog"
+        >
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              color="#2cdd9b" 
+              class="ml-10 mt-5"
+              style="color:#fff;"
+              v-bind="attrs"
+              v-on="on"
+            >Agregar Tramite</v-btn>
+          </template>
+          <template >
+            <v-card>
+              <v-toolbar
+                color="#2cdd9b"
+                dark
+              >Agregar Nuevo tramite</v-toolbar>
+              <v-card-text>
 
-             <form>
-                  <v-text-field
-                    v-model="form.nombre"
-                    label="Nombre"
-                    required
-                  ></v-text-field>
-                   <div v-if="errores.nombre">
-                      <v-alert  dense outlined type="error" >
-                        {{errores.nombre[0]}}
-                      </v-alert>
-                   </div>
-                   <v-select
-                    v-model="form.grado"                  
-                    :items="grados"
-                    item-text='graNom'
-                    item-value='id'
-                    label="grado"
-                    persistent-hint
-                    return-object
-                    single-line
-               
-                  ></v-select>
-                      <div v-if="errores.grado">
-                        <v-alert   dense outlined type="error" >
-                           {{errores.grado[0]}}
+              <form>
+                    <v-text-field
+                      v-model="form.nombre"
+                      label="Nombre"
+                      required
+                    ></v-text-field>
+                    <div v-if="errores.nombre">
+                        <v-alert  dense outlined type="error" >
+                          {{errores.nombre[0]}}
                         </v-alert>
-                      </div>
-                  <v-select
-                    v-model="form.modalidad"                  
-                    :items="modalidades"
-                    item-text='modNombre'
-                    item-value='id'
-                    label="Modalidad"
-                    persistent-hint
-                    return-object
-                    single-line
-                   
-                  ></v-select>
-                       <div v-if="errores.modalidad">
-                            <v-alert   dense outlined type="error" >
-                               {{errores.modalidad[0]}}
-                            </v-alert>
-                        </div>  
-                    <v-btn
-                      class="mr-4"
-                      color="#2cdd9b"
-                      @click="enviar"
-                      style="color:#fff;"
-                    >
-                      Crear
-                    </v-btn>
-                    <v-btn @click="clear" color="#000"  style="color:#fff;">
-                      Limpiar
-                    </v-btn>
-             </form>
-            </v-card-text>
-            <v-card-actions class="justify-end">
-              <v-btn
-                text
-                @click="dialog=false,clear()"
-               
-              >Cerrar</v-btn>
-            </v-card-actions>
-          </v-card>
-        </template>
-      </v-dialog>
-    </v-col>
-
+                    </div>
+                    <v-select
+                      v-model="form.grado"                  
+                      :items="grados"
+                      item-text='graNom'
+                      item-value='id'
+                      label="grado"
+                      persistent-hint
+                      return-object
+                      single-line
+                
+                    ></v-select>
+                        <div v-if="errores.grado">
+                          <v-alert   dense outlined type="error" >
+                            {{errores.grado[0]}}
+                          </v-alert>
+                        </div>
+                    <v-select
+                      v-model="form.modalidad"                  
+                      :items="modalidades"
+                      item-text='modNombre'
+                      item-value='id'
+                      label="Modalidad"
+                      persistent-hint
+                      return-object
+                      single-line
+                    
+                    ></v-select>
+                        <div v-if="errores.modalidad">
+                              <v-alert   dense outlined type="error" >
+                                {{errores.modalidad[0]}}
+                              </v-alert>
+                          </div>  
+                      <v-btn
+                        class="mr-4"
+                        color="#2cdd9b"
+                        @click="enviar"
+                        style="color:#fff;"
+                      >
+                        Crear
+                      </v-btn>
+                      <v-btn @click="clear" color="#000"  style="color:#fff;">
+                        Limpiar
+                      </v-btn>
+              </form>
+              </v-card-text>
+              <v-card-actions class="justify-end">
+                <v-btn
+                  text
+                  @click="dialog=false,clear()"
+                
+                >Cerrar</v-btn>
+              </v-card-actions>
+            </v-card>
+          </template>
+        </v-dialog>
+      </v-col>
+      <v-col cols="auto" md="5" >
+          <v-text-field
+                v-model="search"
+                append-icon="mdi-magnify"
+                label="Buscar"
+                single-line
+                hide-details
+                color="rgb(44, 221, 155)"                
+          ></v-text-field> 
+     {{mostrar}}
+      </v-col>
+    </v-row> 
   </div>
  <div 
   style="display:flex; flex-wrap:wrap; justify-content: space-evenly;"
@@ -170,7 +182,8 @@ import Form from "vform";
           modalidades:[],
           dialog:false,
           errores:{},
-        form: new Form({
+          search:'',
+          form: new Form({
             nombre:'',
             grado:'',
             modalidad:'',
@@ -180,16 +193,23 @@ import Form from "vform";
       }
     },
       mounted(){
-      this.FetchProceso();
+      //this.FetchProceso();
       this.FetchGrados();
       this.FetchModalidad();
       this.FetchTramite();
-    }, 
-    
+    },computed:{
+      mostrar(){
+        if(this.search==''){
+          this.FetchProceso()
+        }else{
+          this.buscarproc(); 
+        }
+      }
+    },
     methods:{
       async FetchProceso() {
         const { data } = await axios.get("/api/proceso");
-        this.procesos = data.tramites;
+             this.procesos = data.tramites;
         
       },async FetchGrados(){
         const { data } = await axios.get("/api/grado");
@@ -231,6 +251,9 @@ import Form from "vform";
          this.form.modalidad=null;
          this.errores={};
          
+      },async buscarproc(){
+        const { data } = await axios.get("/api/buscar-proceso/"+this.search);
+             this.procesos = data.tramites;
       }
 
     },

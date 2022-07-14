@@ -38,7 +38,7 @@ function getFirstRoute(rol_id) {
       path = 'unidad.dashboard'
       break;
   }
-  console.log(rol_id)
+  //console.log(rol_id)
   return path
 }
 // getters
@@ -63,8 +63,8 @@ export const mutations = {
     // if(!Cookies.get('currentRolid')){
       state.currentRolid=currentRolid
       //state.Ruta=getFirstRoute(currentRolid.id);
-      console.log(currentRolid)
-      //console.log(Ruta)
+      //console.log(currentRolid)
+      ////console.log(Ruta)
       Cookies.set('currentRolid', user.role)  //lioos
       //}//si es que existen current rol id
 

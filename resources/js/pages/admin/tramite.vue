@@ -79,6 +79,7 @@
                                 class="my-auto ml-auto mr-4 text-capitalize"
                                 v-bind="attrs"
                                 v-on="on"
+                                @click="FetchRoles()"
                             >Agregar Fase</v-btn> 
                         </div>
                     </template>              
@@ -240,6 +241,7 @@
                                         <v-btn v-if="faseid && estadoE && uso" 
                                         color="#2cdd9b" small elevation="0" style="color:#fff;"  class=" ml-auto text-capitalize"  
                                         v-bind="attrs"
+                                        @click="FetchAllrequisitos()"
                                         v-on="on" >Agregar requisito</v-btn> 
                                         </div>
                                     </template>              
@@ -249,7 +251,8 @@
                                         <v-toolbar
                                         color="#3DB2FF"
                                         dark
-                                        >Agregar Nuevo requisito | Encargado de ejecutar </v-toolbar>
+                                        
+                                        >Agregar Nuevo requisito </v-toolbar>
                                         <v-card-text>                                                                
                                         <template>
                                             <v-card elevation="0" class="mt-2">
@@ -259,7 +262,7 @@
 
                                                 >
                                                     <v-tab >seleccionar requisito </v-tab>
-                                                    <v-tab >crear nuevo</v-tab>                                                                         
+                                                    <v-tab @click="fetchcategorias()" >crear nuevo</v-tab>                                                                         
                                                         <v-tab-item> 
                                                             <form >                                                                                      
                                                             <v-container >
@@ -350,8 +353,26 @@
                                                                                     {{erroresR2.extension[0]}}
                                                                         </v-alert>
                                                                     </div>
+                                                                </v-row>                                                      
+                                                                  <v-row fluid>
+                                                                    <v-select
+                                                                        v-model="formrequi2.categoria"
+                                                                        label="Categoria"
+                                                                        :items="categorias"
+                                                                        item-text='nombre'
+                                                                        item-value='id'
+                                                                        return-object
+                                                                        required
+                                                                    ></v-select>                                                                                 
                                                                 </v-row>
-                                                                <v-row fluid>                                                                                       
+                                                                <v-row>
+                                                                    <div>
+                                                                        <v-alert v-if="erroresR2.categoria"   dense outlined type="error" >
+                                                                                    {{erroresR2.categoria[0]}}
+                                                                        </v-alert>
+                                                                    </div>
+                                                                </v-row>
+                                                                <!--v-row fluid>                                                                                       
                                                                     <v-select
                                                                     v-model="formrequi2.rol"                                                                               
                                                                     required          
@@ -370,7 +391,7 @@
                                                                                     {{erroresR2.rol[0]}}
                                                                         </v-alert>
                                                                     </div>
-                                                                </v-row>                                                                 
+                                                                </v-row-->                                                                 
                                                             </v-container>                                                                     
                                                                 <v-btn                                                                                 
                                                                 class="mr-4 text-capitalize"
@@ -548,45 +569,59 @@ export default{
             tipodocumento:'',
             extension:'',
             fase_id:'',
+            categoria:{'nombre':'Estandar','id':0},
         }),
         allrequisitos:[],
         tipoarchivos:[],
         roles:[],
         rol:[],
+        categorias:[],
      } 
   },
   mounted(){
       this.FetchTramites();
       this.FetchFases();
-      this.Roles();
-      this.FetchAllrequisitos();
-      this.FetchTipoDocumento();
-      this.FetchRoles();
+      //this.Roles();
+     // this.FetchAllrequisitos();
+     // this.FetchTipoDocumento();
+      //this.FetchRoles();
       this.FetchPersona();
+     // this.fetchcategorias();
       this.GuardarProceso();
-      //console.log(this.formrequi);
+      ////console.log(this.formrequi);
       // this.formfase.procesoid=this.$route.params.id;
-      // console.log(this.faseid);
+      // //console.log(this.faseid);
 
-      //console.log(this.formfase.procesoid);
+      ////console.log(this.formfase.procesoid);
 
   },methods:{
+
+
+        fetchcategorias(){
+            this.FetchTipoDocumento();
+            axios.get('/api/categorias/').then(response=>{
+                console.log(response.data)
+                console.log('hola')
+                this.categorias=response.data
+                
+            });
+        },
       async GuardarProceso() {
         const { data } = await axios.get(`/api/cambiarGuardado/${this.$route.params.id}`)
         this.estadoG=data;
-        //console.log(data);
+        ////console.log(data);
       },async FetchTramites(){
           const { data } = await axios.get(`/api/proceso/${this.$route.params.id}`);   
           this.procesos = data;
           this.estadoG = !(data.guardado);
           this.estadoE = !(data.estado);
           this.uso=!(data.uso);
-        console.log(this.uso);
+        //console.log(this.uso);
       },
       async FetchFases(){
           const {data}=await axios.get(`/api/fase/${this.$route.params.id}`);
           this.fases=data;
-          console.log("fases",this.fases);
+          //console.log("fases",this.fases);
           this.faseid=(data[0].id);   
           this.formrequi1.fase_id=(data[0].id);
           this.formrequi2.fase_id=(data[0].id);
@@ -595,10 +630,10 @@ export default{
        async Roles(){
           const {data}=await axios.get(`/api/roles/ `);
           this.rol=data;
-          console.log("fase",this.faseid);
+          ////console.log("fase",this.faseid);
       },
         mostrarid(fase,i){
-         // console.log(fase.id);
+         // //console.log(fase.id);
           this.faseid=fase.id;
           this.formrequi1.fase_id=fase.id;
           this.formrequi2.fase_id=fase.id;
@@ -613,7 +648,7 @@ export default{
               this.documento=data[0].documento;
               this.extension=data[0].extension;
               this.otros=data[0].otrostramites;
-             // console.log(this.otrostramitesA[0].nombre);
+             // //console.log(this.otrostramitesA[0].nombre);
           }else{
                this.nombrereq='';
                this.selectedItem=null;
@@ -622,14 +657,14 @@ export default{
                this.extension='';
                this.otros=[];
           }
-          //console.log(data);
+          ////console.log(data);
       },detallerequisito(requisito){
           this.nombrereq=requisito.nombre;
           this.encargado=requisito.rol;
           this.documento=requisito.documento;
           this.extension=requisito.extension;
            this.otros=requisito.otrostramites;
-         // console.log(this.selectedItem);
+         // //console.log(this.selectedItem);
          
       }, clear() {
          this.formfase.nombrefase='';
@@ -642,13 +677,13 @@ export default{
            .then(response =>{
             this.FetchFases();
             this.clear();
-            console.log(response.data);
+            //console.log(response.data);
             this.dialog=false;
             
           }).catch(error=>{
             if(error.response.status === 422){
               this.errores=error.response.data.errors;
-              console.log(this.errores);
+              //console.log(this.errores);
             }
           });
       },async eliminarfase(id){
@@ -662,18 +697,18 @@ export default{
           }).catch(error=>{
             if(error.response.status === 422){
               this.errores=error.response.data.errors;
-              console.log(this.errores);
+              //console.log(this.errores);
             }
           });
 
       },async FetchAllrequisitos(){
              const {data}=await axios.get(`/api/requisito/`);
              this.allrequisitos=data;
-             //console.log(data);
+             ////console.log(data);
       },async FetchTipoDocumento(){
           const{data}=await axios.get('/api/tipoarchivo/');
           this.tipoarchivos=data;
-          //console.log(data);
+          ////console.log(data);
       },async FetchRoles(){
           const{data}=await axios.get('/api/rol/');
           this.roles=data;
@@ -691,7 +726,7 @@ export default{
           this.limpiarnuevo();
           this.limpiarselect();          
       },async submitrequisito(){ 
-          console.log("requisito",this.formrequi1);                 
+          //console.log("requisito",this.formrequi1);                 
           const {data}= await this.formrequi1.post('/api/faserequisito')
            .then(response =>{
             this.mostrarrequisito(this.formrequi1.fase_id);
@@ -700,39 +735,45 @@ export default{
           }).catch(error=>{
             if(error.response.status === 422){
               this.erroresR1=error.response.data.errors;
-            //  console.log(this.erroresR1);
+            //  //console.log(this.erroresR1);
             }
           });
           
-      },async submitrequisitonuevo(){                 
-          const {data}= await this.formrequi2.post('/api/requisito')
+      },async submitrequisitonuevo(){       
+          //console.log(this.formrequi2) 
+           await this.formrequi2.post('/api/requisito')
            .then(response =>{
+            if(response.data=='EXIST_DOC'){
+                this.erroresR2={'categoria':['Esta categoria ya fue asignado a un requisito']};
+            }else{
             this.mostrarrequisito(this.formrequi2.fase_id);
-            this.clearall();
+            this.clearall();            
             this.dialog2=false;
-           // console.log(response);
+            }
+        
+           // //console.log(response);
           }).catch(error=>{
             if(error.response.status === 422){
               this.erroresR2=error.response.data.errors;
-            //  console.log(this.erroresR2);
+            //  //console.log(this.erroresR2);
             }
           });
           
       },async submitrequisitoeliminado(id){ 
-          /* console.log(this.formrequi2);  
+          /* //console.log(this.formrequi2);  
           const {data}= await axios.get(`/api/ver/${id}`); 
-          console.log("fase",data);  
-          console.log("fase",id);    */   
+          //console.log("fase",data);  
+          //console.log("fase",id);    */   
           axios.delete(`/api/faserequisito/${id}`)
            .then(response =>{
             this.mostrarrequisito(this.formrequi2.fase_id);
             this.clearall();
             this.dialog2=false;
-            console.log(response);
+            //console.log(response);
           }).catch(error=>{
             if(error.response.status === 422){
               this.erroresR2=error.response.data.errors;
-              console.log(this.erroresR2);
+              //console.log(this.erroresR2);
             }
           }); 
           

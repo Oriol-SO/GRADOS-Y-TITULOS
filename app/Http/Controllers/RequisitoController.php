@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Fase;
 use Illuminate\Http\Request;
 use App\Models\Requisito;
 use App\Models\FaseRolRequisito;
@@ -38,17 +39,36 @@ class RequisitoController extends Controller
     public function store(Request $request)
     {
         $this->validarrequisitoNuevo($request);
-        $requisito=Requisito::create([
-            'nombre' => $request->nombre,
-            'tipo_documento' => $request->extension,
-            'tipoarchi_id' =>$request->tipodocumento['id'],
-            'html_formato'=>null,
-            ]);
-        
-        $faserol=$this->insertarfaserequisito($requisito->id,$request->fase_id,$request->rol['id']); 
-         return response()->json([
-           'faserolreq'=>$faserol,
-         ]);  
+        $categoria=$request->categoria['id'];
+        if($categoria==0){
+            $requisito=Requisito::create([
+                'nombre' => $request->nombre,
+                'tipo_documento' => $request->extension,
+                'tipoarchi_id' =>$request->tipodocumento['id'],
+                'html_formato'=>null,
+                'tipo_requisito'=>0,
+                ]);
+                $this->insertarfaserequisito($requisito->id,$request->fase_id); 
+         
+        }else if($categoria==1 || $categoria==2){
+            //buscamos en toda la lista de requisitos que no exista un requisito con este tipo de nombre
+            $c=Requisito::where('tipo_requisito',$request->categoria)->count();
+
+            if($c>0){
+                return 'EXIST_DOC';
+            }else{
+                $requisito=Requisito::create([
+                    'nombre' => $request->nombre,
+                    'tipo_documento' => $request->extension,
+                    'tipoarchi_id' =>$request->tipodocumento['id'],
+                    'html_formato'=>null,
+                    'tipo_requisito'=>$request->categoria,
+                    ]);
+                    $this->insertarfaserequisito($requisito->id,$request->fase_id); 
+                      
+            }
+        }        
+
         
     }
 
@@ -103,14 +123,19 @@ class RequisitoController extends Controller
     public function validarrequisitoNuevo($request=null){
         return $request->validate([
             'nombre'=>'required',
-            'rol'=>'required',
+            //'rol'=>'required',
             'tipodocumento'=>'required',
             'extension'=>'required',
+            'categoria'=>'required',
         ]);
     }
-    public function insertarfaserequisito($id,$faseid,$rolid){  
+    public function insertarfaserequisito($id,$faseid){  
+
+        //obtener rol ejecutor
+        $rol_ejecutor=(Fase::where('id',$faseid)->first())->encargado_ejecutar;
+        //insertar
         $faserequisito = FaseRolRequisito::create([
-            'rol_id' => $rolid,
+            'rol_id' => $rol_ejecutor,
             'requisito_id' => $id,
             'fase_id' =>$faseid,
             ]);

@@ -681,7 +681,7 @@ export default {
               console.log(response.data);
                 if(response.data===1){
                      this.revisar_errores='selleciona una opcion si quieres guardar cambios';
-                     this.boxerror=true;
+                     this.boxerror=true; 
 
                 }else if(response.data===2){
                      this.revisar_errores='ya fue aprobado este documento';

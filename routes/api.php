@@ -76,7 +76,8 @@ Route::group(['middleware' => 'guest:api'], function () {
 Route::group(['middleware'=>'admin:api'],function(){
     Route::resource('fase',FaseController::class);   
     Route::post('agregar_proceso',[ProcesoController::class,'agregar_proceso']);
-    Route::resource('proceso', ProcesoController::class);     
+    Route::resource('proceso', ProcesoController::class);   
+    Route::get('buscar-proceso/{key}',[ProcesoController::class, 'buscar_proc']);  
     Route::resource('grado', GradoController::class);
     Route::resource('modalidades', ModalidadController::class);
     Route::resource('faserequisito',FaseRequisitoController::class);
@@ -95,6 +96,7 @@ Route::group(['middleware'=>'admin:api'],function(){
     Route::get('disableRol/{id}',[AdminUserController::class,'disablerol']);
     Route::get('cambiarEstado/{id}', [ProcesoController::class, 'cambiarEstado']);
     Route::get('cambiarGuardado/{id}', [ProcesoController::class, 'cambiarGuardado']);
+    Route::get('categorias',[ProcesoController::class, 'categorias_requisito']);
 });
 
 Route::group(['middleware' => 'auth:api'], function () {
@@ -104,6 +106,8 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     //notificar cambios del tramite
     Route::get('notificarcambio-tramite/{fase}/{tramite}',[tramiteController::class,'notificarCambio']);
+
+    
 
     Route::resource('bachillerIni',BachillerIniController::class);
     Route::resource('bachillerFinal',BachillerFinalController::class);
@@ -210,3 +214,4 @@ Route::group(['middleware'=>'asesor:api'],function(){
     Route::get('unidad-tramite/{id}',[UnidadController::class,'datos_tramite']);
     Route::get('unidad-fases/{id}',[UnidadController::class,'unidad_fases']);
     Route::get('unidad-faserequisito/{id}/{tramite}',[UnidadController::class,'unidad_requisitos']);
+    Route::post('unidad-revisarrequisito',[UnidadController::class,'unidad_revisarrequisito']);

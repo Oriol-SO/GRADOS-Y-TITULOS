@@ -13,6 +13,7 @@ class Requisito extends Model
         'tipo_documento',
         'html_formate',
         'tipoarchi_id',
+        'tipo_requisito'
 
     ];
     public function FaseRolRequisito()

@@ -177,4 +177,38 @@ class ProcesoController extends Controller
         $valor = Proceso::find($id);
         return !($valor->guardado);
     } 
+
+    protected function categorias_requisito(){
+        $categorias= [
+            ['nombre'=>'Estandar', 'id'=>0],
+            ['nombre'=>'Plan de tesis','id'=>1],
+            ['nombre'=>'Tesis','id'=>2]
+
+        ];
+
+        return $categorias;
+    }
+
+
+    public function buscar_proc($key){
+        $tramites['tramites'] = Proceso::where('procNom','like','%'.$key.'%')->get()->map(function ($t) {
+            return [
+                'uso'=>Tramite::where('proceso_id',$t->id)->where('estado',0)->first()?1:0,
+                'id' => $t->id,
+                'nombre' => $t->procNom,
+                'grado_id' => $t->grado ? $t->grado_id : null,
+                'grado' => $t->grado ? $t->grado->graNom : null,
+                'modalidad_id' => $t->modalidade ? $t->moda_id : null,
+                'modalidad' => $t->modalidade ? $t->modalidade->modNombre : null,
+                'estado' =>$t->estado,
+                'guardado' =>$t->guardado,
+                'cantidad_fases' => $t->fase->count(),
+                'estado'=>$t->estado,
+                'cantidad_requisitos' => $t->fase->map(function ($f) {
+                    return $f->faserolrequisito->count();
+                })->sum(),
+            ];
+        });
+        return response()->json($tramites, 200);
+    }
 }

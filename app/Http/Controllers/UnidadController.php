@@ -180,5 +180,5 @@ class UnidadController extends Controller
         }
 
     }
-
+    
 }
